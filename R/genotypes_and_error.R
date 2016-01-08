@@ -71,3 +71,28 @@ long_markers_to_X_l_list <- function(D, kappa) {
 }
 
 
+
+
+#' a function to compute the X_l matrices for all loci at each desired kappa value
+#'
+#' still working on this
+#' @inheritParams long_markers_to_X_l_list
+#' @param kappa_matrix  A matrix like that in the supplied data \code{\link{kappas}}
+#' @return this returns a named list of length equal to the number of rows in kappa_matrix.
+#' The names are the rownames of the kappa_matrix.  Each component is itself a list named
+#' by locus with each component holding the X_l matrix.
+#' @examples
+#' data(kappas)
+#' compute_all_X_l_matrices(long_markers[1:18,], kappas)
+compute_all_X_l_matrices <- function(D, kappa_matrix) {
+  if(!is.matrix(kappa_matrix)) stop("kappa_matrix is not a matrix")
+  if(is.null(rownames(kappa_matrix))) stop("kappa_matrix does not have rownames")
+  if(ncol(kappa_matrix) != 3) stop("kappa_matrix should have 3 columns")
+
+  ret <- lapply(rownames(kappa_matrix), function(x) {
+    k <- kappa_matrix[x, ]
+    long_markers_to_X_l_list(D, k)
+  })
+  names(ret) <- rownames(kappa_matrix)
+  ret
+}
