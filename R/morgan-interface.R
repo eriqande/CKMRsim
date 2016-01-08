@@ -17,8 +17,9 @@
 #' first one has to be odd.
 #' @examples
 #'    data(pedigrees)
-#'    ped_df2morgan_par_and_ped(pedigrees$FS)
-ped2morgan_input <- function(ped, markers, seed, Dir = ".") {
+#'    data(markers_on_map)
+#'    ped2morgan_input(pedigrees$FS, markers_on_map, c(12345, 789623), "/tmp")
+ped2morgan_input <- function(ped, markers, seeds, Dir = ".") {
   parf <- file.path(Dir, "morgan_parfile")
   pedf <- file.path(Dir, "morgan_pedfile")
   markerseedf <- file.path(Dir, "marker.seed")
