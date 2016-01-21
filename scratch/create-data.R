@@ -106,3 +106,69 @@ U   1 0 0
     header = TRUE, row.names = 1
   )
 )
+
+
+
+#### Make some microhaplotype data ####
+# we just simulate 200 chromosomes using ms and have either 1, 2, 3, 4, or 5 segregating
+# sites.  We want 100 of these by the end, so let us do 20 of each number of seg sites
+library(stringr)
+system("
+       source ~/.bashrc;
+       echo \"41234 20641 60651\" > seedms;
+       rm -f splud;
+       for R in 1 2 3 4 5; do
+         ms 200 20 -s $R >> splud
+       done
+")
+x <- readLines("splud")
+x2 <- x[!str_detect(x, "[a-z/2-9]")]
+x3 <- x2[x2!=""]
+y <- data.frame(hap01 = x3, stringsAsFactors = FALSE) %>%
+  tbl_df
+y$LocNum <- rep(1:100, each = 200)
+
+# now me make 0 or 1 be ACGT for each locus.  We make an array for
+# what the 0's and 1's mean.  Far out
+set.seed(5)
+DNA_types <- lapply(1:100, function(x) matrix(unlist(lapply(1:5, function(x) sample(c("A", "C", "G", "T"), 2 ))), byrow=T, ncol = 2))
+
+# now make a column of DNA bases for each haplotype.  We need a function for that.
+# this is klugie and not vectorized, but I only need to do it once.
+hapseq <- function(x, L) {
+  ivec <- as.numeric(str_split(x, "")[[1]]) + 1
+  len = length(ivec)
+  idx <- cbind(1:len, ivec)
+  paste(DNA_types[[L]][idx], collapse = "")
+}
+# this is klugie but will work....
+y$hap <- sapply(1:nrow(y), function(l) hapseq(y$hap01[l], y$LocNum[l]))
+
+
+# check these:
+y %>%
+  group_by(LocNum, hap01, hap) %>%
+  tally
+
+# yep, it looks good.  So, now, make markers out of them
+# we will have some garbage on the chrom name for all of them
+y2 <- y %>%
+  mutate(Chrom = "ddRAD",
+         Locus = paste("ddRAD", LocNum, sep = "_"),
+         Pos = LocNum
+         ) %>%
+  rename(LocIdx = LocNum,
+         Allele = hap)
+
+
+
+# now compute allele freqs
+microhaps <- y2 %>%
+  group_by(Chrom, Locus, Pos, LocIdx, Allele) %>%
+  tally %>%
+  mutate(Freq = n / sum(n)) %>%
+  select(-n) %>%
+  mutate(AlleIdx = NA) %>%
+  reindex_markers()
+
+save(microhaps, file = "data/microhaps.rda")

@@ -83,3 +83,14 @@
 #' This was made by running the example in \code{\link{reindix_markers}}.
 #' See \code{\link{long_markers}} for more info.
 "markers40"
+
+
+#' 100 microhaplotype markers for a quick test data set
+#'
+#' This was made by running some code in scratch/create-data.R.
+#' See \code{\link{long_markers}} for more info about the columns.
+#' Note that Chrom is a character here (since they are unmapped) and
+#' are all the same.  Pos is actually ordered the way I want them to be.
+#' That turns out to be necessary for proper sorting with \code{\link{reindex_markers}}.
+"microhaps"
+

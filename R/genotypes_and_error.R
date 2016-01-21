@@ -45,54 +45,71 @@ index_ab <- function(a, b, A) {
 
 
 
+
+
+
 #' convert a  long data frame of marker allele frequencies to a list of X_l matrices
 #'
-#' Given a data frame D in the format of long_markers, this function creates the matrix_X_l for
-#' each locus, given the value of kappa. The rows and columns refer to genotypes that are in
+#' Given a data frame D in the format of long_markers, this function creates the matrix X_l for
+#' each locus, given all the values of kappa supplied as rows in a matrix like that in
+#' \code{\link{kappas}}. The rows and columns refer to genotypes that are in
 #' the order given in the
 #' function \code{\link{index_ab}}.
 #' @param  D a data frame in the format of \code{\link{long_markers}}.  Monomorphic loci should have
 #' been removed and the whole thing run through \code{\link{reindex_markers}} before passing it
 #' to this function.
-#' @param kappa A 3-vector giving the cotterman coefficients for a given relationship (like
-#' (0.25, 0.5, 0.25) for full siblings, or (0,1,0) for parent-offspring.)
-#' @return This returns a named list.  The names of the components are the Chrom.Locus of the
-#' marker in D. The contents of each list component is a matrix with nA * (nA+1) / 2 rows and
-#' columns
-#' @examples
-#' long_markers_to_X_l_list(long_markers[1:18,], c(0.25, 0.5, 0.25))
-long_markers_to_X_l_list <- function(D, kappa) {
-
-  D2 <- D %>%
-    mutate(gname = paste(Chrom, Locus, sep = "."))
-
-  split(D2, D2$gname) %>%
-    lapply(., function(x) make_matrix_X_l(p = x$Freq, kappa = kappa))
-}
-
-
-
-
-#' a function to compute the X_l matrices for all loci at each desired kappa value
-#'
-#' still working on this
-#' @inheritParams long_markers_to_X_l_list
-#' @param kappa_matrix  A matrix like that in the supplied data \code{\link{kappas}}
-#' @return this returns a named list of length equal to the number of rows in kappa_matrix.
-#' The names are the rownames of the kappa_matrix.  Each component is itself a list named
-#' by locus with each component holding the X_l matrix.
+#' @param kappa_matrix  A matrix like that in the supplied data \code{\link{kappas}}.  It should have
+#' three columns, and rownames giving the abbreviated name of the pairwise relationship.  Each row
+#' is a three-vector which are the Cotterman coefficients for the relationship. The first element is the
+#' probability that the pair shares 0 gene copies IBD, the second is the prob that they share 1 gene
+#' copy IBD, and the third is the prob that they share 2 gene copies IBD, all assuming no inbreeding.
+#' @return This returns a named list.  The names of the components are the Chrom.Locus.Pos of the
+#' marker in D. The contents of each list component is a list that includes the allele frequencies
+#' (as a vector named with the Allele names), and also another list of matrices with nA * (nA+1) / 2 rows and
+#' columns.  The rows and columns of this matrix are named by the genotypes.
 #' @examples
 #' data(kappas)
-#' compute_all_X_l_matrices(long_markers[1:18,], kappas)
-compute_all_X_l_matrices <- function(D, kappa_matrix) {
-  if(!is.matrix(kappa_matrix)) stop("kappa_matrix is not a matrix")
-  if(is.null(rownames(kappa_matrix))) stop("kappa_matrix does not have rownames")
-  if(ncol(kappa_matrix) != 3) stop("kappa_matrix should have 3 columns")
+#' lm_example <- long_markers_to_X_l_list(long_markers[1:18,], kappa_matrix = kappas)
+#' mh_example <- long_markers_to_X_l_list(microhaps, kappa_matrix = kappas)
+long_markers_to_X_l_list <- function(D, kappa_matrix) {
 
-  ret <- lapply(rownames(kappa_matrix), function(x) {
-    k <- kappa_matrix[x, ]
-    long_markers_to_X_l_list(D, k)
-  })
-  names(ret) <- rownames(kappa_matrix)
-  ret
+  D2 <- D %>%
+    mutate(gname = paste(Chrom, Locus, Pos, sep = "."))
+
+  # this long expression splits D on the Chrom.Locus.Pos and lapplies over
+  # the pieces and computes the X_l matrices for each locus, and then just
+  # returns this
+  split(D2, factor(D2$gname, levels = unique(D2$gname))) %>%
+    lapply(., function(x) {
+
+      # a list for output
+      loc_ret <- list()
+
+      # for the dimnames of the X_l matrices
+      geno_names <- expand.grid(gp = x$Allele, g = x$Allele) %>%
+        filter(as.integer(factor(g, levels = x$Allele)) <= as.integer(factor(gp, levels = x$Allele))) %>%
+        mutate(name = paste(g, gp, sep = "-")) %>%
+        select(name) %>%
+        unlist %>%
+        unname
+
+      # store the allele frequencies with the allele names
+      loc_ret$freqs <- x$Freq
+      names(loc_ret$freqs) <- x$Allele
+
+      loc_ret$X_l <- lapply(1:nrow(kappa_matrix), function(K) {
+        tmp <- make_matrix_X_l(p = x$Freq, kappa_matrix[K, ])
+        dimnames(tmp) <- list(geno_indiv_1 = geno_names, geno_indiv_2 = geno_names)
+        tmp
+      })
+
+      names(loc_ret$X_l) <- rownames(kappa_matrix)
+      loc_ret
+    })
 }
+
+
+
+
+
+
