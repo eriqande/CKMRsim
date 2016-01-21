@@ -11,4 +11,6 @@ LazyData: TRUE
 Depends: dplyr
 LinkingTo: Rcpp
 Imports: stringr,readr,Rcpp
-
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
