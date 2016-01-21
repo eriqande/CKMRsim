@@ -111,5 +111,50 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
 
 
 
+#' insert the matrix C_l into each element of the list of X_l matrices
+#'
+#' After you have gotten the X_l matrices using \code{\link{long_markers_to_X_l_list}}
+#' you can add to the component for each locus the matrix C_l which has, as its (s,t)-th
+#' entry, the probability that the genotype t is observed given that the true genotype
+#' is s. I am going to a add a lot more parameters to this as soon as I figure out how to
+#' pass in genotyping error models and their associated parameters. I would like to do that in
+#' a way that easily let's people define their own functions.  But for now it just
+#' does the microhaplotype error model with default parameters.
+#' @param XL a list of the loci like that created using \code{\link{long_markers_to_X_l_list}}.
+#' The key thing that each list component needs is the named vector freqs of the allele frequencies.
+#' The functions that compute genotyping error use the names of the allele to compute the
+#' probabilities of the observed genotype given the true genotype.
+#' @param ... extra arguments (after haps) to be passed to microhaplotype_geno_err_matrix
+#' #' @examples
+#' example(long_markers_to_X_l_list)
+#' mh_cl_example <- insert_C_l_matrices(mh_example)
+insert_C_l_matrices <- function(XL, ...) {
+  lapply(XL, function(x) {
+    if(is.null(names(x$freqs))) stop("No names attribute on the allele frequencies")
+    x$C_l <- microhaplotype_geno_err_matrix(haps = names(x$freqs), ...)
+    x
+  })
+}
 
 
+
+
+#' compute the Y_l matrices for each locus in a list
+#'
+#' Once you have the X_l matrices for each kappa, and the C_l matrices
+#' have been inserted into the list, then this function cycles over the loci
+#' and the kappa values and does the matrix multiplication to give you the
+#' matrix Y_l.
+#' @param L the list of X_l and C_l matrices
+#' @examples
+#' example(insert_C_l_matrices)
+#' mh_yl_example <- insert_Y_l_matrices(mh_cl_example)
+
+insert_Y_l_matrices <- function(L) {
+  lapply(L, function(a) {
+    a$Y_l <- lapply(a$X_l, function(b) {
+      t(b %*% a$C_l) %*% t(a$C_l)
+    })
+    a
+  })
+}

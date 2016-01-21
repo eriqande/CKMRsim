@@ -164,8 +164,7 @@ microhaplotype_geno_err_matrix <- function(haps, snp_err_rates = 0.005, dropout_
   dimnames(C_mat) <- list(true_geno = paste(tmp$g, tmp$gp, sep = "-"),
                           obs_geno = paste(tmp$g, tmp$gp, sep = "-"))
 
-  # OK, I am making good progress on this.  But it is not finished yet.
+  # OK, return that dude
   C_mat
 }
 
-#haps <- sort(c("AACC", "GACC", "GTCC", "GTTC", "GATA"))
