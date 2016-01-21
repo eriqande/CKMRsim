@@ -8,12 +8,16 @@ insert_Y_l_matrices(L)
 }
 \arguments{
 \item{L}{the list of X_l and C_l matrices}
+
+\item{type}{whether the}
 }
 \description{
 Once you have the X_l matrices for each kappa, and the C_l matrices
 have been inserted into the list, then this function cycles over the loci
 and the kappa values and does the matrix multiplication to give you the
-matrix Y_l.
+matrix Y_l.  This actually gives you the matrices Y_l_true and Y_l,
+but for now they are the same.  I just want to put that into the code at this
+point so I can work with them appropriately.
 }
 \examples{
 example(insert_C_l_matrices)

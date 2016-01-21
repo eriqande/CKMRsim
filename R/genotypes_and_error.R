@@ -144,14 +144,19 @@ insert_C_l_matrices <- function(XL, ...) {
 #' Once you have the X_l matrices for each kappa, and the C_l matrices
 #' have been inserted into the list, then this function cycles over the loci
 #' and the kappa values and does the matrix multiplication to give you the
-#' matrix Y_l.
+#' matrix Y_l.  This actually gives you the matrices Y_l_true and Y_l,
+#' but for now they are the same.  I just want to put that into the code at this
+#' point so I can work with them appropriately.
 #' @param L the list of X_l and C_l matrices
+#' @param type  whether the
 #' @examples
 #' example(insert_C_l_matrices)
 #' mh_yl_example <- insert_Y_l_matrices(mh_cl_example)
-
 insert_Y_l_matrices <- function(L) {
   lapply(L, function(a) {
+    a$Y_l_true <- lapply(a$X_l, function(b) {
+      t(b %*% a$C_l) %*% t(a$C_l)
+    })
     a$Y_l <- lapply(a$X_l, function(b) {
       t(b %*% a$C_l) %*% t(a$C_l)
     })
