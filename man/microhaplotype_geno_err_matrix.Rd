@@ -5,7 +5,7 @@
 \title{create matrix C for probability of observed genotypes from microhaplotype data}
 \usage{
 microhaplotype_geno_err_matrix(haps, snp_err_rates = 0.005,
-  dropout_rates = 0.005)
+  dropout_rates = 0.005, scale_by_num_snps = FALSE)
 }
 \arguments{
 \item{haps}{character vector of strings that denote the haplotypes at the locus.  For example

@@ -125,13 +125,18 @@ hap_obs_prob <- function(H1, H2, e) {
 #'
 #' # look at the first part of it
 #' C_mat[1:5, 1:5]
-microhaplotype_geno_err_matrix <- function(haps, snp_err_rates = 0.005, dropout_rates = 0.005) {
+microhaplotype_geno_err_matrix <- function(haps, snp_err_rates = 0.005, dropout_rates = 0.005, scale_by_num_snps = FALSE) {
   hap_length <- unique(nchar(haps))
   if(length(hap_length) > 1) stop("haps has variable number of SNPs: ", paste(hap_length, collapse = ", "))
   if(length(haps) != length(unique(haps))) stop("duplicate haplotype in haps")
 
   ser <- rep(snp_err_rates, length.out = hap_length)
   dr <- rep(dropout_rates, length.out = hap_length)
+
+  if(scale_by_num_snps == TRUE) {
+    ser <- ser / length(haps)  # this let's us get roughly the same geno error rates for things with many
+                               # snps as for few snps
+  }
 
   names(haps) <- haps
 
