@@ -1,0 +1,291 @@
+---
+title: "Assessing Power of Sebastes Microhaplotypes"
+author: "Eric C. Anderson"
+date: "April 8, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+Anthony did a boatload of bioinformatics on two panels of kelp rockfish GT-seq. Then 
+Thomas created a great tool haPLOType, available within 
+[this repository](https://github.com/ngthomas/callBayes) for visually identifying microhaplotypes.
+Subsequently, Diana curated the loci of Panels 1 and 2, providing me with a list of markers to
+keep and ones to toss.  That work is chronicled in Asana
+[here](https://app.asana.com/0/109989865625977/109989865625980) and 
+[here](https://app.asana.com/0/109989865625977/109989865625982).  Then I used haPLOTtype to 
+filter according to:
+
+1. min read coverage = 21
+2. min allelic ratio = 0.2
+3. Retain only the two most frequent haplotypes
+
+Then I downloaded all those haplotype data to this repository for working on them.
+
+Now I am going to do the power analysis.  This is all happening in
+`/development/Rmd/sebastes_power_1.Rmd` within the CKMR-sim directory that I will 
+push to GitHub soon.
+
+## Initial maneuvers
+Some libraries to have:
+```{r libs, warning=FALSE, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(readr)
+library(readxl)
+library(CKMRsim)
+library(ggplot2)
+```
+
+Load the haplotype data. Make a big long data frame of it all:
+```{r hapdat}
+hapcalls <- lapply(1:2, function(x){
+  file <- paste("../data/filtered_haplotype_panel_", x, ".csv.gz", sep = "")
+  read_csv(file)[,-1] # toss the first column which is useless row numbers
+}) %>%
+  setNames(c("Panel_1", "Panel_2")) %>%
+  bind_rows(., .id = "panel")
+```
+
+Have a look at those:
+```{r lookhap}
+hapcalls
+```
+
+Likewise, get Diana's "toss" and "keep" calls and her comments on each locus in a long
+data frame:
+```{r getdiana}
+hapkeeps <- lapply(1:2, function(x){
+  file <- paste("../data/panel", x, "_status.xlsx", sep = "")
+  read_excel(file) %>%
+    setNames(c("locus", "status", "notes"))
+}) %>%
+  setNames(c("Panel_1", "Panel_2")) %>%
+  bind_rows(., .id = "panel")
+```
+
+Which looks like this
+```{r viewhapkeeps}
+hapkeeps
+```
+And we note that no locus names are duplicated across the two panels:
+```{r checkdupes}
+any(duplicated(hapkeeps$locus))
+```
+
+### Tossing/keeping loci
+This is now a simple filtering step.  We only keep loci that are in Diana's "keep" list.
+```{r keep-keepers}
+keepers <- hapkeeps %>%
+  filter(status == "keep") %>%
+  select(locus) %>%
+  unlist() %>% 
+  unname()
+```
+There are `r length(keepers)` such loci.
+
+And here we reduce our haplotype data to only those:
+```{r hapkept}
+hapkept <- hapcalls %>%
+  filter(locus %in% keepers)
+```
+
+### Computing allele frequencies
+To compute allele freqs we need to just count up the occurrences of the different types
+amongst haplotype.1 and haplotype.2.  So, we need to get them into a single column, and
+just for the extra challenge we will keep their read depths there as well.
+```{r tidyhaps}
+haptidy <- hapkept %>%
+  unite(col = hap1, haplotype.1, read.depth.1) %>%
+  unite(col = hap2, haplotype.2, read.depth.2) %>%
+  gather(key = gene_copy, value = H, hap1, hap2) %>%
+  separate(H, into = c("Allele", "read_depth")) %>%
+  arrange(panel, locus, Indiv.ID, gene_copy)
+```
+And that looks like this
+```{r viewtidyhaps}
+haptidy
+```
+
+So, now we just need to compute the frequencies for each of the haplotypes
+```{r hapfreqs}
+hapfreqs <- haptidy %>%
+  group_by(locus, Allele) %>%
+  summarise(count = n()) %>%
+  mutate(Freq = count / sum(count))
+```
+And the result looks like this
+```{r viewhapfreqs}
+hapfreqs
+```
+
+
+## Running it in CKMRsim
+
+### Get it in the right format
+First we have to get that data frame in the right format and reindex the markers
+and make something that `CKMRsim` is expecting to be able to work with (i.e., it has 
+haplotypes in descending frequeny at each locus and it has locus and allele indices
+in there). To get loci to
+be ordered as they are, I have to throw `Pos` in there, even though they are not 
+known to have a position on any Chrom.
+```{r prep4ckmr}
+mhaps <- hapfreqs %>%
+  ungroup() %>%
+  mutate(Chrom = "GTseq") %>%
+  rename(Locus = locus) %>%
+  select(-count) %>%
+  mutate(Pos = as.integer(factor(Locus, levels = unique(Locus)))) %>%
+  mutate(LocIdx = 0,
+         AlleIdx = 0) %>%
+  CKMRsim::reindex_markers() %>%
+  select(Chrom, Locus, Pos, Allele, LocIdx, AlleIdx, Freq)
+
+```
+
+Here is what that looks like:
+```{r viewmhaps}
+mhaps
+```
+That shows us that our data set has `r nrow(mhaps)` distinct alleles in it.  Cool!
+
+While we are at it, let's look at the distribution of the number of alleles across loci:
+```{r allenumdist}
+mhaps %>%
+  group_by(Locus) %>%
+  summarise(num_haplotypes = n()) %>%
+  group_by(num_haplotypes) %>%
+  summarise(num_loci = n())
+```
+That seems pretty nice and makes a good case for using microhaplotypes.
+
+### Doing the CKMRsim analyses
+Now that we have that in the right format we can do the simulations.  Ultimately I will have some wrappers
+for doing this easily in CKMRsim.  For now, I am still piecing that together.  Let's do it...
+
+```{r ckmr-first-steps, cache=TRUE}
+# do this for Parent-offspring, Full-sibling, Half-sibling, and Unrelated,
+# and we will throw monozygotic twin in there just for 
+# visually checking assumed genotyped error rates 
+mhlist <- long_markers_to_X_l_list(D = mhaps, 
+                                   kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ])
+
+# add the matrices that account for genotyping error
+mhlist2 <- insert_C_l_matrices(mhlist, 
+                               snp_err_rates = 0.005,
+                               scale_by_num_snps = TRUE)
+
+# do the matrix multiplication that gives the Y_l matrices
+mhlist3 <- insert_Y_l_matrices(mhlist2)
+
+# then simulate the Q values 
+Qvals <- simulate_and_calc_Q(mhlist3, reps = 10^4)
+```
+
+OK, now, we can use those Q values to compute log-likelihood ratio statistics and 
+look at the overlap between different distributions.  Let's first just make some
+pretty plots of the distibutions.  We will let $\Lambda = \log\frac{Q_r}{Q_U}$
+where $r$ will be one of PO, FS, or HS.  We will call it $\Lambda_r$ when the true
+relationship is actually $r$, and we will call it $\Lambda_U$ when it is computed 
+assuming relationship $r$ but the truth is Unrelated.  So, let's compute those into
+some variables.
+
+```{r summary-Q}
+rs <- c("PO", "FS", "HS")
+names(rs) <- rs
+lambdas <- lapply(rs, function(r) {
+  data_frame(True = Qvals[[r]][[r]] - Qvals[[r]]$U,
+             Unrelated = Qvals$U[[r]] - Qvals$U$U)
+}) %>%
+  bind_rows(.id = "relat") %>%
+  gather(key = "lambda_type", value = "LogL_Ratio", True, Unrelated) %>%
+  mutate(relat = factor(relat, levels = c("PO", "FS", "HS")))
+```
+
+Let's make a plot of those:
+```{r plot-lambdas, cache=TRUE, dependson="ckmr-first-steps"}
+ggplot(lambdas, aes(x = LogL_Ratio, fill = lambda_type)) +
+  geom_density(alpha = 0.3) +
+  facet_wrap(~ relat, ncol = 1)
+```
+
+That shows us that we have very good separation for Parent-Offspring and decent
+separation for Full Siblings, and not very good separation on Half-Siblings.  
+
+In order to get a really good sense for what the false positive rates are going to be 
+we will need to do importance sampling using the Qvals.  I haven't yet implemented this 
+in a function, but will just do it hastily here.
+
+### Importance sampling
+Write a little function:
+```{r imp-samp-func}
+# Q is for Qvals, nu is the relationship in the numerator of lambda,
+# de is the relationship in the denominator of lambda which always be
+# U in the current context, tr is the true
+# relationship, which will typically be taken to be "U" in these
+# contexts, and pstar is the relationship of the importance sampling
+# distribution, which in this context will almost always by nu.
+# FNRs are the false negative rates you want to investigate.
+imp_samp <- function(Q, nu, de = "U", tr = "U", pstar = nu, FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001)) {
+  # get the importance weights and the corresponding lambdas when 
+  # the sample is from pstar
+  iw <- data_frame(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
+                   impwt = exp(Q[[pstar]][[tr]] - Q[[pstar]][[pstar]])) %>%
+    arrange(desc(lambda)) %>%
+    mutate(FPR = cumsum(impwt))
+  
+  # and now we gotta get the lambdas for the true correct relationship
+  trues <- Q[[pstar]][[nu]] - Q[[pstar]][[de]]
+  
+  # get the lambda values those correspond to
+  cutoffs <- quantile(trues, probs = FNRs)
+  
+  # then get the FPRs for each of those
+  lapply(cutoffs, function(x) {
+    sum(iw$impwt[iw$lambda >= x])
+  }) %>%
+    unlist() %>%
+    unname %>%
+    data.frame(FNR = FNRs, FPR = ., Lambda_star = cutoffs) %>%
+    arrange(FNR)
+}
+```
+
+So, now we can compute per-pair false positive rates (FPR) for various false negative rates (FNR)
+and for the different relationships.  For HS, the distributions are so overlapping that the
+importance sampling is not stable.  But it is pretty obvious that they are out of the question anyway.
+
+```{r final-results}
+# for parent offspring
+imp_samp(Qvals, nu = "PO")
+
+# for full siblings
+imp_samp(Qvals, nu = "FS")
+
+# for half siblings
+imp_samp(Qvals, nu = "HS")
+```
+
+So, it looks like PO should no problem with these markers.  FS pairs at kelp rockfish is probably quite
+doable, but this has assumed no physical linkage, so those FPRs are a little optimistic for the FS case.
+But, as long as we are willing to tolerate false negative rates on the order of 10% FS probably will be 
+OK. Doing FS in other species that might be harder---it depends on how many of these markers
+translate over to those other species.
+
+At any rate, these results are pretty encouraging.
+
+### A digression on assumed genotyping error rates
+I just wanted to point out that I cobbled together an error model for these that includes 
+a chance at allelic dropout and also a chance at sequencing errors.  The probability of
+correctly calling a genotype, broken down by the number of haplotypes at a locus, is 
+shown in the following plot.
+```{r correct-call-rates}
+calls <- lapply(mhlist2, function(x) data.frame(nA = length(x$freqs), rate_correct = diag(x$C_l))) %>%
+  bind_rows(.id = "Locus")
+ggplot(calls, aes(x = rate_correct)) +
+  geom_density() +
+  facet_wrap(~ nA, ncol = 3)
+```
