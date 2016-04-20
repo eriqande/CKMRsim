@@ -21,6 +21,20 @@ in the first component of YL.  Genotype values get simulated from the Y_l_true v
 genotypes from.  Genotype log probs are calculated using the Y_l matrices. If this is NULL then
 the function will just compute probs for all the relationships that have had Y_l matrices computed for them
 in YL.}
+
+\item{rando_miss_n}{NOT IMPLEMENTED YET how many loci to mask at random on each
+iteration.  If this is a vector then it does the whole analysis for each
+one of the values.  Corresponds to column "rando_miss_n" in the output.
+Default is 0. If any value is greater than or equal to the total number of
+loci available, it is removed.}
+
+\item{rando_miss_wts}{weights NOT IMPLEMENTED YET to be given to different loci that influence whether they
+will be one of the rando_miss_n missing loci in any iteration.  These will be recycled
+(or truncated) to have length equal to the number of loci (or to the \code{first_n_loci} if that
+is in effect), and they will be normalized to sum to one as appropriate (so you can provide
+them in unnormalized form.)  The idea of this is to be able to use observed rates of
+missingness amongst loci to mask some loci as missing.  Given as a comma-delimited
+string in column "rando_miss_wts" in the output.}
 }
 \value{
 This returns a list with components that are the relationships that were simulated
