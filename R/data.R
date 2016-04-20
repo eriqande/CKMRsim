@@ -94,3 +94,20 @@
 #' That turns out to be necessary for proper sorting with \code{\link{reindex_markers}}.
 "microhaps"
 
+
+#' Microhaplotype data from kelp rockfish \emph{Sebastes atrovirens}
+#'
+#' These are data from 165 amplicons sequenced in two different runs of an Illumina
+#' MiSeq machine at the SWFSC lab in Santa Cruz.  Genotypes of roughly 150 individuals
+#' were called an resolved into haplotypes using the fact that each short read comes
+#' from a single chromosome.
+#' @format  This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+#' is in the format of \code{\link{long_markers}}. However since true positions
+#' of these markers in the genome are not known, it is instructive to see from these data
+#' how to insert them into the format of \code{\link{long_markers}}.  Simply the column
+#' \code{Chrom} simply has "GTseq" in it, denoting that these are markers obtained from
+#' a GTseq procedure.  \code{Locus} has the name of each locus in it.  The column
+#' \code{Pos} has a simple index for each locus.  They don't denote genomic positions, but they
+#' are useful for sorting things if you run the data through \code{\link{reindex_markers}}.  The
+#' \code{Allele} column gives the sequences of each allele/haplotype observed in the population.
+"sebastes"
