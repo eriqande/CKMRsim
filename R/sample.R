@@ -43,14 +43,14 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs) {
     dplyr::mutate(FPR = cumsum(impwt))
 
   # and now we gotta get the lambdas for the true correct relationship
-  trues <- Q[[pstar]][[nu]] - Q[[pstar]][[de]]
+  trues <- Q[[nu]][[nu]] - Q[[nu]][[de]]
 
   # get the lambda values those correspond to
   cutoffs <- quantile(trues, probs = FNRs)
 
   # then get the FPRs for each of those
   tmp <- lapply(cutoffs, function(x) {
-    sum(iw$impwt[iw$lambda >= x])
+    mean(iw$impwt[iw$lambda >= x])  # mean here is summing them up and then dividing by length
   }) %>%
     unlist() %>%
     unname()
@@ -58,6 +58,30 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs) {
     dplyr::data_frame(FNR = FNRs, FPR = tmp, Lambda_star = cutoffs) %>%
       dplyr::arrange(FNR)
 }
+
+
+# this is a quick function to compute the false positive rates using
+# vanilla monte carlo.  In this case, lambdas are computed as numerator
+# over denominator, and the true sampling dsn is tr.
+vanilla <- function(Q, nu, de, tr, FNRs) {
+  true <- Q[[tr]][[nu]] - Q[[tr]][[de]]  # this is the distribution of Logls under the true relationship
+  nume <- Q[[nu]][[nu]] - Q[[nu]][[de]]  # this is the distribution of Logls under the relationship of the numerator
+
+  # get the lambda values those correspond to
+  cutoffs <- quantile(nume, probs = FNRs)
+
+  # then get the FPRs corresponding to each of those
+  tmp <- lapply(cutoffs, function(x) {
+    mean(true > x)
+  }) %>%
+    unlist() %>%
+    unname()
+
+
+  dplyr::data_frame(FNR = FNRs, FPR = tmp, Lambda_star = cutoffs) %>%
+    dplyr::arrange(FNR)
+}
+
 
 
 #### EXPORTED FUNCTIONS #####
@@ -94,7 +118,8 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs) {
 #' If set as NA and importance sampling (method == "IS" or "both") is used, then
 #' the value of \code{nu} is used as need be.  If not NA, then this can be a vector
 #' of relationships.  Each value will be used in all combinations of pstar, nu, de, and tr.
-#' This is reported in column "pstar" in the output.
+#' This is reported in column "pstar" in the output. For the vanilla method this is
+#' actually set to the be denominator for each lambda.
 #' @param fnr the false negative rates at which to evaluate the false positive rates.
 #' These are reported in column "fnr" in the output. These should all be between
 #' 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).
@@ -148,10 +173,10 @@ mc_sample_simple <- function(Q,
           is$mc_method = "IS"
         }
         if(method == "vanilla" || method == "both") {
-          NULL; # gotta add in here code for the vanilla method
-          # van$mc_method = "vanilla"
+          van <- vanilla(Q = Q, nu = nu_, de = de_, tr = tr_, FNRs)
+          van$pstar = NA
+          van$mc_method = "vanilla"
         }
-
         ret <- dplyr::bind_rows(is, van)
         ret$numerator = nu_
         ret$denominator = de_
