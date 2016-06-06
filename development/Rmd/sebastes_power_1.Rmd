@@ -2,7 +2,9 @@
 title: "Assessing Power of Sebastes Microhaplotypes"
 author: "Eric C. Anderson"
 date: "April 8, 2016"
-output: html_document
+output:
+  html_document: default
+  html_notebook: toc true
 ---
 
 ```{r setup, include=FALSE}
@@ -219,54 +221,13 @@ In order to get a really good sense for what the false positive rates are going 
 we will need to do importance sampling using the Qvals.  I haven't yet implemented this 
 in a function, but will just do it hastily here.
 
+
+
 ### Importance sampling
-Write a little function:
-```{r imp-samp-func}
-# Q is for Qvals, nu is the relationship in the numerator of lambda,
-# de is the relationship in the denominator of lambda which always be
-# U in the current context, tr is the true
-# relationship, which will typically be taken to be "U" in these
-# contexts, and pstar is the relationship of the importance sampling
-# distribution, which in this context will almost always by nu.
-# FNRs are the false negative rates you want to investigate.
-imp_samp <- function(Q, nu, de = "U", tr = "U", pstar = nu, FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001)) {
-  # get the importance weights and the corresponding lambdas when 
-  # the sample is from pstar
-  iw <- data_frame(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
-                   impwt = exp(Q[[pstar]][[tr]] - Q[[pstar]][[pstar]])) %>%
-    arrange(desc(lambda)) %>%
-    mutate(FPR = cumsum(impwt))
-  
-  # and now we gotta get the lambdas for the true correct relationship
-  trues <- Q[[pstar]][[nu]] - Q[[pstar]][[de]]
-  
-  # get the lambda values those correspond to
-  cutoffs <- quantile(trues, probs = FNRs)
-  
-  # then get the FPRs for each of those
-  lapply(cutoffs, function(x) {
-    sum(iw$impwt[iw$lambda >= x])
-  }) %>%
-    unlist() %>%
-    unname %>%
-    data.frame(FNR = FNRs, FPR = ., Lambda_star = cutoffs) %>%
-    arrange(FNR)
-}
-```
-
-So, now we can compute per-pair false positive rates (FPR) for various false negative rates (FNR)
-and for the different relationships.  For HS, the distributions are so overlapping that the
-importance sampling is not stable.  But it is pretty obvious that they are out of the question anyway.
-
-```{r final-results}
-# for parent offspring
-imp_samp(Qvals, nu = "PO")
-
-# for full siblings
-imp_samp(Qvals, nu = "FS")
-
-# for half siblings
-imp_samp(Qvals, nu = "HS")
+We have a function to do importance sampling and vanilla monte carlo:
+```{r mhaps-mc}
+mhaps_mc <- mc_sample_simple(Qvals, nu = c("PO", "FS", "HS"), method = "both") %>% as.data.frame
+mhaps_mc
 ```
 
 So, it looks like PO should no problem with these markers.  FS pairs at kelp rockfish is probably quite
@@ -289,3 +250,233 @@ ggplot(calls, aes(x = rate_correct)) +
   geom_density() +
   facet_wrap(~ nA, ncol = 3)
 ```
+
+
+
+## Investigating half siblings with more markers
+This is a sort of artificial exercise because it assumes no physical linkage, but the
+question arose whether it would take just a few more or a whole lot more markers to 
+identify half siblings.  So we can at least get a lower bound here. 
+
+Here is what we will do: duplicate the 165 markers 16 times, then do the calcuations for varying
+numbers of markers. Notice that the microhap data is now included in the R package as
+`sebastes`.
+```{r rep-and-prep}
+numAlles <- nrow(sebastes)  # the number of alleles we are dealing with here
+
+# here we replicate the loci and reindex them
+repped <- lapply(1:16, function(x) sebastes) %>% bind_rows(.id = "rep") %>%
+  mutate(Locus = paste("Rep-", rep, "-", Locus, sep = ""),
+         Pos = 1000 * (as.integer(rep) - 1)  + Pos
+         ) %>%
+  select(-rep) %>%
+  reindex_markers()
+  
+```
+
+Now, we just have to compute the Qvals with different numbers of markers.  We are only going to
+do it for HS and U:
+```{r repped-qvals, cache=TRUE}
+numRows <- c(1, 2, 4, 8, 16) * numAlles
+names(numRows) <- c(1, 2, 4, 8, 16) * 165  # named by the number of loci
+
+QvList <- lapply(numRows, function(x) {
+  long_markers_to_X_l_list(D = repped[1:x, ], kappa_matrix = kappas[c("HS", "U"), ]) %>%
+    insert_C_l_matrices(., snp_err_rates = 0.005, scale_by_num_snps = TRUE) %>%
+    insert_Y_l_matrices() %>%
+    simulate_and_calc_Q(., reps = 10^4)
+})
+```
+
+And finally, get the samples:
+```{r repped-sampling, cache=TRUE}
+repped_fprs <- lapply(QvList, function(Q) {
+  mc_sample_simple(Q, "HS")
+}) %>% 
+  bind_rows(.id = "num_loci")
+
+repped_fprs
+```
+
+Let's look at all the values:
+```{r look-at-em}
+as.data.frame(repped_fprs)
+```
+
+
+## Comparing the results to the "best" SNP from each fragment
+For this next part, we are going to explode those haplotypes into constituent SNPs 
+and estimate their frequencies, and then take the best SNPs from each microhaplotype
+and see how well it works.  We are going to operate on `mhaps` for this and then 
+get a data frame called `best_snps` which we will then pass off to CKMRsim.
+```{r get-best-snps}
+# get all the SNP freqs
+snp_freqs <- mhaps %>%
+  split(f = mhaps$Locus) %>%
+  lapply(function(x) {
+    x$exploded = sapply(strsplit(x$Allele, split = ""), function(y) paste(y, collapse = "."))
+    x
+  }) %>%
+  lapply(., function(x) {
+    separate(x, exploded, into = paste("snp", 1:nchar(x$Allele[1]), sep = "_"))
+  }) %>%
+  lapply(., function(x) {
+    gather(x, key = "SNP", value = "base", contains("snp_"))
+  }) %>%
+  bind_rows %>%
+  group_by(Chrom, Locus, Pos, LocIdx, SNP, base) %>% 
+  summarise(Freq = sum(Freq))
+
+# now, get the best (MAF closest to 0.5)
+best_snps <- snp_freqs %>%
+  group_by(Locus, SNP) %>%
+  filter(n() > 1) %>%  # toss SNPs that are monomorphic---for some reason there are some...
+  mutate(maf = min(Freq)) %>%
+  group_by(Locus) %>%
+  filter(maf == max(maf))  %>%  # this almost does it, but some snps at a locus might have the same MAF at different snps
+  mutate(tmp = 1:n()) %>%
+  filter(tmp < 3)  %>% # this gets rid of those same MAF cases.
+  select(-tmp, -maf) %>%
+  rename(Allele = base) %>%
+  mutate(AlleIdx = 0) %>%
+  CKMRsim::reindex_markers() %>%
+  select(Chrom, Locus, Pos, Allele, LocIdx, AlleIdx, Freq)
+
+```
+So, that rather exciting set of operations got us our best SNPs from each of the 165 fragments.  
+There are 165 of them, just like there should
+be.  So, now we just need to run CKMR sim on them:
+```{r best-snps-ckmr-sim, cache = TRUE}
+# do this for Parent-offspring, Full-sibling, Half-sibling, and Unrelated,
+# and we will throw monozygotic twin in there just for 
+# visually checking assumed genotyped error rates 
+bslist <- long_markers_to_X_l_list(D = best_snps, 
+                                   kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ])
+
+# add the matrices that account for genotyping error
+bslist2 <- insert_C_l_matrices(bslist, 
+                               snp_err_rates = 0.005,
+                               scale_by_num_snps = TRUE)
+
+# do the matrix multiplication that gives the Y_l matrices
+bslist3 <- insert_Y_l_matrices(bslist2)
+
+# then simulate the Q values 
+Qvals_bs <- simulate_and_calc_Q(bslist3, reps = 10^4)
+
+```
+We can now visually compare the distributions those from all the microhaplotypes.  We will toss HS out of the
+mix because it is not so interesting.
+```{r compare-snps-mhaps-densities, fig.width=14, fig.height=10}
+# gotta make a function in CKMRsim for this sort of operation
+rs <- c("PO", "FS", "HS")
+names(rs) <- rs
+lambdas_bs <- lapply(rs, function(r) {
+  data_frame(True = Qvals_bs[[r]][[r]] - Qvals_bs[[r]]$U,
+             Unrelated = Qvals_bs$U[[r]] - Qvals_bs$U$U)
+}) %>%
+  bind_rows(.id = "relat") %>%
+  gather(key = "lambda_type", value = "LogL_Ratio", True, Unrelated) %>%
+  mutate(relat = factor(relat, levels = c("PO", "FS", "HS")))
+
+ffp <- bind_rows(list(micro_haps = lambdas, SNPs = lambdas_bs), .id = "data_type") %>%
+  filter(relat != "HS") %>%
+  droplevels()
+
+ggplot(ffp, aes(x = LogL_Ratio, fill = lambda_type)) +
+  geom_density(alpha = 0.3) +
+  facet_grid(data_type ~ relat)
+
+# also, save that dude as a pdf
+ggsave(filename = "../outputs/snps_vs_mhaps_165.pdf", width = 7, height = 4)
+```
+And now we can do the MC sampling on that to get the false positive rates.
+```{r mc-sample-best-snps}
+mc_sample_simple(Qvals_bs, nu = c("PO", "FS", "HS"), method = "both") %>% as.data.frame()
+```
+
+
+## Doing the best 96 loci
+First we are going to find the microhaps with the highest heterozygosity, and the SNPs with the high MAF
+```{r high-het-mhaps}
+mhap_hz <- mhaps %>%
+  group_by(Locus) %>% 
+  summarise(hz = 1 - sum(Freq^2), nHaps = n()) %>%
+  arrange(desc(hz)) 
+
+snp_maf <- best_snps %>%
+  group_by(Locus) %>%
+  arrange(Freq) %>%
+  summarise(MAF = first(Freq)) %>%
+  ungroup() %>%
+  arrange(desc(MAF))
+```
+
+After looking at those, I think it will be fine to just focus on the 96 best SNPs.  So, let us do that:
+```{r best-snp-stuff}
+### First the mhaps
+mhlist96 <- long_markers_to_X_l_list(D = mhaps %>% filter(Locus %in% snp_maf$Locus[1:96]), 
+                                   kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ])
+
+# add the matrices that account for genotyping error
+mhlist96_2 <- insert_C_l_matrices(mhlist96, 
+                               snp_err_rates = 0.005,
+                               scale_by_num_snps = TRUE)
+
+# do the matrix multiplication that gives the Y_l matrices
+mhlist96_3 <- insert_Y_l_matrices(mhlist96_2)
+
+# then simulate the Q values 
+Qvals_96 <- simulate_and_calc_Q(mhlist96_3, reps = 10^4)
+
+### Then the 96 SNPs
+bslist96 <- long_markers_to_X_l_list(D = best_snps %>% filter(Locus %in% snp_maf$Locus[1:96]), 
+                                   kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ])
+
+# add the matrices that account for genotyping error
+bslist96_2 <- insert_C_l_matrices(bslist96, 
+                               snp_err_rates = 0.005,
+                               scale_by_num_snps = TRUE)
+
+# do the matrix multiplication that gives the Y_l matrices
+bslist96_3 <- insert_Y_l_matrices(bslist96_2)
+
+# then simulate the Q values 
+Qvals_bs96 <- simulate_and_calc_Q(bslist96_3, reps = 10^4)
+```
+Now just do the mc sampling:
+```{r top-96-mc-sample}
+compare96 <- lapply(list(mhaps = Qvals_96, snps = Qvals_bs96), function(x)
+  mc_sample_simple(Q = x, nu = c("PO", "FS", "HS"), method = "both")
+  ) %>% bind_rows(.id = "data_type")
+as.data.frame(compare96)
+```
+Wow! The 96 SNPs really blow chunks tremendously!
+
+Let's draw the figure:
+```{r plot-dsns-96}
+rs <- c("PO", "FS", "HS")
+names(rs) <- rs
+lambdas_bs96 <- lapply(rs, function(r) {
+  data_frame(True = Qvals_bs96[[r]][[r]] - Qvals_bs96[[r]]$U,
+             Unrelated = Qvals_bs96$U[[r]] - Qvals_bs96$U$U)
+}) %>%
+  bind_rows(.id = "relat") %>%
+  gather(key = "lambda_type", value = "LogL_Ratio", True, Unrelated) %>%
+  mutate(relat = factor(relat, levels = c("PO", "FS", "HS")))
+
+lambdas_96 <- lapply(rs, function(r) {
+  data_frame(True = Qvals_96[[r]][[r]] - Qvals_96[[r]]$U,
+             Unrelated = Qvals_96$U[[r]] - Qvals_96$U$U)
+}) %>%
+  bind_rows(.id = "relat") %>%
+  gather(key = "lambda_type", value = "LogL_Ratio", True, Unrelated) %>%
+  mutate(relat = factor(relat, levels = c("PO", "FS", "HS")))
+
+ffp96 <- bind_rows(list(micro_haps = lambdas_96, SNPs = lambdas_bs96), .id = "data_type")
+
+ggplot(ffp96 %>% filter(relat != "HS"), aes(x = LogL_Ratio, fill = lambda_type)) +
+  geom_density(alpha = 0.3) +
+  facet_grid(data_type ~ relat)
+```
+Cool! That's a wrap.  It is looking good!

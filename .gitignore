@@ -7,3 +7,4 @@ src/*.o
 development/Rmd/*_files
 development/Rmd/*_cache
 development/Rmd/*.html
+*.DS_Store
