@@ -453,6 +453,9 @@ as.data.frame(compare96)
 ```
 Wow! The 96 SNPs really blow chunks tremendously!
 
+
+
+
 Let's draw the figure:
 ```{r plot-dsns-96}
 rs <- c("PO", "FS", "HS")
@@ -478,5 +481,7 @@ ffp96 <- bind_rows(list(micro_haps = lambdas_96, SNPs = lambdas_bs96), .id = "da
 ggplot(ffp96 %>% filter(relat != "HS"), aes(x = LogL_Ratio, fill = lambda_type)) +
   geom_density(alpha = 0.3) +
   facet_grid(data_type ~ relat)
+
+ggsave(filename = "../outputs/snps_vs_mhaps_96.pdf", width = 7, height = 4)
 ```
 Cool! That's a wrap.  It is looking good!

@@ -24,6 +24,8 @@ entry, the probability that the genotype t is observed given that the true genot
 is s. I am going to a add a lot more parameters to this as soon as I figure out how to
 pass in genotyping error models and their associated parameters. I would like to do that in
 a way that easily let's people define their own functions.  But for now it just
-does the microhaplotype error model with default parameters.
+does the microhaplotype error model with default parameters.  This creates and inserts the
+C_l_true matrix and also the C_l matrix.  C_l_true is the "true" genotyping error model results
+and C_l is what gets applied in the likelihood calculations.
 }
 

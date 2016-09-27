@@ -1,0 +1,1402 @@
+"","locus","Indiv.ID","group","haplotype.1","haplotype.2","read.depth.1","read.depth.2"
+"1","CH100884","s1","Kanektok River","*GA","*GA",5834,5834
+"2","CH100884","s10","Wenatchee River","*GA","*GA",6491,6491
+"3","CH100884","s11","Feather River Spring","*GA","*GA",7835,7835
+"4","CH100884","s12","Feather River Spring","*GA","*GG",4380,4254
+"5","CH100884","s13","Kanektok River","*GA","*GA",5597,5597
+"6","CH100884","s14","Kanektok River","*GA","*GA",5189,5189
+"7","CH100884","s15","Spius Creek","*GA","*GA",3393,3393
+"8","CH100884","s16","Spius Creek","*GA","*GG",2482,2404
+"9","CH100884","s17","Eel River","*GG","*GG",4517,4517
+"10","CH100884","s18","Eel River","*GA","*GG",2291,2221
+"11","CH100884","s19","Hanford Reach","*GA","*GA",5202,5202
+"12","CH100884","s2","Kanektok River","*GA","*GA",3664,3664
+"13","CH100884","s20","Hanford Reach","*GA","*GA",5320,5320
+"14","CH100884","s21","Wenatchee River","*GA","*GA",7179,7179
+"15","CH100884","s22","Wenatchee River","*GA","*GA",6247,6247
+"16","CH100884","s23","Feather River Spring","*GA","*GA",7754,7754
+"17","CH100884","s24","Feather River Spring","*GA","*GA",8121,8121
+"18","CH100884","s25","Kanektok River","*AG","*GA",2326,2281
+"19","CH100884","s26","Kanektok River","*GA","*GA",4773,4773
+"20","CH100884","s27","Spius Creek","*GA","*GA",4468,4468
+"21","CH100884","s28","Spius Creek","*GA","*GG",2589,2448
+"22","CH100884","s29","Eel River","*AG","*GG",3406,3133
+"23","CH100884","s3","Spius Creek","*GA","*GG",2363,1997
+"24","CH100884","s30","Eel River","*AG","*GG",402,352
+"25","CH100884","s31","Hanford Reach","*GA","*GA",5659,5659
+"26","CH100884","s32","Hanford Reach","*GA","*GA",4400,4400
+"27","CH100884","s33","Wenatchee River","*AG","*GA",2550,2481
+"28","CH100884","s34","Wenatchee River","*GA","*GA",6002,6002
+"29","CH100884","s35","Feather River Spring","*GA","*GA",6331,6331
+"30","CH100884","s36","Feather River Spring","*GA","*GA",6607,6607
+"31","CH100884","s37","Kanektok River","*AG","*GA",2484,2253
+"32","CH100884","s38","Kanektok River","*GA","*GA",5752,5752
+"33","CH100884","s39","Spius Creek","*GG","*GG",5307,5307
+"34","CH100884","s4","Spius Creek","*GA","*GG",2733,2679
+"35","CH100884","s40","Spius Creek","*GG","*GG",3769,3769
+"36","CH100884","s41","Eel River","*AG","*GG",2636,2372
+"37","CH100884","s42","Eel River","*AG","*GG",857,822
+"38","CH100884","s43","Hanford Reach","*GA","*GA",5683,5683
+"39","CH100884","s44","Hanford Reach","*GA","*GA",6297,6297
+"40","CH100884","s45","Wenatchee River","*GA","*GA",570,570
+"41","CH100884","s46","Wenatchee River","*AG","*GA",2727,2452
+"42","CH100884","s47","Feather River Spring","*GA","*GA",8594,8594
+"43","CH100884","s48","Feather River Spring","*GA","*GA",7593,7593
+"44","CH100884","s49","Kanektok River","*GA","*GG",2011,1714
+"45","CH100884","s5","Eel River","*GA","*GG",2394,2386
+"46","CH100884","s50","Kanektok River","*GA","*GA",6933,6933
+"47","CH100884","s51","Spius Creek","*GA","*GG",3187,2905
+"48","CH100884","s52","Spius Creek","*GG","*GG",2445,2445
+"49","CH100884","s53","Eel River","*GA","*GG",3114,2972
+"50","CH100884","s54","Eel River","*AG","*GG",2249,2040
+"51","CH100884","s55","Hanford Reach","*GA","*GG",2439,2349
+"52","CH100884","s56","Hanford Reach","*GA","*GG",2145,2108
+"53","CH100884","s57","Wenatchee River","*GG","*GG",4825,4825
+"54","CH100884","s58","Wenatchee River","*GA","*GG",2301,1952
+"55","CH100884","s59","Feather River Spring","*GA","*GA",5077,5077
+"56","CH100884","s6","Eel River","*GA","*GG",4015,3810
+"57","CH100884","s60","Feather River Spring","*GA","*GA",7093,7093
+"58","CH100884","s61","Kanektok River","*AG","*GA",2452,2382
+"59","CH100884","s62","Kanektok River","*GA","*GA",5752,5752
+"60","CH100884","s63","Spius Creek","*GG","*GG",5555,5555
+"61","CH100884","s64","Spius Creek","*GA","*GG",2546,2508
+"62","CH100884","s65","Eel River","*GA","*GG",2567,2563
+"63","CH100884","s66","Eel River","*AG","*GA",2545,2373
+"64","CH100884","s67","Hanford Reach","*GA","*GA",5713,5713
+"65","CH100884","s68","Hanford Reach","*GA","*GG",2926,2783
+"66","CH100884","s69","Wenatchee River","*GA","*GA",4826,4826
+"67","CH100884","s7","Hanford Reach","*AG","*GA",2305,2213
+"68","CH100884","s70","Wenatchee River","*GA","*GA",5830,5830
+"69","CH100884","s71","Feather River Spring","*GA","*GA",6325,6325
+"70","CH100884","s72","Feather River Spring","*GA","*GA",7924,7924
+"71","CH100884","s73","Kanektok River","*GA","*GA",3638,3638
+"72","CH100884","s74","Kanektok River","*GA","*GA",4032,4032
+"73","CH100884","s75","Spius Creek","*GA","*GA",5206,5206
+"74","CH100884","s76","Spius Creek","*GA","*GG",3574,2957
+"75","CH100884","s77","Eel River","*AG","*GA",3151,3145
+"76","CH100884","s78","Eel River","*AG","*GG",2713,2431
+"77","CH100884","s79","Hanford Reach","*GA","*GA",4688,4688
+"78","CH100884","s8","Hanford Reach","*GA","*GA",5432,5432
+"79","CH100884","s80","Hanford Reach","*AG","*GA",2102,2030
+"80","CH100884","s81","Wenatchee River","*GA","*GG",2650,2433
+"81","CH100884","s82","Wenatchee River","*GA","*GG",2951,2887
+"82","CH100884","s83","Feather River Spring","*GA","*GA",6262,6262
+"83","CH100884","s84","Feather River Spring","*GA","*GA",5168,5168
+"84","CH100884","s85","Kanektok River","*GA","*GA",2617,2617
+"85","CH100884","s86","Kanektok River","*GA","*GA",5027,5027
+"86","CH100884","s87","Spius Creek","*GA","*GG",2825,2671
+"87","CH100884","s88","Spius Creek","*GA","*GG",3392,3365
+"88","CH100884","s89","Eel River","*AG","*GA",2526,2439
+"89","CH100884","s9","Wenatchee River","*GA","*GA",6482,6482
+"90","CH100884","s90","Eel River","*AG","*GA",2394,2227
+"91","CH100884","s91","Hanford Reach","*GA","*GA",4877,4877
+"92","CH100884","s92","Hanford Reach","*GA","*GA",5229,5229
+"93","CH100884","s93","Wenatchee River","*GA","*GA",4836,4836
+"94","CH100884","s94","Wenatchee River","*GA","*GA",4304,4304
+"95","CH100884","s95","Feather River Spring","*GA","*GA",5791,5791
+"96","CH100884","s96","Feather River Spring","*GA","*GA",6873,6873
+"97","CH102195","s1","Kanektok River","GTT*","GTTT",2,2
+"98","CH102195","s11","Feather River Spring","GCC*","GCCT",2,2
+"99","CH102195","s14","Kanektok River","GCC*","GCC*",2,2
+"100","CH102195","s18","Eel River","GCC*","GCC*",2,2
+"101","CH102195","s25","Kanektok River","GCCT","GCCT",2,2
+"102","CH102195","s27","Spius Creek","GCC*","GCC*",2,2
+"103","CH102195","s29","Eel River","GCC*","GCC*",2,2
+"104","CH102195","s34","Wenatchee River","GTT*","GTT*",2,2
+"105","CH102195","s35","Feather River Spring","GCC*","GCC*",2,2
+"106","CH102195","s39","Spius Creek","GCC*","GCC*",2,2
+"107","CH102195","s4","Spius Creek","GCC*","GCC*",2,2
+"108","CH102195","s44","Hanford Reach","ATT*","ATT*",2,2
+"109","CH102195","s47","Feather River Spring","ATT*","GTT*",3,2
+"110","CH102195","s48","Feather River Spring","ATT*","GCC*",2,2
+"111","CH102195","s53","Eel River","GCC*","GCCT",3,2
+"112","CH102195","s54","Eel River","GCC*","GCC*",3,3
+"113","CH102195","s6","Eel River","GCC*","GCC*",5,5
+"114","CH102195","s60","Feather River Spring","GCC*","GCC*",4,4
+"115","CH102195","s63","Spius Creek","GCC*","GCC*",4,4
+"116","CH102195","s65","Eel River","GCC*","GCC*",3,3
+"117","CH102195","s68","Hanford Reach","GCC*","GCC*",2,2
+"118","CH102195","s81","Wenatchee River","ATT*","ATT*",2,2
+"119","CH102195","s85","Kanektok River","GCC*","GCC*",2,2
+"120","CH102195","s86","Kanektok River","GCC*","GCC*",2,2
+"121","CH102195","s90","Eel River","GCC*","GCC*",2,2
+"122","CH102195","s93","Wenatchee River","GCC*","GCC*",2,2
+"123","CH102420","s1","Kanektok River","*A*","*A*",3283,3283
+"124","CH102420","s10","Wenatchee River","*A*","*C*",1732,1694
+"125","CH102420","s11","Feather River Spring","*C*","*C*",4483,4483
+"126","CH102420","s12","Feather River Spring","*C*","*C*",4475,4475
+"127","CH102420","s13","Kanektok River","*A*","*C*",1298,1280
+"128","CH102420","s14","Kanektok River","*A*","*C*",1209,1067
+"129","CH102420","s15","Spius Creek","*A*","*C*",600,586
+"130","CH102420","s16","Spius Creek","*A*","*A*",1542,1542
+"131","CH102420","s17","Eel River","*A*","*C*",1134,1069
+"132","CH102420","s18","Eel River","*A*","*C*",1199,1164
+"133","CH102420","s19","Hanford Reach","*C*","*C*",2476,2476
+"134","CH102420","s2","Kanektok River","*A*","*C*",1092,1072
+"135","CH102420","s20","Hanford Reach","*C*","*C*",2018,2018
+"136","CH102420","s21","Wenatchee River","*A*","*A*",2364,2364
+"137","CH102420","s22","Wenatchee River","*A*","*A*",2417,2417
+"138","CH102420","s23","Feather River Spring","*C*","*C*",3097,3097
+"139","CH102420","s24","Feather River Spring","*C*","*C*",3690,3690
+"140","CH102420","s25","Kanektok River","*A*","*C*",1052,1042
+"141","CH102420","s26","Kanektok River","*A*","*C*",1090,1056
+"142","CH102420","s27","Spius Creek","*A*","*C*",1126,1110
+"143","CH102420","s28","Spius Creek","*A*","*A*",2201,2201
+"144","CH102420","s29","Eel River","*C*","*C*",2915,2915
+"145","CH102420","s3","Spius Creek","*A*","*A*",1732,1732
+"146","CH102420","s30","Eel River","*C*","*C*",267,267
+"147","CH102420","s31","Hanford Reach","*C*","*C*",2148,2148
+"148","CH102420","s32","Hanford Reach","*C*","*C*",1666,1666
+"149","CH102420","s33","Wenatchee River","*A*","*C*",1160,1140
+"150","CH102420","s34","Wenatchee River","*A*","*C*",1180,1177
+"151","CH102420","s35","Feather River Spring","*A*","*A*",2973,2973
+"152","CH102420","s36","Feather River Spring","*C*","*C*",3979,3979
+"153","CH102420","s37","Kanektok River","*C*","*C*",2443,2443
+"154","CH102420","s38","Kanektok River","*C*","*C*",2684,2684
+"155","CH102420","s39","Spius Creek","*A*","*C*",1137,1061
+"156","CH102420","s4","Spius Creek","*A*","*C*",1260,1225
+"157","CH102420","s40","Spius Creek","*A*","*A*",1267,1267
+"158","CH102420","s41","Eel River","*C*","*C*",1900,1900
+"159","CH102420","s42","Eel River","*C*","*C*",673,673
+"160","CH102420","s43","Hanford Reach","*C*","*C*",2584,2584
+"161","CH102420","s44","Hanford Reach","*C*","*C*",2390,2390
+"162","CH102420","s45","Wenatchee River","*A*","*A*",454,454
+"163","CH102420","s46","Wenatchee River","*A*","*A*",2114,2114
+"164","CH102420","s47","Feather River Spring","*C*","*C*",3737,3737
+"165","CH102420","s48","Feather River Spring","*C*","*C*",3089,3089
+"166","CH102420","s49","Kanektok River","*C*","*C*",1868,1868
+"167","CH102420","s5","Eel River","*A*","*C*",1213,1099
+"168","CH102420","s50","Kanektok River","*A*","*C*",1420,1323
+"169","CH102420","s51","Spius Creek","*A*","*A*",2575,2575
+"170","CH102420","s52","Spius Creek","*A*","*A*",1034,1034
+"171","CH102420","s53","Eel River","*A*","*C*",1349,1290
+"172","CH102420","s54","Eel River","*C*","*C*",1777,1777
+"173","CH102420","s55","Hanford Reach","*A*","*C*",1175,1141
+"174","CH102420","s56","Hanford Reach","*C*","*C*",1952,1952
+"175","CH102420","s57","Wenatchee River","*A*","*C*",1342,1311
+"176","CH102420","s58","Wenatchee River","*A*","*A*",1834,1834
+"177","CH102420","s59","Feather River Spring","*C*","*C*",2317,2317
+"178","CH102420","s6","Eel River","*C*","*C*",4426,4426
+"179","CH102420","s60","Feather River Spring","*C*","*C*",2927,2927
+"180","CH102420","s61","Kanektok River","*A*","*A*",2324,2324
+"181","CH102420","s62","Kanektok River","*C*","*C*",2541,2541
+"182","CH102420","s63","Spius Creek","*A*","*A*",2575,2575
+"183","CH102420","s64","Spius Creek","*A*","*A*",2328,2328
+"184","CH102420","s65","Eel River","*A*","*C*",1229,1203
+"185","CH102420","s66","Eel River","*A*","*C*",1129,1115
+"186","CH102420","s67","Hanford Reach","*C*","*C*",2818,2818
+"187","CH102420","s68","Hanford Reach","*C*","*C*",2316,2316
+"188","CH102420","s69","Wenatchee River","*A*","*A*",1711,1711
+"189","CH102420","s7","Hanford Reach","*C*","*C*",2197,2197
+"190","CH102420","s70","Wenatchee River","*A*","*A*",2977,2977
+"191","CH102420","s71","Feather River Spring","*C*","*C*",2552,2552
+"192","CH102420","s72","Feather River Spring","*C*","*C*",3035,3035
+"193","CH102420","s73","Kanektok River","*A*","*C*",1218,1206
+"194","CH102420","s74","Kanektok River","*A*","*C*",1207,1105
+"195","CH102420","s75","Spius Creek","*A*","*A*",2504,2504
+"196","CH102420","s76","Spius Creek","*A*","*A*",2719,2719
+"197","CH102420","s77","Eel River","*A*","*C*",1572,1536
+"198","CH102420","s78","Eel River","*A*","*C*",1116,1094
+"199","CH102420","s79","Hanford Reach","*A*","*C*",1285,1147
+"200","CH102420","s8","Hanford Reach","*C*","*C*",2547,2547
+"201","CH102420","s80","Hanford Reach","*A*","*C*",965,867
+"202","CH102420","s81","Wenatchee River","*A*","*A*",1747,1747
+"203","CH102420","s82","Wenatchee River","*A*","*A*",2615,2615
+"204","CH102420","s83","Feather River Spring","*A*","*A*",2847,2847
+"205","CH102420","s84","Feather River Spring","*C*","*C*",2390,2390
+"206","CH102420","s85","Kanektok River","*A*","*A*",1567,1567
+"207","CH102420","s86","Kanektok River","*A*","*C*",1177,1110
+"208","CH102420","s87","Spius Creek","*A*","*A*",2377,2377
+"209","CH102420","s88","Spius Creek","*A*","*A*",3219,3219
+"210","CH102420","s89","Eel River","*A*","*C*",1223,1210
+"211","CH102420","s9","Wenatchee River","*A*","*A*",3275,3275
+"212","CH102420","s90","Eel River","*C*","*C*",2122,2122
+"213","CH102420","s91","Hanford Reach","*C*","*C*",2571,2571
+"214","CH102420","s92","Hanford Reach","*C*","*C*",2425,2425
+"215","CH102420","s93","Wenatchee River","*A*","*A*",2281,2281
+"216","CH102420","s94","Wenatchee River","*A*","*A*",2142,2142
+"217","CH102420","s95","Feather River Spring","*A*","*C*",1294,1268
+"218","CH102420","s96","Feather River Spring","*C*","*C*",3042,3042
+"219","CH102483","s1","Kanektok River","*GACT","*GACT",11459,11459
+"220","CH102483","s10","Wenatchee River","*GACC","*GACC",10952,10952
+"221","CH102483","s11","Feather River Spring","*GACC","*TACC",7636,3849
+"222","CH102483","s12","Feather River Spring","*GACC","*GATC",7720,3552
+"223","CH102483","s13","Kanektok River","*GACC","*GACT",7586,4730
+"224","CH102483","s14","Kanektok River","*GACC","*GACT",4706,4369
+"225","CH102483","s15","Spius Creek","*GACC","*GACT",4644,1697
+"226","CH102483","s16","Spius Creek","*GACC","*GACT",4240,2154
+"227","CH102483","s17","Eel River","*GACC","*GACT",8538,2782
+"228","CH102483","s18","Eel River","*GACC","*GACT",8373,2644
+"229","CH102483","s19","Hanford Reach","*GACC","*TACC",6289,3122
+"230","CH102483","s2","Kanektok River","*GACC","*GACT",6807,2135
+"231","CH102483","s20","Hanford Reach","*GACC","*TACC",7064,3489
+"232","CH102483","s21","Wenatchee River","*GACC","*GACC",12572,12572
+"233","CH102483","s22","Wenatchee River","*GACC","*GACT",4333,2359
+"234","CH102483","s23","Feather River Spring","*GACC","*GACT",10680,4026
+"235","CH102483","s24","Feather River Spring","*GACC","*GACT",7444,6915
+"236","CH102483","s25","Kanektok River","*GACC","*GACT",8085,2549
+"237","CH102483","s26","Kanektok River","*GACC","*GACT",5053,4684
+"238","CH102483","s27","Spius Creek","*GACC","*GACC",10111,10111
+"239","CH102483","s28","Spius Creek","*GACC","*GACT",6774,2351
+"240","CH102483","s29","Eel River","*GACC","*GACT",8282,2688
+"241","CH102483","s3","Spius Creek","*GACC","*GACT",7019,2336
+"242","CH102483","s30","Eel River","*GACC","*GACC",1661,1661
+"243","CH102483","s31","Hanford Reach","*GACC","*TACC",9114,3029
+"244","CH102483","s32","Hanford Reach","*GACC","*TACC",2969,1563
+"245","CH102483","s33","Wenatchee River","*GACC","*TACC",9283,3091
+"246","CH102483","s34","Wenatchee River","*GACC","*GACC",9800,9800
+"247","CH102483","s35","Feather River Spring","*GACC","*GACC",11804,11804
+"248","CH102483","s36","Feather River Spring","*GACC","*GACT",9227,3099
+"249","CH102483","s37","Kanektok River","*GACC","*GACT",5055,4857
+"250","CH102483","s38","Kanektok River","*GACC","*GACT",5994,5694
+"251","CH102483","s39","Spius Creek","*GACC","*GACT",7615,2516
+"252","CH102483","s4","Spius Creek","*GACC","*GACC",11070,11070
+"253","CH102483","s40","Spius Creek","*GACC","*GACT",5206,1713
+"254","CH102483","s41","Eel River","*GACC","*GACT",9208,3062
+"255","CH102483","s42","Eel River","*GACC","*GACC",3904,3904
+"256","CH102483","s43","Hanford Reach","*GACC","*GACT",5841,5787
+"257","CH102483","s44","Hanford Reach","*GACC","*TACC",7895,4166
+"258","CH102483","s45","Wenatchee River","*GACT","*GATC",672,370
+"259","CH102483","s46","Wenatchee River","*GACC","*GACC",10565,10565
+"260","CH102483","s47","Feather River Spring","*GACC","*TACC",11696,3796
+"261","CH102483","s48","Feather River Spring","*GACC","*TACC",11256,3642
+"262","CH102483","s49","Kanektok River","*GACC","*GCCC",6740,2280
+"263","CH102483","s5","Eel River","*GACC","*GACC",10369,10369
+"264","CH102483","s50","Kanektok River","*GACC","*GACT",11203,3524
+"265","CH102483","s51","Spius Creek","*GACC","*GACT",11386,3549
+"266","CH102483","s52","Spius Creek","*GACC","*GACC",4630,4630
+"267","CH102483","s53","Eel River","*GACC","*GACC",13272,13272
+"268","CH102483","s54","Eel River","*GACC","*GACC",10527,10527
+"269","CH102483","s55","Hanford Reach","*GACC","*GACT",9977,3137
+"270","CH102483","s56","Hanford Reach","*GACC","*GACT",7911,2754
+"271","CH102483","s57","Wenatchee River","*GACC","*GACT",9560,2871
+"272","CH102483","s58","Wenatchee River","*GACC","*GACT",3489,1832
+"273","CH102483","s59","Feather River Spring","*GACC","*GACT",4865,2280
+"274","CH102483","s6","Eel River","*GACC","*GACT",7991,2643
+"275","CH102483","s60","Feather River Spring","*GACT","*GATC",3844,1898
+"276","CH102483","s61","Kanektok River","*GACC","*GACC",11465,11465
+"277","CH102483","s62","Kanektok River","*GACC","*GACT",6301,5973
+"278","CH102483","s63","Spius Creek","*GACC","*GACT",9722,3232
+"279","CH102483","s64","Spius Creek","*GACC","*GACT",6386,3244
+"280","CH102483","s65","Eel River","*GACC","*GACC",13349,13349
+"281","CH102483","s66","Eel River","*GACC","*GACT",9030,2966
+"282","CH102483","s67","Hanford Reach","*GACC","*GACT",6870,6479
+"283","CH102483","s68","Hanford Reach","*GACC","*GACT",5888,3067
+"284","CH102483","s69","Wenatchee River","*GACC","*GACC",8772,8772
+"285","CH102483","s7","Hanford Reach","*GACC","*GACT",8543,2754
+"286","CH102483","s70","Wenatchee River","*GACC","*GACT",7320,2498
+"287","CH102483","s71","Feather River Spring","*GACT","*TACC",9985,3472
+"288","CH102483","s72","Feather River Spring","*GACC","*GACT",11637,4034
+"289","CH102483","s73","Kanektok River","*GACC","*GACT",7446,2340
+"290","CH102483","s74","Kanektok River","*GACC","*GACT",7877,2600
+"291","CH102483","s75","Spius Creek","*GACC","*GACC",14741,14741
+"292","CH102483","s76","Spius Creek","*GACC","*GACC",13869,13869
+"293","CH102483","s77","Eel River","*GACC","*GATC",7740,2495
+"294","CH102483","s78","Eel River","*GACC","*GACT",6106,1997
+"295","CH102483","s79","Hanford Reach","*GACC","*GACT",5052,4979
+"296","CH102483","s8","Hanford Reach","*GACC","*TACC",5019,2589
+"297","CH102483","s80","Hanford Reach","*GACC","*GACT",6387,2362
+"298","CH102483","s81","Wenatchee River","*GACC","*TACC",6800,1832
+"299","CH102483","s82","Wenatchee River","*GACC","*GACT",5443,5400
+"300","CH102483","s83","Feather River Spring","*GACC","*TACC",3850,3619
+"301","CH102483","s84","Feather River Spring","*GACC","*GACT",8776,3061
+"302","CH102483","s85","Kanektok River","*GACC","*GACT",2799,2493
+"303","CH102483","s86","Kanektok River","*GACC","*GACT",6717,2152
+"304","CH102483","s87","Spius Creek","*GACC","*TACC",5831,2981
+"305","CH102483","s88","Spius Creek","*GACC","*GACT",7286,7001
+"306","CH102483","s89","Eel River","*GACC","*GACT",5890,1930
+"307","CH102483","s9","Wenatchee River","*GACC","*GACC",15345,15345
+"308","CH102483","s90","Eel River","*GACC","*GACC",11056,11056
+"309","CH102483","s91","Hanford Reach","*GACC","*GACT",6718,6319
+"310","CH102483","s92","Hanford Reach","*GACC","*GACT",6476,3012
+"311","CH102483","s93","Wenatchee River","*GACC","*GACC",8932,8932
+"312","CH102483","s94","Wenatchee River","*GACC","*GACC",8635,8635
+"313","CH102483","s95","Feather River Spring","*GACC","*TACC",5273,2829
+"314","CH102483","s96","Feather River Spring","*GACC","*GACT",10091,3608
+"315","CH102801fwd","s1","Kanektok River","AGTA","AGTA",2,2
+"316","CH102801fwd","s11","Feather River Spring","AGTA","*GTA",4,2
+"317","CH102801fwd","s12","Feather River Spring","AGT*","TGTA",3,2
+"318","CH102801fwd","s13","Kanektok River","AGTA","AGTA",3,3
+"319","CH102801fwd","s15","Spius Creek","AGT*","AGT*",2,2
+"320","CH102801fwd","s19","Hanford Reach","AGTA","AGTA",2,2
+"321","CH102801fwd","s22","Wenatchee River","AGTA","AGTA",2,2
+"322","CH102801fwd","s24","Feather River Spring","AGTA","*GTA",3,2
+"323","CH102801fwd","s26","Kanektok River","AGT*","AGT*",2,2
+"324","CH102801fwd","s28","Spius Creek","AGTC","AGTC",2,2
+"325","CH102801fwd","s34","Wenatchee River","AGTA","AGTA",3,3
+"326","CH102801fwd","s35","Feather River Spring","AGTA","AGTA",2,2
+"327","CH102801fwd","s36","Feather River Spring","AGTA","AGTA",2,2
+"328","CH102801fwd","s37","Kanektok River","A_AA","AGTA",2,2
+"329","CH102801fwd","s38","Kanektok River","AGT*","AGT*",2,2
+"330","CH102801fwd","s41","Eel River","AGTA","AGTA",2,2
+"331","CH102801fwd","s46","Wenatchee River","AGTA","AGTA",3,3
+"332","CH102801fwd","s47","Feather River Spring","*GTA","*GTA",2,2
+"333","CH102801fwd","s48","Feather River Spring","AGTA","AGTA",2,2
+"334","CH102801fwd","s50","Kanektok River","AGT*","AGT*",2,2
+"335","CH102801fwd","s52","Spius Creek","AGTA","AGTA",2,2
+"336","CH102801fwd","s53","Eel River","ATTA","ATTA",2,2
+"337","CH102801fwd","s54","Eel River","AGTA","AGTA",3,3
+"338","CH102801fwd","s55","Hanford Reach","AGT*","AGTA",2,2
+"339","CH102801fwd","s56","Hanford Reach","AGTA","AGTA",2,2
+"340","CH102801fwd","s59","Feather River Spring","AGT*","*GTA",2,2
+"341","CH102801fwd","s6","Eel River","*TTA","*TTA",2,2
+"342","CH102801fwd","s60","Feather River Spring","AGTA","AGTA",3,3
+"343","CH102801fwd","s61","Kanektok River","AGTA","AGTA",3,3
+"344","CH102801fwd","s63","Spius Creek","AGT*","AGT*",2,2
+"345","CH102801fwd","s65","Eel River","ATT*","ATT*",2,2
+"346","CH102801fwd","s66","Eel River","*GTA","*GTA",2,2
+"347","CH102801fwd","s67","Hanford Reach","*GTA","*GTA",3,3
+"348","CH102801fwd","s68","Hanford Reach","AGTA","AGTA",2,2
+"349","CH102801fwd","s7","Hanford Reach","AGTA","AGTA",3,3
+"350","CH102801fwd","s70","Wenatchee River","ATTA","ATTA",2,2
+"351","CH102801fwd","s71","Feather River Spring","ATTA","ATTA",3,3
+"352","CH102801fwd","s72","Feather River Spring","*GTA","*GTA",2,2
+"353","CH102801fwd","s75","Spius Creek","AGTA","AGTA",3,3
+"354","CH102801fwd","s76","Spius Creek","*GTA","*GTA",2,2
+"355","CH102801fwd","s77","Eel River","AGTA","AGTA",2,2
+"356","CH102801fwd","s78","Eel River","AGTA","*GTA",2,2
+"357","CH102801fwd","s8","Hanford Reach","*GTA","*GTA",2,2
+"358","CH102801fwd","s80","Hanford Reach","*GTA","*GTA",2,2
+"359","CH102801fwd","s82","Wenatchee River","*GTA","*GTA",2,2
+"360","CH102801fwd","s84","Feather River Spring","AGTA","AGTA",2,2
+"361","CH102801fwd","s87","Spius Creek","AGTA","AGTA",2,2
+"362","CH102801fwd","s88","Spius Creek","AGTA","AGTA",2,2
+"363","CH102801fwd","s9","Wenatchee River","AGTA","*GTA",2,2
+"364","CH102801fwd","s90","Eel River","AGTA","AGTA",2,2
+"365","CH102801fwd","s92","Hanford Reach","*GTA","*GTA",2,2
+"366","CH102801fwd","s93","Wenatchee River","AGT*","AGT*",3,3
+"367","CH103861","s10","Wenatchee River","AGGTCT","AGGTCT",2,2
+"368","CH103861","s11","Feather River Spring","AGGTCT","AGGTCT",2,2
+"369","CH103861","s12","Feather River Spring","CATGCT","CATGCT",2,2
+"370","CH103861","s13","Kanektok River","AGGTCT","CA****",3,2
+"371","CH103861","s23","Feather River Spring","AGGTCT","AGGTCT",3,3
+"372","CH103861","s29","Eel River","AGGTCT","CATGCT",3,2
+"373","CH103861","s33","Wenatchee River","AGGTCT","AGGTCT",2,2
+"374","CH103861","s51","Spius Creek","AGGTCT","AGGTCT",2,2
+"375","CH103861","s52","Spius Creek","AGGTCT","AGGTCT",3,3
+"376","CH103861","s66","Eel River","AGGTCT","AGGTCT",2,2
+"377","CH103861","s71","Feather River Spring","AGGTCT","AGGTCT",2,2
+"378","CH103861","s78","Eel River","AGGTCT","AGGTTT",3,2
+"379","CH103861","s82","Wenatchee River","AGGTCT","AGGTCT",3,3
+"380","CH103861","s87","Spius Creek","AGGTCT","AGGTCT",2,2
+"381","CH104415","s10","Wenatchee River","ACTTTAATTGGTG","ACTTTAATTGGTG",3,3
+"382","CH104415","s11","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"383","CH104415","s12","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",4,4
+"384","CH104415","s16","Spius Creek","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"385","CH104415","s18","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",4,4
+"386","CH104415","s19","Hanford Reach","ACTTT********","ACTTT********",2,2
+"387","CH104415","s20","Hanford Reach","ATTCTAATTGGTG","ATTCTAATTGGTG",2,2
+"388","CH104415","s21","Wenatchee River","ACTCTAATTGGTG","GCTATAATTGGTG",5,3
+"389","CH104415","s22","Wenatchee River","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"390","CH104415","s23","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"391","CH104415","s25","Kanektok River","ATTCTAATTGGTG","ATTCTAATTGGTG",2,2
+"392","CH104415","s27","Spius Creek","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"393","CH104415","s29","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"394","CH104415","s3","Spius Creek","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"395","CH104415","s33","Wenatchee River","ATTCTAATTGGTG","ATTCTAATTGGTG",4,4
+"396","CH104415","s34","Wenatchee River","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"397","CH104415","s35","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"398","CH104415","s36","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"399","CH104415","s38","Kanektok River","ATTCTAATTGGTG","ATTCTAATTGGTG",2,2
+"400","CH104415","s39","Spius Creek","ACTTTAATTGGTG","ACTTTAATTGGTG",3,3
+"401","CH104415","s41","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"402","CH104415","s43","Hanford Reach","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"403","CH104415","s46","Wenatchee River","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"404","CH104415","s47","Feather River Spring","ACTCTAATTGGT*","ACTCTAATTGGTG",5,2
+"405","CH104415","s48","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",4,4
+"406","CH104415","s50","Kanektok River","ATTCTAATTG***","ATTCTAATTG***",2,2
+"407","CH104415","s51","Spius Creek","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"408","CH104415","s53","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"409","CH104415","s56","Hanford Reach","ATTCTAATTGGTG","ATTCTAATTGGTG",2,2
+"410","CH104415","s58","Wenatchee River","ATTCTAATTGGTG","ATTCTAATTGGTG",2,2
+"411","CH104415","s59","Feather River Spring","ACTCT********","ACTCTAATTGGTG",6,3
+"412","CH104415","s6","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"413","CH104415","s60","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"414","CH104415","s61","Kanektok River","ATTCTAATTGGTG","ATTCTAATTGGTG",3,3
+"415","CH104415","s63","Spius Creek","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"416","CH104415","s64","Spius Creek","ATTCTAATTGGTG","ATTCTAATTGGTG",3,3
+"417","CH104415","s66","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"418","CH104415","s75","Spius Creek","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"419","CH104415","s76","Spius Creek","ACTTTAATTGGTG","ACTTTAATTGGTG",2,2
+"420","CH104415","s78","Eel River","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"421","CH104415","s80","Hanford Reach","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"422","CH104415","s82","Wenatchee River","ATTCTAATTGGTG","ATTCTAATTGGTG",2,2
+"423","CH104415","s84","Feather River Spring","ACTCTAATTGG**","ACTCTAATTGGTG",2,2
+"424","CH104415","s88","Spius Creek","ACTCTAATTGGTG","ATTCTAATTGGTG",3,2
+"425","CH104415","s9","Wenatchee River","ATTCT********","ATTCTAATTGGTG",2,2
+"426","CH104415","s91","Hanford Reach","ACTCTAATTGGTG","ACTCTAATTGGTG",2,2
+"427","CH104415","s93","Wenatchee River","ACTTT********","ACTTT********",2,2
+"428","CH104415","s96","Feather River Spring","ACTCTAATTGGTG","ACTCTAATTGGTG",3,3
+"429","CH105401","s1","Kanektok River","**","CC",2,2
+"430","CH105401","s13","Kanektok River","**","CC",5,4
+"431","CH105401","s14","Kanektok River","CC","CC",559,559
+"432","CH105401","s15","Spius Creek","GC","GC",3,3
+"433","CH105401","s16","Spius Creek","**","CC",588,520
+"434","CH105401","s21","Wenatchee River","**","CC",3,2
+"435","CH105401","s22","Wenatchee River","CC","CC",831,831
+"436","CH105401","s25","Kanektok River","**","CC",520,455
+"437","CH105401","s3","Spius Creek","GC","GC",468,468
+"438","CH105401","s30","Eel River","CC","CC",2,2
+"439","CH105401","s33","Wenatchee River","**","CC",629,559
+"440","CH105401","s37","Kanektok River","**","CC",2,2
+"441","CH105401","s39","Spius Creek","GC","GC",987,987
+"442","CH105401","s4","Spius Creek","GC","GC",2,2
+"443","CH105401","s41","Eel River","CC","GC",5,2
+"444","CH105401","s43","Hanford Reach","CC","CC",2,2
+"445","CH105401","s45","Wenatchee River","**","CC",235,215
+"446","CH105401","s46","Wenatchee River","**","CC",443,388
+"447","CH105401","s51","Spius Creek","GC","GC",3,3
+"448","CH105401","s52","Spius Creek","GC","GC",459,459
+"449","CH105401","s55","Hanford Reach","CC","CC",2,2
+"450","CH105401","s62","Kanektok River","**","CC",4,4
+"451","CH105401","s63","Spius Creek","**","CC",3,2
+"452","CH105401","s64","Spius Creek","GC","GC",544,544
+"453","CH105401","s65","Eel River","CC","CC",2,2
+"454","CH105401","s66","Eel River","CC","CC",2,2
+"455","CH105401","s68","Hanford Reach","CC","CC",2,2
+"456","CH105401","s69","Wenatchee River","**","CC",814,725
+"457","CH105401","s70","Wenatchee River","**","CC",1057,916
+"458","CH105401","s73","Kanektok River","CC","CC",1180,1180
+"459","CH105401","s74","Kanektok River","**","CC",501,432
+"460","CH105401","s75","Spius Creek","GC","GC",579,579
+"461","CH105401","s77","Eel River","GC","GC",2,2
+"462","CH105401","s8","Hanford Reach","CC","CC",685,685
+"463","CH105401","s81","Wenatchee River","**","CC",752,652
+"464","CH105401","s82","Wenatchee River","**","CC",1538,1324
+"465","CH105401","s85","Kanektok River","**","CC",617,531
+"466","CH105401","s86","Kanektok River","**","CC",752,641
+"467","CH105401","s87","Spius Creek","GC","GC",601,601
+"468","CH105401","s88","Spius Creek","CC","CC",2,2
+"469","CH105401","s9","Wenatchee River","**","CC",962,831
+"470","CH105401","s94","Wenatchee River","**","CC",1061,475
+"471","CH105401","s96","Feather River Spring","CC","GC",2,2
+"472","CH105407","s1","Kanektok River","*AATT*","*AATT*",7440,7440
+"473","CH105407","s10","Wenatchee River","*TATT*","*TATT*",8118,8118
+"474","CH105407","s11","Feather River Spring","*AATT*","*AATT*",10385,10385
+"475","CH105407","s12","Feather River Spring","*AATT*","*AATT*",12625,12625
+"476","CH105407","s13","Kanektok River","*AATT*","*AGTT*",3240,3158
+"477","CH105407","s14","Kanektok River","*AATT*","*AATT*",6057,6057
+"478","CH105407","s15","Spius Creek","*AATT*","*AATT*",6195,6195
+"479","CH105407","s16","Spius Creek","*AATT*","*AATT*",7538,7538
+"480","CH105407","s17","Eel River","*AATT*","*AATT*",6688,6688
+"481","CH105407","s18","Eel River","*AATT*","*AATT*",6768,6768
+"482","CH105407","s19","Hanford Reach","*AATT*","*TGTT*",3387,3262
+"483","CH105407","s2","Kanektok River","*AATT*","*AATT*",4590,4590
+"484","CH105407","s20","Hanford Reach","*AATT*","*AATT*",6902,6902
+"485","CH105407","s21","Wenatchee River","*AATT*","*TATT*",4662,4129
+"486","CH105407","s22","Wenatchee River","*AATT*","*AATT*",7498,7498
+"487","CH105407","s23","Feather River Spring","*AATT*","*AATT*",10521,10521
+"488","CH105407","s24","Feather River Spring","*AATT*","*AATT*",10241,10241
+"489","CH105407","s25","Kanektok River","*AATT*","*AATT*",5546,5546
+"490","CH105407","s26","Kanektok River","*AATT*","*AATT*",6082,6082
+"491","CH105407","s27","Spius Creek","*AATT*","*AATT*",6911,6911
+"492","CH105407","s28","Spius Creek","*AATT*","*AATT*",6837,6837
+"493","CH105407","s29","Eel River","*AATT*","*AATT*",9105,9105
+"494","CH105407","s3","Spius Creek","*AATT*","*AATT*",6240,6240
+"495","CH105407","s30","Eel River","*AATT*","*AATT*",1218,1218
+"496","CH105407","s31","Hanford Reach","*AATT*","*TATT*",3646,3590
+"497","CH105407","s32","Hanford Reach","*AATT*","*AATT*",7672,7672
+"498","CH105407","s33","Wenatchee River","*AATT*","*TATT*",3476,3378
+"499","CH105407","s34","Wenatchee River","*AATT*","*AATT*",7532,7532
+"500","CH105407","s35","Feather River Spring","*TATT*","*TATT*",7973,7973
+"501","CH105407","s36","Feather River Spring","*AATG*","*AATT*",4343,4318
+"502","CH105407","s37","Kanektok River","*AATT*","*TATT*",2777,2700
+"503","CH105407","s38","Kanektok River","*AATT*","*TATT*",3572,3516
+"504","CH105407","s39","Spius Creek","*AATT*","*AATT*",8929,8929
+"505","CH105407","s4","Spius Creek","*AATT*","*AATT*",8112,8112
+"506","CH105407","s40","Spius Creek","*AATT*","*AATT*",6979,6979
+"507","CH105407","s41","Eel River","*AAGG*","*AATT*",5303,3602
+"508","CH105407","s42","Eel River","*AATT*","*AATT*",2212,2212
+"509","CH105407","s43","Hanford Reach","*AATT*","*TGTT*",4206,3901
+"510","CH105407","s44","Hanford Reach","*AATT*","*TGTT*",5020,4816
+"511","CH105407","s45","Wenatchee River","*AATT*","*TATT*",616,604
+"512","CH105407","s46","Wenatchee River","*AATT*","*AATT*",6068,6068
+"513","CH105407","s47","Feather River Spring","*TATT*","*TATT*",11717,11717
+"514","CH105407","s48","Feather River Spring","*AATT*","*AATT*",10037,10037
+"515","CH105407","s49","Kanektok River","*AATT*","*AATT*",4246,4246
+"516","CH105407","s5","Eel River","*AATT*","*AATT*",6387,6387
+"517","CH105407","s50","Kanektok River","*AATT*","*AATT*",8125,8125
+"518","CH105407","s51","Spius Creek","*AATT*","*AATT*",8882,8882
+"519","CH105407","s52","Spius Creek","*AATT*","*AATT*",4012,4012
+"520","CH105407","s53","Eel River","*AATT*","*TATT*",4160,4125
+"521","CH105407","s54","Eel River","*AATT*","*AATT*",5347,5347
+"522","CH105407","s55","Hanford Reach","*AATT*","*TATT*",3089,3085
+"523","CH105407","s56","Hanford Reach","*AATT*","*AATT*",5452,5452
+"524","CH105407","s57","Wenatchee River","*TATT*","*TATT*",6169,6169
+"525","CH105407","s58","Wenatchee River","*AATG*","*TATT*",3116,3063
+"526","CH105407","s59","Feather River Spring","*AATT*","*TATT*",3228,2945
+"527","CH105407","s6","Eel River","*AATT*","*AATT*",12069,12069
+"528","CH105407","s60","Feather River Spring","*AATT*","*TATT*",4825,4641
+"529","CH105407","s61","Kanektok River","*AATT*","*AATT*",5936,5936
+"530","CH105407","s62","Kanektok River","*AATT*","*TATT*",3508,3503
+"531","CH105407","s63","Spius Creek","*AATT*","*AATT*",8182,8182
+"532","CH105407","s64","Spius Creek","*AATT*","*AATT*",7683,7683
+"533","CH105407","s65","Eel River","*AATT*","*AATT*",7380,7380
+"534","CH105407","s66","Eel River","*AATT*","*AATT*",6897,6897
+"535","CH105407","s67","Hanford Reach","*TATG*","*TGTT*",3769,3510
+"536","CH105407","s68","Hanford Reach","*TATT*","*TGTT*",3958,3879
+"537","CH105407","s69","Wenatchee River","*AATT*","*AATT*",4908,4908
+"538","CH105407","s7","Hanford Reach","*AATT*","*AATT*",5934,5934
+"539","CH105407","s70","Wenatchee River","*AATT*","*AATT*",8424,8424
+"540","CH105407","s71","Feather River Spring","*AATT*","*TATT*",4402,4210
+"541","CH105407","s72","Feather River Spring","*AATG*","*AATT*",6346,6259
+"542","CH105407","s73","Kanektok River","*AATT*","*AATT*",4544,4544
+"543","CH105407","s74","Kanektok River","*AATT*","*AATT*",4976,4976
+"544","CH105407","s75","Spius Creek","*AATT*","*AATT*",7830,7830
+"545","CH105407","s76","Spius Creek","*AATT*","*AATT*",9285,9285
+"546","CH105407","s77","Eel River","*AATT*","*AATT*",8825,8825
+"547","CH105407","s78","Eel River","*AAGG*","*AGTT*",5079,3805
+"548","CH105407","s79","Hanford Reach","*TATG*","*TGTT*",2983,2806
+"549","CH105407","s8","Hanford Reach","*AGTT*","*TGTT*",3597,3585
+"550","CH105407","s80","Hanford Reach","*AATT*","*TATT*",2532,2506
+"551","CH105407","s81","Wenatchee River","*TATT*","*TATT*",7037,7037
+"552","CH105407","s82","Wenatchee River","*AATT*","*AATT*",7917,7917
+"553","CH105407","s83","Feather River Spring","*AATT*","*AATT*",8473,8473
+"554","CH105407","s84","Feather River Spring","*AATT*","*AATT*",6804,6804
+"555","CH105407","s85","Kanektok River","*AATT*","*AATT*",3544,3544
+"556","CH105407","s86","Kanektok River","*AATT*","*AATT*",5844,5844
+"557","CH105407","s87","Spius Creek","*AATT*","*AATT*",7612,7612
+"558","CH105407","s88","Spius Creek","*AATT*","*AATT*",10897,10897
+"559","CH105407","s89","Eel River","*AATT*","*AATT*",6643,6643
+"560","CH105407","s9","Wenatchee River","*AATT*","*AATT*",8220,8220
+"561","CH105407","s90","Eel River","*AATT*","*AATT*",6180,6180
+"562","CH105407","s91","Hanford Reach","*TATT*","*TGTT*",3045,2922
+"563","CH105407","s92","Hanford Reach","*AATT*","*TATT*",3565,3516
+"564","CH105407","s93","Wenatchee River","*AATT*","*AATT*",5518,5518
+"565","CH105407","s94","Wenatchee River","*AATT*","*TATT*",2893,2809
+"566","CH105407","s95","Feather River Spring","*AATT*","*TATT*",3660,3655
+"567","CH105407","s96","Feather River Spring","*AATT*","*TATT*",4776,4636
+"568","CH106172","s1","Kanektok River","*GCC*","*GCC*",1423,1423
+"569","CH106172","s10","Wenatchee River","*GCC*","*GCC*",1219,1219
+"570","CH106172","s11","Feather River Spring","*GCC*","*GCC*",1935,1935
+"571","CH106172","s12","Feather River Spring","*GCC*","*GCC*",2323,2323
+"572","CH106172","s13","Kanektok River","*GCC*","*GCC*",911,911
+"573","CH106172","s14","Kanektok River","*GCC*","*GCC*",755,755
+"574","CH106172","s15","Spius Creek","*GCC*","*GCC*",473,473
+"575","CH106172","s16","Spius Creek","*GCC*","*GCC*",526,526
+"576","CH106172","s17","Eel River","*GCC*","*GCC*",711,711
+"577","CH106172","s18","Eel River","*GCC*","*GCC*",751,751
+"578","CH106172","s19","Hanford Reach","*GCC*","*GCC*",818,818
+"579","CH106172","s2","Kanektok River","*GCC*","*GCC*",788,788
+"580","CH106172","s20","Hanford Reach","*GCC*","*GCC*",658,658
+"581","CH106172","s21","Wenatchee River","*GCC*","*GCC*",720,720
+"582","CH106172","s22","Wenatchee River","*GCC*","*GCC*",910,910
+"583","CH106172","s23","Feather River Spring","*GCC*","*GCC*",1077,1077
+"584","CH106172","s24","Feather River Spring","*GCC*","*GCC*",1414,1414
+"585","CH106172","s25","Kanektok River","*GCC*","*GCC*",602,602
+"586","CH106172","s26","Kanektok River","*GCC*","*GCC*",646,646
+"587","CH106172","s27","Spius Creek","*GCC*","*GCC*",761,761
+"588","CH106172","s28","Spius Creek","*GCC*","*GCC*",654,654
+"589","CH106172","s29","Eel River","*GCC*","*GCC*",1279,1279
+"590","CH106172","s3","Spius Creek","*GCC*","*GCC*",561,561
+"591","CH106172","s30","Eel River","*GCC*","*GCC*",210,210
+"592","CH106172","s31","Hanford Reach","*GCC*","*GCC*",763,763
+"593","CH106172","s32","Hanford Reach","*GCC*","*GCC*",807,807
+"594","CH106172","s33","Wenatchee River","*GCC*","*GCC*",780,780
+"595","CH106172","s34","Wenatchee River","*GCC*","*GCC*",769,769
+"596","CH106172","s35","Feather River Spring","*GCC*","*GCC*",1039,1039
+"597","CH106172","s36","Feather River Spring","*GCC*","*GCC*",2048,2048
+"598","CH106172","s37","Kanektok River","*GCC*","*GCC*",780,780
+"599","CH106172","s38","Kanektok River","*GCC*","*GCC*",808,808
+"600","CH106172","s39","Spius Creek","*GCC*","*GCC*",980,980
+"601","CH106172","s4","Spius Creek","*GCC*","*GCC*",865,865
+"602","CH106172","s40","Spius Creek","*GCC*","*GCC*",434,434
+"603","CH106172","s41","Eel River","*ACC*","*GCC*",288,275
+"604","CH106172","s42","Eel River","*GCC*","*GCC*",394,394
+"605","CH106172","s43","Hanford Reach","*GCC*","*GCC*",1043,1043
+"606","CH106172","s44","Hanford Reach","*GCC*","*GCC*",1016,1016
+"607","CH106172","s45","Wenatchee River","*GCC*","*GCC*",194,194
+"608","CH106172","s46","Wenatchee River","*GCC*","*GCC*",593,593
+"609","CH106172","s47","Feather River Spring","*GCC*","*GCC*",1114,1114
+"610","CH106172","s48","Feather River Spring","*GCC*","*GCC*",1082,1082
+"611","CH106172","s49","Kanektok River","*GCC*","*GCC*",574,574
+"612","CH106172","s5","Eel River","*GCC*","*GCC*",888,888
+"613","CH106172","s50","Kanektok River","*GCC*","*GCC*",944,944
+"614","CH106172","s51","Spius Creek","*GCC*","*GCC*",785,785
+"615","CH106172","s52","Spius Creek","*GCC*","*GCC*",447,447
+"616","CH106172","s53","Eel River","*GCC*","*GCC*",902,902
+"617","CH106172","s54","Eel River","*GCC*","*GCC*",583,583
+"618","CH106172","s55","Hanford Reach","*GCC*","*GCC*",768,768
+"619","CH106172","s56","Hanford Reach","*GCC*","*GCC*",636,636
+"620","CH106172","s57","Wenatchee River","*GCC*","*GCC*",762,762
+"621","CH106172","s58","Wenatchee River","*GCC*","*GCC*",652,652
+"622","CH106172","s59","Feather River Spring","*GCC*","*GCC*",812,812
+"623","CH106172","s6","Eel River","*GCC*","*GCC*",1080,1080
+"624","CH106172","s60","Feather River Spring","*GCC*","*GCC*",1062,1062
+"625","CH106172","s61","Kanektok River","*GCC*","*GCC*",869,869
+"626","CH106172","s62","Kanektok River","*GCC*","*GCC*",809,809
+"627","CH106172","s63","Spius Creek","*GCC*","*GCC*",863,863
+"628","CH106172","s64","Spius Creek","*GCC*","*GCC*",629,629
+"629","CH106172","s65","Eel River","*GCC*","*GCC*",896,896
+"630","CH106172","s66","Eel River","*GCC*","*GCC*",648,648
+"631","CH106172","s67","Hanford Reach","*GCC*","*GCT*",451,353
+"632","CH106172","s68","Hanford Reach","*GCC*","*GCC*",776,776
+"633","CH106172","s69","Wenatchee River","*GCC*","*GCC*",579,579
+"634","CH106172","s7","Hanford Reach","*GCC*","*GCC*",767,767
+"635","CH106172","s70","Wenatchee River","*GCC*","*GCC*",1002,1002
+"636","CH106172","s71","Feather River Spring","*GCC*","*GCC*",847,847
+"637","CH106172","s72","Feather River Spring","*GCC*","*GCC*",1051,1051
+"638","CH106172","s73","Kanektok River","*GCC*","*GCC*",969,969
+"639","CH106172","s74","Kanektok River","*GCC*","*GCC*",623,623
+"640","CH106172","s75","Spius Creek","*GCC*","*GCC*",778,778
+"641","CH106172","s76","Spius Creek","*GCC*","*GCC*",826,826
+"642","CH106172","s77","Eel River","*ACC*","*GCC*",677,637
+"643","CH106172","s78","Eel River","*GCC*","*GCC*",819,819
+"644","CH106172","s79","Hanford Reach","*GCC*","*GCC*",907,907
+"645","CH106172","s8","Hanford Reach","*GCC*","*GCC*",989,989
+"646","CH106172","s80","Hanford Reach","*GCC*","*GCC*",643,643
+"647","CH106172","s81","Wenatchee River","*GCC*","*GCC*",720,720
+"648","CH106172","s82","Wenatchee River","*GCC*","*GCC*",925,925
+"649","CH106172","s83","Feather River Spring","*GCC*","*GCC*",842,842
+"650","CH106172","s84","Feather River Spring","*GCC*","*GCC*",1124,1124
+"651","CH106172","s85","Kanektok River","*GCC*","*GCC*",610,610
+"652","CH106172","s86","Kanektok River","*GCC*","*GCC*",889,889
+"653","CH106172","s87","Spius Creek","*GCC*","*GCC*",870,870
+"654","CH106172","s88","Spius Creek","*GCC*","*GCC*",1200,1200
+"655","CH106172","s89","Eel River","*ACC*","*GCC*",419,402
+"656","CH106172","s9","Wenatchee River","*GCC*","*GCC*",1224,1224
+"657","CH106172","s90","Eel River","*GCC*","*GCC*",821,821
+"658","CH106172","s91","Hanford Reach","*GCC*","*GCC*",815,815
+"659","CH106172","s92","Hanford Reach","*GCC*","*GCC*",760,760
+"660","CH106172","s93","Wenatchee River","*GCC*","*GCC*",712,712
+"661","CH106172","s94","Wenatchee River","*GCC*","*GCC*",630,630
+"662","CH106172","s95","Feather River Spring","*GCC*","*GCC*",1014,1014
+"663","CH106172","s96","Feather River Spring","*GCC*","*GCC*",1223,1223
+"664","CH107485","s1","Kanektok River","*AGTG*","*ATAT*",1605,1572
+"665","CH107485","s10","Wenatchee River","*AGTG*","*ATAT*",1663,862
+"666","CH107485","s11","Feather River Spring","*AGAG*","*ATAT*",2750,2583
+"667","CH107485","s12","Feather River Spring","*AGAG*","*ATAT*",2606,2367
+"668","CH107485","s13","Kanektok River","*AGTG*","*ATAT*",1190,1183
+"669","CH107485","s14","Kanektok River","*AGTG*","*ATAT*",1117,1063
+"670","CH107485","s15","Spius Creek","*AGTG*","*ATAT*",438,203
+"671","CH107485","s16","Spius Creek","*ATAG*","*ATAT*",501,284
+"672","CH107485","s17","Eel River","*AGTG*","*ATAT*",952,934
+"673","CH107485","s18","Eel River","*AGTG*","*ATAT*",1098,1057
+"674","CH107485","s19","Hanford Reach","*AGAG*","*ATAT*",1489,1449
+"675","CH107485","s2","Kanektok River","*AGTG*","*ATAT*",970,953
+"676","CH107485","s20","Hanford Reach","*ATAG*","*ATAT*",873,568
+"677","CH107485","s21","Wenatchee River","*AGAG*","*ATAT*",930,470
+"678","CH107485","s22","Wenatchee River","*AGTG*","*ATAT*",987,977
+"679","CH107485","s23","Feather River Spring","*AGTG*","*ATAT*",1439,730
+"680","CH107485","s24","Feather River Spring","*AGTG*","*ATAT*",1885,910
+"681","CH107485","s25","Kanektok River","*AGTG*","*ATAT*",1081,978
+"682","CH107485","s26","Kanektok River","*AGTG*","*ATAT*",991,990
+"683","CH107485","s27","Spius Creek","*ATAG*","*ATAT*",1077,629
+"684","CH107485","s28","Spius Creek","*ATAG*","*ATAT*",1285,1194
+"685","CH107485","s29","Eel River","*AGTG*","*ATAT*",1260,1246
+"686","CH107485","s3","Spius Creek","*ATAG*","*ATAT*",936,524
+"687","CH107485","s30","Eel River","*AGTG*","*ATAT*",39,25
+"688","CH107485","s31","Hanford Reach","*AGTG*","*ATAT*",943,484
+"689","CH107485","s32","Hanford Reach","*ATAG*","*ATAT*",611,416
+"690","CH107485","s33","Wenatchee River","*AGTG*","*ATAT*",1138,1111
+"691","CH107485","s34","Wenatchee River","*AGTG*","*ATAT*",737,718
+"692","CH107485","s35","Feather River Spring","*AGAG*","*ATAT*",1423,1408
+"693","CH107485","s36","Feather River Spring","*AGTG*","*ATAT*",2426,1258
+"694","CH107485","s37","Kanektok River","*AGTG*","*ATAT*",1265,1218
+"695","CH107485","s38","Kanektok River","*AGTG*","*ATAT*",1221,1110
+"696","CH107485","s39","Spius Creek","*ATAG*","*ATAT*",942,453
+"697","CH107485","s4","Spius Creek","*AGAG*","*ATAT*",1132,1103
+"698","CH107485","s40","Spius Creek","*ATAG*","*ATAT*",357,339
+"699","CH107485","s41","Eel River","*AGTG*","*TTAT*",776,400
+"700","CH107485","s42","Eel River","*AGTG*","*ATAT*",154,145
+"701","CH107485","s43","Hanford Reach","*AGAG*","*ATAT*",1085,1006
+"702","CH107485","s44","Hanford Reach","*ATAG*","*ATAT*",1063,636
+"703","CH107485","s45","Wenatchee River","*AGAG*","*ATAT*",52,30
+"704","CH107485","s46","Wenatchee River","*AGTG*","*ATAT*",901,865
+"705","CH107485","s47","Feather River Spring","*ATAG*","*ATAT*",1386,721
+"706","CH107485","s48","Feather River Spring","*ATAG*","*ATAT*",1349,649
+"707","CH107485","s49","Kanektok River","*AGTG*","*ATAT*",894,871
+"708","CH107485","s5","Eel River","*AGTG*","*ATAT*",1005,578
+"709","CH107485","s50","Kanektok River","*AGTG*","*ATAT*",1328,1282
+"710","CH107485","s51","Spius Creek","*ATAG*","*ATAT*",1159,661
+"711","CH107485","s52","Spius Creek","*AGAG*","*ATAT*",426,240
+"712","CH107485","s53","Eel River","*AGTG*","*ATAT*",1064,1031
+"713","CH107485","s54","Eel River","*AGTG*","*ATAT*",821,793
+"714","CH107485","s55","Hanford Reach","*AGTG*","*ATAT*",1138,584
+"715","CH107485","s56","Hanford Reach","*AGTG*","*ATAT*",1057,1000
+"716","CH107485","s57","Wenatchee River","*AGTG*","*ATAT*",1264,1143
+"717","CH107485","s58","Wenatchee River","*AGAG*","*ATAT*",482,244
+"718","CH107485","s59","Feather River Spring","*AGTG*","*ATAT*",1318,1252
+"719","CH107485","s6","Eel River","*AGTG*","*ATAT*",1626,1618
+"720","CH107485","s60","Feather River Spring","*AGAG*","*ATAT*",1290,1240
+"721","CH107485","s61","Kanektok River","*AGTG*","*ATAT*",1134,1101
+"722","CH107485","s62","Kanektok River","*AGTG*","*ATAT*",1282,1230
+"723","CH107485","s63","Spius Creek","*ATAG*","*ATAT*",1281,748
+"724","CH107485","s64","Spius Creek","*ATAG*","*ATAT*",1165,1136
+"725","CH107485","s65","Eel River","*AGTG*","*ATAT*",1040,491
+"726","CH107485","s66","Eel River","*AGTG*","*ATAT*",891,836
+"727","CH107485","s67","Hanford Reach","*ATAG*","*ATAT*",1207,612
+"728","CH107485","s68","Hanford Reach","*AGTG*","*ATAT*",759,407
+"729","CH107485","s69","Wenatchee River","*AGTG*","*ATAT*",794,776
+"730","CH107485","s7","Hanford Reach","*AGAG*","*ATAT*",1145,1059
+"731","CH107485","s70","Wenatchee River","*AGTG*","*ATAT*",892,887
+"732","CH107485","s71","Feather River Spring","*ATAG*","*ATAT*",1103,586
+"733","CH107485","s72","Feather River Spring","*ATAG*","*ATAT*",1152,627
+"734","CH107485","s73","Kanektok River","*AGTG*","*ATAT*",1693,1641
+"735","CH107485","s74","Kanektok River","*AGTG*","*ATAT*",1156,1113
+"736","CH107485","s75","Spius Creek","*ATAG*","*ATAT*",1258,618
+"737","CH107485","s76","Spius Creek","*ATAG*","*ATAT*",1195,626
+"738","CH107485","s77","Eel River","*AGTG*","*ATAT*",1266,1252
+"739","CH107485","s78","Eel River","*AGTG*","*ATAT*",767,364
+"740","CH107485","s79","Hanford Reach","*ATAG*","*ATAT*",1191,636
+"741","CH107485","s8","Hanford Reach","*ATAG*","*ATAT*",991,557
+"742","CH107485","s80","Hanford Reach","*AGAG*","*ATAT*",1063,576
+"743","CH107485","s81","Wenatchee River","*AGTG*","*ATAT*",615,303
+"744","CH107485","s82","Wenatchee River","*AGTG*","*ATAT*",963,900
+"745","CH107485","s83","Feather River Spring","*AGAG*","*ATAT*",1304,1238
+"746","CH107485","s84","Feather River Spring","*ATAG*","*ATAT*",1438,723
+"747","CH107485","s85","Kanektok River","*AGTG*","*ATAT*",806,741
+"748","CH107485","s86","Kanektok River","*AGTG*","*ATAT*",961,944
+"749","CH107485","s87","Spius Creek","*ATAG*","*ATAT*",1359,759
+"750","CH107485","s88","Spius Creek","*ATAG*","*ATAT*",1250,587
+"751","CH107485","s89","Eel River","*AGTG*","*ATAT*",1079,1007
+"752","CH107485","s9","Wenatchee River","*AGTG*","*ATAT*",1946,1847
+"753","CH107485","s90","Eel River","*ATAT*","*TTAT*",481,464
+"754","CH107485","s91","Hanford Reach","*AGAG*","*ATAT*",1221,611
+"755","CH107485","s92","Hanford Reach","*AGTG*","*ATAT*",1249,1148
+"756","CH107485","s93","Wenatchee River","*AGTG*","*ATAT*",945,939
+"757","CH107485","s94","Wenatchee River","*AGTG*","*ATAT*",840,818
+"758","CH107485","s95","Feather River Spring","*ATAG*","*ATAT*",1376,718
+"759","CH107485","s96","Feather River Spring","*AGAG*","*ATAT*",1422,678
+"760","CH107806","s1","Kanektok River","*TAA*","*TAA*",5197,5197
+"761","CH107806","s10","Wenatchee River","*TAA*","*TAA*",6640,6640
+"762","CH107806","s11","Feather River Spring","*TAA*","*TAA*",8934,8934
+"763","CH107806","s12","Feather River Spring","*TAA*","*TAA*",8895,8895
+"764","CH107806","s13","Kanektok River","*TAA*","*TAA*",5604,5604
+"765","CH107806","s14","Kanektok River","*TTA*","*TTA*",5503,5503
+"766","CH107806","s15","Spius Creek","*TTA*","*TTA*",1949,1949
+"767","CH107806","s16","Spius Creek","*TTA*","*TTA*",2905,2905
+"768","CH107806","s17","Eel River","*TAA*","*TAA*",4845,4845
+"769","CH107806","s18","Eel River","*TAA*","*TAA*",5187,5187
+"770","CH107806","s19","Hanford Reach","*TAA*","*TAA*",5866,5866
+"771","CH107806","s2","Kanektok River","*TAA*","*TAA*",4005,4005
+"772","CH107806","s20","Hanford Reach","*TAA*","*TAA*",4803,4803
+"773","CH107806","s21","Wenatchee River","*TAA*","*TTA*",3039,2957
+"774","CH107806","s22","Wenatchee River","*TAA*","*TAA*",4325,4325
+"775","CH107806","s23","Feather River Spring","*TAA*","*TAA*",7728,7728
+"776","CH107806","s24","Feather River Spring","*TAA*","*TAA*",9075,9075
+"777","CH107806","s25","Kanektok River","*TTA*","*TTA*",5215,5215
+"778","CH107806","s26","Kanektok River","*TAA*","*TTA*",2595,2563
+"779","CH107806","s27","Spius Creek","*TAA*","*TAA*",4445,4445
+"780","CH107806","s28","Spius Creek","*TAA*","*TAA*",6007,6007
+"781","CH107806","s29","Eel River","*TAA*","*TAA*",5343,5343
+"782","CH107806","s3","Spius Creek","*TAA*","*TAA*",4675,4675
+"783","CH107806","s30","Eel River","*TAA*","*TAA*",246,246
+"784","CH107806","s31","Hanford Reach","*TAA*","*TAA*",4556,4556
+"785","CH107806","s32","Hanford Reach","*TAA*","*TTA*",1517,1516
+"786","CH107806","s33","Wenatchee River","*TTA*","*TTA*",5025,5025
+"787","CH107806","s34","Wenatchee River","*TAA*","*TAA*",3753,3753
+"788","CH107806","s35","Feather River Spring","*TAA*","*TTA*",3465,3334
+"789","CH107806","s36","Feather River Spring","*TAA*","*TTA*",4128,3939
+"790","CH107806","s37","Kanektok River","*TTA*","*TTA*",5338,5338
+"791","CH107806","s38","Kanektok River","*TAA*","*TTA*",3007,2900
+"792","CH107806","s39","Spius Creek","*TAA*","*TTA*",1830,1806
+"793","CH107806","s4","Spius Creek","*TAA*","*TAA*",4348,4348
+"794","CH107806","s40","Spius Creek","*TAA*","*TTA*",1195,1011
+"795","CH107806","s41","Eel River","*TAA*","*TAA*",4957,4957
+"796","CH107806","s42","Eel River","*TAA*","*TAA*",719,719
+"797","CH107806","s43","Hanford Reach","*TAA*","*TAA*",4587,4587
+"798","CH107806","s44","Hanford Reach","*TAA*","*TTA*",2939,2789
+"799","CH107806","s45","Wenatchee River","*TAA*","*TAA*",129,129
+"800","CH107806","s46","Wenatchee River","*TAA*","*TAA*",5096,5096
+"801","CH107806","s47","Feather River Spring","*TAA*","*TAA*",8294,8294
+"802","CH107806","s48","Feather River Spring","*TAA*","*TAA*",7892,7892
+"803","CH107806","s49","Kanektok River","*TTA*","*TTA*",4314,4314
+"804","CH107806","s5","Eel River","*TAA*","*TAA*",4562,4562
+"805","CH107806","s50","Kanektok River","*TAA*","*TAA*",6804,6804
+"806","CH107806","s51","Spius Creek","*TAA*","*TTA*",2979,2906
+"807","CH107806","s52","Spius Creek","*TAA*","*TAA*",1567,1567
+"808","CH107806","s53","Eel River","*TAA*","*TAA*",6049,6049
+"809","CH107806","s54","Eel River","*TAA*","*TAA*",4387,4387
+"810","CH107806","s55","Hanford Reach","*TAA*","*TTA*",2764,2662
+"811","CH107806","s56","Hanford Reach","*TAA*","*TTA*",2644,2526
+"812","CH107806","s57","Wenatchee River","*TAA*","*TTA*",2879,2811
+"813","CH107806","s58","Wenatchee River","*TAA*","*TAA*",2641,2641
+"814","CH107806","s59","Feather River Spring","*TAA*","*TAA*",6498,6498
+"815","CH107806","s6","Eel River","*TAA*","*TTA*",3186,3019
+"816","CH107806","s60","Feather River Spring","*TAA*","*TAA*",7532,7532
+"817","CH107806","s61","Kanektok River","*TAA*","*TAA*",4658,4658
+"818","CH107806","s62","Kanektok River","*TAA*","*TAA*",6316,6316
+"819","CH107806","s63","Spius Creek","*TAA*","*TTA*",2760,2743
+"820","CH107806","s64","Spius Creek","*TAA*","*TTA*",2640,2528
+"821","CH107806","s65","Eel River","*TAA*","*TTA*",2463,2273
+"822","CH107806","s66","Eel River","*TAA*","*TAA*",4881,4881
+"823","CH107806","s67","Hanford Reach","*TAA*","*TTA*",2874,2709
+"824","CH107806","s68","Hanford Reach","*TAA*","*TTA*",2149,2018
+"825","CH107806","s69","Wenatchee River","*TAA*","*TAA*",4587,4587
+"826","CH107806","s7","Hanford Reach","*TTA*","*TTA*",4723,4723
+"827","CH107806","s70","Wenatchee River","*TAA*","*TAA*",4155,4155
+"828","CH107806","s71","Feather River Spring","*TAA*","*TAA*",7201,7201
+"829","CH107806","s72","Feather River Spring","*TAA*","*TAA*",7578,7578
+"830","CH107806","s73","Kanektok River","*TAA*","*TAT*",2527,2464
+"831","CH107806","s74","Kanektok River","*TAA*","*TAA*",4987,4987
+"832","CH107806","s75","Spius Creek","*TAA*","*TAA*",5221,5221
+"833","CH107806","s76","Spius Creek","*TAA*","*TTA*",2484,2402
+"834","CH107806","s77","Eel River","*TAA*","*TTA*",2541,2526
+"835","CH107806","s78","Eel River","*TAA*","*TAA*",3884,3884
+"836","CH107806","s79","Hanford Reach","*TAA*","*TAA*",4601,4601
+"837","CH107806","s8","Hanford Reach","*TTA*","*TTA*",4868,4868
+"838","CH107806","s80","Hanford Reach","*TAA*","*TTA*",2503,2481
+"839","CH107806","s81","Wenatchee River","*TAA*","*TAA*",3080,3080
+"840","CH107806","s82","Wenatchee River","*TAA*","*TTA*",2299,2275
+"841","CH107806","s83","Feather River Spring","*TAA*","*TTA*",3548,3476
+"842","CH107806","s84","Feather River Spring","*TAA*","*TAA*",5463,5463
+"843","CH107806","s85","Kanektok River","*TAA*","*TTA*",1309,1254
+"844","CH107806","s86","Kanektok River","*TAA*","*TTA*",2015,1879
+"845","CH107806","s87","Spius Creek","*TTA*","*TTA*",6067,6067
+"846","CH107806","s88","Spius Creek","*TTA*","*TTA*",4471,4471
+"847","CH107806","s89","Eel River","*TAA*","*TTA*",2461,2319
+"848","CH107806","s9","Wenatchee River","*TAA*","*TAA*",6570,6570
+"849","CH107806","s90","Eel River","*TAA*","*TAA*",4028,4028
+"850","CH107806","s91","Hanford Reach","*TAA*","*TTA*",2698,2681
+"851","CH107806","s92","Hanford Reach","*TAA*","*TTA*",2795,2783
+"852","CH107806","s93","Wenatchee River","*TAA*","*TTA*",2039,2012
+"853","CH107806","s94","Wenatchee River","*TAA*","*TTA*",2119,1960
+"854","CH107806","s95","Feather River Spring","*TAA*","*TAA*",6893,6893
+"855","CH107806","s96","Feather River Spring","*TAA*","*TAA*",6851,6851
+"856","CH108210","s1","Kanektok River","ATTTAGGT","GGTTGGTT",5,5
+"857","CH108210","s10","Wenatchee River","ATTCAGGT","ATTTATGT",2,2
+"858","CH108210","s11","Feather River Spring","AGTTAGGT","ATTTAGGT",2,2
+"859","CH108210","s12","Feather River Spring","ATTTAGGT","ATTTAGGT",4,4
+"860","CH108210","s16","Spius Creek","ATTTATGT","ATTTATGT",2,2
+"861","CH108210","s17","Eel River","ATTTATGT","GGTTGGTT",3,2
+"862","CH108210","s18","Eel River","ATTTAGGT","ATTTAGGT",2,2
+"863","CH108210","s19","Hanford Reach","ATTTATGT","ATTTATGT",5,5
+"864","CH108210","s2","Kanektok River","GGTTGGTT","GGTTGGTT",2,2
+"865","CH108210","s21","Wenatchee River","ATTTAGGT","ATTTAGGT",3,3
+"866","CH108210","s22","Wenatchee River","AGTTAGGT","ATTTAGGT",2,2
+"867","CH108210","s23","Feather River Spring","ATTTATGT","ATTTATGT",2,2
+"868","CH108210","s24","Feather River Spring","GGTTGGTT","GGTTGGTT",2,2
+"869","CH108210","s25","Kanektok River","ATTTAGGT","ATTTATGT",2,2
+"870","CH108210","s26","Kanektok River","ATTTAGGT","ATTTATGT",3,2
+"871","CH108210","s27","Spius Creek","AGTTAGGT","ATTTATGT",3,2
+"872","CH108210","s28","Spius Creek","GGTTGGTT","GGTTGGTT",2,2
+"873","CH108210","s29","Eel River","ATTTATGT","GGTTGGTT",3,2
+"874","CH108210","s3","Spius Creek","ATTTATGT","GGTTGGTT",3,2
+"875","CH108210","s31","Hanford Reach","ATTTATGT","ATTTATGT",7,7
+"876","CH108210","s33","Wenatchee River","ATTTATGT","ATTTATGT",2,2
+"877","CH108210","s37","Kanektok River","ATTTAGGT","ATTTAGGT",2,2
+"878","CH108210","s41","Eel River","ATTTAGGT","ATTTATGT",2,2
+"879","CH108210","s43","Hanford Reach","ATTTATGT","ATTTATGT",2,2
+"880","CH108210","s44","Hanford Reach","ATTTATGT","ATTTATGT",6,6
+"881","CH108210","s46","Wenatchee River","ATTTATGT","ATTTATGT",3,3
+"882","CH108210","s47","Feather River Spring","ATTTAGGT","GGTTGGTT",3,2
+"883","CH108210","s48","Feather River Spring","ATTTAGGT","GGTTGGTT",3,2
+"884","CH108210","s49","Kanektok River","ATTTAGGT","GGTTGGTT",2,2
+"885","CH108210","s50","Kanektok River","ATTTATGT","ATTTATGT",7,7
+"886","CH108210","s51","Spius Creek","GGTTGGTT","GGTTGGTT",2,2
+"887","CH108210","s53","Eel River","ATTTAGGT","ATTTATGT",3,2
+"888","CH108210","s54","Eel River","ATTTATGT","ATTTATGT",2,2
+"889","CH108210","s56","Hanford Reach","ATTTATGT","ATTTATGT",3,3
+"890","CH108210","s59","Feather River Spring","AGTTAGGT","ATTTATGT",2,2
+"891","CH108210","s6","Eel River","ATTTATGT","GGTTGGTT",4,3
+"892","CH108210","s60","Feather River Spring","AGTTAGGT","AGTTAGGT",2,2
+"893","CH108210","s61","Kanektok River","ATTTATGT","ATTTATGT",2,2
+"894","CH108210","s62","Kanektok River","ATTTATGT","ATTTATGT",3,3
+"895","CH108210","s65","Eel River","ATTTATGT","ATTTATGT",3,3
+"896","CH108210","s66","Eel River","ATTTATGT","ATTTATGT",2,2
+"897","CH108210","s68","Hanford Reach","ATTTATGT","ATTTATGT",2,2
+"898","CH108210","s69","Wenatchee River","ATTTATGT","ATTTATGT",2,2
+"899","CH108210","s7","Hanford Reach","AGTTAGGT","ATTTAGGT",3,3
+"900","CH108210","s70","Wenatchee River","ATTTATGT","ATTTATGT",4,4
+"901","CH108210","s71","Feather River Spring","ATTTATGT","ATTTATGT",2,2
+"902","CH108210","s72","Feather River Spring","ATTTATGT","ATTTATGT",3,3
+"903","CH108210","s73","Kanektok River","ATTTATGT","ATTTATGT",7,7
+"904","CH108210","s74","Kanektok River","ATTTATGT","ATTTATGT",2,2
+"905","CH108210","s75","Spius Creek","ATTTATGT","ATTTATGT",4,4
+"906","CH108210","s76","Spius Creek","ATTTATGT","ATTTATGT",7,7
+"907","CH108210","s77","Eel River","ATTTATGT","ATTTATGT",3,3
+"908","CH108210","s78","Eel River","ATTTATGT","GGTTGGTT",5,2
+"909","CH108210","s80","Hanford Reach","AGTTAGGT","ATTTATGT",5,2
+"910","CH108210","s82","Wenatchee River","AGTTAGGT","ATTTATGT",2,2
+"911","CH108210","s83","Feather River Spring","ATTTATGT","ATTTATGT",2,2
+"912","CH108210","s86","Kanektok River","ATTTAGGT","ATTTATGT",3,2
+"913","CH108210","s87","Spius Creek","AGTTAGGT","AGTTAGGT",2,2
+"914","CH108210","s88","Spius Creek","GGTTGGTT","GGTTGGTT",4,4
+"915","CH108210","s89","Eel River","ATTTATGT","ATTTATGT",3,3
+"916","CH108210","s9","Wenatchee River","ATTTAGGT","ATTTATGT",3,3
+"917","CH108210","s90","Eel River","ATTTATGT","ATTTATGT",2,2
+"918","CH108210","s91","Hanford Reach","ATTTATGT","ATTTATGT",5,5
+"919","CH108210","s92","Hanford Reach","ATTTATGT","GGTTGGTT",3,2
+"920","CH108210","s95","Feather River Spring","ATTTAGGT","ATTTATGT",3,2
+"921","CH108210","s96","Feather River Spring","ATTTAGGT","ATTTATGT",3,2
+"922","CH123048","s11","Feather River Spring","TATGAGAGA","TATGAGAGA",5,5
+"923","CH123048","s14","Kanektok River","*ATGAGAGA","TATGAGAGA",2,2
+"924","CH123048","s19","Hanford Reach","TATGAGAGA","TATGAGAGA",2,2
+"925","CH123048","s23","Feather River Spring","CATGAGCGA","TATGAGAGA",2,2
+"926","CH123048","s25","Kanektok River","TATAGCCGA","TATAGCCGA",2,2
+"927","CH123048","s33","Wenatchee River","CATGAGAGA","CATGAGAGA",2,2
+"928","CH123048","s37","Kanektok River","TATGAGATG","TATGAGATG",2,2
+"929","CH123048","s57","Wenatchee River","TATGAGAGA","TATGAGAGA",2,2
+"930","CH123048","s64","Spius Creek","CATGAGAGA","CATGAGAGA",2,2
+"931","CH123048","s74","Kanektok River","TATGAGAGA","TATGAGAGA",3,3
+"932","CH123048","s76","Spius Creek","TATGATAGA","TATGATAGA",2,2
+"933","CH123048","s93","Wenatchee River","TATGAGAGA","TATGAGAGA",2,2
+"934","CH123048","s96","Feather River Spring","TATGAGCGA","TATGAGCGA",2,2
+"935","CH123921","s1","Kanektok River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"936","CH123921","s10","Wenatchee River","TGGAGTCGCTTTA","TGGGGTCGCTTTA",9,3
+"937","CH123921","s11","Feather River Spring","CGAAGTCGCTTTA","CGAAGTCGCTTTA",15,15
+"938","CH123921","s12","Feather River Spring","CGAAGTCGCTTTA","CGGAGTCGCTTTA",8,7
+"939","CH123921","s13","Kanektok River","CGGAGTCGCTTTA","CGGGGTCGCTTTA",5,4
+"940","CH123921","s14","Kanektok River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"941","CH123921","s15","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",3,3
+"942","CH123921","s16","Spius Creek","TGGAGTCGCTTTA","TGGGGTCGCTTTA",4,3
+"943","CH123921","s17","Eel River","CGGAGTCGCTTTA","CGGAGTCGCTTTA",4,4
+"944","CH123921","s18","Eel River","TGGAGTCGCTTTA","TGGGGTCGCTTTA",7,3
+"945","CH123921","s19","Hanford Reach","CGAAGTCGCTTTA","CGGAGTCGCTTTA",4,3
+"946","CH123921","s20","Hanford Reach","CGGAGTCGCTTTA","CGGAGTCGCTTTA",3,3
+"947","CH123921","s21","Wenatchee River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",3,3
+"948","CH123921","s22","Wenatchee River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",6,6
+"949","CH123921","s23","Feather River Spring","TGGAGTCGCTTTA","TGGGGTCGCTTTA",10,5
+"950","CH123921","s24","Feather River Spring","CGAAGTCGCTTTA","TGGGGTCGCTTTA",6,3
+"951","CH123921","s25","Kanektok River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",8,2
+"952","CH123921","s26","Kanektok River","CGAAGTCGCTTTA","CGAGGTCGCTTTA",3,2
+"953","CH123921","s27","Spius Creek","TGGAGTCGCTTTA","TGGGGTCGCTTTA",5,3
+"954","CH123921","s28","Spius Creek","TGGAGTCGCTTTA","TGGGGTCGCTTTA",3,2
+"955","CH123921","s29","Eel River","CGAAGTCGCTT**","TGGAGTCGCTTTA",2,2
+"956","CH123921","s3","Spius Creek","TGGAGTCGCTTTA","TGGGGTCGCTTTA",7,2
+"957","CH123921","s32","Hanford Reach","TGGAGTCGCTTTA","TGGAGTCGCTTTA",3,3
+"958","CH123921","s33","Wenatchee River","TGGAGTCGCTTTA","TGGGGTCGCTTTA",4,4
+"959","CH123921","s34","Wenatchee River","TAGAGTCGCTTTA","TGGAGTCGCTTTA",3,2
+"960","CH123921","s35","Feather River Spring","CGGAGTCGCTTTA","CGGAGTCGCTTTA",11,11
+"961","CH123921","s36","Feather River Spring","TGGAGTCGCTTTA","TGGAGTCGCTTTA",10,10
+"962","CH123921","s37","Kanektok River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",3,2
+"963","CH123921","s38","Kanektok River","CGGAGTCGCTTTA","CGGGGTCGCTTTA",4,4
+"964","CH123921","s39","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"965","CH123921","s4","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",7,7
+"966","CH123921","s40","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",3,3
+"967","CH123921","s41","Eel River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",3,3
+"968","CH123921","s43","Hanford Reach","TGGAGTCGCTTTA","TGGAGTCGCTTTA",5,5
+"969","CH123921","s44","Hanford Reach","CGGGGTCGCTTTA","TGGAGTCGCTTTA",5,2
+"970","CH123921","s46","Wenatchee River","CGAAGTCGCTTTA","TGGAGTCGCTTTA",4,3
+"971","CH123921","s47","Feather River Spring","TGGAGTCGCTTTA","TGGAGTCGCTTTA",5,5
+"972","CH123921","s48","Feather River Spring","TGGAGTCGCTTTA","TGGGGTCGCTTTA",9,2
+"973","CH123921","s49","Kanektok River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",4,2
+"974","CH123921","s5","Eel River","CGGAGTCGCTTTA","CGGAGTCGCTTTA",4,4
+"975","CH123921","s50","Kanektok River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",6,5
+"976","CH123921","s51","Spius Creek","CGGGGTCGCTTTA","TGGAGTCGCTTTA",3,2
+"977","CH123921","s53","Eel River","TGGAGTCGCTTTA","TGGGGTCGCTTTA",4,3
+"978","CH123921","s55","Hanford Reach","CGGAGTCGCTTTA","TGGAGTCGCTTTA",3,2
+"979","CH123921","s56","Hanford Reach","TGGAGTCGCTTTA","TGGGGTCGCTTTA",6,3
+"980","CH123921","s57","Wenatchee River","TGGAGTCGCTTT*","TGGAGTCGCTTTA",5,2
+"981","CH123921","s59","Feather River Spring","CGGAGTCGCTTTA","TGGAGTCGCTTTA",4,3
+"982","CH123921","s6","Eel River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",7,4
+"983","CH123921","s60","Feather River Spring","CGAAGTCGCTTTA","CGGAGTCGCTTTA",4,4
+"984","CH123921","s61","Kanektok River","CGGAGTCGC_TTA","CGGAGTCGCTTTA",7,2
+"985","CH123921","s62","Kanektok River","CGAAGTCGCTTTA","TGGAGTCGCTTTA",7,2
+"986","CH123921","s63","Spius Creek","TGGAGTCGCTTTA","TGGGGTCGCTTTA",6,2
+"987","CH123921","s64","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",5,5
+"988","CH123921","s65","Eel River","CGGAGTCGCTTT*","TGGAGTCGCTTTA",2,2
+"989","CH123921","s66","Eel River","TGGAGTCGCTTT*","TGGAGTCGCTTTA",4,2
+"990","CH123921","s67","Hanford Reach","CGAAGTCGCTTTA","CGGAGTCGCTTTA",5,2
+"991","CH123921","s68","Hanford Reach","CGGGGTCGCTTTA","CGGGGTCGCTTTA",2,2
+"992","CH123921","s69","Wenatchee River","TGGAGTCGCTTTA","TGGGGTCGCTTTA",3,3
+"993","CH123921","s7","Hanford Reach","CGGAGTCGCTTTA","TGGAGTCGCTTTA",4,3
+"994","CH123921","s70","Wenatchee River","CGAAGTCGCTTTA","TGGAGTCGCTTTA",4,3
+"995","CH123921","s71","Feather River Spring","CGAAGTCGCTTTA","TGGAGTCGCTTTA",3,2
+"996","CH123921","s72","Feather River Spring","CGAGGTCGCTTTA","TGGAGTCGCTTTA",4,2
+"997","CH123921","s73","Kanektok River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",18,18
+"998","CH123921","s74","Kanektok River","CGAGGTCGCTTTA","TGGAGTCGCTTTA",4,3
+"999","CH123921","s75","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",3,3
+"1000","CH123921","s76","Spius Creek","TGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"1001","CH123921","s77","Eel River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",5,5
+"1002","CH123921","s78","Eel River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",7,7
+"1003","CH123921","s79","Hanford Reach","CGGAGTCGCTTTA","TGGAGTCGCTTTA",5,4
+"1004","CH123921","s8","Hanford Reach","CGAAGTCGCTTTA","CGAGGTCGCTTTA",6,2
+"1005","CH123921","s80","Hanford Reach","CGAAGTCGCTTTA","CGGAGTCGCTTTA",4,3
+"1006","CH123921","s81","Wenatchee River","CGAAGTCGCTTTA","TGGGGTCGCTTTA",2,2
+"1007","CH123921","s82","Wenatchee River","TGGAGTCGCTTTA","TGGGGTCGCTTTA",3,2
+"1008","CH123921","s83","Feather River Spring","CGGAGTCGCTTTA","CGGGGTCGCTTTA",6,3
+"1009","CH123921","s84","Feather River Spring","CGGAGTCGCTTTA","CGGGGTCGCTTTA",3,2
+"1010","CH123921","s85","Kanektok River","CGAAGTCGCTTTA","CGGATTCGCTTTA",2,2
+"1011","CH123921","s86","Kanektok River","CGAAGTCGCTTTA","CGAAGTCGCTTTA",3,3
+"1012","CH123921","s87","Spius Creek","TGGAGTCGCTTTA","TGGGGTCGCTTTA",6,2
+"1013","CH123921","s88","Spius Creek","CGGAGTCGCTTTA","TGGAGTCGCTTTA",5,3
+"1014","CH123921","s89","Eel River","CGGAGTCGCTTTA","TGGAGTCGCTTTA",4,3
+"1015","CH123921","s9","Wenatchee River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"1016","CH123921","s90","Eel River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"1017","CH123921","s91","Hanford Reach","TGGAGTCGCTTTA","TGGGGTCGCTTTA",11,5
+"1018","CH123921","s92","Hanford Reach","CGGAGTCGCTTTA","TGGAGTCGCTTTA",5,2
+"1019","CH123921","s93","Wenatchee River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",8,8
+"1020","CH123921","s94","Wenatchee River","TGGAGTCGCTTTA","TGGAGTCGCTTTA",4,4
+"1021","CH123921","s95","Feather River Spring","CGGAGTCGCTTTA","CGGAGTCGCTTTA",12,12
+"1022","CH123921","s96","Feather River Spring","TGGAGTCGCTTTA","TGGGGTCGCTTTA",7,4
+"1023","CH127236","s1","Kanektok River","TTT","TTT",140,140
+"1024","CH127236","s10","Wenatchee River","TGC","TTT",72,71
+"1025","CH127236","s11","Feather River Spring","TGC","TGC",197,197
+"1026","CH127236","s12","Feather River Spring","TGC","TGC",236,236
+"1027","CH127236","s13","Kanektok River","TTT","TTT",114,114
+"1028","CH127236","s14","Kanektok River","TGC","TTT",60,47
+"1029","CH127236","s15","Spius Creek","TTT","TTT",39,39
+"1030","CH127236","s16","Spius Creek","TTT","TTT",27,27
+"1031","CH127236","s17","Eel River","GGC","TGC",59,48
+"1032","CH127236","s18","Eel River","TGC","TGC",89,89
+"1033","CH127236","s19","Hanford Reach","TGC","TGC",121,121
+"1034","CH127236","s2","Kanektok River","TTT","TTT",77,77
+"1035","CH127236","s20","Hanford Reach","TGC","TGC",75,75
+"1036","CH127236","s21","Wenatchee River","TTT","TTT",94,94
+"1037","CH127236","s22","Wenatchee River","TGC","TTT",37,35
+"1038","CH127236","s23","Feather River Spring","TGC","TGC",122,122
+"1039","CH127236","s24","Feather River Spring","TGC","TGC",199,199
+"1040","CH127236","s25","Kanektok River","TTT","TTT",105,105
+"1041","CH127236","s26","Kanektok River","TTT","TTT",73,73
+"1042","CH127236","s27","Spius Creek","TTT","TTT",103,103
+"1043","CH127236","s28","Spius Creek","TTT","TTT",111,111
+"1044","CH127236","s29","Eel River","TGC","TGC",100,100
+"1045","CH127236","s3","Spius Creek","TTT","TTT",113,113
+"1046","CH127236","s31","Hanford Reach","TGC","TTT",48,48
+"1047","CH127236","s32","Hanford Reach","TGC","TGC",57,57
+"1048","CH127236","s33","Wenatchee River","TGC","TTT",54,48
+"1049","CH127236","s34","Wenatchee River","TTT","TTT",76,76
+"1050","CH127236","s35","Feather River Spring","TGC","TGC",125,125
+"1051","CH127236","s36","Feather River Spring","TGC","TGC",128,128
+"1052","CH127236","s37","Kanektok River","TTT","TTT",124,124
+"1053","CH127236","s38","Kanektok River","TTT","TTT",111,111
+"1054","CH127236","s39","Spius Creek","TTT","TTT",97,97
+"1055","CH127236","s4","Spius Creek","TTT","TTT",114,114
+"1056","CH127236","s40","Spius Creek","TGC","TTT",22,20
+"1057","CH127236","s41","Eel River","TGC","TTT",45,36
+"1058","CH127236","s42","Eel River","GGC","GGC",2,2
+"1059","CH127236","s43","Hanford Reach","TGC","TTT",47,44
+"1060","CH127236","s44","Hanford Reach","TGC","TTT",57,45
+"1061","CH127236","s46","Wenatchee River","TTT","TTT",102,102
+"1062","CH127236","s47","Feather River Spring","TGC","TGC",147,147
+"1063","CH127236","s48","Feather River Spring","TGC","TGC",141,141
+"1064","CH127236","s49","Kanektok River","TGC","TTT",56,51
+"1065","CH127236","s5","Eel River","TGC","TGC",91,91
+"1066","CH127236","s50","Kanektok River","TTT","TTT",109,109
+"1067","CH127236","s51","Spius Creek","TTT","TTT",119,119
+"1068","CH127236","s52","Spius Creek","TTT","TTT",53,53
+"1069","CH127236","s53","Eel River","GGC","TTT",49,41
+"1070","CH127236","s54","Eel River","TGC","TTT",40,34
+"1071","CH127236","s55","Hanford Reach","TGC","TGC",108,108
+"1072","CH127236","s56","Hanford Reach","TGC","TGC",99,99
+"1073","CH127236","s57","Wenatchee River","TTT","TTT",136,136
+"1074","CH127236","s58","Wenatchee River","TTT","TTT",51,51
+"1075","CH127236","s59","Feather River Spring","TGC","TGC",115,115
+"1076","CH127236","s6","Eel River","TGC","TGC",154,154
+"1077","CH127236","s60","Feather River Spring","TGC","TGC",123,123
+"1078","CH127236","s61","Kanektok River","TTT","TTT",111,111
+"1079","CH127236","s62","Kanektok River","TTT","TTT",128,128
+"1080","CH127236","s63","Spius Creek","TTT","TTT",128,128
+"1081","CH127236","s64","Spius Creek","TTT","TTT",117,117
+"1082","CH127236","s65","Eel River","TGC","TGC",90,90
+"1083","CH127236","s66","Eel River","TGC","TGC",108,108
+"1084","CH127236","s67","Hanford Reach","TGC","TGC",113,113
+"1085","CH127236","s68","Hanford Reach","TGC","TTT",43,32
+"1086","CH127236","s69","Wenatchee River","TGC","TTT",43,36
+"1087","CH127236","s7","Hanford Reach","TGC","TGC",89,89
+"1088","CH127236","s70","Wenatchee River","TGC","TTT",47,46
+"1089","CH127236","s71","Feather River Spring","TGC","TGC",117,117
+"1090","CH127236","s72","Feather River Spring","TGC","TGC",111,111
+"1091","CH127236","s73","Kanektok River","TGC","TTT",86,59
+"1092","CH127236","s74","Kanektok River","TGC","TTT",66,58
+"1093","CH127236","s75","Spius Creek","TTT","TTT",135,135
+"1094","CH127236","s76","Spius Creek","TGC","TTT",58,48
+"1095","CH127236","s77","Eel River","TTT","TTT",101,101
+"1096","CH127236","s78","Eel River","TGC","TTT",35,25
+"1097","CH127236","s79","Hanford Reach","TGC","TGC",101,101
+"1098","CH127236","s8","Hanford Reach","TGC","TGC",94,94
+"1099","CH127236","s80","Hanford Reach","TTT","TTT",93,93
+"1100","CH127236","s81","Wenatchee River","TTT","TTT",59,59
+"1101","CH127236","s82","Wenatchee River","TTT","TTT",92,92
+"1102","CH127236","s83","Feather River Spring","TGC","TGC",123,123
+"1103","CH127236","s84","Feather River Spring","TGC","TGC",131,131
+"1104","CH127236","s85","Kanektok River","TTT","TTT",68,68
+"1105","CH127236","s86","Kanektok River","TTT","TTT",84,84
+"1106","CH127236","s87","Spius Creek","TGC","TGC",107,107
+"1107","CH127236","s88","Spius Creek","TTT","TTT",109,109
+"1108","CH127236","s89","Eel River","TGC","TGC",70,70
+"1109","CH127236","s9","Wenatchee River","TGC","TTT",92,91
+"1110","CH127236","s90","Eel River","TGC","TGC",101,101
+"1111","CH127236","s91","Hanford Reach","TGC","TGC",115,115
+"1112","CH127236","s92","Hanford Reach","TGC","TGC",99,99
+"1113","CH127236","s93","Wenatchee River","TGC","TGC",77,77
+"1114","CH127236","s94","Wenatchee River","TGC","TTT",37,33
+"1115","CH127236","s95","Feather River Spring","TGC","TGC",102,102
+"1116","CH127236","s96","Feather River Spring","TGC","TGC",148,148
+"1117","CH131460","s1","Kanektok River","CTA","CTA",3150,3150
+"1118","CH131460","s10","Wenatchee River","CTA","CTA",2852,2852
+"1119","CH131460","s11","Feather River Spring","CTA","CTA",4621,4621
+"1120","CH131460","s12","Feather River Spring","CTA","CTA",4754,4754
+"1121","CH131460","s13","Kanektok River","CTA","CTA",2292,2292
+"1122","CH131460","s14","Kanektok River","CTA","CTA",1955,1955
+"1123","CH131460","s15","Spius Creek","CTA","CTA",1245,1245
+"1124","CH131460","s16","Spius Creek","CTA","CTA",1550,1550
+"1125","CH131460","s17","Eel River","CTA","CTA",1808,1808
+"1126","CH131460","s18","Eel River","CTA","CTT",1029,1019
+"1127","CH131460","s19","Hanford Reach","CTA","CTA",2130,2130
+"1128","CH131460","s2","Kanektok River","CCA","CCA",1983,1983
+"1129","CH131460","s20","Hanford Reach","CTA","CTA",1718,1718
+"1130","CH131460","s21","Wenatchee River","CTA","CTA",1871,1871
+"1131","CH131460","s22","Wenatchee River","CTA","CTA",2294,2294
+"1132","CH131460","s23","Feather River Spring","CTA","CTA",2545,2545
+"1133","CH131460","s24","Feather River Spring","CTA","CTA",3235,3235
+"1134","CH131460","s25","Kanektok River","CTA","CTA",1682,1682
+"1135","CH131460","s26","Kanektok River","CTA","CTA",1646,1646
+"1136","CH131460","s27","Spius Creek","CTA","CTA",2021,2021
+"1137","CH131460","s28","Spius Creek","CTA","CTA",1906,1906
+"1138","CH131460","s29","Eel River","CTA","CTA",3031,3031
+"1139","CH131460","s3","Spius Creek","CTA","CTA",1716,1716
+"1140","CH131460","s30","Eel River","CTA","TCA",132,99
+"1141","CH131460","s31","Hanford Reach","CTA","TCA",941,890
+"1142","CH131460","s32","Hanford Reach","CTA","CTA",1727,1727
+"1143","CH131460","s33","Wenatchee River","CTA","CTA",2094,2094
+"1144","CH131460","s34","Wenatchee River","CTA","CTA",1785,1785
+"1145","CH131460","s35","Feather River Spring","CTA","TCA",1299,1292
+"1146","CH131460","s36","Feather River Spring","CTA","CTA",4582,4582
+"1147","CH131460","s37","Kanektok River","CTA","CTA",1972,1972
+"1148","CH131460","s38","Kanektok River","CTA","CTA",2109,2109
+"1149","CH131460","s39","Spius Creek","CTA","CTA",2347,2347
+"1150","CH131460","s4","Spius Creek","CTA","CTA",2806,2806
+"1151","CH131460","s40","Spius Creek","CTA","CTA",1155,1155
+"1152","CH131460","s41","Eel River","CTA","CTT",870,845
+"1153","CH131460","s42","Eel River","CTA","CTA",544,544
+"1154","CH131460","s43","Hanford Reach","CTA","CTA",2307,2307
+"1155","CH131460","s44","Hanford Reach","CTA","CTA",2396,2396
+"1156","CH131460","s45","Wenatchee River","CTA","CTA",238,238
+"1157","CH131460","s46","Wenatchee River","CTA","CTA",1584,1584
+"1158","CH131460","s47","Feather River Spring","CTA","CTA",2988,2988
+"1159","CH131460","s48","Feather River Spring","CTA","CTA",2625,2625
+"1160","CH131460","s49","Kanektok River","CTA","CTA",1436,1436
+"1161","CH131460","s5","Eel River","CTA","CTA",2251,2251
+"1162","CH131460","s50","Kanektok River","CCA","CTA",1244,1156
+"1163","CH131460","s51","Spius Creek","CTA","CTA",2486,2486
+"1164","CH131460","s52","Spius Creek","CTA","CTA",1065,1065
+"1165","CH131460","s53","Eel River","CTA","CTA",2391,2391
+"1166","CH131460","s54","Eel River","CTA","TCA",812,759
+"1167","CH131460","s55","Hanford Reach","CTA","CTA",2131,2131
+"1168","CH131460","s56","Hanford Reach","CTA","CTA",1671,1671
+"1169","CH131460","s57","Wenatchee River","CTA","CTA",1956,1956
+"1170","CH131460","s58","Wenatchee River","CTA","CTA",1450,1450
+"1171","CH131460","s59","Feather River Spring","CTA","CTA",2068,2068
+"1172","CH131460","s6","Eel River","CTA","CTA",4659,4659
+"1173","CH131460","s60","Feather River Spring","CTA","CTA",2645,2645
+"1174","CH131460","s61","Kanektok River","CCA","CTA",1082,1065
+"1175","CH131460","s62","Kanektok River","CTA","CTA",2196,2196
+"1176","CH131460","s63","Spius Creek","CTA","CTA",2514,2514
+"1177","CH131460","s64","Spius Creek","CTA","CTA",1915,1915
+"1178","CH131460","s65","Eel River","CTA","CTT",1144,1130
+"1179","CH131460","s66","Eel River","CTA","TCA",964,926
+"1180","CH131460","s67","Hanford Reach","CTA","CTA",2235,2235
+"1181","CH131460","s68","Hanford Reach","CTA","CTA",1819,1819
+"1182","CH131460","s69","Wenatchee River","CTA","CTA",1512,1512
+"1183","CH131460","s7","Hanford Reach","CTA","CTA",1955,1955
+"1184","CH131460","s70","Wenatchee River","CTA","CTA",2316,2316
+"1185","CH131460","s71","Feather River Spring","CTA","CTA",2212,2212
+"1186","CH131460","s72","Feather River Spring","CTA","CTA",2688,2688
+"1187","CH131460","s73","Kanektok River","CTA","CTA",2313,2313
+"1188","CH131460","s74","Kanektok River","CTA","CTA",1828,1828
+"1189","CH131460","s75","Spius Creek","CTA","CTA",2612,2612
+"1190","CH131460","s76","Spius Creek","CTA","CTA",2475,2475
+"1191","CH131460","s77","Eel River","CTA","CTA",3163,3163
+"1192","CH131460","s78","Eel River","CTA","CTT",1156,1029
+"1193","CH131460","s79","Hanford Reach","CTA","CTA",2206,2206
+"1194","CH131460","s8","Hanford Reach","CTA","CTA",2289,2289
+"1195","CH131460","s80","Hanford Reach","CTA","CTA",1846,1846
+"1196","CH131460","s81","Wenatchee River","CTA","CTA",1526,1526
+"1197","CH131460","s82","Wenatchee River","CTA","CTA",2196,2196
+"1198","CH131460","s83","Feather River Spring","CTA","CTA",2170,2170
+"1199","CH131460","s84","Feather River Spring","CTA","CTA",2621,2621
+"1200","CH131460","s85","Kanektok River","CTA","CTA",1642,1642
+"1201","CH131460","s86","Kanektok River","CTA","CTA",2138,2138
+"1202","CH131460","s87","Spius Creek","CTA","CTA",2764,2764
+"1203","CH131460","s88","Spius Creek","CTA","CTA",3031,3031
+"1204","CH131460","s89","Eel River","CTA","CTA",2046,2046
+"1205","CH131460","s9","Wenatchee River","CCA","CTA",1505,1480
+"1206","CH131460","s90","Eel River","CTA","CTA",2170,2170
+"1207","CH131460","s91","Hanford Reach","CTA","CTA",2157,2157
+"1208","CH131460","s92","Hanford Reach","CTA","CTA",2013,2013
+"1209","CH131460","s93","Wenatchee River","CTA","CTA",1909,1909
+"1210","CH131460","s94","Wenatchee River","CTA","CTA",1727,1727
+"1211","CH131460","s95","Feather River Spring","CTA","CTA",2541,2541
+"1212","CH131460","s96","Feather River Spring","CTA","TCA",1478,1373
+"1213","CH95442","s1","Kanektok River","CCAT*","CTAT*",5,5
+"1214","CH95442","s10","Wenatchee River","CCAT*","CCGAT",8,5
+"1215","CH95442","s11","Feather River Spring","CCGA*","CCGAT",20,9
+"1216","CH95442","s12","Feather River Spring","CCGA*","CCGAT",13,6
+"1217","CH95442","s13","Kanektok River","*CATT","CCATT",17,5
+"1218","CH95442","s14","Kanektok River","*CATT","CCATT",14,4
+"1219","CH95442","s15","Spius Creek","CCAT*","CCATT",3,3
+"1220","CH95442","s16","Spius Creek","CCAT*","CCATT",9,4
+"1221","CH95442","s17","Eel River","CCGA*","CCGAT",10,9
+"1222","CH95442","s18","Eel River","CCGA*","CCGAT",18,5
+"1223","CH95442","s19","Hanford Reach","CCGA*","CCGAT",13,7
+"1224","CH95442","s2","Kanektok River","CCAT*","CCATT",14,3
+"1225","CH95442","s20","Hanford Reach","CCATT","CCGAT",6,5
+"1226","CH95442","s21","Wenatchee River","CCGAT","*CGAT",10,4
+"1227","CH95442","s22","Wenatchee River","CCGA*","CCGAT",9,5
+"1228","CH95442","s23","Feather River Spring","CCGA*","CCGAT",17,12
+"1229","CH95442","s24","Feather River Spring","CCGA*","CCGAT",16,13
+"1230","CH95442","s25","Kanektok River","CCAT*","CCATT",16,7
+"1231","CH95442","s26","Kanektok River","CCAT*","CCATT",6,6
+"1232","CH95442","s27","Spius Creek","CCAT*","CCATT",20,6
+"1233","CH95442","s28","Spius Creek","CCAT*","CCATT",22,6
+"1234","CH95442","s29","Eel River","CCGA*","CCGAT",17,9
+"1235","CH95442","s3","Spius Creek","CCATT","CCGA*",6,3
+"1236","CH95442","s31","Hanford Reach","CCGA*","CCGAT",14,7
+"1237","CH95442","s32","Hanford Reach","CCGAT","*CGAT",4,2
+"1238","CH95442","s33","Wenatchee River","CCGA*","CCGAT",20,6
+"1239","CH95442","s34","Wenatchee River","CCATT","CCGAT",6,5
+"1240","CH95442","s35","Feather River Spring","CCGA*","CCGAT",14,8
+"1241","CH95442","s36","Feather River Spring","CCGAT","*CGAT",19,6
+"1242","CH95442","s37","Kanektok River","CCAT*","CCATT",14,6
+"1243","CH95442","s38","Kanektok River","CCAT*","CCATT",14,5
+"1244","CH95442","s39","Spius Creek","CCATT","TCATT",5,3
+"1245","CH95442","s4","Spius Creek","CCAT*","CCATT",17,7
+"1246","CH95442","s40","Spius Creek","CCAT*","CCATT",4,3
+"1247","CH95442","s41","Eel River","CCGA*","CCGAT",10,7
+"1248","CH95442","s43","Hanford Reach","CCATT","CCGAT",5,3
+"1249","CH95442","s44","Hanford Reach","CCGAT","*CGAT",12,3
+"1250","CH95442","s46","Wenatchee River","CCATT","CCGAT",8,6
+"1251","CH95442","s47","Feather River Spring","CCGA*","CCGAT",16,6
+"1252","CH95442","s48","Feather River Spring","CCGA*","CCGAT",13,7
+"1253","CH95442","s49","Kanektok River","CCAT*","CCATT",10,2
+"1254","CH95442","s5","Eel River","CCGA*","CCGAT",14,7
+"1255","CH95442","s50","Kanektok River","CCAT*","CCATT",16,11
+"1256","CH95442","s51","Spius Creek","CCAT*","CCATT",9,9
+"1257","CH95442","s52","Spius Creek","*CATT","CCATT",4,2
+"1258","CH95442","s53","Eel River","CCGAT","*CGAT",15,5
+"1259","CH95442","s54","Eel River","CCGAT","*CGAT",6,5
+"1260","CH95442","s55","Hanford Reach","CCGA*","CCGAT",14,9
+"1261","CH95442","s56","Hanford Reach","CCGAT","CCGAT",11,11
+"1262","CH95442","s57","Wenatchee River","CCATT","CCGAT",9,3
+"1263","CH95442","s58","Wenatchee River","CCATT","CCGAT",5,2
+"1264","CH95442","s59","Feather River Spring","CCGA*","CCGAT",15,4
+"1265","CH95442","s6","Eel River","CCGA*","CCGAT",17,9
+"1266","CH95442","s60","Feather River Spring","CCGA*","CCGAT",18,4
+"1267","CH95442","s61","Kanektok River","*CATT","CCATT",6,3
+"1268","CH95442","s62","Kanektok River","*CATT","CCATT",6,4
+"1269","CH95442","s63","Spius Creek","CCAT*","CCATT",11,8
+"1270","CH95442","s64","Spius Creek","CCATT","CCGAT",9,7
+"1271","CH95442","s65","Eel River","CCGAT","*CGAT",12,5
+"1272","CH95442","s66","Eel River","CCGA*","CCGAT",12,4
+"1273","CH95442","s67","Hanford Reach","CCGA*","CCGAT",14,11
+"1274","CH95442","s68","Hanford Reach","CCGA*","CCGAT",9,5
+"1275","CH95442","s69","Wenatchee River","CCGAT","*CGAT",12,6
+"1276","CH95442","s7","Hanford Reach","CCGA*","CCGAT",11,3
+"1277","CH95442","s70","Wenatchee River","CCAT*","CCATT",12,5
+"1278","CH95442","s71","Feather River Spring","CCGA*","CCGAT",14,6
+"1279","CH95442","s72","Feather River Spring","CCGA*","CCGAT",17,9
+"1280","CH95442","s73","Kanektok River","CCAT*","CCATT",9,4
+"1281","CH95442","s74","Kanektok River","CCAT*","CCATT",10,7
+"1282","CH95442","s75","Spius Creek","CCAT*","CCATT",8,7
+"1283","CH95442","s76","Spius Creek","CCAT*","CCATT",16,10
+"1284","CH95442","s77","Eel River","CCGAT","*CGAT",20,5
+"1285","CH95442","s78","Eel River","CCGAT","*CGAT",12,3
+"1286","CH95442","s79","Hanford Reach","CCGA*","CCGAT",7,7
+"1287","CH95442","s8","Hanford Reach","CCGA*","CCGAT",13,7
+"1288","CH95442","s80","Hanford Reach","CCGA*","CCGAT",8,5
+"1289","CH95442","s81","Wenatchee River","CCAT*","CCATT",5,4
+"1290","CH95442","s82","Wenatchee River","CCATT","CCGAT",7,4
+"1291","CH95442","s83","Feather River Spring","CCGAT","*CGAT",15,7
+"1292","CH95442","s84","Feather River Spring","CCGAT","*CGAT",13,5
+"1293","CH95442","s85","Kanektok River","CCGAT","CTAT*",7,3
+"1294","CH95442","s86","Kanektok River","*CATT","CCATT",8,6
+"1295","CH95442","s87","Spius Creek","CCAT*","CCATT",28,16
+"1296","CH95442","s88","Spius Creek","CCAT*","CCATT",11,5
+"1297","CH95442","s89","Eel River","CCGA*","CCGAT",10,6
+"1298","CH95442","s9","Wenatchee River","CCAT*","CCATT",18,13
+"1299","CH95442","s90","Eel River","CCATT","CCGAT",6,5
+"1300","CH95442","s91","Hanford Reach","CCGA*","CCGAT",15,10
+"1301","CH95442","s92","Hanford Reach","CCGAT","*CGAT",17,4
+"1302","CH95442","s93","Wenatchee River","CCATT","CCGAT",9,4
+"1303","CH95442","s94","Wenatchee River","CCATT","CCGAT",6,5
+"1304","CH95442","s95","Feather River Spring","CCGA*","CCGAT",12,10
+"1305","CH95442","s96","Feather River Spring","CCGA*","CCGAT",19,9
+"1306","CH97077","s1","Kanektok River","*AA","*AA",2121,2121
+"1307","CH97077","s10","Wenatchee River","*AA","*AA",2260,2260
+"1308","CH97077","s11","Feather River Spring","*AA","*CA",1770,1740
+"1309","CH97077","s12","Feather River Spring","*AA","*CA",1959,1947
+"1310","CH97077","s13","Kanektok River","*AA","*AG",949,923
+"1311","CH97077","s14","Kanektok River","*AA","*AA",1648,1648
+"1312","CH97077","s15","Spius Creek","*AA","*AA",516,516
+"1313","CH97077","s16","Spius Creek","*AA","*CA",421,390
+"1314","CH97077","s17","Eel River","*CA","*CA",1321,1321
+"1315","CH97077","s18","Eel River","*AA","*CA",754,726
+"1316","CH97077","s19","Hanford Reach","*AA","*AA",1917,1917
+"1317","CH97077","s2","Kanektok River","*AA","*AA",1567,1567
+"1318","CH97077","s20","Hanford Reach","*AA","*CA",644,609
+"1319","CH97077","s21","Wenatchee River","*AA","*AA",1372,1372
+"1320","CH97077","s22","Wenatchee River","*AA","*AA",1462,1462
+"1321","CH97077","s23","Feather River Spring","*AA","*CA",987,953
+"1322","CH97077","s24","Feather River Spring","*CA","*CA",2820,2820
+"1323","CH97077","s25","Kanektok River","*AA","*AA",1589,1589
+"1324","CH97077","s26","Kanektok River","*AA","*AA",1502,1502
+"1325","CH97077","s27","Spius Creek","*AA","*AG",624,601
+"1326","CH97077","s28","Spius Creek","*AA","*AG",809,788
+"1327","CH97077","s29","Eel River","*AA","*CA",848,832
+"1328","CH97077","s3","Spius Creek","*AA","*AG",644,603
+"1329","CH97077","s30","Eel River","*AA","*AA",88,88
+"1330","CH97077","s31","Hanford Reach","*AA","*CA",660,645
+"1331","CH97077","s32","Hanford Reach","*AA","*AA",1194,1194
+"1332","CH97077","s33","Wenatchee River","*AA","*AA",1629,1629
+"1333","CH97077","s34","Wenatchee River","*AA","*AA",1032,1032
+"1334","CH97077","s35","Feather River Spring","*AA","*CA",1026,944
+"1335","CH97077","s36","Feather River Spring","*AA","*AA",3169,3169
+"1336","CH97077","s37","Kanektok River","*AA","*AA",1796,1796
+"1337","CH97077","s38","Kanektok River","*AA","*AA",1681,1681
+"1338","CH97077","s39","Spius Creek","*AA","*AG",549,509
+"1339","CH97077","s4","Spius Creek","*AA","*AA",1423,1423
+"1340","CH97077","s40","Spius Creek","*AA","*AG",245,237
+"1341","CH97077","s41","Eel River","*AA","*CA",623,582
+"1342","CH97077","s42","Eel River","*CA","*CA",377,377
+"1343","CH97077","s43","Hanford Reach","*AA","*CA",786,715
+"1344","CH97077","s44","Hanford Reach","*AA","*CA",848,766
+"1345","CH97077","s45","Wenatchee River","*AA","*AA",43,43
+"1346","CH97077","s46","Wenatchee River","*AA","*AA",1321,1321
+"1347","CH97077","s47","Feather River Spring","*AA","*CA",1002,995
+"1348","CH97077","s48","Feather River Spring","*AA","*CA",1052,976
+"1349","CH97077","s49","Kanektok River","*AA","*AG",723,700
+"1350","CH97077","s5","Eel River","*AA","*AA",1567,1567
+"1351","CH97077","s50","Kanektok River","*AA","*AA",1874,1874
+"1352","CH97077","s51","Spius Creek","*AG","*CA",781,736
+"1353","CH97077","s52","Spius Creek","*AA","*AA",514,514
+"1354","CH97077","s53","Eel River","*AA","*AA",1828,1828
+"1355","CH97077","s54","Eel River","*CA","*CA",1223,1223
+"1356","CH97077","s55","Hanford Reach","*AA","*CA",830,796
+"1357","CH97077","s56","Hanford Reach","*AA","*CA",773,758
+"1358","CH97077","s57","Wenatchee River","*AA","*AA",1713,1713
+"1359","CH97077","s58","Wenatchee River","*AA","*AA",769,769
+"1360","CH97077","s59","Feather River Spring","*AA","*AA",1917,1917
+"1361","CH97077","s6","Eel River","*AA","*CA",1099,1022
+"1362","CH97077","s60","Feather River Spring","*AA","*AA",1958,1958
+"1363","CH97077","s61","Kanektok River","*AA","*AA",1771,1771
+"1364","CH97077","s62","Kanektok River","*AA","*AA",1808,1808
+"1365","CH97077","s63","Spius Creek","*AG","*AG",1466,1466
+"1366","CH97077","s64","Spius Creek","*AA","*AG",656,649
+"1367","CH97077","s65","Eel River","*AA","*CA",750,706
+"1368","CH97077","s66","Eel River","*AA","*AA",1284,1284
+"1369","CH97077","s67","Hanford Reach","*CA","*CA",1527,1527
+"1370","CH97077","s68","Hanford Reach","*AA","*CA",563,550
+"1371","CH97077","s69","Wenatchee River","*AA","*AA",1279,1279
+"1372","CH97077","s7","Hanford Reach","*CA","*CA",1493,1493
+"1373","CH97077","s70","Wenatchee River","*AA","*AA",1244,1244
+"1374","CH97077","s71","Feather River Spring","*AA","*CA",946,901
+"1375","CH97077","s72","Feather River Spring","*AA","*AA",1803,1803
+"1376","CH97077","s73","Kanektok River","*AA","*AA",2285,2285
+"1377","CH97077","s74","Kanektok River","*AA","*AA",1554,1554
+"1378","CH97077","s75","Spius Creek","*AA","*AG",775,727
+"1379","CH97077","s76","Spius Creek","*AA","*AA",1422,1422
+"1380","CH97077","s77","Eel River","*AA","*AG",866,831
+"1381","CH97077","s78","Eel River","*AA","*CA",577,510
+"1382","CH97077","s79","Hanford Reach","*AA","*AA",1604,1604
+"1383","CH97077","s8","Hanford Reach","*CA","*CA",1744,1744
+"1384","CH97077","s80","Hanford Reach","*AA","*AA",1631,1631
+"1385","CH97077","s81","Wenatchee River","*AA","*AA",1021,1021
+"1386","CH97077","s82","Wenatchee River","*AA","*AA",1445,1445
+"1387","CH97077","s83","Feather River Spring","*AA","*AG",896,891
+"1388","CH97077","s84","Feather River Spring","*AA","*CA",1104,1091
+"1389","CH97077","s85","Kanektok River","*AA","*AA",1090,1090
+"1390","CH97077","s86","Kanektok River","*AA","*AA",1604,1604
+"1391","CH97077","s87","Spius Creek","*AA","*AA",2128,2128
+"1392","CH97077","s88","Spius Creek","*AA","*AA",1402,1402
+"1393","CH97077","s89","Eel River","*AA","*AA",1561,1561
+"1394","CH97077","s9","Wenatchee River","*AA","*AG",1233,1207
+"1395","CH97077","s90","Eel River","*AA","*AA",1505,1505
+"1396","CH97077","s91","Hanford Reach","*AA","*AA",1765,1765
+"1397","CH97077","s92","Hanford Reach","*AA","*CA",825,818
+"1398","CH97077","s93","Wenatchee River","*AA","*AA",1372,1372
+"1399","CH97077","s94","Wenatchee River","*AA","*AA",1225,1225
+"1400","CH97077","s95","Feather River Spring","*AA","*CA",1053,1025
+"1401","CH97077","s96","Feather River Spring","*AA","*AA",2191,2191

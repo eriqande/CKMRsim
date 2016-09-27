@@ -241,3 +241,16 @@ run_mendel <- function(Dir, Control) {
                 )
   system(COMM)
 }
+
+
+
+
+#' simulate genotype-pairs from linked markers using Mendel
+#'
+#' This is the main function to use.  Pass it a data frame of markers (indexed in order)
+#' and it will pass them off to Mendel, drop the genes, do genotyping error and then return
+#' a list of vectors which hold the genotype index that you can use to subscript the
+#' joint probability vectors with.
+#' @param df  A data frame in the format of \code{\link{long_markers}}.
+#' @param C a list whose elements contain, at a minimum, the "C-matrices" which give the
+#' probability of observed genotypes given

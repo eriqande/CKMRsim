@@ -25,7 +25,7 @@
 #'
 #' # when a > b
 #' wrong_ord <- all_genos %>%
-#'  filter(a <= b) %>%
+#'  filter(a >= b) %>%
 #'  mutate(Idx = 1:length(a),
 #'       Indab = index_ab(b, a, A))
 #'
@@ -119,7 +119,9 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
 #' is s. I am going to a add a lot more parameters to this as soon as I figure out how to
 #' pass in genotyping error models and their associated parameters. I would like to do that in
 #' a way that easily let's people define their own functions.  But for now it just
-#' does the microhaplotype error model with default parameters.
+#' does the microhaplotype error model with default parameters.  This creates and inserts the
+#' C_l_true matrix and also the C_l matrix.  C_l_true is the "true" genotyping error model results
+#' and C_l is what gets applied in the likelihood calculations.
 #' @param XL a list of the loci like that created using \code{\link{long_markers_to_X_l_list}}.
 #' The key thing that each list component needs is the named vector freqs of the allele frequencies.
 #' The functions that compute genotyping error use the names of the allele to compute the
@@ -131,6 +133,7 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
 insert_C_l_matrices <- function(XL, ...) {
   lapply(XL, function(x) {
     if(is.null(names(x$freqs))) stop("No names attribute on the allele frequencies")
+    x$C_l_true <- microhaplotype_geno_err_matrix(haps = names(x$freqs), ...)
     x$C_l <- microhaplotype_geno_err_matrix(haps = names(x$freqs), ...)
     x
   })
@@ -155,10 +158,14 @@ insert_C_l_matrices <- function(XL, ...) {
 insert_Y_l_matrices <- function(L) {
   lapply(L, function(a) {
     a$Y_l_true <- lapply(a$X_l, function(b) {
-      t(b %*% a$C_l) %*% t(a$C_l)
+      tmp <- t(b %*% a$C_l_true) %*% t(a$C_l_true)
+      names(dimnames(tmp)) <- c("obs_geno_indiv_1", "obs_geno_indiv_2")
+      tmp
     })
     a$Y_l <- lapply(a$X_l, function(b) {
-      t(b %*% a$C_l) %*% t(a$C_l)
+      tmp <- t(b %*% a$C_l) %*% t(a$C_l)
+      names(dimnames(tmp)) <- c("obs_geno_indiv_1", "obs_geno_indiv_2")
+      tmp
     })
     a
   })

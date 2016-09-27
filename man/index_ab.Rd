@@ -37,7 +37,7 @@ right_ord <- all_genos \%>\%
 
 # when a > b
 wrong_ord <- all_genos \%>\%
- filter(a <= b) \%>\%
+ filter(a >= b) \%>\%
  mutate(Idx = 1:length(a),
       Indab = index_ab(b, a, A))
 

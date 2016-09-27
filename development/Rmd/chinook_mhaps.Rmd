@@ -1,0 +1,437 @@
+---
+title: "Analyses of Chinook microhaps"
+author: "Eric C. Anderson"
+date: "June 6, 2016"
+output: 
+  html_notebook:
+    toc: true
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readr)
+library(readxl)
+library(ggplot2)
+library(tidyr)
+library(CKMRsim)
+library(stringr)
+library(gpiper)
+```
+
+## Compiling the Data
+I downloaded the read and haplotype data from haPLOType and put it into `CKMRsim/development/data/chinook_read_data_lightly_filtered.csv`. 
+This is lightly filtered:
+
+  - Min read depth of 20
+  - Min allelic depth ration 0.2
+  - Keeping only the top two haplotypes in each individual.
+  
+Diana went through and curated these loci and provided an account of which ones should be kept, by population, in the excel file
+that I put here: `CKMRsim/development/data/chinook_microhaps_status.xlsx`.  She put some of the loci in the "toss" pile for each population
+because they were monomorphic in that population, but they could still be useful for GSI, so I will put those back in there.
+
+First task is to get that out of excel into something more usable in R:
+```{r extract-from-excel}
+sheets <- excel_sheets(path = "../data/chinook_microhaps_status.xlsx")
+names(sheets) <- sheets
+long_status <- lapply(sheets, function(x) read_excel(path = "../data/chinook_microhaps_status.xlsx", sheet = x, skip = 1)) %>%
+  bind_rows(.id = "pop")
+```
+Great.  Now the variable `long_status` has all that.  Now we are going to keep any locus that was kept in any of the populations
+```{r determine-kept-loci}
+keeper_loci <- long_status %>% 
+  group_by(locus) %>% 
+  summarise(takem = any(status == "keep")) %>%
+  filter(takem == TRUE) %>%
+  select(locus) %>%
+  unlist() %>%
+  unname()
+
+keeper_loci
+```
+Now, it turns out that `CH105401` is not really a keeper, either. I found that later tallying
+the sample size from each population.  So we will drop that now too.
+```{r drop-another-lame-locus}
+keeper_loci <- keeper_loci[keeper_loci != "CH105401"]
+```
+Voila! We are left with 10 loci that we are going to be able to play with.
+
+OK, next step is to filter down the genotypes of the individuals:
+```{r get-genos}
+genos <- read_csv("../data/chinook_read_data_lightly_filtered.csv") 
+genos <- genos[-1]  # toss the row number column
+# make a factor out of the groups:  south to north
+genos$group <- factor(genos$group, levels = c(
+  "Feather River Spring",
+  "Eel River",
+  "Hanford Reach",
+  "Wenatchee River",
+  "Spius Creek",
+  "Kanektok River"
+))
+tidied <- genos %>%
+  filter(locus %in% keeper_loci) %>%
+  filter(read.depth.1 > 8 & read.depth.2 > 8) %>%  # only keep genotypes that have read depth at least 8 of each haplotype
+  tidyr::gather(key = "gene_copy", value = "allele", contains("haplotype"))
+```
+
+## Quick Summaries
+
+Now we can do some simple summaries.
+
+### Number of haplotypes per locus
+```{r num-haps}
+num_haps <- tidied %>% group_by(locus, allele) %>% tally() %>% summarise(num_haps = n())
+num_haps
+
+# and you can look at it like this too:
+table(num_haps$num_haps)
+```
+
+### Number of individuals genotyped per population per locus
+```{r num_indivs-by-locus-and-pop}
+nums_genotyped <- tidied %>%
+  group_by(group, locus) %>%
+  summarise(num_scored = n()/2) %>%
+  tidyr::spread(key = locus, value = num_scored)
+nums_genotyped
+```
+So, at these 10 loci, almost every individual yielded a genotype.
+
+### Haplotype frequencies in the different populations
+We just compute haplotype frequencies here, and then we will plot the haplotype freqs with line plots
+```{r hap-freqs}
+hap_freqs <- tidied %>%
+  group_by(locus, allele, group) %>%
+  summarise(counts = n()) %>%
+  group_by(locus, group) %>%
+  mutate(freq = counts / sum(counts))
+
+# now actually want to add 0's in there too
+alles <- tidied %>% 
+  group_by(locus, allele) %>%
+  tally() %>%
+  select(-n) %>%
+  ungroup()
+
+full_hap_freqs <- complete(ungroup(hap_freqs), nesting(locus, allele), group, fill = list(counts = 0, freq = 0.0)) %>% arrange(group, locus, allele)
+```
+
+Now some plots:
+```{r loc-plot-func}
+# here is a little function that makes a plot for locus
+plot_freq_func <- function(loc = "CH100884") {
+  ggplot(full_hap_freqs %>% filter(locus == loc), aes(x = group, y = freq, colour = allele)) + 
+    geom_point() + 
+    geom_line(data = full_hap_freqs %>% filter(locus == loc) %>% mutate(group_int = as.integer(group)),
+              aes(x = group_int)) + 
+    theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=10)) +
+    ggtitle(loc)
+}
+```
+
+And I am going to make a lot of those...
+```{r locus-freq-plots}
+dump <- lapply(unique(tidied$locus), function(x) {g <- plot_freq_func(x); ggsave(paste("../outputs/freqs", x, ".pdf", sep = ""))})
+```
+To be honest, I don't see any great smoking guns there.
+
+## Single parent power
+First get the microhap freqs in each population and get ready to run them in CKMRsim.
+```{r prep-mhaps}
+set.seed(5)
+tmp <- hap_freqs %>%
+  ungroup() %>%
+  mutate(Chrom = "GTseq") %>%
+  rename(Locus = locus,
+         Allele = allele,
+         Freq = freq) %>%
+  select(-counts) %>%
+  mutate(Pos = as.integer(factor(Locus, levels = unique(Locus)))) %>%
+  mutate(LocIdx = 0,
+         AlleIdx = 0)
+
+tmplist <- split(tmp, tmp$group) %>% lapply(function(x) x %>% select(-group))
+  
+ckmr_list <- lapply(tmplist, function(x) CKMRsim::reindex_markers(x) %>%
+  select(Chrom, Locus, Pos, Allele, LocIdx, AlleIdx, Freq))
+
+```
+
+Now a function to take each of these are run it for PO:
+```{r full-ckmr-func}
+full_ckmr_func <- function(x) {
+  mhlist <- long_markers_to_X_l_list(D = x, 
+                                     kappa_matrix = kappas[c("PO", "U"), ])
+  # add the matrices that account for genotyping error
+  mhlist2 <- insert_C_l_matrices(mhlist, 
+                                 snp_err_rates = 0.005,
+                                 scale_by_num_snps = TRUE)
+  # do the matrix multiplication that gives the Y_l matrices
+  mhlist3 <- insert_Y_l_matrices(mhlist2)
+  # then simulate the Q values 
+  Qvals <- simulate_and_calc_Q(mhlist3, reps = 10^5)
+  # then do the Monte Carlo
+  mc_sample_simple(Q = Qvals, nu = "PO", method = "vanilla", FNRs = c(0.1, 0.5))
+}
+
+FPRs <- lapply(ckmr_list, function(x) full_ckmr_func(x)) %>%
+  bind_rows(.id = "pop")
+
+FPRs
+```
+
+OK, now let's do the same for the best SNPs in each population, and run it through with those
+```{r best-feather}
+get_best_snps <- function(mhaps) {
+snp_freqs <- mhaps %>%
+  split(f = mhaps$Locus) %>%
+  lapply(function(x) {
+    x$exploded = sapply(strsplit(x$Allele, split = ""), function(y) paste(y, collapse = "."))
+    x
+  }) %>%
+  lapply(., function(x) {
+    separate(x, exploded, into = paste("snp", 1:nchar(x$Allele[1]), sep = "_"))
+  }) %>%
+  lapply(., function(x) {
+    gather(x, key = "SNP", value = "base", contains("snp_"))
+  }) %>%
+  bind_rows %>%
+  group_by(Chrom, Locus, Pos, LocIdx, SNP, base) %>% 
+  summarise(Freq = sum(Freq))
+
+# now, get the best (MAF closest to 0.5)
+best_snps <- snp_freqs %>%
+  group_by(Locus, SNP) %>%
+  filter(n() > 1) %>%  # toss SNPs that are monomorphic---for some reason there are some...
+  mutate(maf = min(Freq)) %>%
+  group_by(Locus) %>%
+  filter(maf == max(maf))  %>%  # this almost does it, but some snps at a locus might have the same MAF at different snps
+  mutate(tmp = 1:n()) %>%
+  filter(tmp < 3)  %>% # this gets rid of those same MAF cases.
+  select(-tmp, -maf) %>%
+  rename(Allele = base) %>%
+  mutate(AlleIdx = 0) %>%
+  CKMRsim::reindex_markers() %>%
+  select(Chrom, Locus, Pos, Allele, LocIdx, AlleIdx, Freq, SNP)
+
+  list(snp_freqs = snp_freqs, best_snps = best_snps)
+}
+
+best_snps_list <- lapply(ckmr_list, function(x) get_best_snps(x))
+```
+
+Now, do CKMRsim on each of those
+```{r best-snps-ckmr}
+bsFPRs <- lapply(best_snps_list, function(x) full_ckmr_func(x$best_snps)) %>%
+  bind_rows(.id = "pop")
+bsFPRs
+```
+
+OK, that is about what we expect.  Twice as much power with the microhaps.  But, what
+if we force ourselves to use only the best SNPs for Feather River?
+```{r only-good-for-feather}
+feath_best <- best_snps_list$`Feather River Spring`$best_snps %>%
+  select(Locus, Allele, SNP)
+
+feath_best_list <- lapply(best_snps_list, function(x) left_join(feath_best, x$snp_freqs %>% rename(Allele = base)) %>%
+                            group_by(Locus) %>% filter(!any(is.na(Freq)) | !any(Freq == 1.0)))
+```
+Now we CKMR thos
+```{r feath_best-ckmr}
+fbFPRs <- lapply(feath_best_list, function(x) full_ckmr_func(x)) %>%
+  bind_rows(.id = "pop")
+fbFPRs
+```
+Now let us compare those together more easily
+```{r lump-fprs}
+all_comp <- list(mhaps = FPRs, best_snps_each_pop = bsFPRs, best_snps_feather = fbFPRs) %>%
+  bind_rows(.id = "marker_method") %>% 
+  arrange(pop, FNR, marker_method) 
+
+all_comp %>%
+  as.data.frame
+
+```
+
+And I think it might be worth plotting these
+```{r plot-FPRs}
+all_comp$pop <- factor(all_comp$pop, levels = c(
+  "Feather River Spring",
+  "Eel River",
+  "Hanford Reach",
+  "Wenatchee River",
+  "Spius Creek",
+  "Kanektok River"
+))
+
+DF <- all_comp %>% filter(FNR > 0.2) %>%
+  mutate(pop_int = as.integer(pop))
+ggplot(DF, aes(x = pop, y = FPR, colour = marker_method)) + 
+  geom_point() + 
+  theme(axis.text.x  = element_text(angle=90, vjust=0.5, size=10)) +
+  ylim(0, NA) +
+  geom_line(mapping = aes(x = pop_int), size = 0.2)
+  
+ggsave(filename = "../outputs/single-parent-FPRs-at-FNR-of-one-half.pdf")
+
+```
+
+## GSI power comparisons
+
+### Explode into SNPs
+We are going to look at how well we do with multiple haplotypes versus the highest global FST snp from each locus.  To do that we
+are going to want to write a function that explodes microhaplotypes into single SNPs.  And then use it.
+```{r explode-function}
+explode_snps <- function(D) {
+  DL <- split(D, D$locus)
+  lapply(DL, function(x) {
+  x$clean <- str_replace(x$allele, "\\*", "")
+  x$exploded <- sapply(strsplit(x$clean, split = ""), function(y) paste(y, collapse = ".")) 
+  
+  separate(x, exploded, into = paste("snp", 1:nchar(x$clean[1]), sep = "_")) %>%
+    gather(., key = "SNP", value = "base", contains("snp_"))
+  }) %>% bind_rows
+}
+
+snps <- explode_snps(tidied) %>% ungroup
+```
+
+### Extract the max Fst SNPs
+And now we are going to do a quick calculation to get the highest global Fst.  This will be sort of an approximation
+but it should be fine because the sample sizes are all pretty much the same.  
+```{r calc-fst}
+max_fst_snps <- snps %>%
+  group_by(group, locus, SNP, base) %>% 
+  summarise(counts = n()) %>%
+  mutate(freqs = counts / sum(counts)) %>%
+  group_by(locus, SNP, base) %>%
+  mutate(global_mean = mean(freqs)) %>%
+  filter(global_mean > 0.0 & global_mean < 1.0) %>%
+  mutate(Fthing = ((freqs - global_mean)^2) / ( global_mean * (1 - global_mean) )) %>%
+  group_by(group, locus, SNP) %>%
+  mutate(idx = 1:n()) %>%
+  filter(idx == 1) %>%
+  group_by(locus, SNP) %>%
+  summarise(mean_fst_thing = mean(Fthing)) %>%
+  group_by(locus) %>%
+  filter(mean_fst_thing == max(mean_fst_thing)) %>%
+  mutate(idx = 1:n()) %>%  # this gets rid of a duplicate SNPs that is there because it is identical to the other
+  filter(idx == 1) %>%
+  select(-idx) %>%
+  ungroup()
+
+
+```
+
+Now we just need to extract those particular snps from the data set.  
+```{r extract-max-fst-snps}
+gsi_snps <- left_join(max_fst_snps, snps)
+```
+
+### Convert SNPs to two-column format and feed into gpiper
+And the hard part now is turning this into a data set that gsi_sim can use.  I can go toward a two-column format with
+rownames, and then we can use gpiper.  
+
+
+Here we two-column-format-ize the SNPs
+```{r two-cf-snps}
+snp_2c <- gsi_snps %>%
+  mutate(alle_int = as.integer(factor(base))) %>%
+  arrange(group, Indiv.ID, locus, gene_copy) %>%
+  group_by(Indiv.ID, locus) %>%
+  mutate(loc = paste(locus, c("", ".1"), sep = "")) %>%
+  ungroup() %>%
+  select(group, Indiv.ID, loc, alle_int) %>%
+  tidyr::spread(key = loc, value = alle_int) 
+
+```
+
+And then we prep and send to `gpiper`
+```{r gpiper-snps}
+tmp <- snp_2c %>% select(CH100884:CH97077.1) %>% as.data.frame
+rownames(tmp) <- snp_2c$`Indiv.ID`
+pops <- factor(str_replace_all(snp_2c$group, " ", "_"), levels = str_replace_all(levels(snp_2c$group), " ", "_"))
+tmp[is.na(tmp)] <- 0
+self_ass <- gsi.a.SelfAssign(tmp, pops.f = pops)[[1]]$SelfAss
+self_ass$PopulationOfOrigin = pops
+self_ass <- tbl_df(self_ass)
+self_ass$ID <- snp_2c$`Indiv.ID`
+```
+And finally we can compute the posterior probabilities to the right population:
+```{r snp-posteriors}
+self_ass_posts_snps <- self_ass %>% 
+  gather(key = "AssPop", value = "posterior", Feather_River_Spring:Kanektok_River) %>%
+  mutate(marker_type = "max_fst_snp")
+
+```
+That is great.  We will combine that with the mhaps when we get them.
+
+### Convert microhaps to two-column format and feed into gpiper
+For this, we are just going to be using `tidied` and doing many of the same things that we were doing before.
+```{r tidied-to-two-column}
+mhaps_2c <- tidied %>%
+  mutate(alle_int = as.integer(factor(allele))) %>%
+  arrange(group, Indiv.ID, locus, gene_copy) %>%
+  group_by(Indiv.ID, locus) %>%
+  mutate(loc = paste(locus, c("", ".1"), sep = "")) %>%
+  ungroup() %>%
+  select(group, Indiv.ID, loc, alle_int) %>%
+  tidyr::spread(key = loc, value = alle_int) 
+```
+
+And then we prep and send that to gpiper:
+```{r mahps-to-gpiper}
+tmp <- mhaps_2c %>% select(CH100884:CH97077.1) %>% as.data.frame
+rownames(tmp) <- mhaps_2c$`Indiv.ID`
+pops <- factor(str_replace_all(mhaps_2c$group, " ", "_"), levels = str_replace_all(levels(mhaps_2c$group), " ", "_"))
+tmp[is.na(tmp)] <- 0
+self_ass_mhaps <- gsi.a.SelfAssign(tmp, pops.f = pops)[[1]]$SelfAss
+self_ass_mhaps$ID <- mhaps_2c$`Indiv.ID`
+```
+
+And then get the posteriors to the correct population:
+```{r mhaps-loo-posteriors}
+self_ass_mhaps$PopulationOfOrigin = pops
+self_ass_mhaps <- tbl_df(self_ass_mhaps)
+
+self_ass_posts_mhaps <- self_ass_mhaps %>% 
+  gather(key = "AssPop", value = "posterior", Feather_River_Spring:Kanektok_River) %>%
+  mutate(marker_type = "microhap")
+```
+
+
+## Finally compare the Leave-one-out posteriors from microhaps vs snps
+There are a couple ways we might go about this.    First things first though we want to put these together
+```{r self-ass-bind}
+SAP <- bind_rows(self_ass_posts_snps, self_ass_posts_mhaps)
+SAP_wide <- spread(data = SAP, marker_type, value = posterior)
+
+SAP_wide_c <- SAP_wide %>% filter(PopulationOfOrigin == AssPop)
+```
+
+I will look first at scatterplots.
+```{r gsi-scatters}
+ggplot(SAP_wide_c, aes(x = max_fst_snp, y = microhap, colour = PopulationOfOrigin)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0) +
+  facet_wrap(~ PopulationOfOrigin) +
+  theme(axis.text.x  = element_text(angle=90, vjust=0.5))
+  
+
+ggsave(filename = "../outputs/posteriors-to-correct-population.pdf")
+```
+And then I will also look at rates of correct assignment
+```{r corr-ass-nums}
+SAP %>%
+  group_by(PopulationOfOrigin, marker_type, ID) %>%
+  mutate(max_post = max(posterior)) %>%
+  filter(PopulationOfOrigin == AssPop & posterior == max_post) %>%
+  group_by(PopulationOfOrigin, marker_type) %>% 
+  tally()
+
+```
+Ha! OK, that isn't as compelling, so I think we should stick with showing that on average
+you clearly have a higher posterior to the correct population from microhaps.
+
