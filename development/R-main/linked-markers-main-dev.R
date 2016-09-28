@@ -1,21 +1,8 @@
 library(dplyr)
 library(CKMRsim)
+library(ggplot2)
 
 
-
-# make some data with 20 chromosomes, each of 100 Mb and positions
-# on each random
-set.seed(1)
-linked_mhaps <- mhaps %>%
-  group_by(Chrom, Locus) %>%
-  mutate(NewChrom = sample(1:20, 1),
-         NewPos = floor(runif(1, 1, 10^8))
-  ) %>%
-  ungroup() %>%
-  mutate(Chrom = NewChrom,
-         Pos = NewPos) %>%
-  select(-starts_with("New")) %>%
-  CKMRsim::reindex_markers()
 
 
 
@@ -32,72 +19,27 @@ mhlist2 <- insert_C_l_matrices(mhlist,
 mhlist3 <- insert_Y_l_matrices(mhlist2)
 
 
-# now we do the linked simulation stuff.  For that we are going to need the number
-# of alleles in the proper order.
-alle_nums <- linked_mhaps %>%
-  mutate(list_name = paste(Chrom, Locus, Pos, sep = ".")) %>%
-  mutate(list_name = factor(list_name, levels = unique(list_name))) %>%
-  group_by(list_name) %>%
-  tally()
+
+# now we want to simulate the linked genos from Mendel, let's say for Full siblings
+FSs <- sample_linked_genotype_pairs(df = linked_mhaps, ped = pedigrees$FS, C = mhlist3, num = 1000)
 
 
-# we are doing do to linked markers for PO and FS
-relats <- c("HS", "FS")
-names(relats) <- relats
+# that is really all there is to it.  Now, it would be cool to confirm that
+# simulated genotype frequencies are marginally what we expect.
+fs_probs <- lapply(mhlist3, function(x) {y <- as.numeric(x$Y_l_true$FS); data_frame(geno_idx = 1:length(y), prob = y)}) %>%
+  bind_rows(.id = "locus")
 
-true_genos <- lapply(relats, function(x) {
-  tmpDir = tempdir()
-  write_all_mendel_files("mendel-example", 1000, floor(runif(1, min = 100, max = 100000)), linked_mhaps, pedigrees[[x]], Dir = tmpDir)
-  run_mendel(tmpDir, "mendel-example-Control.in")
-  outgenos <- read_mendel_outped(file.path(tmpDir, "mendel-example-Ped.out"), alle_nums$n) %>%
-    lapply(function(x) {
-      dimnames(x) = list(NULL, locus = as.character(alle_nums$list_name))
-      x})
-})
+fs_freqs <- lapply(FSs, function(x) data_frame(geno_idx = x)) %>% bind_rows(.id = "locus") %>%
+  group_by(locus, geno_idx) %>%
+  tally() %>%
+  mutate(freq = n / sum(n))
 
-# at this juncture, we have the genotypes of each individual at all the loci, but we
-# need to apply the true genotyping errors to them.  This we do by, for either HS or FS,
-# lapplying over the loci. (as the names of mhlist2).
-G1 <- true_genos$FS$indiv1
-G2 <- true_genos$FS$indiv2
-locs <- names(mhlist3)
-names(locs) <- locs
-results <- lapply(locs, function(n) {
-  g1 <- G1[, n]
-  g2 <- G2[, n]
-  Clt <- mhlist2[[n]]$C_l_true
-  g1e <- samp_from_mat(Clt[g1,])
-  g2e <- samp_from_mat(Clt[g2,])
+# now stick those together and see what we get:
+tmp <- full_join(fs_probs, fs_freqs) %>%
+  mutate(freq = ifelse(is.na(freq), 0, freq))
 
-  # here is the number of genos
-  nG <- nrow(Clt)
-
-  # so, the position of the genotype of the two individuals in a matrix of
-  # joint probabilities will be  nG * (g2 - 1) + g1
-  jg_idx <- nG * (g2e - 1) + g1e
-
-  spoogie <- list(g1=g1, g2=g2, Clt=Clt, g1e = g1e, g2e = g2e, jg_idx = jg_idx)
-
-
-
-  # check the observed geno freqs:
-  obsy <- as.data.frame(table(spoogie$jg_idx)/length(spoogie$jg_idx)) %>%
-    tbl_df() %>%
-    mutate(alle = as.character(Var1)) %>%
-    select(alle, Freq)
-
-  # and compare against the joint probs
-  tmp <- as.numeric(mhlist3[[n]]$Y_l_true$FS)
-  names(tmp) <- 1:length(tmp)
-  predi <- data_frame(alle = names(tmp), Freq_pred = tmp)
-
-  full_join(predi, obsy)
-}) %>%
-  bind_rows(.id = "Locus")
-
-
-# then plot that to make sure our simulated values are coming out like
-# we have predicted.
-ggplot(results, aes(x = Freq_pred, y = Freq)) +
+ggplot(tmp, aes(x = prob, y = freq)) +
   geom_point(colour = "blue") +
   geom_abline(intercept = 0, slope = 1)
+
+

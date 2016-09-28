@@ -111,3 +111,20 @@
 #' are useful for sorting things if you run the data through \code{\link{reindex_markers}}.  The
 #' \code{Allele} column gives the sequences of each allele/haplotype observed in the population.
 "sebastes"
+
+
+#' Microhaplotype data from kelp rockfish \emph{Sebastes atrovirens} with pretend linkage positions
+#'
+#' These are data from 165 amplicons sequenced in two different runs of an Illumina
+#' MiSeq machine at the SWFSC lab in Santa Cruz.  Genotypes of roughly 150 individuals
+#' were called an resolved into haplotypes using the fact that each short read comes
+#' from a single chromosome. These were randomly assigned to some positions on some random
+#' chromosomes for testing linkage stuff.
+#' @format  This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+#' is in the format of \code{\link{long_markers}}. However since true positions
+#' of these markers in the genome are not known I just pretended that we knew some (randomly generated)
+#' locations.   The column
+#' \code{Chrom} Is randomly given  \code{Locus} has the name of each locus in it.  The column
+#' \code{Pos} has a random position (in base pairs) for each locus.  The
+#' \code{Allele} column gives the sequences of each allele/haplotype observed in the population.
+"linked_mhaps"

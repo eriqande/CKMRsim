@@ -41,7 +41,3 @@ samp_from_mat <- function(M) {
     .Call('CKMRsim_samp_from_mat', PACKAGE = 'CKMRsim', M)
 }
 
-tableC <- function(x) {
-    .Call('CKMRsim_tableC', PACKAGE = 'CKMRsim', x)
-}
-
