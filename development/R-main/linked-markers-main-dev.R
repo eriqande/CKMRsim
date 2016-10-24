@@ -21,7 +21,7 @@ mhlist3 <- insert_Y_l_matrices(mhlist2)
 
 
 # now we want to simulate the linked genos from Mendel, let's say for Full siblings
-FSs <- sample_linked_genotype_pairs(df = linked_mhaps, ped = pedigrees$FS, C = mhlist3, num = 1000)
+FSs <- sample_linked_genotype_pairs(df = linked_mhaps, ped = pedigrees$FS, C = mhlist3, num = 1250)
 
 
 # that is really all there is to it.  Now, it would be cool to confirm that

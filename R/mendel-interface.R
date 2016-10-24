@@ -257,7 +257,7 @@ run_mendel <- function(Dir, Control) {
 #' @param df  A data frame in the format of \code{\link{long_markers}}.
 #' @param ped  The pedigree to be simulating from
 #' @param C a list whose elements contain, at a minimum, the "C-matrices" which give the
-#' probability of observed genotypes given.  If this is NULL (the default), then the
+#' probability of observed genotypes given true genotypes.  If this is NULL (the default), then the
 #' function will assume no genotyping error.
 #' @param num Number of reps of gene-dropping to do. Default is 1000
 #' @return  This returns a list named by Chrom.Locus.Pos (the names of C), in which each
@@ -278,13 +278,12 @@ sample_linked_genotype_pairs <- function(df, ped, C = NULL, num = 1000) {
   # this runs everything through Mendel and delivers outgenos, a list of two matrices. (One matrix for indiv1 and the other for indiv2)
   # In each, rows are reps and columns are loci and the entries are the indexes of genotypes.
   tmpDir = tempdir()
-  write_all_mendel_files("mendel-example", 1000, floor(runif(1, min = 100, max = 100000)), df, ped, Dir = tmpDir)
+  write_all_mendel_files("mendel-example", num, floor(runif(1, min = 100, max = 100000)), df, ped, Dir = tmpDir)
   run_mendel(tmpDir, "mendel-example-Control.in")
   outgenos <- read_mendel_outped(file.path(tmpDir, "mendel-example-Ped.out"), alle_nums$n) %>%
     lapply(function(x) {
       dimnames(x) = list(NULL, locus = as.character(alle_nums$list_name))
       x})
-
 
   # at this juncture, we have the genotypes of each individual at all the loci, but we
   # need to apply the true genotyping errors to them.  This we do by
@@ -310,4 +309,5 @@ sample_linked_genotype_pairs <- function(df, ped, C = NULL, num = 1000) {
     nG * (g2e - 1) + g1e
   })
 
+  obs_geno_pairs
 }

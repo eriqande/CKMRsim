@@ -189,3 +189,4 @@ mc_sample_simple <- function(Q,
   }) %>%
     dplyr::bind_rows()
 }
+
