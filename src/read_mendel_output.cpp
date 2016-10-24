@@ -16,7 +16,7 @@ using namespace Rcpp;
 //' read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
 // [[Rcpp::export]]
 List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
-  int i,j, slash;
+  int i, slash;
   int aa,bb, a, b, A;
   std::string tempstr;
   std::string line;
@@ -34,7 +34,11 @@ List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
   while (std::getline(infile, line)) {
     std::stringstream ss(line);
 
-    for(j=0;j<3;j++) ss >> word;  // get to the indiv identifier on the line.  This is screwed up because at reps < 1000 there is a space before the comma...
+    ss >> word;  // get to the indiv identifier on the line.  This is screwed up because at reps < 1000 there is a space before the comma...
+    ss >> word;
+    if(word == "1") Num1++;  // one time or another word is a comma, so this should be OK
+    if(word == "2") Num2++;
+    ss >> word;
     if(word == "1") Num1++;
     if(word == "2") Num2++;
   }
@@ -53,7 +57,9 @@ List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
   while (std::getline(infile, line)) {
     std::stringstream ss(line);
 
-    for(j=0;j<3;j++) ss >> word;  // get to the indiv identifier on the line
+    ss >> word;  // get to the indiv identifier on the line
+    ss >> word;
+    if(word == ",") ss >> word;  // if we just ate a comma, chow up one more token
     if(word == "1" || word == "2") {
       if(word == "1") {
         Num1++;
