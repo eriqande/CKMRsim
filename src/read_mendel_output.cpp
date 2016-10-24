@@ -34,7 +34,7 @@ List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
   while (std::getline(infile, line)) {
     std::stringstream ss(line);
 
-    for(j=0;j<3;j++) ss >> word;  // get to the indiv identifier on the line
+    for(j=0;j<3;j++) ss >> word;  // get to the indiv identifier on the line.  This is screwed up because at reps < 1000 there is a space before the comma...
     if(word == "1") Num1++;
     if(word == "2") Num2++;
   }
