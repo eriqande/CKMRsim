@@ -50,9 +50,10 @@ pg <- expand.grid(g=alles, gp=alles, stringsAsFactors = FALSE) \%>\%
 # and then we replicate that to get all possible combinations of true
 # genotypes to observed genotypes
 input_df <- cbind(pg[rep(1:nrow(pg), nrow(pg)), ],
-                  pg[rep(1:nrow(pg), each = nrow(pg)), ]) \%>\%
-  tbl_df
+                  pg[rep(1:nrow(pg), each = nrow(pg)), ])
 names(input_df)[3:4] <- c("h", "hp")
+input_df <- tbl_df(input_df)
+
 
 # here we make the matrix W (just some random numbers)
 W <- runif(length(alles)^2, 0.001, 0.02) \%>\%
