@@ -12,7 +12,9 @@
 #' relationships for which the probability of each simulated genotype
 #' pair was evaluated (the "tos").
 #' @param Q the list of lists to be turned into a Qij object.
-Qij_class <- function(Q) {
+#' @param unlinked Logical that says whether simulation was of unlinked markers or not
+#' @param forceLinkagePO Logical.  If linked markers, should PO be forced to be simulated via Mendel
+Qij_class <- function(Q, unlinked, forceLinkagePO) {
   # first, make sure that the names of each component are the same
   names1 <- names(Q[[1]])
   names_correct <- all(sapply(Q, function(x) all(names(x) == names1)))
@@ -24,6 +26,18 @@ Qij_class <- function(Q) {
   if(!reps_correct) stop("Q does not seem to have consistent reps across all relationships.")
 
   class(Q) <- "Qij"
+  if(unlinked == FALSE) {
+    attr(Q, "simtype") <- "linked"
+  } else {
+    attr(Q, "simtype") <- "unlinked"
+  }
+
+  if(forceLinkagePO == TRUE) {
+    attr(Q, "PO_sim") <- "forced_MENDEL"
+  } else {
+    attr(Q, "PO_sim") <- "not_forced_MENDEL"
+  }
+
   Q
 }
 
@@ -36,8 +50,13 @@ Qij_class <- function(Q) {
 format.Qij <- function(Q) {
   ret <- character()
   ret[1] <- paste0("A Qij object with ", length(Q[[1]][[1]]), " reps")
-  ret[2] <- paste0("\"Froms\" relationships: ", paste(names(Q), collapse = ", "))
-  ret[3] <- paste0("\"Tos\"   relationships: ", paste(names(Q[[1]]), collapse = ", "))
+  if(attributes(Q)$simtype == "unlinked") {
+    ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype)
+  } else {
+    ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype, " with PO treated as ", attributes(Q)$PO_sim)
+  }
+  ret[3] <- paste0("\"Froms\" relationships: ", paste(names(Q), collapse = ", "))
+  ret[4] <- paste0("\"Tos\"   relationships: ", paste(names(Q[[1]]), collapse = ", "))
   ret
 }
 

@@ -5,7 +5,7 @@
 \title{compute the all-locus genotype pair probs for pairs simulated given specified relationships}
 \usage{
 simulate_Qij(C, froms, tos, reps = 10^4, unlinked = TRUE,
-  forceLinkagePO = FALSE)
+  forceLinkagePO = FALSE, pedigree_list = NULL)
 }
 \arguments{
 \item{C}{the ckmr object upon which to base the simulations.}
@@ -28,6 +28,8 @@ physical linkage.}
 \item{forceLinkagePO}{If you really want to force simulation to be done under physical linkage for the PO case
 (perhaps to verify that you get the same result as with unlinked.  Pass TRUE to this while \code{unlinked} is
 FALSE.)}
+
+\item{pedigree_list}{If you specify unlinked == FALSE, then you have to supply a pedigree_list.}
 }
 \description{
 After you have created a ckmr object with \code{\link{create_ckmr}}, then

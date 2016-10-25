@@ -21,7 +21,7 @@ mhlist3 <- insert_Y_l_matrices(mhlist2)
 
 # simulate values from each relationship, assuming unlinked. This takes
 # about 12 seconds
-Qvals <- simulate_and_calc_Q(mhlist3, reps = 10^4)
+Qvals <- simulate_and_calc_Q(mhlist3, reps = 10^3)
 
 
 # collect the MC averages

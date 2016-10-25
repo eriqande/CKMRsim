@@ -4,7 +4,8 @@
 \alias{simulate_and_calc_Q}
 \title{compute all-locus genotype pair probs for pairs simulated given specified relationships}
 \usage{
-simulate_and_calc_Q(YL, reps = 10^4, froms = NULL, tos = NULL)
+simulate_and_calc_Q(YL, reps = 10^4, froms = NULL, tos = NULL,
+  df = NULL, pedigrees = NULL, forceLinkagePO = FALSE)
 }
 \arguments{
 \item{YL}{the list that holds the Y_l and Y_l_true matrices}
@@ -21,6 +22,13 @@ in the first component of YL.  Genotype values get simulated from the Y_l_true v
 genotypes from.  Genotype log probs are calculated using the Y_l matrices. If this is NULL then
 the function will just compute probs for all the relationships that have had Y_l matrices computed for them
 in YL.}
+
+\item{df}{A data frame of the original long markers.}
+
+\item{pedigrees}{A list in the format of \code{\link{pedigrees}} that includes the pedigrees at least for
+each relationship in \code{froms}.  If this is non-null, then the simulation will be done of the markers
+as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
+is done assuming that the markers are all unlinked.}
 
 \item{rando_miss_n}{NOT IMPLEMENTED YET how many loci to mask at random on each
 iteration.  If this is a vector then it does the whole analysis for each

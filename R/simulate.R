@@ -19,6 +19,11 @@
 #' genotypes from.  Genotype log probs are calculated using the Y_l matrices. If this is NULL then
 #' the function will just compute probs for all the relationships that have had Y_l matrices computed for them
 #' in YL.
+#' @param df A data frame of the original long markers.
+#' @param pedigrees A list in the format of \code{\link{pedigrees}} that includes the pedigrees at least for
+#' each relationship in \code{froms}.  If this is non-null, then the simulation will be done of the markers
+#' as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
+#' is done assuming that the markers are all unlinked.
 #' @param rando_miss_n NOT IMPLEMENTED YET how many loci to mask at random on each
 #' iteration.  If this is a vector then it does the whole analysis for each
 #' one of the values.  Corresponds to column "rando_miss_n" in the output.
@@ -49,12 +54,23 @@
 #' library(ggplot2)
 #' ggplot(DD, aes(x = logL, fill = Relat)) + geom_density(alpha = 0.6)
 #' }
-simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL) {
+simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL, df = NULL, pedigrees = NULL, forceLinkagePO = FALSE) {
   if(is.null(froms)) {
     froms <- names(YL[[1]]$Y_l_true)
   }
   if(is.null(tos)) {
     tos <- names(YL[[1]]$Y_l)
+  }
+  if(!is.null(pedigrees)) {
+    misspeds <- base::setdiff(froms, names(pedigrees)) %>%  # note: drop U and MZ because those get done via unlinked always anyway...
+      base::setdiff(c("U", "MZ"))
+    if(forceLinkagePO == FALSE) {
+      misspeds <- base::setdiff(misspeds, "PO")   # Don't require PO in the pedigree list of we aren't forcing it to use Mendel for it
+    }
+    if(length(misspeds) > 0) stop("Error!  Asking for linked simulation from = ",
+                                  paste(froms, collapse = ", "),",
+                                  but only providing pedigrees for ",
+                                  paste(names(pedigrees), collapse = ", ") )
   }
 
   # deal with recycling the reps as necessary
@@ -66,11 +82,23 @@ simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL) {
   names(tos) <- tos
 
   # cycle over the relationships to simulate from
+  if(!is.null(pedigrees)) {
+    linktext <- "linked"
+  } else {
+    linktext <- "unlinked"
+  }
+
   lapply(froms, function(r) {
     # then simulate the indexes of the genotype pairs that are simulated at each locus
-    gp <- lapply(YL, function(y) { # this is cycling over loci
-      sample.int(n = length(y$Y_l_true[[r]]), size = reps[r], replace = TRUE, prob = y$Y_l_true[[r]])
-    })
+    if(is.null(pedigrees) || r == "U" || r == "MZ" || (r == "PO" && forceLinkagePO == FALSE) ) {
+      message("Simulating ", linktext, " markers from Y_l_true matrices for relationship: ", r)
+      gp <- lapply(YL, function(y) { # this is cycling over loci
+        sample.int(n = length(y$Y_l_true[[r]]), size = reps[r], replace = TRUE, prob = y$Y_l_true[[r]])
+      })
+    } else {
+      message("Simulating ", linktext, " markers with MENDEL for relationship: ", r)
+      gp <- sample_linked_genotype_pairs(df = df, ped = pedigrees[[r]], C = YL, num = reps[r])
+    }
 
     # now with those in hand we cycle over the tos relationships and compute the log probs
     # for them and then cbind them and rowSum them...

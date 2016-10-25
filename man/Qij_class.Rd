@@ -4,10 +4,14 @@
 \alias{Qij_class}
 \title{Constructor function for the class Qij}
 \usage{
-Qij_class(Q)
+Qij_class(Q, unlinked, forceLinkagePO)
 }
 \arguments{
 \item{Q}{the list of lists to be turned into a Qij object.}
+
+\item{unlinked}{Logical that says whether simulation was of unlinked markers or not}
+
+\item{forceLinkagePO}{Logical.  If linked markers, should PO be forced to be simulated via Mendel}
 }
 \description{
 The Qij class holds the output of simulated genotype pairs whose
