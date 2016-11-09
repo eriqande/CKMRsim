@@ -44,25 +44,23 @@ extract_logls <- function(Q, numer, denom) {
     stop("Must have at least one positive weight in denom")
   }
 
-  #### Then normalize the weights so they are sure to sum to one, and add any explicit zeroes into them
+  #### Then normalize the weights so they are sure to sum to one
   numer_norm <- numer/sum(numer)
   denom_norm <- denom/sum(denom)
 
-  # explicitly remove 0's for a version
-  numer_norm_p <- numer_norm[numer_norm > 0]
-  denom_norm_p <- denom_norm[denom_norm > 0]
+  # explicitly remove 0's, since they don't serve any purpose
+  numer_norm_p_unsrt <- numer_norm[numer_norm > 0]
+  denom_norm_p_unsrt <- denom_norm[denom_norm > 0]
 
-  numer_complete <- rep(0.0, length(Q[[1]]))
-  denom_complete <- rep(0.0, length(Q[[1]]))
-  names(numer_complete) <- names(Q[[1]])
-  names(denom_complete) <- names(Q[[1]])
+  # then sort them from most to least weight
+  numer_norm_p <- sort(numer_norm_p_unsrt, decreasing = TRUE)
+  denom_norm_p <- sort(denom_norm_p_unsrt, decreasing = TRUE)
 
-  numer_complete[names(numer_norm)] <- numer_norm
-  denom_complete[names(denom_norm)] <- denom_norm
 
-  # and get strings to summarise these weights (though I don't know if I will use these or not.  I may include them AND the individuals weight columns)
-  numer_string <- paste(names(numer_complete), numer_complete, sep = "=", collapse = ":")
-  denom_string <- paste(names(denom_complete), denom_complete, sep = "=", collapse = ":")
+
+  # and get strings to summarise these weights
+  numer_string <- paste(names(numer_norm_p), numer_norm_p, sep = "=", collapse = ":")
+  denom_string <- paste(names(denom_norm_p), denom_norm_p, sep = "=", collapse = ":")
 
   # collect other information in a convenient place:
   simtype = attributes(Q)$simtype
