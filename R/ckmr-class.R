@@ -62,7 +62,7 @@ format.ckmr <- function(C) {
 
   # check to see if assumed genotyping error is same as true error.  We just check it on the
   # first relationship
-  gerr_same <- all(sapply(CL, function(x) all(x$Y_l[[1]] == x$Y_l_true[[1]])))
+  gerr_same <- all(sapply(CL, function(x) all(x$Y_l[[1]] == x$Y_l_true[[1]])), na.rm = TRUE)
   if(gerr_same) {
     sameness <- "the same"
   } else {
