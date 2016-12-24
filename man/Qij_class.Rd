@@ -4,7 +4,8 @@
 \alias{Qij_class}
 \title{Constructor function for the class Qij}
 \usage{
-Qij_class(Q, unlinked, forceLinkagePO)
+Qij_class(Q, unlinked, forceLinkagePO, miss_mask_mat, rando_miss_wts,
+  rando_miss_n)
 }
 \arguments{
 \item{Q}{the list of lists to be turned into a Qij object.}
@@ -12,6 +13,24 @@ Qij_class(Q, unlinked, forceLinkagePO)
 \item{unlinked}{Logical that says whether simulation was of unlinked markers or not}
 
 \item{forceLinkagePO}{Logical.  If linked markers, should PO be forced to be simulated via Mendel}
+
+\item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
+the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
+lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
+missing data given missing data rates, etc. (Need to make another function to do that.)}
+
+\item{rando_miss_wts}{weights to be given to different loci that influence whether they
+will be one of the rando_miss_n missing loci in any iteration.  These will be recycled
+(or truncated) to have length equal to the number of loci, and they will be normalized
+to sum to one as appropriate (so you can provide
+them in unnormalized form.) The idea of this is to be able to use observed rates of
+missingness amongst loci to mask some loci as missing.  Given as a comma-delimited
+string in column "rando_miss_wts" in the output.}
+
+\item{rando_miss_n}{a single number less than the number of loci.  Each iteration,
+rando_miss_n loci will be considered missing, according to the rando_miss_wts.  This
+let's you get a sense for how well you will do, on average, with a certain number of
+missing loci.}
 }
 \description{
 The Qij class holds the output of simulated genotype pairs whose

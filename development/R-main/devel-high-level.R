@@ -27,6 +27,12 @@ QU4 <- simulate_Qij(CK, froms = c("HS", "FS", "U", "PO"), tos = ckmr_relats(CK),
 
 
 
+## If we wanted to simulate a certain amount of missing data we could do:
+QU_miss1 <- simulate_Qij(CK, froms = c("PO", "FS", "HS", "U"), tos = c("PO", "FS", "U"), reps = 500,  rando_miss_wts = 1/(1:4), rando_miss_n = 10)
+
+
+
+
 ## Or, if we wanted to go after the this for parentage and full sibs only for rockfish:
 RF <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000)
 
@@ -49,3 +55,18 @@ ggplot(df, aes(x = logl_ratio, fill = true_relat)) +
 
 
 # that is pretty cool.  It shows that full sibs can be hard to distinguish from PO, surprisingly...
+
+# now, let's just check that we are getting reasonable results for the missing data part
+RFmiss10 <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000, rando_miss_wts = 1/(1:4), rando_miss_n = 10)
+RFmiss20 <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000, rando_miss_wts = 1/(1:4), rando_miss_n = 20)
+RFmiss100 <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000, rando_miss_wts = 1/(1:4), rando_miss_n = 100)
+
+df2 <- bind_rows(
+  extract_logls(RF, numer = c(PO=1), denom = c(U=1)),
+  extract_logls(RFmiss10, numer = c(PO=1), denom = c(U=1)),
+  extract_logls(RFmiss20, numer = c(PO=1), denom = c(U=1)),
+  extract_logls(RFmiss100, numer = c(PO=1), denom = c(U=1))
+)
+
+ggplot(df2, aes(x = logl_ratio, fill = as.factor(rando_miss_n))) +
+  geom_density(alpha = 0.5)

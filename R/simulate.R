@@ -24,18 +24,21 @@
 #' each relationship in \code{froms}.  If this is non-null, then the simulation will be done of the markers
 #' as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
 #' is done assuming that the markers are all unlinked.
-#' @param rando_miss_n NOT IMPLEMENTED YET how many loci to mask at random on each
-#' iteration.  If this is a vector then it does the whole analysis for each
-#' one of the values.  Corresponds to column "rando_miss_n" in the output.
-#' Default is 0. If any value is greater than or equal to the total number of
-#' loci available, it is removed.
-#' @param rando_miss_wts weights NOT IMPLEMENTED YET to be given to different loci that influence whether they
+#' @param miss_mask_mat  A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
+#' the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
+#' lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
+#' missing data given missing data rates, etc. (Need to make another function to do that.)
+#' @param rando_miss_wts weights to be given to different loci that influence whether they
 #' will be one of the rando_miss_n missing loci in any iteration.  These will be recycled
-#' (or truncated) to have length equal to the number of loci (or to the \code{first_n_loci} if that
-#' is in effect), and they will be normalized to sum to one as appropriate (so you can provide
-#' them in unnormalized form.)  The idea of this is to be able to use observed rates of
+#' (or truncated) to have length equal to the number of loci, and they will be normalized
+#' to sum to one as appropriate (so you can provide
+#' them in unnormalized form.) The idea of this is to be able to use observed rates of
 #' missingness amongst loci to mask some loci as missing.  Given as a comma-delimited
 #' string in column "rando_miss_wts" in the output.
+#' @param rando_miss_n a single number less than the number of loci.  Each iteration,
+#' rando_miss_n loci will be considered missing, according to the rando_miss_wts.  This
+#' let's you get a sense for how well you will do, on average, with a certain number of
+#' missing loci.
 
 #' @return This returns a list with components that are the relationships that were simulated
 #' from.  Inside each of those components is a list with components referring to the relationships
@@ -54,7 +57,11 @@
 #' library(ggplot2)
 #' ggplot(DD, aes(x = logL, fill = Relat)) + geom_density(alpha = 0.6)
 #' }
-simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL, df = NULL, pedigrees = NULL, forceLinkagePO = FALSE) {
+simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL, df = NULL, pedigrees = NULL, forceLinkagePO = FALSE,
+                                miss_mask_mat = NULL,
+                                rando_miss_wts = NULL,
+                                rando_miss_n = 0
+                                ) {
   if(is.null(froms)) {
     froms <- names(YL[[1]]$Y_l_true)
   }
@@ -71,6 +78,32 @@ simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL, df = 
                                   paste(froms, collapse = ", "),",
                                   but only providing pedigrees for ",
                                   paste(names(pedigrees), collapse = ", ") )
+  }
+  if(is.null(miss_mask_mat)) { # if it is null, seed it with all FALSE
+    miss_mask_mat = matrix(FALSE, nrow = reps, ncol = length(YL))
+  } else {  # otherwise, check it to make sure it is the right dimension, etc
+    stopifnot(is.matrix(miss_mask_mat))
+    if(nrow(miss_mask_mat) != reps || ncol(miss_mask_mat) != length(YL)) {
+      stop("miss_mask_mat should have reps rows and num_loci columns, but it has ", nrow(miss_mask_mat), " and ", ncol(miss_mask_mat))
+    }
+    stopifnot(is.logical(miss_mask_mat))
+    if(rando_miss_n > 0) stop("rando_miss_n must be zero if rando_miss_mask is nonNULL.")
+  }
+  # deal with rando_miss stuff
+  stopifnot(length(rando_miss_n) == 1)
+  stopifnot(rando_miss_n < length(YL))
+  if(rando_miss_n > 0) {  # if this is the case, we have to deal with rando_miss_wts
+    if(is.null(rando_miss_wts)) stop("If rando_miss_m > 0, you MUST supply a valid rando_miss_wts vector.")
+    stopifnot(is.numeric(rando_miss_wts))
+    miss_wts <- rep(rando_miss_wts, length.out = length(YL))
+    miss_wts <- miss_wts / sum(miss_wts)
+
+
+    # now, this makes a vector of indices to turn to true in miss_mask_mat
+    miss_idx <- unlist(lapply(1:nrow(miss_mask_mat), function(x) {
+      (sample.int(length(miss_wts), size = rando_miss_n, prob = miss_wts) - 1) * nrow(miss_mask_mat) + x
+    }))
+    miss_mask_mat[miss_idx] <- TRUE
   }
 
   # deal with recycling the reps as necessary
@@ -103,10 +136,12 @@ simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL, df = 
     # now with those in hand we cycle over the tos relationships and compute the log probs
     # for them and then cbind them and rowSum them...
     lapply(tos, function(t) {
-      sapply(names(YL), function(y) {
+      tmp_mat <- sapply(names(YL), function(y) {
         log(YL[[y]]$Y_l[[t]])[gp[[y]]]   # right about here is where I think I can add randomly missing loci, etc.
-      }) %>%
-        rowSums
+      })
+      tmp_mat[miss_mask_mat] <- 0.0  # this is where we zero things out if the loci are simulated as missing
+
+      rowSums(tmp_mat)
     })
   })
 }

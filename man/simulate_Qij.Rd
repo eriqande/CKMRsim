@@ -5,7 +5,8 @@
 \title{compute the all-locus genotype pair probs for pairs simulated given specified relationships}
 \usage{
 simulate_Qij(C, froms, tos, reps = 10^4, unlinked = TRUE,
-  forceLinkagePO = FALSE, pedigree_list = NULL)
+  forceLinkagePO = FALSE, pedigree_list = NULL, miss_mask_mat = NULL,
+  rando_miss_wts = NULL, rando_miss_n = 0)
 }
 \arguments{
 \item{C}{the ckmr object upon which to base the simulations.}
@@ -14,8 +15,9 @@ simulate_Qij(C, froms, tos, reps = 10^4, unlinked = TRUE,
 froms, genotype values will get simulated from the Y_l_true values in C.}
 
 \item{tos}{a vector of names of the relationship IDs to calculate the genotype log probs of the simulated
-genotypes from.  Genotype log probs are calculated using the Y_l matrices.
-#' @param reps An integer. The number of pairs to simulate for each relationship in \code{froms}.
+genotypes from.  Genotype log probs are calculated using the Y_l matrices.}
+
+\item{reps}{An integer. The number of pairs to simulate for each relationship in \code{froms}.
 Default is 10,000.}
 
 \item{unlinked}{A logical indicating whether to simulate the markers as unlinked.  By default this is
@@ -30,6 +32,24 @@ physical linkage.}
 FALSE.)}
 
 \item{pedigree_list}{If you specify unlinked == FALSE, then you have to supply a pedigree_list.}
+
+\item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
+the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
+lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
+missing data given missing data rates, etc. (Need to make another function to do that.)}
+
+\item{rando_miss_wts}{weights to be given to different loci that influence whether they
+will be one of the rando_miss_n missing loci in any iteration.  These will be recycled
+(or truncated) to have length equal to the number of loci, and they will be normalized
+to sum to one as appropriate (so you can provide
+them in unnormalized form.) The idea of this is to be able to use observed rates of
+missingness amongst loci to mask some loci as missing.  Given as a comma-delimited
+string in column "rando_miss_wts" in the output.}
+
+\item{rando_miss_n}{a single number less than the number of loci.  Each iteration,
+rando_miss_n loci will be considered missing, according to the rando_miss_wts.  This
+let's you get a sense for how well you will do, on average, with a certain number of
+missing loci.}
 }
 \description{
 After you have created a ckmr object with \code{\link{create_ckmr}}, then

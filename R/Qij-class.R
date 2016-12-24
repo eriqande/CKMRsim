@@ -14,7 +14,8 @@
 #' @param Q the list of lists to be turned into a Qij object.
 #' @param unlinked Logical that says whether simulation was of unlinked markers or not
 #' @param forceLinkagePO Logical.  If linked markers, should PO be forced to be simulated via Mendel
-Qij_class <- function(Q, unlinked, forceLinkagePO) {
+#' @inheritParams simulate_Qij
+Qij_class <- function(Q, unlinked, forceLinkagePO, miss_mask_mat, rando_miss_wts, rando_miss_n) {
   # first, make sure that the names of each component are the same
   names1 <- names(Q[[1]])
   names_correct <- all(sapply(Q, function(x) all(names(x) == names1)))
@@ -38,6 +39,11 @@ Qij_class <- function(Q, unlinked, forceLinkagePO) {
     attr(Q, "PO_sim") <- "not_forced_MENDEL"
   }
 
+  attr(Q, "miss_mask_mat_NULL") <- is.null(miss_mask_mat)
+  attr(Q, "rando_miss_wts") <- rando_miss_wts
+  attr(Q, "rando_miss_n") <- rando_miss_n
+
+
   Q
 }
 
@@ -57,6 +63,7 @@ format.Qij <- function(Q) {
   }
   ret[3] <- paste0("\"Froms\" relationships: ", paste(names(Q), collapse = ", "))
   ret[4] <- paste0("\"Tos\"   relationships: ", paste(names(Q[[1]]), collapse = ", "))
+  ret[5] <- paste0("rando_miss_n: ", attributes(Q)$rando_miss_n)
   ret
 }
 

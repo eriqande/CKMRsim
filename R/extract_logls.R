@@ -89,6 +89,7 @@ extract_logls <- function(Q, numer, denom) {
     }
     dplyr::data_frame(simtype = simtype,
                       PO_sim = PO_sim,
+                      rando_miss_n = attributes(Q)$rando_miss_n,
                       numer_wts = numer_string,
                       denom_wts = denom_string,
                       true_relat = true_relat,

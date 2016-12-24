@@ -5,7 +5,8 @@
 \title{compute all-locus genotype pair probs for pairs simulated given specified relationships}
 \usage{
 simulate_and_calc_Q(YL, reps = 10^4, froms = NULL, tos = NULL,
-  df = NULL, pedigrees = NULL, forceLinkagePO = FALSE)
+  df = NULL, pedigrees = NULL, forceLinkagePO = FALSE,
+  miss_mask_mat = NULL, rando_miss_wts = NULL, rando_miss_n = 0)
 }
 \arguments{
 \item{YL}{the list that holds the Y_l and Y_l_true matrices}
@@ -30,19 +31,23 @@ each relationship in \code{froms}.  If this is non-null, then the simulation wil
 as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
 is done assuming that the markers are all unlinked.}
 
-\item{rando_miss_n}{NOT IMPLEMENTED YET how many loci to mask at random on each
-iteration.  If this is a vector then it does the whole analysis for each
-one of the values.  Corresponds to column "rando_miss_n" in the output.
-Default is 0. If any value is greater than or equal to the total number of
-loci available, it is removed.}
+\item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
+the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
+lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
+missing data given missing data rates, etc. (Need to make another function to do that.)}
 
-\item{rando_miss_wts}{weights NOT IMPLEMENTED YET to be given to different loci that influence whether they
+\item{rando_miss_wts}{weights to be given to different loci that influence whether they
 will be one of the rando_miss_n missing loci in any iteration.  These will be recycled
-(or truncated) to have length equal to the number of loci (or to the \code{first_n_loci} if that
-is in effect), and they will be normalized to sum to one as appropriate (so you can provide
-them in unnormalized form.)  The idea of this is to be able to use observed rates of
+(or truncated) to have length equal to the number of loci, and they will be normalized
+to sum to one as appropriate (so you can provide
+them in unnormalized form.) The idea of this is to be able to use observed rates of
 missingness amongst loci to mask some loci as missing.  Given as a comma-delimited
 string in column "rando_miss_wts" in the output.}
+
+\item{rando_miss_n}{a single number less than the number of loci.  Each iteration,
+rando_miss_n loci will be considered missing, according to the rando_miss_wts.  This
+let's you get a sense for how well you will do, on average, with a certain number of
+missing loci.}
 }
 \value{
 This returns a list with components that are the relationships that were simulated
