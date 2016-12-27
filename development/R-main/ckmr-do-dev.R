@@ -19,7 +19,7 @@ po_logl_flat$probs <- log(po_flat$probs / unrel_flat$probs)
 ## choose which spip output to use:
 #GENO <- "development/data/spip400_geno.txt"
 GENO <- "development/data/spip4K_geno.txt.gz"
-
+PED <- "development/data/spip4K_ped.txt"
 
 #### now prepare the genotypes in the right order
 # first get the genos
@@ -48,7 +48,12 @@ storage.mode(adult_mat) <- "integer"
 rownames(adult_mat) <- wide_adults$id
 
 ## I really should create some missing data in here to make sure it is working!!
+set.seed(55)
+admask <- sample(1:length(adult_mat), size = floor(length(adult_mat) / 50))
+jumask <- sample(1:length(juvie_mat), size = floor(length(juvie_mat) / 50))
 
+adult_mat[admask] <- -1
+juvie_mat[jumask] <- -1
 
 #### Now, with that stuff in hand we should be ready to try out our functions
 idx <- 1:nrow(juvie_mat)
@@ -61,7 +66,24 @@ system.time({boing <- lapply(idx, function(i) {
   tbl_df()}
   )
 
-# with roughly 4K adults and 4K offspring, this takes about 45 seconds on my laptop.  Cool!
+# with roughly 4K adults and 4K offspring, this takes about 45 seconds to a minute on my laptop.  Cool!
 
 
-boing %>% filter(value > 0)
+# now get the rough list of candidates as those with a logl > 0
+candi <- boing %>% filter(value > 0) %>%
+  mutate(offspring = as.integer(offspring))
+
+
+# and compare these to the true pedigree
+ped <- read_delim(PED, delim = " ", col_types = "ccc")
+
+check_em <- candi %>%
+  mutate(off_name = rownames(juvie_mat)[offspring],
+         adult_name = rownames(adult_mat)[ind]) %>%
+  left_join(ped, by = c("off_name" = "kid")) %>%
+  mutate(correct = pa == adult_name | ma == adult_name)
+
+# and note that the ones that are wrong have very low logl:
+check_em %>% filter(correct == FALSE)
+
+# booyah! (of course, there is not genotyping error here, so you expect that it will totally kill.)
