@@ -19,7 +19,7 @@ po_logl_flat$probs <- log(po_flat$probs / unrel_flat$probs)
 ## choose which spip output to use:
 #GENO <- "development/data/spip400_geno.txt"
 GENO <- "development/data/spip4K_geno.txt.gz"
-PED <- "development/data/spip4K_ped.txt"
+PED <- "development/data/spip4K_ped.txt.gz"
 
 #### now prepare the genotypes in the right order
 # first get the genos
