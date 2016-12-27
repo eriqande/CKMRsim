@@ -30,14 +30,14 @@
 #'
 #' # here is a data frame of all possible genotypes
 #' pg <- expand.grid(g=alles, gp=alles, stringsAsFactors = FALSE) %>%
-#'   filter(g<=gp)
+#'   dplyr::filter(g<=gp)
 #'
 #' # and then we replicate that to get all possible combinations of true
 #' # genotypes to observed genotypes
 #' input_df <- cbind(pg[rep(1:nrow(pg), nrow(pg)), ],
 #'                   pg[rep(1:nrow(pg), each = nrow(pg)), ])
 #' names(input_df)[3:4] <- c("h", "hp")
-#' input_df <- tbl_df(input_df)
+#' input_df <- dplyr::tbl_df(input_df)
 #'
 #'
 #' # here we make the matrix W (just some random numbers)
@@ -58,13 +58,13 @@
 #'
 #' # then compute the probs
 #' gprobs <- input_df %>%
-#'   mutate(prob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
+#'  dplyr::mutate(prob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
 #'
 #' # now, confirm that, for each true genotype, when we sum over the
 #' # probs of the observed genotypes, we get 1.
 #' gprobs %>%
-#'   mutate(ggp = paste(g, gp, sep = "-")) %>%
-#'   group_by(ggp) %>%
+#'  dplyr::mutate(ggp = paste(g, gp, sep = "-")) %>%
+#'   dplyr::group_by(ggp) %>%
 #'   summarise(probSum = sum(prob))
 #'
 #' # Eureka! it all checks out!
@@ -155,16 +155,16 @@ microhaplotype_geno_err_matrix <- function(haps, snp_err_rates = 0.005, dropout_
   # would need to fill the matrix C.  That is, cycling over true
   # genotypes fastest...
   tmp <- expand.grid(gp = haps, g = haps) %>%
-    filter(as.integer(factor(g, levels = haps)) <= as.integer(factor(gp, levels = haps))) %>%
-    select(g, gp) %>%
-    mutate(h = g, hp = gp)
+    dplyr::filter(as.integer(factor(g, levels = haps)) <= as.integer(factor(gp, levels = haps))) %>%
+    dplyr::select(g, gp) %>%
+   dplyr::mutate(h = g, hp = gp)
 
   gdf <- cbind(tmp[rep(1:nrow(tmp), nrow(tmp)), c("g", "gp")],
                tmp[rep(1:nrow(tmp), each = nrow(tmp)), c("h", "hp")])
 
   # now compute the obs probs given true genotypes of those
   probs <- gdf %>%
-    mutate(cprob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
+   dplyr::mutate(cprob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
 
   C_mat <- matrix(probs$cprob, nrow = sqrt(nrow(probs)))
   dimnames(C_mat) <- list(true_geno = paste(tmp$g, tmp$gp, sep = "-"),

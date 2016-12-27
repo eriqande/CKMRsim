@@ -28,7 +28,7 @@ make_matrix_X_l <- function(p, kappa) {
 #' comparisons.
 #' @param t the index (base-1) of the individual in T that you want to compare against
 #' everyone on S.
-#' @param values the vector of genotype specific values.  See the probs field of \code\link{flatten_ckmr}}.
+#' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 #' @param nGenos a vector of the number of genotypes at each locus
 #' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
 #'
@@ -62,11 +62,12 @@ read_mendel_outped <- function(Input, NumA) {
 #'
 #' @return a vector length = \code{nrow(M)} of indices, with each element being
 #' the column that was chosen in that row's sampling
-#' @export
 samp_from_mat <- function(M) {
     .Call('CKMRsim_samp_from_mat', PACKAGE = 'CKMRsim', M)
 }
 
+#' return indices of the top n elements of a large vector
+#' @export
 top_index <- function(x, n) {
     .Call('CKMRsim_top_index', PACKAGE = 'CKMRsim', x, n)
 }

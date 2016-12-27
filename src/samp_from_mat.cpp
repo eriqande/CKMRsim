@@ -11,7 +11,6 @@ using namespace Rcpp;
 //'
 //' @return a vector length = \code{nrow(M)} of indices, with each element being
 //' the column that was chosen in that row's sampling
-//' @export
 // [[Rcpp::export]]
 IntegerVector samp_from_mat(NumericMatrix M) {
   int C = M.ncol();

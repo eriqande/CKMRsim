@@ -1,5 +1,3 @@
-
-
 #' My package documentation
 #' … bla bla …
 #' @name CKMRsim

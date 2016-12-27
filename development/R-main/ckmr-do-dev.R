@@ -1,5 +1,4 @@
 # This is some code for testing out the indiv_comparison funcs.
-library(dplyr)
 library(readr)
 
 
@@ -26,17 +25,17 @@ PED <- "development/data/spip4K_ped.txt.gz"
 genos <- read_delim(GENO, delim = " ")
 
 # then prepare a data frame with number of alleles
-numa <- data_frame(LocIdx = 1:length(CK$loci), NumAlle = sapply(CK$loci, function(x) length(x$freqs)))
+numa <- dplyr::data_frame(LocIdx = 1:length(CK$loci), NumAlle = sapply(CK$loci, function(x) length(x$freqs)))
 
 # then compute the genotype index of each pair of alleles
-wide_genos <- left_join(genos, numa) %>%
-  mutate(GenoIdx = index_ab(alle1, alle2, NumAlle)) %>%
-  select(type, id, LocIdx, GenoIdx) %>%
+wide_genos <- dplyr::left_join(genos, numa) %>%
+  dplyr::mutate(GenoIdx = index_ab(alle1, alle2, NumAlle)) %>%
+  dplyr::select(type, id, LocIdx, GenoIdx) %>%
   tidyr::spread(data = ., key = LocIdx, value = GenoIdx)
 
 
-wide_juvies <- wide_genos %>% filter(type == "juvie") %>% select(-type)
-wide_adults <- wide_genos %>% filter(type == "pop") %>% select(-type)
+wide_juvies <- wide_genos %>% dplyr::filter(type == "juvie") %>% dplyr::select(-type)
+wide_adults <- wide_genos %>% dplyr::filter(type == "pop") %>% dplyr::select(-type)
 
 juvie_mat <- as.matrix(wide_juvies[,-1]) - 1
 storage.mode(juvie_mat) <- "integer"
@@ -62,28 +61,28 @@ system.time({boing <- lapply(idx, function(i) {
     tmp <- comp_ind_pairwise(S = adult_mat, T = juvie_mat, t = i, values = po_logl_flat$probs, nGenos = po_logl_flat$nGenos, Starts = po_logl_flat$base0_locus_starts)
     tmp[rev(top_index(tmp$value, 5)), ]  # just take the top 5 from each
     }) %>%
-  bind_rows(.id = "offspring") %>%
-  tbl_df()}
+  dplyr::bind_rows(.id = "offspring") %>%
+  dplyr::tbl_df()}
   )
 
 # with roughly 4K adults and 4K offspring, this takes about 45 seconds to a minute on my laptop.  Cool!
 
 
 # now get the rough list of candidates as those with a logl > 0
-candi <- boing %>% filter(value > 0) %>%
-  mutate(offspring = as.integer(offspring))
+candi <- boing %>% dplyr::filter(value > 0) %>%
+  dplyr::mutate(offspring = as.integer(offspring))
 
 
 # and compare these to the true pedigree
 ped <- read_delim(PED, delim = " ", col_types = "ccc")
 
 check_em <- candi %>%
-  mutate(off_name = rownames(juvie_mat)[offspring],
+  dplyr::mutate(off_name = rownames(juvie_mat)[offspring],
          adult_name = rownames(adult_mat)[ind]) %>%
-  left_join(ped, by = c("off_name" = "kid")) %>%
-  mutate(correct = pa == adult_name | ma == adult_name)
+  dplyr::left_join(ped, by = c("off_name" = "kid")) %>%
+  dplyr::mutate(correct = pa == adult_name | ma == adult_name)
 
 # and note that the ones that are wrong have very low logl:
-check_em %>% filter(correct == FALSE)
+check_em %>% dplyr::filter(correct == FALSE)
 
 # booyah! (of course, there is not genotyping error here, so you expect that it will totally kill.)

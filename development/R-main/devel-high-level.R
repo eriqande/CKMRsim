@@ -39,7 +39,7 @@ RF <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), rep
 RF_linked <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000, unlinked = FALSE, forceLinkagePO = TRUE, pedigree_list = pedigrees)
 
 # then extract and plot those
-df <- bind_rows(
+df <- dplyr::bind_rows(
   extract_logls(RF, numer = c(PO=1), denom = c(U=1)),
   extract_logls(RF_linked, numer = c(PO=1), denom = c(U=1)),
   extract_logls(RF, numer = c(FS=1), denom = c(PO=1)),
@@ -61,7 +61,7 @@ RFmiss10 <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"
 RFmiss20 <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000, rando_miss_wts = 1/(1:4), rando_miss_n = 20)
 RFmiss100 <- simulate_Qij(CK, froms = c("PO", "U", "FS"), tos = c("PO", "U", "FS"), reps = 10000, rando_miss_wts = 1/(1:4), rando_miss_n = 100)
 
-df2 <- bind_rows(
+df2 <- dplyr::bind_rows(
   extract_logls(RF, numer = c(PO=1), denom = c(U=1)),
   extract_logls(RFmiss10, numer = c(PO=1), denom = c(U=1)),
   extract_logls(RFmiss20, numer = c(PO=1), denom = c(U=1)),

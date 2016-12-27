@@ -45,14 +45,14 @@ alles <- paste("a", 1:5, sep = "")
 
 # here is a data frame of all possible genotypes
 pg <- expand.grid(g=alles, gp=alles, stringsAsFactors = FALSE) \%>\%
-  filter(g<=gp)
+  dplyr::filter(g<=gp)
 
 # and then we replicate that to get all possible combinations of true
 # genotypes to observed genotypes
 input_df <- cbind(pg[rep(1:nrow(pg), nrow(pg)), ],
                   pg[rep(1:nrow(pg), each = nrow(pg)), ])
 names(input_df)[3:4] <- c("h", "hp")
-input_df <- tbl_df(input_df)
+input_df <- dplyr::tbl_df(input_df)
 
 
 # here we make the matrix W (just some random numbers)
@@ -73,13 +73,13 @@ names(D) <- alles
 
 # then compute the probs
 gprobs <- input_df \%>\%
-  mutate(prob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
+ dplyr::mutate(prob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
 
 # now, confirm that, for each true genotype, when we sum over the
 # probs of the observed genotypes, we get 1.
 gprobs \%>\%
-  mutate(ggp = paste(g, gp, sep = "-")) \%>\%
-  group_by(ggp) \%>\%
+ dplyr::mutate(ggp = paste(g, gp, sep = "-")) \%>\%
+  dplyr::group_by(ggp) \%>\%
   summarise(probSum = sum(prob))
 
 # Eureka! it all checks out!

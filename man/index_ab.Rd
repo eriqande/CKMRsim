@@ -31,14 +31,14 @@ all_genos <- expand.grid(1:A, 1:A)[,c(2,1)] \%>\%
 
 # when a < b
 right_ord <- all_genos \%>\%
- filter(a <= b) \%>\%
- mutate(Idx = 1:length(a),
+ dplyr::filter(a <= b) \%>\%
+dplyr::mutate(Idx = 1:length(a),
       Indab = index_ab(a, b, A))
 
 # when a > b
 wrong_ord <- all_genos \%>\%
- filter(a >= b) \%>\%
- mutate(Idx = 1:length(a),
+ dplyr::filter(a >= b) \%>\%
+dplyr::mutate(Idx = 1:length(a),
       Indab = index_ab(b, a, A))
 
 # then check to make sure it all checks out

@@ -8,11 +8,13 @@ Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
 LazyData: TRUE
-Depends:
-    dplyr
 LinkingTo: Rcpp
 Imports:
-    stringr,readr,Rcpp
+    dplyr,
+    magrittr,
+    Rcpp,
+    readr,
+    stringr
 Suggests:
     knitr,
     rmarkdown

@@ -15,7 +15,7 @@ using namespace Rcpp;
 //' comparisons.
 //' @param t the index (base-1) of the individual in T that you want to compare against
 //' everyone on S.
-//' @param values the vector of genotype specific values.  See the probs field of \code\link{flatten_ckmr}}.
+//' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 //' @param nGenos a vector of the number of genotypes at each locus
 //' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
 //'

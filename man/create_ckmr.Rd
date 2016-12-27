@@ -24,4 +24,7 @@ in \code{\link{microhaps}} or \code{\link{long_markers}}. This
 function takes care of all the calculations necessary to simulate
 log-likelihood ratios of genotypes given different pairwise relationships.
 }
+\section{TODO  GOTTA INCORPORATE SPECIFICATION OF THE TRUE AND THE ASSUMED GTYP ERROR MODEL}{
+
+}
 

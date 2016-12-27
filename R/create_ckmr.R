@@ -15,7 +15,7 @@
 #' copy IBD, and the third is the prob that they share 2 gene copies IBD, all assuming no inbreeding.
 #' By default, this just uses the "MZ", "PO", "FS", "HS", and "U" rows from \code{\link{kappas}}.
 #' @export
-#' @todo  GOTTA INCORPORATE SPECIFICATION OF THE TRUE AND THE ASSUMED GTYP ERROR MODEL
+#' @section TODO  GOTTA INCORPORATE SPECIFICATION OF THE TRUE AND THE ASSUMED GTYP ERROR MODEL
 create_ckmr <- function(D, kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ]) {
   # read in the "linked mhaps" but treat them as unlinked
   mhlist <- long_markers_to_X_l_list(D = D,

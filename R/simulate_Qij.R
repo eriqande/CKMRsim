@@ -39,7 +39,7 @@
 #' rando_miss_n loci will be considered missing, according to the rando_miss_wts.  This
 #' let's you get a sense for how well you will do, on average, with a certain number of
 #' missing loci.
-
+#' @export
 simulate_Qij <- function(C, froms, tos, reps = 10^4, unlinked = TRUE, forceLinkagePO = FALSE, pedigree_list = NULL,
                          miss_mask_mat = NULL,
                          rando_miss_wts = NULL,

@@ -20,6 +20,8 @@ comparisons.}
 \item{t}{the index (base-1) of the individual in T that you want to compare against
 everyone on S.}
 
+\item{values}{the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.}
+
 \item{nGenos}{a vector of the number of genotypes at each locus}
 
 \item{base0_locus_starts}{the base0 indexes of the starting positions of each locus in probs.}

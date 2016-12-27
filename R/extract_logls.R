@@ -11,6 +11,7 @@
 #' @param denom a named vector of weights to be given to the relationships for the denominator.
 #' The names are the relationships and the values are the weights.  Relationships that
 #' appear in the "Tos" field of the Q that do not appear will get weights of 0.
+#' @export
 extract_logls <- function(Q, numer, denom) {
 
   if(FALSE) {  # a block of stuff for testing

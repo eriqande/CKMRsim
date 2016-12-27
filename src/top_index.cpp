@@ -82,6 +82,9 @@ IntegerVector top_index(Vector<RTYPE> v, int n) {
   return q;
 }
 
+
+//' return indices of the top n elements of a large vector
+//' @export
 // [[Rcpp::export]]
 IntegerVector top_index(SEXP x, int n) {
   switch (TYPEOF(x)) {

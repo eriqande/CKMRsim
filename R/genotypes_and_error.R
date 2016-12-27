@@ -11,6 +11,7 @@
 #' @details If a is not an allele with index lower than b, then this function
 #' automatically reorients the alleles so that it is. This is vectorized and
 #' so should work over long vectors of alleles.
+#' @export
 #' @examples
 #' # Create some data to test/demonstrate this:
 #' A <- 7
@@ -19,14 +20,14 @@
 #'
 #' # when a < b
 #' right_ord <- all_genos %>%
-#'  filter(a <= b) %>%
-#'  mutate(Idx = 1:length(a),
+#'  dplyr::filter(a <= b) %>%
+#' dplyr::mutate(Idx = 1:length(a),
 #'       Indab = index_ab(a, b, A))
 #'
 #' # when a > b
 #' wrong_ord <- all_genos %>%
-#'  filter(a >= b) %>%
-#'  mutate(Idx = 1:length(a),
+#'  dplyr::filter(a >= b) %>%
+#' dplyr::mutate(Idx = 1:length(a),
 #'       Indab = index_ab(b, a, A))
 #'
 #' # then check to make sure it all checks out
@@ -74,7 +75,7 @@ index_ab <- function(a, b, A) {
 long_markers_to_X_l_list <- function(D, kappa_matrix) {
 
   D2 <- D %>%
-    mutate(gname = paste(Chrom, Locus, Pos, sep = "."))
+   dplyr::mutate(gname = paste(Chrom, Locus, Pos, sep = "."))
 
   # this long expression splits D on the Chrom.Locus.Pos and lapplies over
   # the pieces and computes the X_l matrices for each locus, and then just
@@ -87,9 +88,9 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
 
       # for the dimnames of the X_l matrices
       geno_names <- expand.grid(gp = x$Allele, g = x$Allele) %>%
-        filter(as.integer(factor(g, levels = x$Allele)) <= as.integer(factor(gp, levels = x$Allele))) %>%
-        mutate(name = paste(g, gp, sep = "-")) %>%
-        select(name) %>%
+        dplyr::filter(as.integer(factor(g, levels = x$Allele)) <= as.integer(factor(gp, levels = x$Allele))) %>%
+       dplyr::mutate(name = paste(g, gp, sep = "-")) %>%
+        dplyr::select(name) %>%
         unlist %>%
         unname
 

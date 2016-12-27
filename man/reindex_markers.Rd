@@ -23,10 +23,10 @@ map order along the chromosomes.
 set.seed(5);  # for reproducibility
 A_few_markers <- long_markers \%>\%
   sample_n(1000) \%>\%     # subsample 4000 alleles
-  group_by(Chrom, Locus) \%>\%
-  mutate(NumAlle = n()) \%>\%
-  filter(NumAlle > 1)  \%>\%  # chuck out loci only one allele now...
-  select(-NumAlle)  # get rid of the NumAlle column we created
+  dplyr::group_by(Chrom, Locus) \%>\%
+ dplyr::mutate(NumAlle = n()) \%>\%
+  dplyr::filter(NumAlle > 1)  \%>\%  # chuck out loci only one allele now...
+  dplyr::select(-NumAlle)  # get rid of the NumAlle column we created
 
   reindex_markers(A_few_markers)   # then reindex them
 }

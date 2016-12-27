@@ -16,10 +16,10 @@
 #' cat(D[1:100], sep = "")
 markers2mendel_def_lines <- function(df) {
   tmp <- df %>%
-    ungroup() %>%
-    arrange(Chrom, LocIdx, AlleIdx) %>%
-    group_by(Chrom, LocIdx) %>%
-    mutate(LocLine = paste(Chrom, "_", LocIdx, ",", Chrom, ",", n_distinct(AlleIdx), sep = ""),
+    dplyr::ungroup() %>%
+    dplyr::arrange(Chrom, LocIdx, AlleIdx) %>%
+    dplyr::group_by(Chrom, LocIdx) %>%
+   dplyr::mutate(LocLine = paste(Chrom, "_", LocIdx, ",", Chrom, ",", n_distinct(AlleIdx), sep = ""),
            LocScrub = ifelse(AlleIdx == 1, paste(LocLine,"\n"), ""),
            AlleLine = paste(AlleIdx, ",", Freq, "\n", sep = ""),
            TextVec = paste(LocScrub, AlleLine, sep = "   ")
@@ -42,12 +42,12 @@ markers2mendel_def_lines <- function(df) {
 #' cat(D[1:100], sep = "")
 markers2mendel_map_lines <- function(df) {
   tmp <- df %>%
-    arrange(Chrom, LocIdx, AlleIdx) %>%
-    group_by(Chrom) %>%
-    mutate(ender = ifelse(LocIdx == max(LocIdx), "\n\n", "\n")) %>%
-    ungroup %>%
-    group_by(Chrom, LocIdx) %>%
-    summarize(map_lines = paste(Chrom, "_", LocIdx, ", ", Pos, ender , sep = "")[1])
+    dplyr::arrange(Chrom, LocIdx, AlleIdx) %>%
+    dplyr::group_by(Chrom) %>%
+   dplyr::mutate(ender = ifelse(LocIdx == max(LocIdx), "\n\n", "\n")) %>%
+    dplyr::ungroup() %>%
+    dplyr::group_by(Chrom, LocIdx) %>%
+    dplyr::summarise(map_lines = paste(Chrom, "_", LocIdx, ", ", Pos, ender , sep = "")[1])
 
   tmp$map_lines
 }
@@ -58,15 +58,15 @@ pedigree2mendel_ped_file <- function(df, name, filename = NA) {
 
 
   df2 <- df %>%
-    tbl_df %>%
-    mutate(pedname = name,
+    dplyr::tbl_df() %>%
+   dplyr::mutate(pedname = name,
            MZtwin_stat = "",
            Panew = ifelse(Pa == 0, "", Pa),
            Manew = ifelse(Ma == 0, "", Ma),
            Sexnew = ifelse(Sex == 0, "", c("M", "F")[Sex]),
            TwinStatus = ""
            ) %>%
-    select(pedname, Kid, Panew, Manew, Sexnew, TwinStatus)
+    dplyr::select(pedname, Kid, Panew, Manew, Sexnew, TwinStatus)
 
     if(is.na(filename)) {
       return(df2)
@@ -200,9 +200,9 @@ fast_mendel_outped2genos <- function(OutPed, Def) {
   command <- paste(scrpath, OutPed, Def, ">", tf)
   system(command)
   ret <- read.table(tf, stringsAsFactors = FALSE, colClasses = "integer") %>%
-    tbl_df %>%
+    dplyr::tbl_df() %>%
     setNames(c("Rep", "Indiv", "Locus", "Geno")) %>%
-    mutate(Rep = Rep + 1L)
+   dplyr::mutate(Rep = Rep + 1L)
   ret
 }
 
@@ -266,10 +266,10 @@ sample_linked_genotype_pairs <- function(df, ped, C = NULL, num = 1000) {
 
   # first get the number of alleles at each locus
   alle_nums <- df %>%
-    mutate(list_name = paste(Chrom, Locus, Pos, sep = ".")) %>%
-    mutate(list_name = factor(list_name, levels = unique(list_name))) %>%
-    group_by(list_name) %>%
-    tally()
+   dplyr::mutate(list_name = paste(Chrom, Locus, Pos, sep = ".")) %>%
+   dplyr::mutate(list_name = factor(list_name, levels = unique(list_name))) %>%
+    dplyr::group_by(list_name) %>%
+    dplyr::tally()
 
   # check to make sure that the names are correct here
   if(!all(names(C) == alle_nums$list_name)) stop("Mismatch between Chrom.Locus.Pos names in df and in C")
