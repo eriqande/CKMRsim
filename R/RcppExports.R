@@ -14,6 +14,32 @@ make_matrix_X_l <- function(p, kappa) {
     .Call('CKMRsim_make_matrix_X_l', PACKAGE = 'CKMRsim', p, kappa)
 }
 
+#' Compute pairwise relationship measures between all individuals in source and one individual in target
+#'
+#' More explanation later.
+#'
+#' @param S "source", a matrix whose rows are integers, with NumInd-source rows and NumLoci columns, with each
+#' entry being a a base-0 representation of the genotype of the c-th locus at the r-th individual.
+#' These are the individuals you can think of as parents if there is directionality to the
+#' comparisons.
+#' @param T "target",  a matrix whose rows are integers, with NumInd-target rows and NumLoci columns, with each
+#' entry being a a base-0 representation of the genotype of the c-th locus at the r-th individual.
+#' These are the individuals you can think of as offspring if there is directionality to the
+#' comparisons.
+#' @param t the index (base-1) of the individual in T that you want to compare against
+#' everyone on S.
+#' @param values the vector of genotype specific values.  See the probs field of \code\link{flatten_ckmr}}.
+#' @param nGenos a vector of the number of genotypes at each locus
+#' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
+#'
+#' @return a data frame with columns "ind" (the base-1 index of the individual in S),
+#' "value" (the value extracted, typically a log likelihood ratio), and "num_loc" (the
+#' number of non-missing loci in the comparison.)
+#' @export
+comp_ind_pairwise <- function(S, T, t, values, nGenos, Starts) {
+    .Call('CKMRsim_comp_ind_pairwise', PACKAGE = 'CKMRsim', S, T, t, values, nGenos, Starts)
+}
+
 #' pick the genotypes out of the Mendel output pedigree file to use to compute Q
 #'
 #' Not sure exactly how I am going to do this, as we need to include genotyping error on there as well.
@@ -39,5 +65,9 @@ read_mendel_outped <- function(Input, NumA) {
 #' @export
 samp_from_mat <- function(M) {
     .Call('CKMRsim_samp_from_mat', PACKAGE = 'CKMRsim', M)
+}
+
+top_index <- function(x, n) {
+    .Call('CKMRsim_top_index', PACKAGE = 'CKMRsim', x, n)
 }
 

@@ -17,6 +17,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// comp_ind_pairwise
+DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVector values, IntegerVector nGenos, IntegerVector Starts);
+RcppExport SEXP CKMRsim_comp_ind_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< int >::type t(tSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type nGenos(nGenosSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type Starts(StartsSEXP);
+    rcpp_result_gen = Rcpp::wrap(comp_ind_pairwise(S, T, t, values, nGenos, Starts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // read_mendel_outped
 List read_mendel_outped(CharacterVector Input, IntegerVector NumA);
 RcppExport SEXP CKMRsim_read_mendel_outped(SEXP InputSEXP, SEXP NumASEXP) {
@@ -37,6 +53,18 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type M(MSEXP);
     rcpp_result_gen = Rcpp::wrap(samp_from_mat(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// top_index
+IntegerVector top_index(SEXP x, int n);
+RcppExport SEXP CKMRsim_top_index(SEXP xSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(top_index(x, n));
     return rcpp_result_gen;
 END_RCPP
 }

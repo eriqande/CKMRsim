@@ -1,0 +1,59 @@
+---
+title: "spip simulating some data"
+output: html_notebook
+---
+
+
+Just want to create some individual microhaplotypes of related individuals for use while
+testing some of my comparison functions.  Going to just do a spip simulation.
+
+I am going to use the `microhaps` data and then simulate a generation.  
+```{r libs}
+library(dplyr)
+library(CKMRsim)
+set.seed(55)
+```
+
+
+## Create CKMR
+
+```{r create}
+CK <- create_ckmr(linked_mhaps)
+```
+
+## Extract allele freqs, etc.
+
+```{r get-freqs}
+freqlist <- lapply(CK$loci, function(x) x$freqs)
+
+cat(length(freqlist), "\n", file = "afreqs.txt")
+dump <- lapply(freqlist, function(x) {
+  cat(length(x), "\n", file = "afreqs.txt", append = TRUE)
+  cat(x, "\n", file = "afreqs.txt", append = TRUE)
+})
+```
+
+### Then simulate from spip and process
+
+```{sh, eval=FALSE}
+2016-12-26 19:28 /Rmd/--% (master) pwd
+/Users/eriq/Documents/git-repos/CKMRsim/development/Rmd
+2016-12-26 19:28 /Rmd/--% (master) spip -A 1 -s 1  -T 3 --initial-males 1000 --initial-females 1000 --cohort-size const 2000 -f 1 --fem-prob-repro 1 -m 1 --male-prob-repro 1 --discard-all 1 --gtyp-ppn-fem-dur 2-3 0.2  --gtyp-ppn-male-dur 2-3 0.2 --locus-file afreqs.txt  --mate-fidelity 0.1 > spipout_small
+
+2016-12-26 19:53 /Rmd/--% (master) grep GenotypesByAllelicType spipout_small | cut -d: -f 2,5,6 | sed 's/://g; s/\// /g;' | awk 'BEGIN {print "type id LocIdx gene_copy allele";} {id=$1; if($2==2) p="pop"; else p="juvie"; for(i=3;i<=NF;i+=2) {print p,id, (i-1)/2, 1,$i; print p,id, (i-1)/2, 2, $(i+1)}}'   > ../data/spip400_geno.txt 
+
+2016-12-26 19:52 /Rmd/--% (master) awk 'BEGIN {print "kid pa ma"} /^PEDIGREE/ && ($3==1 || $3==2) {print $5,$6,$7}' spipout_small > ../data/spip400_ped.txt 
+```
+
+
+### And do a big set of about 4,000 adults and 4000 offspring
+```{sh, eval=FALSE}
+2016-12-26 20:58 /Rmd/--% (master) pwd
+/Users/eriq/Documents/git-repos/CKMRsim/development/Rmd
+2016-12-26 20:58 /Rmd/--% (master) spip -A 1 -s 1  -T 3 --initial-males 10000 --initial-females 10000 --cohort-size const 20000 -f 1 --fem-prob-repro 1 -m 1 --male-prob-repro 1 --discard-all 1 --gtyp-ppn-fem-dur 2-3 0.2  --gtyp-ppn-male-dur 2-3 0.2 --locus-file afreqs.txt  --mate-fidelity 0.1 > spipout_big
+
+2016-12-26 21:00 /Rmd/--% (master) grep GenotypesByAllelicType spipout_big | cut -d: -f 2,5,6 | sed 's/://g; s/\// /g;' | awk 'BEGIN {print "type id LocIdx gene_copy allele";} {id=$1; if($2==2) p="pop"; else p="juvie"; for(i=3;i<=NF;i+=2) {print p,id, (i-1)/2, 1,$i; print p,id, (i-1)/2, 2, $(i+1)}}'   > ../data/spip4K_geno.txt 
+
+2016-12-26 20:59 /Rmd/--% (master) awk 'BEGIN {print "kid pa ma"} /^PEDIGREE/ && ($3==1 || $3==2) {print $5,$6,$7}' spipout_big > ../data/spip4K_ped.txt 
+
+```
