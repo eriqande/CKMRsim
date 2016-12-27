@@ -1,0 +1,318 @@
+---
+title: "Splitnose Rockfish Calculations"
+author: "Eric C. Anderson"
+date: "April 8, 2016"
+output:
+  html_notebook: toc true
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+Just saw the paper come out from the OSU group on splitnose rockfish.  
+(Find it [here](http://www.pnas.org/content/early/2016/11/18/1613440113.full)).
+Theirs is an extraordinary result of aggregation.  It is hard to not wonder if
+there could be something artefactual (ack!  Only three months and the English spelling
+is already rubbing off on me!) going on.
+
+I just wanted to take a look at some things here.
+
+Load some libraries:
+```{r}
+library(dplyr)
+library(CKMRsim)
+library(ggplot2)
+library(related)
+```
+
+I have downloaded the genotypes into two text files.  Now, I will make a function that reads each and turns
+it into long format.
+```{r lf-func}
+lf_genos <- function(path) {
+  x <- readr::read_delim(path, delim = "\t")  # read it in
+  # change names to end in _1 or _2
+  names(x)[seq(3,length(x), by = 2)] <- paste0(names(x)[seq(2,length(x), by = 2)], "_", "2")
+  names(x)[seq(2,length(x), by = 2)] <- paste0(names(x)[seq(2,length(x), by = 2)], "_", "1")
+  
+  tidyr::gather(data = x, key = "Locus", value = "Allele", -Sample_Name) %>%
+    tidyr::separate(col = Locus, into = c("locus", "gene_copy"), sep = "_") %>%
+    dplyr::arrange(Sample_Name, locus, gene_copy) %>%
+    dplyr::mutate(Allele = ifelse(Allele == 0, NA, Allele))
+}
+```
+
+Now we can get the adults and the recruits:
+```{r get-em, message=FALSE, warning=FALSE}
+adults <- lf_genos("../data/splitnose_adults.txt")
+recruits <- lf_genos("../data/splitnose_recruits.txt")
+```
+
+Now, let us get the allele freqs amongst the adults:
+```{r adult-freqs}
+adult_freqs <- adults %>%
+  filter(!is.na(Allele)) %>%
+  group_by(locus, Allele) %>%
+  summarise(counts = n()) %>%
+  mutate(Freq = counts/sum(counts)) %>%
+  ungroup() %>%
+  rename(Locus = locus) %>%
+  mutate(Chrom = "msat",
+         Pos = as.integer(factor(Locus)),
+         LocIdx = Pos,
+         AlleIdx = 1) %>%
+  select(Chrom, Locus, Pos, Allele, Freq, AlleIdx, LocIdx) %>%
+  reindex_markers(.)
+
+recruit_freqs <- recruits %>%
+  filter(!is.na(Allele)) %>%
+  group_by(locus, Allele) %>%
+  summarise(counts = n()) %>%
+  mutate(Freq = counts/sum(counts)) %>%
+  ungroup() %>%
+  rename(Locus = locus) %>%
+  mutate(Chrom = "msat",
+         Pos = as.integer(factor(Locus)),
+         LocIdx = Pos,
+         AlleIdx = 1) %>%
+  select(Chrom, Locus, Pos, Allele, Freq, AlleIdx, LocIdx) %>%
+  reindex_markers(.)
+
+```
+
+Just for fun, let us compare the allele freqs between adults and recruits
+```{r comp-alle-freq}
+freq_comp <- adult_freqs %>%
+  select(Locus, Allele, Freq) %>%
+  rename(AdultFreq = Freq) %>%
+  full_join(., recruit_freqs %>% select(Locus, Allele, Freq) %>% rename(RecruitFreq =  Freq))
+
+ggplot(freq_comp, aes(x = AdultFreq, y = RecruitFreq)) + geom_point()
+```
+
+
+## Check out individual homozygosity in the adults and the recruits
+```{r}
+ahomo <- adults %>% 
+  filter(!is.na(Allele)) %>%
+  group_by(Sample_Name, locus) %>% 
+  summarise(isHomo = Allele[1] == Allele[2]) %>%
+  group_by(Sample_Name) %>%
+  summarise(homoFreq = sum(isHomo) / n(),
+            numNonMiss = n())
+
+rhomo <- recruits %>% 
+  filter(!is.na(Allele)) %>%
+  group_by(Sample_Name, locus) %>% 
+  summarise(isHomo = Allele[1] == Allele[2]) %>%
+  group_by(Sample_Name) %>%
+  summarise(homoFreq = sum(isHomo) / n(),
+            numNonMiss = n())
+
+ind_homoz <- bind_rows(list(adults = ahomo, recruits = rhomo), .id = "group")
+```
+
+Now, let's plot those and see what we see:
+```{r plot-homoz}
+ggplot(ind_homoz, aes(x = homoFreq, fill = group)) +
+  geom_density(alpha = 0.5)
+```
+
+Not a huge difference there.  Somewhat thicker-tailed to the right on the recruits.
+
+### How about overall frequencies of homozygous genotypes?
+
+I am curious about the excess of homozygotes in the recruits.  Let's make a picture of that.  
+We are going to compute the expected frequency of homozygotes using either the adult or the
+recruit frequencies, and then also compute the observed frequency of those same homozygotes.  
+
+First, get the expected freq of homozygotes.
+```{r exp-hom}
+expHo <- bind_rows(list(adults = adult_freqs, recruits = recruit_freqs), .id = "group") %>%
+  select(group, Locus, Allele, Freq) %>%
+  mutate(homoz_efreq = Freq^2) %>%
+  select(-Freq) %>%
+  tidyr::spread(data = ., key = group, value = homoz_efreq, fill = 0.0) %>%
+  rename(adult_E_Homoz = adults,
+         recruit_E_Homoz = recruits)
+
+expHo
+```
+
+Then, get the observed frequencies of homozygotes
+```{r obs-hom}
+# first get a single data frame
+genos <- bind_rows(list(adults = adults, recruits = recruits), .id = "group")
+
+# then do a few operations to count up the observed homozygotes
+obsHomo <- genos %>% 
+  filter(!is.na(Allele)) %>%
+  group_by(group, Sample_Name, locus) %>%
+  summarise(isHomo = Allele[1] == Allele[2],
+            alle1 = Allele[1],
+            alle2 = Allele[2]) %>%
+  group_by(group, locus) %>%
+  mutate(nGeno = n()) %>%
+  group_by(group, locus, alle1) %>%
+  summarise(nObsHomo = sum(isHomo) / nGeno[1]) %>%
+  ungroup() %>%
+  rename(Allele = alle1) %>%
+  tidyr::spread(data = ., key = group, value = nObsHomo, fill = 0.0) %>%
+  rename(adult_O_Homoz = adults, 
+         recruit_O_Homoz = recruits,
+         Locus = locus)
+
+obsHomo
+```
+
+And then we can full join them, and turn NAs to 0's on the observed homoz...
+```{r join-homo}
+homoz_joined <- full_join(expHo, obsHomo)
+homoz_joined[is.na(homoz_joined)] <- 0
+```
+
+Then plot them all.  We plot the observed recruit homozygosities against the expected homozygosities 
+from the "reference" population, as they used the ref pop allele frequencies in the calculations.
+
+
+```{r aplot, fig.width=10, fig.height=10}
+ggplot(homoz_joined, aes(x = adult_E_Homoz, y = recruit_O_Homoz)) +
+  geom_point() +
+  facet_wrap(~ Locus, ncol = 5, scales = "free") +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted")
+```
+
+Now we look at the same type of plot, but we use the expected freqs from the recruits
+```{r bplot, fig.width=10, fig.height=10}
+ggplot(homoz_joined, aes(x = recruit_E_Homoz, y = recruit_O_Homoz)) +
+  geom_point() +
+  facet_wrap(~ Locus, ncol = 5, scales = "free") +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted")
+```
+
+And we might as well have a look at the adult-observed against the adult expected
+```{r cplot, fig.width=10, fig.height=10}
+ggplot(homoz_joined, aes(x = adult_E_Homoz, y = adult_O_Homoz)) +
+  geom_point() +
+  facet_wrap(~ Locus, ncol = 5, scales = "free") +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted")
+```
+
+
+### What do we make of this?
+
+Clearly, there is something major going on at the Seb33 locus.  Let's look specifically at the alleles at that locus:
+```{r, rows.print=100}
+homoz_joined %>% filter(Locus == "Seb33")
+```
+
+Here we count up the number of genotypes amongst individuals who carry at least one copy of the Seb33 199 allele:
+```{r seb33}
+genos %>% filter(locus == "Seb33") %>% group_by(Sample_Name) %>% mutate(Gotit = 199 %in% Allele) %>% filter(Gotit == TRUE) %>% summarise(geno = paste(sort(Allele), collapse = "--")) %>% group_by(geno) %>% tally()
+```
+
+So, this is not a pattern one would expect to find unless the 199 allele was under serious positive selection, 
+I think.  I mean, it is very unlikely that we would have two parents carrying one copy each of the 199 allele.
+But, let's say that we did...then we would expect 1/4, 1/2, 1/4 frequencies of the resulting offspring, so it would
+be more reasonable to see something that looked like 10, 20, 10, and this is not what we see at all.  
+
+We wouldn't get something like this if one of the parents was homozygous for the 199 allele, because then we
+would expect 1/2, 1/2 proportions.  So, this is pretty odd...
+
+Here is a thought:  I can't imagine that we would get that many 199-199 homozygotes unless they were full siblings
+(wouldn't be likely that they were half-siblings).  So, we can investigate whether the other loci that those 
+individuals carry indicate that they are full siblings.  We can do that in a quick and dirty fashion by counting
+the number of alleles observed amongst those individuals, and also by enumerating the genotypes (a la Tony Almudevar's
+equivalence classes.)
+
+So, let's do that. Here are the 41 recruits homozygous for that 199 allele:
+```{r get-19-homos}
+Homo199s <- genos %>% filter(locus == "Seb33") %>% 
+  group_by(Sample_Name) %>% 
+  mutate(Homo199 = (Allele[1] == 199 && Allele[2] == 199)) %>%
+  filter(Homo199 == TRUE) %>%
+  select(Sample_Name) %>%
+  unlist() %>% 
+  unique()
+
+Homo199s
+```
+
+
+So, now we look at all the loci in those individuals and count up the number of occurrences of each allele at each locus amongst
+those individuals.  We will add the observed allele freq amongst the recruits to that as well.  
+```{r look-alles, rows.print = 25}
+alle_counts_homo199 <- genos %>%
+  filter(Sample_Name %in% Homo199s) %>%
+  group_by(locus, Allele) %>%
+  tally() %>%
+  left_join(., recruit_freqs %>% select(Locus, Allele, Freq) %>% rename(locus = Locus))
+
+alle_counts_homo199
+```
+
+Wow! That is clearly a lot of alleles.  So, unless genotyping error rates are 
+wicked high, there is no way that all those 199-199 homozygotes are a single set
+of full siblings.  Let's be explicit about the number of alleles at each locus
+amongst those 199-homozygotes
+```{r count-alleles}
+alle_counts_homo199 %>%
+  group_by(locus) %>% 
+  summarise(numAlle = n())
+```
+
+That is clearly more than 4 alleles at each locus.  So, those 41 homozygotes of allele 199 at Seb33 are clearly not all full siblings.
+
+### Expand the filtering to those Sal1-107 alleles
+There is a noticeable slug of individuals carrying the 107 allele at Sal1.  So, let's filter down by those to
+to see what we end up with. First get a list of all the indivs with at least one copy of 107
+```{r}
+Sal1_107 <- genos %>%
+  filter(group == "recruits" & locus == "Sal1" & Allele == 107) %>%
+  select(Sample_Name) %>%
+  unlist() %>%
+  unique()
+
+Sal1_107
+  
+```
+Then intersect them with the 199-homozygotes:
+```{r, rows.print = 25}
+genos %>%
+  filter(Sample_Name %in% Homo199s & Sample_Name %in% Sal1_107) %>%
+  group_by(locus, Allele) %>%
+  tally() %>%
+  left_join(., recruit_freqs %>% select(Locus, Allele, Freq) %>% rename(locus = Locus))
+```
+
+Same thing.  Boatloads of alleles.
+
+### How could this be?
+
+It seems to me that it would be impossible to get these sorts of patterns without strong selection on 
+genes linked to a few alleles in at least a few genes.  If everthing is neutral you just can't get this
+otherwise. 
+
+Another hypothesis is that, for those individuals that are homozygous at the 199 allele, there was some
+sort of data handling error.
+
+
+
+
+## Try to compute things using the related package
+
+I started doing a little bit here last night, but haven't followed up.
+
+First, let's just read the recruits in:
+```{r read-related}
+juvies <- readgenotypedata("../data/splitnose_recruits_noheader.txt")
+```
+And now, we can do the computations with `coancestry`:
+```{r do-coanc}
+#boing <- coancestry(juvies$gdata, trioml = 1, trioml.num.reference = 1)
+#saveRDS(boing, file = "shortbelly_triadic.rds", compress = "xz") # save it for future use.
+```
