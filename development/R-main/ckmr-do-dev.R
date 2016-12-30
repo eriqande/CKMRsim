@@ -1,10 +1,18 @@
 # This is some code for testing out the indiv_comparison funcs.
 library(readr)
+library(parallel)
+library(tidyverse)
 
 
 
 # get the allele freqs and stuff
 CK <- create_ckmr(linked_mhaps)
+
+# do simulations to see if things make sense
+QU0 <- simulate_Qij(CK, froms = c("PO", "U"), tos = c("PO", "U"), reps = 1000)
+mc_sample_simple(Q = QU0, nu = "PO", de = "U")
+
+
 
 # flatten those out
 po_flat <- flatten_ckmr(CK, "PO")
@@ -57,15 +65,16 @@ juvie_mat[jumask] <- -1
 #### Now, with that stuff in hand we should be ready to try out our functions
 idx <- 1:nrow(juvie_mat)
 names(idx) <- idx
-system.time({boing <- lapply(idx, function(i) {
+system.time({boing <- mclapply(idx, function(i) {
     tmp <- comp_ind_pairwise(S = adult_mat, T = juvie_mat, t = i, values = po_logl_flat$probs, nGenos = po_logl_flat$nGenos, Starts = po_logl_flat$base0_locus_starts)
     tmp[rev(top_index(tmp$value, 5)), ]  # just take the top 5 from each
-    }) %>%
+    }, mc.cores = 8) %>%
   dplyr::bind_rows(.id = "offspring") %>%
   dplyr::tbl_df()}
   )
 
-# with roughly 4K adults and 4K offspring, this takes about 45 seconds to a minute on my laptop.  Cool!
+# with roughly 4K adults and 4K offspring, this takes about a minute on my old home laptop serially.
+# On my work laptop with 8 cores and mclappy it takes 7 seconds elapsed time.  Booyah!
 
 
 # now get the rough list of candidates as those with a logl > 0
@@ -86,3 +95,20 @@ check_em <- candi %>%
 check_em %>% dplyr::filter(correct == FALSE)
 
 # booyah! (of course, there is not genotyping error here, so you expect that it will totally kill.)
+
+# let's check that the logls look roughly correct (likely a little high)
+sim_logls <- extract_logls(QU0, numer = c(PO = 1), denom = c(U = 1)) %>%
+  filter(true_relat == "PO") %>%
+  select(logl_ratio)
+spip_logls <- check_em %>%
+  filter(correct == TRUE) %>%
+  select(value) %>%
+  rename(logl_ratio = value)
+
+logls <- bind_rows(spip = spip_logls, ckmr_sim = sim_logls, .id = "type_of_sim")
+
+ggplot(logls, aes(x = logl_ratio, fill = type_of_sim)) +
+  geom_density(alpha = 0.5)
+
+# yep!  That is just how things are supposed to look!
+
