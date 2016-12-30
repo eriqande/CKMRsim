@@ -68,6 +68,11 @@ format.Qij <- function(Q) {
 }
 
 
+#' print a Qij object nicely
+#'
+#' For nice printing.
+#' @param Q
+#' @export
 print.Qij <- function(Q) {
   cat(format(Q), sep = "\n")
 }

@@ -125,6 +125,7 @@ vanilla <- function(Q, nu, de, tr, FNRs) {
 #' 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).
 #' @return A long format data frame.  It will have a column of \code{tot_loci} that gives the total
 #' number of loci.
+#' @export
 mc_sample_simple <- function(Q,
                                nu,
                                de = "U",

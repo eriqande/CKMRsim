@@ -82,6 +82,7 @@ format.ckmr <- function(C) {
 #'
 #' Just wraps a call to the format.ckmr function
 #' @param C an object of class \code{\link{ckmr_class}}.
+#' @export
 print.ckmr <- function(C) {
   cat(format(C), sep = "\n")
 }
