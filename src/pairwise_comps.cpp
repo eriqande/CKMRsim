@@ -55,3 +55,72 @@ DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVect
                            Named("value") = val,
                            Named("num_loc") = nonmiss));
 }
+
+
+
+
+
+//' Return every pair of individuals that mismatch at no more than max_miss loci
+//'
+//' This is used for identifying duplicate individuals/genotypes in large
+//' data sets. I've specified this in terms of the max number of missing loci because
+//' I think everyone should already have tossed out individuals with a lot of
+//' missing data, and then it makes it easy to toss out pairs without even
+//' looking at all the loci, so it is faster for all the comparisons.
+//'
+//' @param S "source", a matrix whose rows are integers, with NumInd-source rows and NumLoci columns, with each
+//' entry being a a base-0 representation of the genotype of the c-th locus at the r-th individual.
+//' These are the individuals you can think of as parents if there is directionality to the
+//' comparisons.  Missing data is denoted by -1 (or any integer < 0).
+//' @param max_miss maximum allowable number of mismatching genotypes betwen the pairs.
+//' @return a data frame with columns:
+//' \describe{
+//'   \item{ind1}{the base-1 index in S of the first individual of the pair}
+//'   \item{ind2}{the base-1 index in S of the second individual of the pair}
+//'   \item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
+//'   \item{num_loc}{the total number of loci missing in neither individual}
+//' }
+//' @export
+// [[Rcpp::export]]
+DataFrame pairwise_geno_id(IntegerMatrix S, int max_miss) {
+  int L = S.ncol();
+  int nS = S.nrow();
+  int i,j,l,n,mm, bailed = 0;
+  int G1, G2;
+  std::vector<int> ind1;
+  std::vector<int> ind2;
+  std::vector<int> num_mismatch;
+  std::vector<int> num_loc;
+
+
+  for(i=0;i<nS;i++) {
+    for(j=i+1;j<nS;j++) {
+      mm = 0;
+      n = 0;
+      bailed = 0;
+      for(l=0;l<L;l++) {
+        G1 = S(i, l);
+        G2 = S(j, l);
+        if(G1 >=0 && G2 >= 0) {  // if both individuals have non-missing data
+          n++;
+          mm += G1 != G2;
+        }
+        if(mm > max_miss) {
+          bailed = 1;
+          break;
+        }
+      }
+      if(bailed == 0) {  // if we didn't bail 'cuz there were too many mismatching genotypes
+        ind1.push_back(i + 1);
+        ind2.push_back(j + 1);
+        num_mismatch.push_back(mm);
+        num_loc.push_back(n);
+      }
+    }
+  }
+
+  return(DataFrame::create(Named("ind1") = ind1,
+                           Named("ind2") = ind2,
+                           Named("num_mismatch") = num_mismatch,
+                           Named("num_loc") = num_loc));
+}

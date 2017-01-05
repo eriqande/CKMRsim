@@ -33,6 +33,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pairwise_geno_id
+DataFrame pairwise_geno_id(IntegerMatrix S, int max_miss);
+RcppExport SEXP CKMRsim_pairwise_geno_id(SEXP SSEXP, SEXP max_missSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< int >::type max_miss(max_missSEXP);
+    rcpp_result_gen = Rcpp::wrap(pairwise_geno_id(S, max_miss));
+    return rcpp_result_gen;
+END_RCPP
+}
 // read_mendel_outped
 List read_mendel_outped(CharacterVector Input, IntegerVector NumA);
 RcppExport SEXP CKMRsim_read_mendel_outped(SEXP InputSEXP, SEXP NumASEXP) {

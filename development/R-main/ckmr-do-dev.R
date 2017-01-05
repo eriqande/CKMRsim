@@ -111,4 +111,4 @@ ggplot(logls, aes(x = logl_ratio, fill = type_of_sim)) +
   geom_density(alpha = 0.5)
 
 # yep!  That is just how things are supposed to look!
-
+hist(po_logl_flat$probs, breaks = 100)

@@ -40,6 +40,31 @@ comp_ind_pairwise <- function(S, T, t, values, nGenos, Starts) {
     .Call('CKMRsim_comp_ind_pairwise', PACKAGE = 'CKMRsim', S, T, t, values, nGenos, Starts)
 }
 
+#' Return every pair of individuals that mismatch at no more than max_miss loci
+#'
+#' This is used for identifying duplicate individuals/genotypes in large
+#' data sets. I've specified this in terms of the max number of missing loci because
+#' I think everyone should already have tossed out individuals with a lot of
+#' missing data, and then it makes it easy to toss out pairs without even
+#' looking at all the loci, so it is faster for all the comparisons.
+#'
+#' @param S "source", a matrix whose rows are integers, with NumInd-source rows and NumLoci columns, with each
+#' entry being a a base-0 representation of the genotype of the c-th locus at the r-th individual.
+#' These are the individuals you can think of as parents if there is directionality to the
+#' comparisons.  Missing data is denoted by -1 (or any integer < 0).
+#' @param max_miss maximum allowable number of mismatching genotypes betwen the pairs.
+#' @return a data frame with columns:
+#' \describe{
+#'   \item{ind1}{the base-1 index in S of the first individual of the pair}
+#'   \item{ind2}{the base-1 index in S of the second individual of the pair}
+#'   \item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
+#'   \item{num_loc}{the total number of loci missing in neither individual}
+#' }
+#' @export
+pairwise_geno_id <- function(S, max_miss) {
+    .Call('CKMRsim_pairwise_geno_id', PACKAGE = 'CKMRsim', S, max_miss)
+}
+
 #' pick the genotypes out of the Mendel output pedigree file to use to compute Q
 #'
 #' Not sure exactly how I am going to do this, as we need to include genotyping error on there as well.
