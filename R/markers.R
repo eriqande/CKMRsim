@@ -8,6 +8,7 @@
 #' allele frequencies to sum to one, and, of course, sorts the loci into
 #' map order along the chromosomes.
 #' @param M a data frame of markers.
+#' @export
 #' @examples
 #' # subsample alleles from the long_markers data frame.
 #' # Note, you would never subsample alleles like this but it

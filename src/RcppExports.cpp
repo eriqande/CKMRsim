@@ -33,6 +33,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// locus_specific_pairwise
+DataFrame locus_specific_pairwise(IntegerMatrix S, IntegerMatrix T, IntegerVector s, IntegerVector t, NumericVector values, IntegerVector nGenos, IntegerVector Starts);
+RcppExport SEXP CKMRsim_locus_specific_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP sSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type S(SSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type T(TSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type s(sSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type t(tSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type nGenos(nGenosSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type Starts(StartsSEXP);
+    rcpp_result_gen = Rcpp::wrap(locus_specific_pairwise(S, T, s, t, values, nGenos, Starts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pairwise_geno_id
 DataFrame pairwise_geno_id(IntegerMatrix S, int max_miss);
 RcppExport SEXP CKMRsim_pairwise_geno_id(SEXP SSEXP, SEXP max_missSEXP) {

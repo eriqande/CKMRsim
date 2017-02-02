@@ -60,6 +60,75 @@ DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVect
 
 
 
+//' Return locus-specific pairwise relationship measures between desired pairs of individuals
+//'
+//' The idea here is that you can go back and look more closely at the log-likelihood ratios
+//' for pairs that are found to look the PO, etc., to see how much each of the different
+//' loci are contributing.  More explanation later.
+//'
+//' @param S "source", a matrix whose rows are integers, with NumInd-source rows and NumLoci columns, with each
+//' entry being a a base-0 representation of the genotype of the c-th locus at the r-th individual.
+//' These are the individuals you can think of as parents if there is directionality to the
+//' comparisons.
+//' @param T "target",  a matrix whose rows are integers, with NumInd-target rows and NumLoci columns, with each
+//' entry being a a base-0 representation of the genotype of the c-th locus at the r-th individual.
+//' These are the individuals you can think of as offspring if there is directionality to the
+//' comparisons.
+//' @param s a vector of base-1 indexes of the source individual in each pair.
+//' @param t a vector of base-1 indexes of the target individual in each pair.  This vector is parallel to s.  So,
+//' for example (s[i], t[i]) designates a pair that you wish to investigate (individual s[i] in S and t[i] in T)
+//' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
+//' @param nGenos a vector of the number of genotypes at each locus
+//' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
+//'
+//' @return a data frame with columns "indS" (the base-1 index of the individual in S),
+//' "indT" (the base-1 index of the individual in S), "locus" (base-1 index of the locus),
+//' and "value" (the value extracted, typically a log likelihood ratio).  If the pair is missing that
+//' locus it is given as NA_REAL
+//' @export
+// [[Rcpp::export]]
+DataFrame locus_specific_pairwise(IntegerMatrix S, IntegerMatrix T, IntegerVector s, IntegerVector t, NumericVector values, IntegerVector nGenos, IntegerVector Starts) {
+  int L = S.ncol();
+  int ns = s.length();
+  int nt = t.length();
+  int i,j,n, ss, tt;
+  int tG, sG;
+  IntegerVector indS(ns * L);
+  IntegerVector indT(ns * L);
+  IntegerVector loc(ns * L);
+  NumericVector val(ns * L);
+
+  if(ns != nt) stop("s and t must be the same length");
+
+  n = -1;
+  for(i=0;i<ns;i++) {
+    for(j=0;j<L;j++) {
+      n++;  // increment for every locus and and individual
+      ss = s[i] - 1;  // base-0 index of s-member of the pair
+      tt = t[i] - 1;  // base-0 index of t-member of the pair
+      sG = S(ss, j); // genotype of the s-member of the pair
+      tG = T(tt, j); // genoytype of the t-member of the pair
+
+      if(tG >=0 && sG >= 0) {  // if both individuals have non-missing data
+        val[n] = values[Starts[j] + nGenos[j] * sG + tG];
+      } else {
+        val[n] = NA_REAL;
+      }
+      indS[n] = ss + 1; // make sure the base-1 index is returned
+      indT[n] = tt + 1;
+      loc[n] = j + 1;
+    }
+  }
+
+  return(DataFrame::create(Named("indS") = indS,
+                           Named("indT") = indT,
+                           Named("locus") = loc,
+                           Named("value") = val));
+}
+
+
+
+
 //' Return every pair of individuals that mismatch at no more than max_miss loci
 //'
 //' This is used for identifying duplicate individuals/genotypes in large
