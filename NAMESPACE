@@ -3,6 +3,7 @@
 S3method(print,Qij)
 S3method(print,ckmr)
 export("%>%")
+export(ckmr2colony)
 export(ckmr_relats)
 export(comp_ind_pairwise)
 export(create_ckmr)
