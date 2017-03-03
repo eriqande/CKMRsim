@@ -34,7 +34,11 @@ format_mixed_r <- function(R, colchars = ",") {
 # contexts, and pstar is the relationship of the importance sampling
 # distribution, which in this context will almost always by nu.
 # FNRs are the false negative rates you want to investigate.
-imp_samp <- function(Q, nu, de, tr, pstar, FNRs) {
+# In some cases you might want to specify the Lambda_Star cutoffs
+# instead of the FNRs.  You can do that, too---just specify those
+# lambda_star values as a vector and they will be added to the
+# lambda_star values used by the FNRs.
+imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL) {
   # get the importance weights and the corresponding lambdas when
   # the sample is from pstar
   iw <- dplyr::data_frame(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
@@ -48,6 +52,13 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs) {
   # get the lambda values those correspond to
   cutoffs <- quantile(trues, probs = FNRs)
 
+  if(!is.null(lambda_stars)) {  # here we need to add stuff on there
+    fnrs2 <- colMeans(outer(trues, lambda_stars, "<"))  # this gets the false negative rates corresponding to the lambda_stars
+    # then add those values into FNRs and cutoffs
+    FNRs <- c(FNRs, fnrs2)
+    cutoffs <- c(cutoffs, lambda_stars)
+  }
+
   # then get the FPRs for each of those
   tmp <- lapply(cutoffs, function(x) {
     mean(iw$impwt[iw$lambda >= x])  # mean here is summing them up and then dividing by length
@@ -56,19 +67,28 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs) {
     unname()
 
     dplyr::data_frame(FNR = FNRs, FPR = tmp, Lambda_star = cutoffs) %>%
-      dplyr::arrange(FNR)
+      dplyr::arrange(FNR, Lambda_star)
 }
 
 
 # this is a quick function to compute the false positive rates using
 # vanilla monte carlo.  In this case, lambdas are computed as numerator
 # over denominator, and the true sampling dsn is tr.
-vanilla <- function(Q, nu, de, tr, FNRs) {
+vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
   true <- Q[[tr]][[nu]] - Q[[tr]][[de]]  # this is the distribution of Logls under the true relationship
   nume <- Q[[nu]][[nu]] - Q[[nu]][[de]]  # this is the distribution of Logls under the relationship of the numerator
 
   # get the lambda values those correspond to
   cutoffs <- quantile(nume, probs = FNRs)
+
+
+  if(!is.null(lambda_stars)) {  # here we need to add stuff on there
+    fnrs2 <- colMeans(outer(nume, lambda_stars, "<"))  # this gets the false negative rates corresponding to the lambda_stars
+    # then add those values into FNRs and cutoffs
+    FNRs <- c(FNRs, fnrs2)
+    cutoffs <- c(cutoffs, lambda_stars)
+  }
+
 
   # then get the FPRs corresponding to each of those
   tmp <- lapply(cutoffs, function(x) {
@@ -120,9 +140,11 @@ vanilla <- function(Q, nu, de, tr, FNRs) {
 #' of relationships.  Each value will be used in all combinations of pstar, nu, de, and tr.
 #' This is reported in column "pstar" in the output. For the vanilla method this is
 #' actually set to the be denominator for each lambda.
-#' @param fnr the false negative rates at which to evaluate the false positive rates.
+#' @param FNRs the false negative rates at which to evaluate the false positive rates.
 #' These are reported in column "fnr" in the output. These should all be between
 #' 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).
+#' @param lambda_stars Additional values of lambda to consider as cutoffs.  The corresponding
+#' false negative rates will be computed for each of these and will be presented in the output.
 #' @return A long format data frame.  It will have a column of \code{tot_loci} that gives the total
 #' number of loci.
 #' @export
@@ -132,7 +154,8 @@ mc_sample_simple <- function(Q,
                                tr = "U",
                                method = c("IS", "vanilla", "both")[1],
                                pstar = NA,
-                               FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001)
+                               FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001),
+                               lambda_stars = NULL
 ) {
 
   #### here test that everything is OK and catch input errors  ####
@@ -165,7 +188,7 @@ mc_sample_simple <- function(Q,
             pstar_tmp <- pstar
           }
           is <- lapply(pstar_tmp, function(pstar_) {
-            tmp <- imp_samp(Q = Q, nu = nu_, de = de_, tr = tr_, pstar_, FNRs)
+            tmp <- imp_samp(Q = Q, nu = nu_, de = de_, tr = tr_, pstar_, FNRs, lambda_stars)
             tmp$pstar <- pstar_
             tmp
           }) %>%
@@ -174,7 +197,7 @@ mc_sample_simple <- function(Q,
           is$mc_method = "IS"
         }
         if(method == "vanilla" || method == "both") {
-          van <- vanilla(Q = Q, nu = nu_, de = de_, tr = tr_, FNRs)
+          van <- vanilla(Q = Q, nu = nu_, de = de_, tr = tr_, FNRs, lambda_stars)
           van$pstar = NA
           van$mc_method = "vanilla"
         }

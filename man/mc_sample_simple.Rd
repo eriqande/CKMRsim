@@ -5,7 +5,8 @@
 \title{sample Q values to get and analyze a sample of Lambdas with simple (non-mixture) hypotheses}
 \usage{
 mc_sample_simple(Q, nu, de = "U", tr = "U", method = c("IS", "vanilla",
-  "both")[1], pstar = NA, FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001))
+  "both")[1], pstar = NA, FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001),
+  lambda_stars = NULL)
 }
 \arguments{
 \item{Q}{the list that is the output of simulate_and_calc_Q.}
@@ -39,9 +40,12 @@ of relationships.  Each value will be used in all combinations of pstar, nu, de,
 This is reported in column "pstar" in the output. For the vanilla method this is
 actually set to the be denominator for each lambda.}
 
-\item{fnr}{the false negative rates at which to evaluate the false positive rates.
+\item{FNRs}{the false negative rates at which to evaluate the false positive rates.
 These are reported in column "fnr" in the output. These should all be between
 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).}
+
+\item{lambda_stars}{Additional values of lambda to consider as cutoffs.  The corresponding
+false negative rates will be computed for each of these and will be presented in the output.}
 }
 \value{
 A long format data frame.  It will have a column of \code{tot_loci} that gives the total
