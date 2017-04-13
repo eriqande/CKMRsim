@@ -300,6 +300,10 @@ otherwise.
 Another hypothesis is that, for those individuals that are homozygous at the 199 allele, there was some
 sort of data handling error.
 
+And, upon coming back to this project, I suspect that their big cluster of siblings are actually a 
+different species, misidentified, or something similar.
+
+
 
 
 
