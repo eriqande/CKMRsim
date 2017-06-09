@@ -16,13 +16,13 @@
 # @examples
 # format_mixed_r(c(U=.9997, FS=.0001, PO=.00001, HS=.0002))
 format_mixed_r <- function(R, colchars = ",") {
-  if(length(R) == 1) {
+  if (length(R) == 1) {
     return(paste(R))
   }
 
-  if(is.null(names(R))) stop("argument R must be a named vector if it has length > 1 in format_mixed_r")
+  if (is.null(names(R))) stop("argument R must be a named vector if it has length > 1 in format_mixed_r")
 
-  paste(paste(names(R), R, sep ="="), collapse = colchars)
+  paste(paste(names(R), R, sep = "="), collapse = colchars)
 }
 
 
@@ -52,7 +52,7 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL) {
   # get the lambda values those correspond to
   cutoffs <- quantile(trues, probs = FNRs)
 
-  if(!is.null(lambda_stars)) {  # here we need to add stuff on there
+  if (!is.null(lambda_stars)) {  # here we need to add stuff on there
     fnrs2 <- colMeans(outer(trues, lambda_stars, "<"))  # this gets the false negative rates corresponding to the lambda_stars
     # then add those values into FNRs and cutoffs
     FNRs <- c(FNRs, fnrs2)
@@ -82,7 +82,7 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
   cutoffs <- quantile(nume, probs = FNRs)
 
 
-  if(!is.null(lambda_stars)) {  # here we need to add stuff on there
+  if (!is.null(lambda_stars)) {  # here we need to add stuff on there
     fnrs2 <- colMeans(outer(nume, lambda_stars, "<"))  # this gets the false negative rates corresponding to the lambda_stars
     # then add those values into FNRs and cutoffs
     FNRs <- c(FNRs, fnrs2)
@@ -109,7 +109,7 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
 #'
 #' Once you have gotten an output from simulate_and_calc_Q you can pass that
 #' to this function along with instructions on what quantities to compute.
-#' This version assumes that the the denominator of Lambda and the true relationship can be specified as a
+#' This version assumes that the denominator of Lambda and the true relationship can be specified as a
 #' a simple, single
 #' relationship (typically, and by default, "U"), rather than a mixture of
 #' possible relationships. For the latter see \code{\link{mc_sample_mixture}}
@@ -165,13 +165,13 @@ mc_sample_simple <- function(Q,
             is.character(tr) == TRUE,
             is.na(pstar) || is.character(pstar) == TRUE)
   tr_lack <- setdiff(c(tr, pstar[!is.na(pstar)]), names(Q))
-  if(length(tr_lack) > 0) stop("Asking for relationships in tr or pstar that are not available in Q: ",
+  if (length(tr_lack) > 0) stop("Asking for relationships in tr or pstar that are not available in Q: ",
                                paste(tr_lack, collapse = ", "))
   nu_lack <- setdiff(c(nu, de), unique(unlist(lapply(Q, names))))
-  if(length(nu_lack) > 0) stop("Asking for relationships in nu or de that are not available in Q: ",
+  if (length(nu_lack) > 0) stop("Asking for relationships in nu or de that are not available in Q: ",
                                paste(nu_lack, collapse = ", "))
   stopifnot(all(FNRs > 0  & FNRs < 1) == TRUE)
-  stopifnot(length(method)==1, method %in% c("IS", "vanilla", "both"))
+  stopifnot(length(method) == 1, method %in% c("IS", "vanilla", "both"))
 
 
   #### cycle over different relationships and do the calculations ####
@@ -181,8 +181,8 @@ mc_sample_simple <- function(Q,
       lapply(tr, function(tr_) {
         is <- NULL  # setting these to default NULL for easy row-binding later if they didn't get set
         van <- NULL
-        if(method == "IS" || method == "both") {
-          if(is.na(pstar)) {  # just taking care of defaulting pstar to nu_ if pstar is NA
+        if (method == "IS" || method == "both") {
+          if (is.na(pstar)) {  # just taking care of defaulting pstar to nu_ if pstar is NA
             pstar_tmp <- nu_
           } else {
             pstar_tmp <- pstar
@@ -196,7 +196,7 @@ mc_sample_simple <- function(Q,
 
           is$mc_method = "IS"
         }
-        if(method == "vanilla" || method == "both") {
+        if (method == "vanilla" || method == "both") {
           van <- vanilla(Q = Q, nu = nu_, de = de_, tr = tr_, FNRs, lambda_stars)
           van$pstar = NA
           van$mc_method = "vanilla"
