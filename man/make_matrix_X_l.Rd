@@ -18,4 +18,3 @@ incredible space-inefficient. Ergo, we are going after it using
 Rcpp.  The genotypes are ordered in rows and columns in the way
 as described in the paper.
 }
-

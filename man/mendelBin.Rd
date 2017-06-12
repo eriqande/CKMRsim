@@ -9,4 +9,3 @@ mendelBin()
 \description{
 Given the operating system, check for mendel program in the typical location
 }
-

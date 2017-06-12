@@ -39,4 +39,3 @@ all.equal(lw, correct)
 # see that they are only different at machine precision
 lw - correct
 }
-

@@ -10,4 +10,3 @@
 My package documentation
 … bla bla …
 }
-

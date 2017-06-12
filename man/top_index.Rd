@@ -9,4 +9,3 @@ top_index(x, n)
 \description{
 return indices of the top n elements of a large vector
 }
-

@@ -45,4 +45,3 @@ dplyr::mutate(Idx = 1:length(a),
 all(right_ord$Idx == right_ord$Indab)
 all(wrong_ord$Idx == wrong_ord$Indab)
 }
-

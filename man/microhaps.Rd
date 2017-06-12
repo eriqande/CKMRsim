@@ -16,4 +16,3 @@ are all the same.  Pos is actually ordered the way I want them to be.
 That turns out to be necessary for proper sorting with \code{\link{reindex_markers}}.
 }
 \keyword{datasets}
-

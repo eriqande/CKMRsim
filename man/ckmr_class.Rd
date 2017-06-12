@@ -40,4 +40,3 @@ components
   matrix multiplication of \code{X_l} to \code{C_l_true}.}
 }
 }
-

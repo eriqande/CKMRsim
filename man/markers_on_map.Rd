@@ -24,4 +24,3 @@ is itself a named list that holds the position in centiMorgans and the allele fr
 of the alleles at the marker.
 }
 \keyword{datasets}
-

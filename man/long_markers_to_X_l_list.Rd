@@ -35,4 +35,3 @@ data(kappas)
 lm_example <- long_markers_to_X_l_list(long_markers[1:18,], kappa_matrix = kappas)
 mh_example <- long_markers_to_X_l_list(microhaps, kappa_matrix = kappas)
 }
-

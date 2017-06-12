@@ -29,4 +29,3 @@ convert a pedigree into control files used by morgan to drop genes
    data(markers_on_map)
    ped2morgan_input(pedigrees$FS, markers_on_map, c(12345, 789623), "/tmp")
 }
-

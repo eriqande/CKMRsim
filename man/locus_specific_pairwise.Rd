@@ -39,4 +39,3 @@ The idea here is that you can go back and look more closely at the log-likelihoo
 for pairs that are found to look the PO, etc., to see how much each of the different
 loci are contributing.  More explanation later.
 }
-

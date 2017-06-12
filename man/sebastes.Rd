@@ -23,4 +23,3 @@ were called an resolved into haplotypes using the fact that each short read come
 from a single chromosome.
 }
 \keyword{datasets}
-

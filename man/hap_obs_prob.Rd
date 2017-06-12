@@ -19,4 +19,3 @@ H2 is observed from a haplotype that is truly H1 given a super
 simple model of independent sequencing errors. This is not
 intended to be vectorized, at the moment.
 }
-

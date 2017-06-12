@@ -58,4 +58,3 @@ relationships that you want to simulate from, and compute the likelihood of thos
 relationships under different relationship hypotheses.
 This function does that.
 }
-

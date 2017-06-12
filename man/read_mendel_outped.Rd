@@ -19,4 +19,3 @@ of individuals are labeled 1 and 2.
 \examples{
 read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
 }
-

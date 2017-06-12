@@ -12,4 +12,3 @@
 \description{
 Just wraps a call to the format.ckmr function
 }
-

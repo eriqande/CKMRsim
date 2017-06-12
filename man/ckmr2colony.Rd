@@ -42,4 +42,3 @@ they might be sibs of some sort.  This spits out a Colony2.dat file that can
 be run with Colony.  To change different settings and options for the run, you
 just hand edit that output file.
 }
-

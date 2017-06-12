@@ -33,4 +33,3 @@ results <- fast_mendel_outped2genos(file.path(tmpDir, "mendel-example-Ped.out"),
 # finally show the results:
 results
 }
-

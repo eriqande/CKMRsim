@@ -28,4 +28,3 @@ does the microhaplotype error model with default parameters.  This creates and i
 C_l_true matrix and also the C_l matrix.  C_l_true is the "true" genotyping error model results
 and C_l is what gets applied in the likelihood calculations.
 }
-

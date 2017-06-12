@@ -22,4 +22,3 @@ from a single chromosome. These were randomly assigned to some positions on some
 chromosomes for testing linkage stuff.
 }
 \keyword{datasets}
-

@@ -22,4 +22,3 @@ example(write_all_mendel_files)
 # then run mendel
 run_mendel(tmpDir, "mendel-example-Control.in")
 }
-

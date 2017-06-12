@@ -12,4 +12,3 @@ mendel_control_list(ID, Reps, Seed)
 \description{
 return a list of values for a Mendel definitions file for gene dropping
 }
-

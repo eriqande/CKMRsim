@@ -23,4 +23,3 @@ point so I can work with them appropriately.
 example(insert_C_l_matrices)
 mh_yl_example <- insert_Y_l_matrices(mh_cl_example)
 }
-

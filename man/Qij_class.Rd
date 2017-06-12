@@ -44,4 +44,3 @@ simualated (the "froms").  Within each of those is a named list of
 relationships for which the probability of each simulated genotype
 pair was evaluated (the "tos").
 }
-

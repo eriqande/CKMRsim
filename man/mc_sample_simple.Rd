@@ -54,7 +54,7 @@ number of loci.
 \description{
 Once you have gotten an output from simulate_and_calc_Q you can pass that
 to this function along with instructions on what quantities to compute.
-This version assumes that the the denominator of Lambda and the true relationship can be specified as a
+This version assumes that the denominator of Lambda and the true relationship can be specified as a
 a simple, single
 relationship (typically, and by default, "U"), rather than a mixture of
 possible relationships. For the latter see \code{\link{mc_sample_mixture}}
@@ -62,4 +62,3 @@ possible relationships. For the latter see \code{\link{mc_sample_mixture}}
 \details{
 The output is a long format data frame.
 }
-

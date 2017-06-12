@@ -12,4 +12,3 @@ ckmr_relats(CK)
 \description{
 Just a simple convenience function
 }
-

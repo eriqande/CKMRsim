@@ -13,4 +13,3 @@ This was made by running the example in \code{\link{reindix_markers}}.
 See \code{\link{long_markers}} for more info.
 }
 \keyword{datasets}
-

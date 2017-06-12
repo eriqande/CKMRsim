@@ -30,4 +30,3 @@ appropriately (i.e have been run through reindex_markers()) and that the compone
 C are named Chrom.Locus.Pos, as is typical.  Obviously the C list should corresponds
 exactly to the markers/alleles in df.
 }
-

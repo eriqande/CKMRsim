@@ -26,4 +26,3 @@ specify markers.  This is particularly useful for pumping stuff into Mendel.
 And it is way easier than having everything in a big named list.
 }
 \keyword{datasets}
-

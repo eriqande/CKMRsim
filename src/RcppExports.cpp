@@ -97,3 +97,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"CKMRsim_make_matrix_X_l", (DL_FUNC) &CKMRsim_make_matrix_X_l, 2},
+    {"CKMRsim_comp_ind_pairwise", (DL_FUNC) &CKMRsim_comp_ind_pairwise, 6},
+    {"CKMRsim_locus_specific_pairwise", (DL_FUNC) &CKMRsim_locus_specific_pairwise, 7},
+    {"CKMRsim_pairwise_geno_id", (DL_FUNC) &CKMRsim_pairwise_geno_id, 2},
+    {"CKMRsim_read_mendel_outped", (DL_FUNC) &CKMRsim_read_mendel_outped, 2},
+    {"CKMRsim_samp_from_mat", (DL_FUNC) &CKMRsim_samp_from_mat, 1},
+    {"CKMRsim_top_index", (DL_FUNC) &CKMRsim_top_index, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_CKMRsim(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

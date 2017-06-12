@@ -30,4 +30,3 @@ I think everyone should already have tossed out individuals with a lot of
 missing data, and then it makes it easy to toss out pairs without even
 looking at all the loci, so it is faster for all the comparisons.
 }
-

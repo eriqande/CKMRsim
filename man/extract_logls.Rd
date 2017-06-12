@@ -21,4 +21,3 @@ appear in the "Tos" field of the Q that do not appear will get weights of 0.}
 This function applies the prior weights on the pairs for the numerator (for generality)
 and denominator and returns the log-likelihood ratios in a tidy format
 }
-

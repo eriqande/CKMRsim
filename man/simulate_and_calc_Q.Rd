@@ -74,4 +74,3 @@ library(ggplot2)
 ggplot(DD, aes(x = logL, fill = Relat)) + geom_density(alpha = 0.6)
 }
 }
-

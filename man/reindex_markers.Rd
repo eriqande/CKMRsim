@@ -30,4 +30,3 @@ A_few_markers <- long_markers \%>\%
 
   reindex_markers(A_few_markers)   # then reindex them
 }
-

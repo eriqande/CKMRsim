@@ -41,4 +41,3 @@ C_mat <- microhaplotype_geno_err_matrix(haps)
 # look at the first part of it
 C_mat[1:5, 1:5]
 }
-

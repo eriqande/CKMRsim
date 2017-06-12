@@ -13,4 +13,3 @@ mendel_outped2genos(Pedfile)
 This assumes that the target individuals are numbered 1 and 2, and it pitches the data
 for everyone else, then it converts the genotypes into a big long format data frame.
 }
-

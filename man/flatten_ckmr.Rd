@@ -18,4 +18,3 @@ flatten_ckmr(CK, rel, useYl_true = FALSE, unname = TRUE)
 \description{
 blah
 }
-

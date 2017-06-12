@@ -20,4 +20,3 @@ pedigrees
 A list of pedigrees, each specified as a data frame with five columns.
 }
 \keyword{datasets}
-
