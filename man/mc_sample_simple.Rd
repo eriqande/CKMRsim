@@ -6,7 +6,7 @@
 \usage{
 mc_sample_simple(Q, nu, de = "U", tr = "U", method = c("IS", "vanilla",
   "both")[1], pstar = NA, FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001),
-  lambda_stars = NULL)
+  lambda_stars = NULL, Q_for_fnrs = NULL)
 }
 \arguments{
 \item{Q}{the list that is the output of simulate_and_calc_Q.}
@@ -46,6 +46,10 @@ These are reported in column "fnr" in the output. These should all be between
 
 \item{lambda_stars}{Additional values of lambda to consider as cutoffs.  The corresponding
 false negative rates will be computed for each of these and will be presented in the output.}
+
+\item{Q_for_fnrs}{The Qij struct to use to compute the Lambda values corresponding to the
+given FNRs. This is used primarily for the situation where you are importance sampling with
+truth = Unrelated and doing physically linked markers.}
 }
 \value{
 A long format data frame.  It will have a column of \code{tot_loci} that gives the total

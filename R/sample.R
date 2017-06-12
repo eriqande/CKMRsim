@@ -38,7 +38,7 @@ format_mixed_r <- function(R, colchars = ",") {
 # instead of the FNRs.  You can do that, too---just specify those
 # lambda_star values as a vector and they will be added to the
 # lambda_star values used by the FNRs.
-imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL) {
+imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs) {
   # get the importance weights and the corresponding lambdas when
   # the sample is from pstar
   iw <- dplyr::data_frame(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
@@ -47,7 +47,7 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL) {
     dplyr::mutate(FPR = cumsum(impwt))
 
   # and now we gotta get the lambdas for the true correct relationship
-  trues <- Q[[nu]][[nu]] - Q[[nu]][[de]]
+  trues <- Q_for_FNRs[[nu]][[nu]] - Q_for_FNRs[[nu]][[de]]
 
   # get the lambda values those correspond to
   cutoffs <- quantile(trues, probs = FNRs)
@@ -145,17 +145,22 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
 #' 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).
 #' @param lambda_stars Additional values of lambda to consider as cutoffs.  The corresponding
 #' false negative rates will be computed for each of these and will be presented in the output.
+#' @param Q_for_fnrs The Qij struct to use to compute the Lambda values corresponding to the
+#' given FNRs. This is used primarily for the situation where you are importance sampling with
+#' truth = Unrelated and doing physically linked markers.
 #' @return A long format data frame.  It will have a column of \code{tot_loci} that gives the total
 #' number of loci.
+#'
 #' @export
 mc_sample_simple <- function(Q,
-                               nu,
-                               de = "U",
-                               tr = "U",
-                               method = c("IS", "vanilla", "both")[1],
-                               pstar = NA,
-                               FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001),
-                               lambda_stars = NULL
+                             nu,
+                             de = "U",
+                             tr = "U",
+                             method = c("IS", "vanilla", "both")[1],
+                             pstar = NA,
+                             FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001),
+                             lambda_stars = NULL,
+                             Q_for_fnrs = NULL
 ) {
 
   #### here test that everything is OK and catch input errors  ####
@@ -173,6 +178,14 @@ mc_sample_simple <- function(Q,
   stopifnot(all(FNRs > 0  & FNRs < 1) == TRUE)
   stopifnot(length(method) == 1, method %in% c("IS", "vanilla", "both"))
 
+  # deal with Q_for_FNRs
+  if (is.null(Q_for_fnrs)) {
+    Q_for_fnrs <- Q
+    SingleQ <- TRUE
+  } else {
+    SingleQ <- FALSE
+  }
+
 
   #### cycle over different relationships and do the calculations ####
 
@@ -188,7 +201,7 @@ mc_sample_simple <- function(Q,
             pstar_tmp <- pstar
           }
           is <- lapply(pstar_tmp, function(pstar_) {
-            tmp <- imp_samp(Q = Q, nu = nu_, de = de_, tr = tr_, pstar_, FNRs, lambda_stars)
+            tmp <- imp_samp(Q = Q, nu = nu_, de = de_, tr = tr_, pstar_, FNRs, lambda_stars, Q_for_fnrs)
             tmp$pstar <- pstar_
             tmp
           }) %>%
