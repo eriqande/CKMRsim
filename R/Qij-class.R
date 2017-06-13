@@ -8,7 +8,7 @@
 #'
 #' A Qij object is quite simply a list of lists of vectors.  At the first
 #' level the components are named by relationships from which data were
-#' simualated (the "froms").  Within each of those is a named list of
+#' simulated (the "froms").  Within each of those is a named list of
 #' relationships for which the probability of each simulated genotype
 #' pair was evaluated (the "tos").
 #' @param Q the list of lists to be turned into a Qij object.

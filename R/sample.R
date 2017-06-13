@@ -60,13 +60,25 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs
   }
 
   # then get the FPRs for each of those
-  tmp <- lapply(cutoffs, function(x) {
-    mean(iw$impwt[iw$lambda >= x])  # mean here is summing them up and then dividing by length
-  }) %>%
-    unlist() %>%
-    unname()
+  fpr <- lapply(cutoffs, function(x) {
+    tmp <- iw$impwt
+    tmp[iw$lambda < x] <- 0.0
+    mean(tmp) # mean here is summing them up and then dividing by length
+  }) %>% unlist() %>% unname()
 
-    dplyr::data_frame(FNR = FNRs, FPR = tmp, Lambda_star = cutoffs) %>%
+  # also get the estimated standard error of the estimate
+  se <- lapply(cutoffs, function(x) {
+    tmp <- iw$impwt
+    tmp[iw$lambda < x] <- 0.0  # set the weights less than lambda-star to zero
+    sd(tmp) / sqrt(length(tmp))  # this is the standard error of the mean
+  }) %>% unlist() %>% unname()
+
+  # and also get the number of non-zero importance weights
+  nnz <- lapply(cutoffs, function(x) {
+    sum(iw$lambda >= x)
+  }) %>% unlist() %>% unname()
+
+    dplyr::data_frame(FNR = FNRs, FPR = fpr, se = se, num_nonzero_wts = nnz, Lambda_star = cutoffs) %>%
       dplyr::arrange(FNR, Lambda_star)
 }
 
@@ -158,7 +170,7 @@ mc_sample_simple <- function(Q,
                              tr = "U",
                              method = c("IS", "vanilla", "both")[1],
                              pstar = NA,
-                             FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001),
+                             FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01),
                              lambda_stars = NULL,
                              Q_for_fnrs = NULL
 ) {
@@ -174,9 +186,14 @@ mc_sample_simple <- function(Q,
                                paste(tr_lack, collapse = ", "))
   nu_lack <- setdiff(c(nu, de), unique(unlist(lapply(Q, names))))
   if (length(nu_lack) > 0) stop("Asking for relationships in nu or de that are not available in Q: ",
-                               paste(nu_lack, collapse = ", "))
+                                paste(nu_lack, collapse = ", "))
   stopifnot(all(FNRs > 0  & FNRs < 1) == TRUE)
   stopifnot(length(method) == 1, method %in% c("IS", "vanilla", "both"))
+  if (attributes(Q)$simtype == "linked" && method %in% c("IS", "both")) {
+    stop("Error! Sorry, you cannot do importance sampling with Q coming from a simulation of linked variables.
+          Importance sampling for linked markers can be done when the true relationship is Unrelated by setting
+          Q to be unlinked while Q_for_fnrs is the corresponding linked version of the Qs.")
+  }
 
   # deal with Q_for_FNRs
   if (is.null(Q_for_fnrs)) {

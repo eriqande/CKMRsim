@@ -278,6 +278,7 @@ sample_linked_genotype_pairs <- function(df, ped, C = NULL, num = 1000) {
   # this runs everything through Mendel and delivers outgenos, a list of two matrices. (One matrix for indiv1 and the other for indiv2)
   # In each, rows are reps and columns are loci and the entries are the indexes of genotypes.
   tmpDir = tempdir()
+  message("Mendel running in temp directory ", tmpDir)
   write_all_mendel_files("mendel-example", num, floor(runif(1, min = 100, max = 100000)), df, ped, Dir = tmpDir)
   run_mendel(tmpDir, "mendel-example-Control.in")
   outgenos <- read_mendel_outped(file.path(tmpDir, "mendel-example-Ped.out"), alle_nums$n) %>%
