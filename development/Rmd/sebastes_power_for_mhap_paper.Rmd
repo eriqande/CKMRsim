@@ -1,0 +1,559 @@
+---
+title: "Assessing Power of Sebastes Microhaplotypes for the Microhap Paper"
+author: "Eric C. Anderson"
+date: "April 8, 2016"
+output:
+  html_notebook: 
+    toc: true
+  html_document: 
+    default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Our Goal Here
+
+
+**NOTE!!** As I am developing this, I am not doing very many reps in the simulations.  
+I will have to update that when I am back at a faster computer...
+
+We are in the final stages of writing up the paper and I thought it would be good to 
+re-do the power analyses with CKMRsim, and also add a few things that are very relevant.
+
+Carlos, sent around some notes on what would be good to provide with the 
+microhap paper:
+
+1. Include specific FPR/FNR values for microhaps and SNPs, maybe in a Supplemental Table.
+(Hard to determine exactly from the Figure).
+2. Include FPR/FNR data for best 96 SNPs from all 171 loci, in addition to the best SNPs
+in each of the 96 best microhaps. Make sure that it is clear everywhere which
+dataset is being referenced.
+3. Include values of FPR/FNR for parent pair/offspring trio identification: best
+96 microhaps, best 96 SNPs from all 171 loci, best SNPs in the 96 best microhaps
+4. Include values of FPR/FNR for half siblings by replication of the data set:
+2X, 3X, 5X?, for all three marker sets?
+5. Include values of FPR/FNR for full siblings and parent-pair: by replication
+of the two SNP data sets: 2X, 3X, 5X?,
+
+This document deals with all of these extect for number 3 which will involve some new code.
+
+Let's start off establishing some nomenclature for nameing our sets of SNPs and microhaps
+just so that I can tag rows of output easily and know what we are talking about.
+
+- **m165**: all 165 microhaps. (Note that after filtering we have 165 microhaps to play with, not 171).
+- **s165**: the highest MAF SNP from each of the 165 loci.
+- **m96**: the 96 microhaps with the highest heterozygosity amongst the 165.
+- **s96_top**: the 96 SNPs with the highest MAFs from amongst the s165.
+- **s96_m**: 96 SNPs, each being the highest MAF SNP from each of the m96.
+
+That part will be fairly straightforward.  On top of that, we will want to try some data "augmentation"
+exercises:  bootstrap resample the SNP and microhap sets and see what our FPR and FNR rates
+are as the numbers of markers get larger.  This will be especially good to see how many
+SNPs are required to do as well as we do with the microhaps. 
+
+But here is the kicker, we will want to do this both:
+    1. assuming that the markers are all unlinked (which they are not)
+    1. assuming the markers are placed somewhere on a "typical" map. 
+    
+I also think that we will want to do more intermediate points the 2X and 3X.  I say we just
+make a resampled data set by sampling with replacement at many more points.  
+
+But, first we need to establish our different sets of loci.
+    
+## Preliminaries
+
+Anthony did a boatload of bioinformatics on two panels of kelp rockfish GT-seq. Then 
+Thomas created a great tool haPLOType, available within 
+[this repository](https://github.com/ngthomas/callBayes) for visually identifying microhaplotypes.
+Subsequently, Diana curated the loci of Panels 1 and 2, providing me with a list of markers to
+keep and ones to toss.  That work is chronicled in Asana
+[here](https://app.asana.com/0/109989865625977/109989865625980) and 
+[here](https://app.asana.com/0/109989865625977/109989865625982).  Then I used haPLOTtype to 
+filter according to:
+
+1. min read coverage = 21
+2. min allelic ratio = 0.2
+3. Retain only the two most frequent haplotypes
+
+Then I downloaded all those haplotype data to this repository for working on them.
+
+Now I am going to do the power analysis.  This is all happening in
+`/development/Rmd/sebastes_power_1.Rmd` within the CKMR-sim directory that I will 
+push to GitHub soon.
+
+## Initial maneuvers
+Some libraries to have:
+```{r libs, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(readxl)
+library(CKMRsim)  # this was done using commit 93f834cf6c7f9ad19704fabb462be3227f15abae
+```
+
+Load the haplotype data. Make a big long data frame of it all:
+```{r hapdat}
+hapcalls <- lapply(1:2, function(x){
+  file <- paste("../data/filtered_haplotype_panel_", x, ".csv.gz", sep = "")
+  read_csv(file)[,-1] # toss the first column which is useless row numbers
+}) %>%
+  setNames(c("Panel_1", "Panel_2")) %>%
+  bind_rows(., .id = "panel")
+```
+
+Have a look at those:
+```{r lookhap}
+hapcalls
+```
+
+Likewise, get Diana's "toss" and "keep" calls and her comments on each locus in a long
+data frame:
+```{r getdiana}
+hapkeeps <- lapply(1:2, function(x){
+  file <- paste("../data/panel", x, "_status.xlsx", sep = "")
+  read_excel(file) %>%
+    setNames(c("locus", "status", "notes"))
+}) %>%
+  setNames(c("Panel_1", "Panel_2")) %>%
+  bind_rows(., .id = "panel")
+```
+
+Which looks like this
+```{r viewhapkeeps}
+hapkeeps
+```
+And we note that no locus names are duplicated across the two panels:
+```{r checkdupes}
+any(duplicated(hapkeeps$locus))
+```
+
+### Compiling and filtering some loci
+This is now a simple filtering step.  We only keep loci that are in Diana's "keep" list.
+```{r keep-keepers}
+keepers <- hapkeeps %>%
+  filter(status == "keep") %>%
+  .$locus
+```
+There are `r length(keepers)` such loci.
+
+And here we reduce our haplotype data to only those:
+```{r hapkept}
+hapkept <- hapcalls %>%
+  filter(locus %in% keepers)
+```
+
+### Computing allele frequencies
+To compute allele freqs we need to just count up the occurrences of the different types
+amongst haplotype.1 and haplotype.2.  So, we need to get them into a single column, and
+just for the extra challenge we will keep their read depths there as well.
+```{r tidyhaps}
+haptidy <- hapkept %>%
+  unite(col = hap1, haplotype.1, read.depth.1) %>%
+  unite(col = hap2, haplotype.2, read.depth.2) %>%
+  gather(key = gene_copy, value = H, hap1, hap2) %>%
+  separate(H, into = c("Allele", "read_depth")) %>%
+  arrange(panel, locus, Indiv.ID, gene_copy)
+```
+And that looks like this
+```{r viewtidyhaps}
+haptidy
+```
+
+So, now we just need to compute the frequencies for each of the haplotypes
+```{r hapfreqs}
+hapfreqs <- haptidy %>%
+  group_by(locus, Allele) %>%
+  summarise(count = n()) %>%
+  mutate(Freq = count / sum(count))
+```
+And the result looks like this
+```{r viewhapfreqs}
+hapfreqs
+```
+
+
+## Reminding ourselves how to do CKMR sim analyses
+
+### Get it in the right format
+First we have to get that data frame in the right format and reindex the markers
+and make something that `CKMRsim` is expecting to be able to work with (i.e., it has 
+haplotypes in descending frequeny at each locus and it has locus and allele indices
+in there). To get loci to
+be ordered as they are, I have to throw `Pos` in there, even though they are not 
+known to have a position on any Chrom.
+```{r prep4ckmr}
+mhaps <- hapfreqs %>%
+  ungroup() %>%
+  mutate(Chrom = "GTseq") %>%
+  rename(Locus = locus) %>%
+  select(-count) %>%
+  mutate(Pos = as.integer(factor(Locus, levels = unique(Locus)))) %>%
+  mutate(LocIdx = 0,
+         AlleIdx = 0) %>%
+  CKMRsim::reindex_markers() %>%
+  select(Chrom, Locus, Pos, Allele, LocIdx, AlleIdx, Freq)
+
+```
+
+Here is what that looks like:
+```{r viewmhaps}
+mhaps
+```
+That shows us that our data set has `r nrow(mhaps)` distinct alleles in it.  Cool!
+
+While we are at it, let's look at the distribution of the number of alleles across loci:
+```{r allenumdist}
+mhaps %>%
+  group_by(Locus) %>%
+  summarise(num_haplotypes = n()) %>%
+  group_by(num_haplotypes) %>%
+  summarise(num_loci = n())
+```
+That seems pretty nice and makes a good case for using microhaplotypes.
+
+### Running through CKMRsim
+Just going to run through this again with the full data set, to remind myself of how
+it goes, now that I have updated CKMRsim.
+
+First we create a
+CKMR object. In the current version of the CKMRsim, this assumes an error model
+that is appropriate to microhaps and SNPs (0.005 per gene copy per snp, scaled by the number
+of SNPs).
+
+```{r}
+CK <- create_ckmr(mhaps, kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ])
+```
+
+Then we can simulate some Q values:
+```{r}
+Qs <- simulate_Qij(C = CK, froms = c("PO", "FS", "HS", "U"), tos = c("PO", "FS", "HS", "U"), reps = 10^4)
+
+# then do the  sampling to get the FPRs
+mc_sample_simple(Qs, nu = "PO", de = c("U", "FS"), tr = c("U", "FS"), method = "both")
+```
+
+If we want to plot the actual distributions, we can extract them and plot them. For example,
+to plot the PO/U Lambdas we can do:
+```{r}
+extract_logls(Qs, numer = c(PO = 1), denom = c(U = 1)) %>%
+  ggplot(aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.3)
+  
+```
+
+
+## Ranking and Selecting microhaps and SNPs
+
+### Getting SNP freqs
+To find the SNP frequencies, we are going to need to explode those haplotypes into constituent SNPs 
+and estimate their frequencies, and then take the best SNPs from each microhaplotype
+to then select subsets of them.  We are going to operate on `mhaps` for this, and then 
+get a data frame called `best_snps_165` which are the SNP allele allele frequencies.  We
+will filter that data frame later to get our different subsets of SNPs.
+```{r}
+# get all the SNP freqs
+snp_freqs <- mhaps %>%
+  split(f = mhaps$Locus) %>%
+  lapply(function(x) {
+    x$exploded = sapply(strsplit(x$Allele, split = ""), function(y) paste(y, collapse = "."))
+    x
+  }) %>%
+  lapply(., function(x) {
+    separate(x, exploded, into = paste("snp", 1:nchar(x$Allele[1]), sep = "_"))
+  }) %>%
+  lapply(., function(x) {
+    gather(x, key = "SNP", value = "base", contains("snp_"))
+  }) %>%
+  bind_rows %>%
+  group_by(Chrom, Locus, Pos, LocIdx, SNP, base) %>% 
+  summarise(Freq = sum(Freq))
+
+# now, get the best (MAF closest to 0.5)
+best_snps_165 <- snp_freqs %>%
+  group_by(Locus, SNP) %>%
+  filter(n() > 1) %>%  # toss SNPs that are monomorphic---for some reason there are some...
+  mutate(maf = min(Freq)) %>%  # since there are only two alleles, this gets the MAF at that locus
+  group_by(Locus) %>%
+  filter(near(maf, max(maf)))  %>%  # this almost does it, but some snps at a locus might have the same MAF at different snps
+  mutate(tmp = 1:n()) %>%
+  filter(tmp < 3)  %>% # this gets rid of those same MAF cases.
+  select(-tmp, -maf) %>%
+  rename(Allele = base) %>%
+  mutate(AlleIdx = 0) %>%
+  CKMRsim::reindex_markers() %>%
+  select(Chrom, Locus, Pos, Allele, LocIdx, AlleIdx, Freq)
+
+```
+
+Now, let's just make a quick plot to confirm that we have gotten the highest
+MAF SNPs for each. 
+```{r}
+all_mafs <- snp_freqs %>%
+  group_by(Locus, SNP) %>%
+  summarise(maf = min(Freq)) %>%
+  filter(maf <= 0.5)  # this gets rid of monomorphic ones
+best_mafs <- best_snps_165 %>%
+  group_by(Locus) %>%
+  summarise(maf = min(Freq))
+
+ggplot(all_mafs, aes(y = Locus, x = maf)) +
+  geom_point() +
+  geom_point(data = best_mafs, colour = "red")
+```
+
+OK, that looks good.  We will be coming back to these to grab
+the allele frequencies for further analysis.
+
+And using some of the results from above, get the 96 SNPs that are the best
+from amongst all 165.
+```{r}
+top_snps_96_all <- best_mafs %>%
+  arrange(desc(maf)) %>%
+  slice(1:96)
+```
+
+### Selecting the best microhaps
+
+First we are going to find the microhaps with the highest heterozygosity, and the SNPs with the high MAF
+```{r}
+mhap_hz <- mhaps %>%
+  group_by(Locus) %>% 
+  summarise(hz = 1 - sum(Freq^2), nHaps = n()) %>%
+  arrange(desc(hz)) 
+
+top_mhaps <- mhap_hz %>%
+  slice(1:96)
+```
+
+Now, we are going to make our CKMR-ready allele frequencies for each of our 
+five data sets in a named list:
+
+### Making a list of data sets
+
+```{r}
+fiveData_list <- list(
+  m165 = mhaps,
+  s165 = best_snps_165,
+  m96 = mhaps %>% filter(Locus %in% top_mhaps$Locus),
+  s96_top = best_snps_165 %>% filter(Locus %in% top_snps_96_all$Locus),
+  s96_m = best_snps_165 %>% filter(Locus %in% top_mhaps$Locus)
+)
+```
+
+
+## Doing CKMR calcs on each data set
+
+We can do each step, lapplying over things:
+```{r}
+CK_list <- lapply(fiveData_list, function(x) 
+  create_ckmr(x, kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ])
+)
+```
+
+And simulate the Qij values.  Do 10^5...
+```{r, cache=TRUE}
+Qs_list <- lapply(CK_list, function(x) 
+  simulate_Qij(C = x, froms = c("PO", "FS", "HS", "U"), tos = c("PO", "FS", "HS", "U"), reps = 10^5)
+)
+```
+
+And once that is done, we can collect samples from it:
+```{r}
+FPRs_etc <- lapply(Qs_list, function(x) mc_sample_simple(x, nu = c("PO", "FS", "HS"), method = "IS", FNRs = seq(0.01, 0.30, by = 0.01))) %>%
+  bind_rows(.id = "marker_set")
+         
+```
+And now, let us spread that into a data set that is easier to read:
+```{r}
+FPRs_etc %>%
+  rename(relationship = pstar) %>%
+  select(relationship, FNR, marker_set, FPR) %>%
+  tidyr::spread(data = ., key = marker_set, value = FPR)
+```
+
+Really quickly, let's try plotting the FPRs_etc:
+```{r}
+FPR_ses <- FPRs_etc %>%
+  mutate(se_lo = FPR - 2 * se,
+         se_hi = FPR + 2 * se)
+
+ggplot(FPR_ses, aes(x = FNR, y = FPR, colour = marker_set, shape = marker_set)) +
+  geom_point() +
+  geom_segment(aes(x = FNR, y = se_lo, xend = FNR, yend = se_hi)) +  # these are basically invisible because they are so small
+  facet_wrap(~ numerator) +
+  scale_y_continuous(trans = "log10")
+```
+
+## Expanding data assuming things are unlinked or linked
+
+First, we are going to need to assume a map---i.e. a collection of chromosomes and lengths.  For
+now, I am just going to assume 25 chromosomes that vary in length from 200 to 100 Mb, and we
+assume 1 cM per megabase.
+```{r}
+fakeChroms <- tibble(Chrom = 1:25,
+                     length = seq(200e06, 100e06, length.out = 25))
+```
+That is a pretty "generous" genome, in terms of chances for recombination, I think.
+
+
+Let's just do this as simply as possible and duplicate our data 1X, 2X, 4X, 8X, 16X, 32X, 64X.
+
+Before I required that we replicate everything contiguously, but now we want to be able to
+just go straight to 32X, or, actually, we would like to multiply things by a factor or 2 each 
+time.  
+
+Of course, before that, we want to have something that assigns chromosomes and positions to each
+marker. Ultimately, I should turn this into a function in CKMRsim.
+```{r}
+#' @param D a data frame of Chrom Locus Pos, Allele, LocIdx, AlleIdx and Freq
+#' @param FC a data frame of fake chromosomes with chrom names and lenths
+#' @details This randomly assigns each Locus to a random position within a 
+#' randomly chosen chrom.
+sprinkle_positions <- function(D, FC) {
+  loci <- tibble::tibble(Locus = unique(D$Locus))
+  L <- nrow(loci)  # the number of loci we are doing here
+  
+  # now, choose which chroms those are on.  Weight it by their length, of course
+  # and also simulate a position in it. Then bind it to the Locus names
+  new_pos <- FC %>%
+    sample_n(size = L, replace = TRUE, weight = length) %>%
+    mutate(Pos = floor(runif(n(), min = 1, max = length))) %>%
+    mutate(Locus = loci$Locus) %>%
+    select(Chrom, Locus, Pos)
+  
+  # now, just left join that onto D by Locus.
+  # and we might as well reindex them, although if we duplicate the data 
+  # set we will have to reindex them again
+  D %>%
+    select(-Chrom, -Pos) %>%
+    left_join(new_pos, ., by = "Locus") %>%
+    reindex_markers()
+}
+```
+
+And now we just need a function that will return a set of data just like the previous,
+but with locus names that are slightly different, and with the duplicated ones having
+new positions, while the old ones keep the same old positions.
+```{r}
+data_duplicator <- function(D, FC, suffix = "_x2") {
+  D2 <- D %>%
+    mutate(Locus = paste0(Locus, suffix)) %>%
+    sprinkle_positions(., FC)
+  
+  reindex_markers(bind_rows(D, D2))
+}
+```
+
+Now, here is a function which will return a list of data sets, each one representing
+a 1X, or 2X, or 4X duplication...
+```{r}
+make_dupies <- function(D, FC) {
+  
+  ret <- list()
+  ret[[1]] <- sprinkle_positions(D, FC)
+  
+  for (i in 1:6) {
+    idx <- 1 + i
+    suff <- paste0("x", 2^i)
+    ret[[idx]] <- data_duplicator(ret[[i]], FC, suffix = suff)
+  }
+  
+  names(ret) <- paste0("x", 2 ^ (0:6))
+  ret
+}
+```
+
+And here we create dupie versions of the 96 microhaps and the 96 SNPs.  Note that
+positions are not the same in each, but are just randomly sprinkled for each marker
+type, but that should be fine...
+```{r}
+set.seed(555)
+mhap_dupie_list <- make_dupies(fiveData_list$m96, fakeChroms)
+snp_dupie_list <- make_dupies(fiveData_list$s96_top, fakeChroms)
+```
+
+
+And, finally, all we need is a function that will do the linked and unlinked simulation for each of these.
+I am going to do it for one relationship at a time...
+```{r}
+sim_linked_and_unlinked_hs <- function(D) {
+  CK <- create_ckmr(D)
+  QU_unlinked <- simulate_Qij(CK, froms = c("U", "HS"), tos = c("U", "HS"), reps = 1e4)
+  QU_linked <- simulate_Qij(CK, froms = c("HS"), tos = c("U", "HS"), reps = 1e04, unlinked = FALSE, pedigree_list = pedigrees)
+  
+  link <- mc_sample_simple(Q = QU_unlinked, nu = "HS", de = "U", method = "IS", FNRs = seq(0.05, 0.3, by = 0.05), Q_for_fnrs = QU_linked) %>%
+    mutate(sim_type = "linked")
+  unlink <- mc_sample_simple(Q = QU_unlinked, nu = "HS", de = "U", method = "IS", FNRs = seq(0.05, 0.3, by = 0.05)) %>%
+    mutate(sim_type = "unlinked")
+  
+  bind_rows(link, unlink)
+}
+```
+
+
+And now, fire it up for half-sibs and SNPs:
+```{r}
+snps_hs_reslist <- lapply(snp_dupie_list, sim_linked_and_unlinked_hs)
+```
+
+And, after doing that, we can plot the results at a constant false negative rate, let's say 0.05:
+```{r}
+hs05 <- bind_rows(snps_hs_reslist, .id = "data_reps") %>%
+  filter(near(FNR, 0.05)) %>%
+  mutate(data_reps = parse_number(data_reps),
+         num_markers = 96 * data_reps)
+
+ggplot(hs05, aes(x = num_markers, y = FPR, colour = sim_type)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(trans = "log10")
+```
+
+OK, so the linkage doesn't make it plateau...it just increases the number of necessary
+markers by a predictable amount.  Basically, it changes the slope of the relationship.
+
+Now, let's have a look at how things work with the microhaplotypes, but only do the first five 
+(up to 16X).  
+```{r}
+mhaps_hs_reslist <- lapply(mhap_dupie_list[1:5], sim_linked_and_unlinked_hs)
+```
+
+```{r}
+hs05_mh <- bind_rows(mhaps_hs_reslist, .id = "data_reps") %>%
+  filter(near(FNR, 0.05)) %>%
+  mutate(data_reps = parse_number(data_reps),
+         num_markers = 96 * data_reps) %>%
+  mutate(marker_type = "mhap")
+
+combo_df <- hs05 %>%
+  filter(data_reps <= 16) %>%
+  mutate(marker_type = "SNP") %>%
+  bind_rows(., hs05_mh)
+  
+
+gg <- ggplot(combo_df, aes(x = num_markers, y = FPR, colour = marker_type, linetype = sim_type, shape = marker_type)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(trans = "log10", breaks = 10 ^ (-(seq(3,28, by = 2))))
+
+# print it
+gg
+```
+
+Now, zoom in on the left part of the graph:
+```{r}
+gg +
+  coord_cartesian(xlim = c(0, 1200), ylim = c(1e-00, 1e-17))
+
+```
+
+So, that is how things are looking.  We'll have to figure out how we want to present this.  Basically,
+if we want FPR's on the order of 1e-09 we are going to want about 400 microhaps (taking account of
+likely patterns of linkage).  And to get the same sort of power, we would need 1100 SNPs.
+
+So, the issue of physical linkage is not a total deal-breaker for SNPs, but we still do better
+with microhaps.  And the microhap numbers there put us in the realm in which one could still
+be doing amplicon sequencing, as opposed to having to resort to RAPTURE or other somewhat
+less reliable and more expensive methods with more  difficult preps, etc.
+
+
