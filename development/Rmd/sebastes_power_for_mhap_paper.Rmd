@@ -481,9 +481,9 @@ sim_linked_and_unlinked_hs <- function(D) {
   QU_unlinked <- simulate_Qij(CK, froms = c("U", "HS"), tos = c("U", "HS"), reps = 1e4)
   QU_linked <- simulate_Qij(CK, froms = c("HS"), tos = c("U", "HS"), reps = 1e04, unlinked = FALSE, pedigree_list = pedigrees)
   
-  link <- mc_sample_simple(Q = QU_unlinked, nu = "HS", de = "U", method = "IS", FNRs = seq(0.05, 0.3, by = 0.05), Q_for_fnrs = QU_linked) %>%
+  link <- mc_sample_simple(Q = QU_unlinked, nu = "HS", de = "U", method = "IS", FNRs = seq(0.01, 0.3, by = 0.01), Q_for_fnrs = QU_linked) %>%
     mutate(sim_type = "linked")
-  unlink <- mc_sample_simple(Q = QU_unlinked, nu = "HS", de = "U", method = "IS", FNRs = seq(0.05, 0.3, by = 0.05)) %>%
+  unlink <- mc_sample_simple(Q = QU_unlinked, nu = "HS", de = "U", method = "IS", FNRs = seq(0.01, 0.3, by = 0.01)) %>%
     mutate(sim_type = "unlinked")
   
   bind_rows(link, unlink)
@@ -496,21 +496,28 @@ And now, fire it up for half-sibs and SNPs:
 snps_hs_reslist <- lapply(snp_dupie_list, sim_linked_and_unlinked_hs)
 ```
 
-And, after doing that, we can plot the results at a constant false negative rate, let's say 0.05:
+Save the results so I don't have to do all the computation to look at results further:
 ```{r}
-hs05 <- bind_rows(snps_hs_reslist, .id = "data_reps") %>%
-  filter(near(FNR, 0.05)) %>%
+saveRDS(snps_hs_reslist, file = "../outputs/snps_hs_reslist.rds", compress = "xz")
+```
+And, after doing that, we can plot the results at a constant false negative rate, let's say 0.01:
+```{r}
+hs01 <- bind_rows(snps_hs_reslist, .id = "data_reps") %>%
+  filter(near(FNR, 0.01)) %>%
   mutate(data_reps = parse_number(data_reps),
          num_markers = 96 * data_reps)
 
-ggplot(hs05, aes(x = num_markers, y = FPR, colour = sim_type)) +
+ggplot(hs01, aes(x = num_markers, y = FPR, colour = sim_type)) +
   geom_line() +
   geom_point() +
   scale_y_continuous(trans = "log10")
 ```
 
-OK, so the linkage doesn't make it plateau...it just increases the number of necessary
-markers by a predictable amount.  Basically, it changes the slope of the relationship.
+OK, so the linkage doesn't make it plateau...but itincreases the number of necessary
+markers.  Notice that it changes the slope of the relationship. Which means it is 
+not increaseing the FPR by a constant fraction, but actually by a larger proportion
+when you have more markers.  (Since it is on a log scale, a constant fraction would
+just be constant shift upward of the orange curve).
 
 Now, let's have a look at how things work with the microhaplotypes, but only do the first five 
 (up to 16X).  
@@ -518,14 +525,19 @@ Now, let's have a look at how things work with the microhaplotypes, but only do 
 mhaps_hs_reslist <- lapply(mhap_dupie_list[1:5], sim_linked_and_unlinked_hs)
 ```
 
+And save that dude...
 ```{r}
-hs05_mh <- bind_rows(mhaps_hs_reslist, .id = "data_reps") %>%
-  filter(near(FNR, 0.05)) %>%
+saveRDS(mhaps_hs_reslist, file = "../outputs/mhaps_hs_reslist.rds", compress = "xz")
+```
+
+```{r}
+hs01_mh <- bind_rows(mhaps_hs_reslist, .id = "data_reps") %>%
+  filter(near(FNR, 0.01)) %>%
   mutate(data_reps = parse_number(data_reps),
          num_markers = 96 * data_reps) %>%
   mutate(marker_type = "mhap")
 
-combo_df <- hs05 %>%
+combo_df <- hs01 %>%
   filter(data_reps <= 16) %>%
   mutate(marker_type = "SNP") %>%
   bind_rows(., hs05_mh)
@@ -543,17 +555,64 @@ gg
 Now, zoom in on the left part of the graph:
 ```{r}
 gg +
-  coord_cartesian(xlim = c(0, 1200), ylim = c(1e-00, 1e-17))
+  coord_cartesian(xlim = c(0, 1400), ylim = c(1e-00, 1e-17))
 
 ```
 
 So, that is how things are looking.  We'll have to figure out how we want to present this.  Basically,
 if we want FPR's on the order of 1e-09 we are going to want about 400 microhaps (taking account of
-likely patterns of linkage).  And to get the same sort of power, we would need 1100 SNPs.
+likely patterns of linkage).  And to get the same sort of power, we would need 1400 SNPs.
 
 So, the issue of physical linkage is not a total deal-breaker for SNPs, but we still do better
 with microhaps.  And the microhap numbers there put us in the realm in which one could still
 be doing amplicon sequencing, as opposed to having to resort to RAPTURE or other somewhat
 less reliable and more expensive methods with more  difficult preps, etc.
 
+### Now, let's look at FNR = 0.01
+
+Turns out that we might want to use the 0.01 FNR cutoff for the paper.  So,
+let's get all the results and make an RDS so I don't have to redo them!!
+
+```{r}
+full_results <- list(
+  mhap = bind_rows(mhaps_hs_reslist, .id = "data_reps"),
+  SNP = bind_rows(snps_hs_reslist, .id = "data_reps")
+) %>%
+  bind_rows(.id = "marker_type") %>% 
+  mutate(data_reps = parse_number(data_reps)) %>%
+  mutate(num_markers = 96 * data_reps) %>%
+  select(marker_type, data_reps, num_markers, sim_type, everything())
+
+full_results
+```
+
+And now, let's save that as well:
+```{r}
+saveRDS(full_results, file = "../outputs/full_results_snps_v_mhaps_half_sibs_linked_v_unlinked.rds")
+```
+
+And now we can look at things with an FNR of 0.01:
+```{r, rows.print = 25}
+full_results %>%
+  filter(near(FNR, 0.01))
+```
+
+## Making Figure 4
+
+We can use the stored results:
+```{r}
+# get the results and filter just to the points we want to keep
+fig4res <- readRDS("../outputs/full_results_snps_v_mhaps_half_sibs_linked_v_unlinked.rds") %>%
+  filter(near(FNR, 0.01)) %>%
+  filter((marker_type == "mhap" & data_reps <= 8) | (marker_type == "SNP" & data_reps <= 16))
+
+# then plot it
+ggplot(fig4res, aes(x = num_markers, y = FPR, colour = marker_type, linetype = sim_type, shape = marker_type)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(trans = "log10", breaks = 10^(-seq(0, 20, by = 2)))
+
+# save a pdf version to send to carlos and diana.  Diana will do final formatting/fiddling
+ggsave(file = "../outputs/proto-figure-four.pdf")
+```
 

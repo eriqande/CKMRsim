@@ -1,5 +1,8 @@
 # CKMRsim
 
+[![DOI](https://zenodo.org/badge/55812404.svg)](https://zenodo.org/badge/latestdoi/55812404)
+
+
 This is an R package in development.  Not much else here now.
 
 NOTES:
