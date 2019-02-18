@@ -80,7 +80,7 @@
 
 #' 40 dinucleotide markers for a quick test data set
 #'
-#' This was made by running the example in \code{\link{reindix_markers}}.
+#' This was made by running the example in \code{\link{reindex_markers}}.
 #' See \code{\link{long_markers}} for more info.
 "markers40"
 

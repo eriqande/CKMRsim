@@ -124,7 +124,7 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
 #' This version assumes that the denominator of Lambda and the true relationship can be specified as a
 #' a simple, single
 #' relationship (typically, and by default, "U"), rather than a mixture of
-#' possible relationships. For the latter see \code{\link{mc_sample_mixture}}
+#' possible relationships. Code for the latter has not yet been implemented
 #'
 #' The output is a long format data frame.
 #' @param Q the list that is the output of simulate_and_calc_Q.

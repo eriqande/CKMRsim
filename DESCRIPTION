@@ -1,22 +1,31 @@
 Package: CKMRsim
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Inference of Pairwise Relationships Using Likelihood Ratios
 Version: 0.1
-Date: 2015-09-09
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Authors@R: c(
+    person(given = c("Eric", "C."), family = "Anderson", email = "eric.anderson@noaa.gov", role = c("aut", "cre"))
+  )
+Maintainer: Eric C. Anderson <eric.anderson@noaa.gov>
+Description: Suite of tools for inference of relationships, especially for
+    use in close-kin mark-recapture.  Implements an importance sampling algorithm
+    for assessing false-positive rates, and also includes functions for rapidly
+    performing pairwise relationship inference.
+License: CC0
 LazyData: TRUE
 LinkingTo: Rcpp
+Depends:
+    R (>= 3.1)
 Imports:
     dplyr,
     magrittr,
     Rcpp,
     readr,
-    stringr
+    stringr,
+    tidyr
 Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8
+SystemRequirements: C++11

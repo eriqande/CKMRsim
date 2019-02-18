@@ -31,6 +31,11 @@ each relationship in \code{froms}.  If this is non-null, then the simulation wil
 as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
 is done assuming that the markers are all unlinked.}
 
+\item{forceLinkagePO}{Logical. If TRUE, the genotypes for the parent-offspring
+relationship are simulated with linkage even though it doesn't make a difference
+so long as the markers themselves are not in LD in the population.  This is primarily
+useful for testing.}
+
 \item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
 lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
@@ -62,8 +67,13 @@ it is time to simulate multilocus genotype pairs under a variety of relationship
 and then compute the log probability of them assuming various relationships.
 }
 \examples{
-example(insert_Y_l_matrices)
-mh_sacQ_example <- simulate_and_calc_Q(mh_yl_example, 10^4, froms = c("U", "PO"), tos = c("U", "PO"))
+example(insert_Y_l_matrices, package = "CKMRsim")
+mh_sacQ_example <- simulate_and_calc_Q(
+   mh_yl_example,
+   10^4,
+   froms = c("U", "PO"),
+   tos = c("U", "PO")
+   )
 
 \dontrun{
 # and we could plot the distribution of those if we wanted to

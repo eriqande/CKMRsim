@@ -5,7 +5,7 @@
 #' This is a constructor function and where we will document the \code{ckmr} class.
 #' The \code{ckmr} class is an object that includes all the stuff necessary to
 #' sample genotypes of pairs of individuals at different loci.  Primarily this
-#' will be the object returned by \code{\link{ckmr_create}}. A \code{ckmr} object
+#' will be the object returned by \code{\link{create_ckmr}}. A \code{ckmr} object
 #' is a named list.  At the first level are components \code{orig_data} (the original
 #' data frame of markers that went into its construction) and \code{loci}, a component in which
 #' each component corresponds to a locus and has the following
@@ -81,10 +81,11 @@ format.ckmr <- function(C) {
 #' print method for ckmr class
 #'
 #' Just wraps a call to the format.ckmr function
-#' @param C an object of class \code{\link{ckmr_class}}.
+#' @param x an object of class \code{\link{ckmr_class}}.
+#' @param ... additional arguments to print. (But nothing implemented).
 #' @export
-print.ckmr <- function(C) {
-  cat(format(C), sep = "\n")
+print.ckmr <- function(x, ...) {
+  cat(format(x), sep = "\n")
 }
 
 

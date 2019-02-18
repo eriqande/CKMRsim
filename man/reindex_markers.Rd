@@ -22,9 +22,9 @@ map order along the chromosomes.
 # helps to demonstrate the function.
 set.seed(5);  # for reproducibility
 A_few_markers <- long_markers \%>\%
-  sample_n(1000) \%>\%     # subsample 4000 alleles
+  dplyr::sample_n(1000) \%>\%     # subsample 4000 alleles
   dplyr::group_by(Chrom, Locus) \%>\%
- dplyr::mutate(NumAlle = n()) \%>\%
+  dplyr::mutate(NumAlle = n()) \%>\%
   dplyr::filter(NumAlle > 1)  \%>\%  # chuck out loci only one allele now...
   dplyr::select(-NumAlle)  # get rid of the NumAlle column we created
 

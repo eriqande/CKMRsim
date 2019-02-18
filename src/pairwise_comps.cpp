@@ -17,8 +17,7 @@ using namespace Rcpp;
 //' everyone on S.
 //' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 //' @param nGenos a vector of the number of genotypes at each locus
-//' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
-//'
+//' @param Starts the base0 indexes of the starting positions of each locus in probs.
 //' @return a data frame with columns "ind" (the base-1 index of the individual in S),
 //' "value" (the value extracted, typically a log likelihood ratio), and "num_loc" (the
 //' number of non-missing loci in the comparison.)
@@ -79,7 +78,7 @@ DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVect
 //' for example (s[i], t[i]) designates a pair that you wish to investigate (individual s[i] in S and t[i] in T)
 //' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 //' @param nGenos a vector of the number of genotypes at each locus
-//' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
+//' @param Starts the base0 indexes of the starting positions of each locus in probs.
 //'
 //' @return a data frame with columns "indS" (the base-1 index of the individual in S),
 //' "indT" (the base-1 index of the individual in S), "locus" (base-1 index of the locus),

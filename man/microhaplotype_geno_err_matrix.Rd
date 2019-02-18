@@ -19,6 +19,9 @@ that are in the haplotype.  This recycles if its length is less than the number 
 haplotypes.}
 
 \item{dropout_rates}{Haplotype-specific rates of allelic dropout.  Recycles if need be.}
+
+\item{scale_by_num_snps}{Logical.  If true, then the error rate is divided by the
+number of SNPs in each microhaplotype.}
 }
 \description{
 This is intended for the case where the genotypes in question are composed of alleles
@@ -41,3 +44,4 @@ C_mat <- microhaplotype_geno_err_matrix(haps)
 # look at the first part of it
 C_mat[1:5, 1:5]
 }
+\keyword{internal}

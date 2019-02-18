@@ -11,7 +11,7 @@
 #' @param p vector of allele frequencies
 #' @param kappa a 3-vector of the Cotterman coefficients
 make_matrix_X_l <- function(p, kappa) {
-    .Call('CKMRsim_make_matrix_X_l', PACKAGE = 'CKMRsim', p, kappa)
+    .Call('_CKMRsim_make_matrix_X_l', PACKAGE = 'CKMRsim', p, kappa)
 }
 
 #' Compute pairwise relationship measures between all individuals in source and one individual in target
@@ -30,14 +30,13 @@ make_matrix_X_l <- function(p, kappa) {
 #' everyone on S.
 #' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 #' @param nGenos a vector of the number of genotypes at each locus
-#' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
-#'
+#' @param Starts the base0 indexes of the starting positions of each locus in probs.
 #' @return a data frame with columns "ind" (the base-1 index of the individual in S),
 #' "value" (the value extracted, typically a log likelihood ratio), and "num_loc" (the
 #' number of non-missing loci in the comparison.)
 #' @export
 comp_ind_pairwise <- function(S, T, t, values, nGenos, Starts) {
-    .Call('CKMRsim_comp_ind_pairwise', PACKAGE = 'CKMRsim', S, T, t, values, nGenos, Starts)
+    .Call('_CKMRsim_comp_ind_pairwise', PACKAGE = 'CKMRsim', S, T, t, values, nGenos, Starts)
 }
 
 #' Return locus-specific pairwise relationship measures between desired pairs of individuals
@@ -59,7 +58,7 @@ comp_ind_pairwise <- function(S, T, t, values, nGenos, Starts) {
 #' for example (s[i], t[i]) designates a pair that you wish to investigate (individual s[i] in S and t[i] in T)
 #' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 #' @param nGenos a vector of the number of genotypes at each locus
-#' @param base0_locus_starts the base0 indexes of the starting positions of each locus in probs.
+#' @param Starts the base0 indexes of the starting positions of each locus in probs.
 #'
 #' @return a data frame with columns "indS" (the base-1 index of the individual in S),
 #' "indT" (the base-1 index of the individual in S), "locus" (base-1 index of the locus),
@@ -67,7 +66,7 @@ comp_ind_pairwise <- function(S, T, t, values, nGenos, Starts) {
 #' locus it is given as NA_REAL
 #' @export
 locus_specific_pairwise <- function(S, T, s, t, values, nGenos, Starts) {
-    .Call('CKMRsim_locus_specific_pairwise', PACKAGE = 'CKMRsim', S, T, s, t, values, nGenos, Starts)
+    .Call('_CKMRsim_locus_specific_pairwise', PACKAGE = 'CKMRsim', S, T, s, t, values, nGenos, Starts)
 }
 
 #' Return every pair of individuals that mismatch at no more than max_miss loci
@@ -92,7 +91,7 @@ locus_specific_pairwise <- function(S, T, s, t, values, nGenos, Starts) {
 #' }
 #' @export
 pairwise_geno_id <- function(S, max_miss) {
-    .Call('CKMRsim_pairwise_geno_id', PACKAGE = 'CKMRsim', S, max_miss)
+    .Call('_CKMRsim_pairwise_geno_id', PACKAGE = 'CKMRsim', S, max_miss)
 }
 
 #' pick the genotypes out of the Mendel output pedigree file to use to compute Q
@@ -103,9 +102,11 @@ pairwise_geno_id <- function(S, max_miss) {
 #' @param Input the path to the Mendel output file to read in.
 #' @param NumA the number of alleles at each locus
 #' @examples
+#' \dontrun{
 #' read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
+#' }
 read_mendel_outped <- function(Input, NumA) {
-    .Call('CKMRsim_read_mendel_outped', PACKAGE = 'CKMRsim', Input, NumA)
+    .Call('_CKMRsim_read_mendel_outped', PACKAGE = 'CKMRsim', Input, NumA)
 }
 
 #' Sample 1 observation from cell probabilities that are columns of a matrix
@@ -118,12 +119,12 @@ read_mendel_outped <- function(Input, NumA) {
 #' @return a vector length = \code{nrow(M)} of indices, with each element being
 #' the column that was chosen in that row's sampling
 samp_from_mat <- function(M) {
-    .Call('CKMRsim_samp_from_mat', PACKAGE = 'CKMRsim', M)
+    .Call('_CKMRsim_samp_from_mat', PACKAGE = 'CKMRsim', M)
 }
 
 #' return indices of the top n elements of a large vector
-#' @export
+#' @keywords internal
 top_index <- function(x, n) {
-    .Call('CKMRsim_top_index', PACKAGE = 'CKMRsim', x, n)
+    .Call('_CKMRsim_top_index', PACKAGE = 'CKMRsim', x, n)
 }
 

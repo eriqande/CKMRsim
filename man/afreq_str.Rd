@@ -13,3 +13,4 @@ prints out the integer allele names and their freqs into alternating
 strings in a vector, so all you have to do is cat it with sep = "backslash n" to
 get it to print to the colony file.
 }
+\keyword{internal}

@@ -24,7 +24,7 @@ everyone on S.}
 
 \item{nGenos}{a vector of the number of genotypes at each locus}
 
-\item{base0_locus_starts}{the base0 indexes of the starting positions of each locus in probs.}
+\item{Starts}{the base0 indexes of the starting positions of each locus in probs.}
 }
 \value{
 a data frame with columns "ind" (the base-1 index of the individual in S),

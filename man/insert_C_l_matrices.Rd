@@ -12,10 +12,7 @@ The key thing that each list component needs is the named vector freqs of the al
 The functions that compute genotyping error use the names of the allele to compute the
 probabilities of the observed genotype given the true genotype.}
 
-\item{...}{extra arguments (after haps) to be passed to microhaplotype_geno_err_matrix
-#' @examples
-example(long_markers_to_X_l_list)
-mh_cl_example <- insert_C_l_matrices(mh_example)}
+\item{...}{extra arguments (after haps) to be passed to microhaplotype_geno_err_matrix}
 }
 \description{
 After you have gotten the X_l matrices using \code{\link{long_markers_to_X_l_list}}
@@ -27,4 +24,8 @@ a way that easily let's people define their own functions.  But for now it just
 does the microhaplotype error model with default parameters.  This creates and inserts the
 C_l_true matrix and also the C_l matrix.  C_l_true is the "true" genotyping error model results
 and C_l is what gets applied in the likelihood calculations.
+}
+\examples{
+example(long_markers_to_X_l_list, package = "CKMRsim")
+mh_cl_example <- insert_C_l_matrices(mh_example)
 }

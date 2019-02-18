@@ -13,7 +13,7 @@
 #' @param markers A list of chromosomes with markers upon them in the format of
 #' \code{\link{markers_on_map}}
 #' @param Dir  the directory where the output files should be placed.
-#' @param seed a vector of 2 integers, each of them positive but less than 5e08  The
+#' @param seeds a vector of 2 integers, each of them positive but less than 5e08  The
 #' first one has to be odd.
 #' @examples
 #'    data(pedigrees)

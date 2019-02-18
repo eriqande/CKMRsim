@@ -16,9 +16,11 @@ it should be given relative to the Dir directory.}
 Run the mendel binary in directory Dir using control file Control
 }
 \examples{
+\dontrun{
 # first prepare the input files and define tmpDir
 example(write_all_mendel_files)
 
 # then run mendel
 run_mendel(tmpDir, "mendel-example-Control.in")
+}
 }

@@ -23,13 +23,19 @@ the standard R readLines approach.  But only works if those tools are installed
 on the system.
 }
 \examples{
+# we don't run these because it depends on having Mendel installed
+\dontrun{
 # first prepare files for mendel simulation and run it in tmpDir
 # with naming prefix "mendel-example"
 example(run_mendel)
 
 # then grab the results
-results <- fast_mendel_outped2genos(file.path(tmpDir, "mendel-example-Ped.out"), file.path(tmpDir, "mendel-example-Def.in"))
+results <- fast_mendel_outped2genos(
+  file.path(tmpDir, "mendel-example-Ped.out"),
+  file.path(tmpDir, "mendel-example-Def.in")
+  )
 
 # finally show the results:
 results
+}
 }

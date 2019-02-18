@@ -30,3 +30,4 @@ Writes all files in the directory Dir but does not launch mendel.
 tmpDir <- tempdir()
 write_all_mendel_files("mendel-example", 10, 1234, long_markers, pedigrees$HS, Dir = tmpDir)
 }
+\keyword{internal}

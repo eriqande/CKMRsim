@@ -4,9 +4,9 @@
 \alias{mc_sample_simple}
 \title{sample Q values to get and analyze a sample of Lambdas with simple (non-mixture) hypotheses}
 \usage{
-mc_sample_simple(Q, nu, de = "U", tr = "U", method = c("IS", "vanilla",
-  "both")[1], pstar = NA, FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01),
-  lambda_stars = NULL, Q_for_fnrs = NULL)
+mc_sample_simple(Q, nu, de = "U", tr = "U", method = c("IS",
+  "vanilla", "both")[1], pstar = NA, FNRs = c(0.3, 0.2, 0.1, 0.05,
+  0.01), lambda_stars = NULL, Q_for_fnrs = NULL)
 }
 \arguments{
 \item{Q}{the list that is the output of simulate_and_calc_Q.}
@@ -61,7 +61,7 @@ to this function along with instructions on what quantities to compute.
 This version assumes that the denominator of Lambda and the true relationship can be specified as a
 a simple, single
 relationship (typically, and by default, "U"), rather than a mixture of
-possible relationships. For the latter see \code{\link{mc_sample_mixture}}
+possible relationships. Code for the latter has not yet been implemented
 }
 \details{
 The output is a long format data frame.

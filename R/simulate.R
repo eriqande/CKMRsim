@@ -39,15 +39,24 @@
 #' rando_miss_n loci will be considered missing, according to the rando_miss_wts.  This
 #' let's you get a sense for how well you will do, on average, with a certain number of
 #' missing loci.
-
+#' @param forceLinkagePO Logical. If TRUE, the genotypes for the parent-offspring
+#' relationship are simulated with linkage even though it doesn't make a difference
+#' so long as the markers themselves are not in LD in the population.  This is primarily
+#' useful for testing.
+#' @export
 #' @return This returns a list with components that are the relationships that were simulated
 #' from.  Inside each of those components is a list with components referring to the relationships
 #' that had genotype log probabilities calculated (the "tos"). The contents of each is a vector
 #' of length reps which are the log probability of the multilocus genotypes of that each of reps
 #' simulated pairs.
 #' @examples
-#' example(insert_Y_l_matrices)
-#' mh_sacQ_example <- simulate_and_calc_Q(mh_yl_example, 10^4, froms = c("U", "PO"), tos = c("U", "PO"))
+#' example(insert_Y_l_matrices, package = "CKMRsim")
+#' mh_sacQ_example <- simulate_and_calc_Q(
+#'    mh_yl_example,
+#'    10^4,
+#'    froms = c("U", "PO"),
+#'    tos = c("U", "PO")
+#'    )
 #'
 #' \dontrun{
 #' # and we could plot the distribution of those if we wanted to
@@ -57,7 +66,12 @@
 #' library(ggplot2)
 #' ggplot(DD, aes(x = logL, fill = Relat)) + geom_density(alpha = 0.6)
 #' }
-simulate_and_calc_Q <- function(YL, reps = 10^4, froms = NULL, tos = NULL, df = NULL, pedigrees = NULL, forceLinkagePO = FALSE,
+simulate_and_calc_Q <- function(YL, reps = 10^4,
+                                froms = NULL,
+                                tos = NULL,
+                                df = NULL,
+                                pedigrees = NULL,
+                                forceLinkagePO = FALSE,
                                 miss_mask_mat = NULL,
                                 rando_miss_wts = NULL,
                                 rando_miss_n = 0

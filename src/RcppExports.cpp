@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // make_matrix_X_l
 NumericMatrix make_matrix_X_l(NumericVector p, NumericVector kappa);
-RcppExport SEXP CKMRsim_make_matrix_X_l(SEXP pSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _CKMRsim_make_matrix_X_l(SEXP pSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // comp_ind_pairwise
 DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVector values, IntegerVector nGenos, IntegerVector Starts);
-RcppExport SEXP CKMRsim_comp_ind_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
+RcppExport SEXP _CKMRsim_comp_ind_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -35,7 +35,7 @@ END_RCPP
 }
 // locus_specific_pairwise
 DataFrame locus_specific_pairwise(IntegerMatrix S, IntegerMatrix T, IntegerVector s, IntegerVector t, NumericVector values, IntegerVector nGenos, IntegerVector Starts);
-RcppExport SEXP CKMRsim_locus_specific_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP sSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
+RcppExport SEXP _CKMRsim_locus_specific_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP sSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -52,7 +52,7 @@ END_RCPP
 }
 // pairwise_geno_id
 DataFrame pairwise_geno_id(IntegerMatrix S, int max_miss);
-RcppExport SEXP CKMRsim_pairwise_geno_id(SEXP SSEXP, SEXP max_missSEXP) {
+RcppExport SEXP _CKMRsim_pairwise_geno_id(SEXP SSEXP, SEXP max_missSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -64,7 +64,7 @@ END_RCPP
 }
 // read_mendel_outped
 List read_mendel_outped(CharacterVector Input, IntegerVector NumA);
-RcppExport SEXP CKMRsim_read_mendel_outped(SEXP InputSEXP, SEXP NumASEXP) {
+RcppExport SEXP _CKMRsim_read_mendel_outped(SEXP InputSEXP, SEXP NumASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -76,7 +76,7 @@ END_RCPP
 }
 // samp_from_mat
 IntegerVector samp_from_mat(NumericMatrix M);
-RcppExport SEXP CKMRsim_samp_from_mat(SEXP MSEXP) {
+RcppExport SEXP _CKMRsim_samp_from_mat(SEXP MSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -87,7 +87,7 @@ END_RCPP
 }
 // top_index
 IntegerVector top_index(SEXP x, int n);
-RcppExport SEXP CKMRsim_top_index(SEXP xSEXP, SEXP nSEXP) {
+RcppExport SEXP _CKMRsim_top_index(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -99,13 +99,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"CKMRsim_make_matrix_X_l", (DL_FUNC) &CKMRsim_make_matrix_X_l, 2},
-    {"CKMRsim_comp_ind_pairwise", (DL_FUNC) &CKMRsim_comp_ind_pairwise, 6},
-    {"CKMRsim_locus_specific_pairwise", (DL_FUNC) &CKMRsim_locus_specific_pairwise, 7},
-    {"CKMRsim_pairwise_geno_id", (DL_FUNC) &CKMRsim_pairwise_geno_id, 2},
-    {"CKMRsim_read_mendel_outped", (DL_FUNC) &CKMRsim_read_mendel_outped, 2},
-    {"CKMRsim_samp_from_mat", (DL_FUNC) &CKMRsim_samp_from_mat, 1},
-    {"CKMRsim_top_index", (DL_FUNC) &CKMRsim_top_index, 2},
+    {"_CKMRsim_make_matrix_X_l", (DL_FUNC) &_CKMRsim_make_matrix_X_l, 2},
+    {"_CKMRsim_comp_ind_pairwise", (DL_FUNC) &_CKMRsim_comp_ind_pairwise, 6},
+    {"_CKMRsim_locus_specific_pairwise", (DL_FUNC) &_CKMRsim_locus_specific_pairwise, 7},
+    {"_CKMRsim_pairwise_geno_id", (DL_FUNC) &_CKMRsim_pairwise_geno_id, 2},
+    {"_CKMRsim_read_mendel_outped", (DL_FUNC) &_CKMRsim_read_mendel_outped, 2},
+    {"_CKMRsim_samp_from_mat", (DL_FUNC) &_CKMRsim_samp_from_mat, 1},
+    {"_CKMRsim_top_index", (DL_FUNC) &_CKMRsim_top_index, 2},
     {NULL, NULL, 0}
 };
 

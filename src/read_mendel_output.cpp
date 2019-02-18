@@ -13,7 +13,9 @@ using namespace Rcpp;
 //' @param Input the path to the Mendel output file to read in.
 //' @param NumA the number of alleles at each locus
 //' @examples
+//' \dontrun{
 //' read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
+//' }
 // [[Rcpp::export]]
 List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
   int i, slash;
@@ -28,7 +30,7 @@ List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
   int indiv;
 
 
-  std::ifstream infile (fname);
+  std::ifstream infile (fname.c_str());
 
   /* first we scan through the file and count lines from individuals "1" and "2" */
   while (std::getline(infile, line)) {

@@ -122,6 +122,7 @@ extract_logls <- function(Q, numer, denom) {
 #' to be exponentiated, summed with weights, and then re-logged.  One has to worry about underflow
 #' in these situations.  This function deals with that by pulling a constant out of each and putting it
 #' back in as a log for each column.
+#' @export
 #' @examples
 #' # this is just a little thing to show that it gets the correct result:
 #' tmp <- matrix(runif(120,0,1), nrow = 3)

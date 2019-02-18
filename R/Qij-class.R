@@ -71,8 +71,9 @@ format.Qij <- function(Q) {
 #' print a Qij object nicely
 #'
 #' For nice printing.
-#' @param Q
+#' @param x an object of class \code{\link{Qij_class}}
+#' @param ... additional arguments to print. (But nothing implemented).
 #' @export
-print.Qij <- function(Q) {
-  cat(format(Q), sep = "\n")
+print.Qij <- function(x, ...) {
+  cat(format(x), sep = "\n")
 }

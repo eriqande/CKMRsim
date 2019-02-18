@@ -7,11 +7,11 @@
 index_ab(a, b, A)
 }
 \arguments{
+\item{a}{The first allele in the genotype}
+
+\item{b}{The second allele in the genotype}
+
 \item{A}{the total number of alleles at the locus in the population.}
-
-\item{The}{first allele in the genotype}
-
-\item{The}{second allele in the genotype}
 }
 \description{
 This implements the function to index genotypes so that we can put

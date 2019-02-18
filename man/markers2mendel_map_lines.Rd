@@ -19,3 +19,4 @@ data(long_markers)
 D <- markers2mendel_map_lines(long_markers)
 cat(D[1:100], sep = "")
 }
+\keyword{internal}

@@ -8,8 +8,6 @@ insert_Y_l_matrices(L)
 }
 \arguments{
 \item{L}{the list of X_l and C_l matrices}
-
-\item{type}{whether the}
 }
 \description{
 Once you have the X_l matrices for each kappa, and the C_l matrices

@@ -4,9 +4,7 @@
 \name{CKMRsim}
 \alias{CKMRsim}
 \alias{CKMRsim-package}
-\title{My package documentation
-… bla bla …}
+\title{My package documentation}
 \description{
-My package documentation
-… bla bla …
+bla bla, need to write more here
 }

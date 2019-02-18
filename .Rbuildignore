@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^development$
+^scratch$
+^IDEAS\.md$
+^deprecated$

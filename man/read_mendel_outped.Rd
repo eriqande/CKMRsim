@@ -17,5 +17,7 @@ Crap.  But at least I have a start on how to parse this monstrous file. This ass
 of individuals are labeled 1 and 2.
 }
 \examples{
+\dontrun{
 read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
+}
 }

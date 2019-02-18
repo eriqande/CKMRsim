@@ -21,6 +21,7 @@
 #' @param Ws the matrix omega* of allelic call probabilities
 #' @return This function returns a vector that is in the order of the genotypes
 #' as they are listed according to  g, gp, h, and hp.
+#' @export
 #' @examples
 #' # let's fabricate a locus with 5 alleles named "a1" through "a5"
 #' # and make W random, but with a much higher chance of observing the
@@ -65,7 +66,7 @@
 #' gprobs %>%
 #'  dplyr::mutate(ggp = paste(g, gp, sep = "-")) %>%
 #'   dplyr::group_by(ggp) %>%
-#'   summarise(probSum = sum(prob))
+#'   dplyr::summarise(probSum = sum(prob))
 #'
 #' # Eureka! it all checks out!
 general_allele_based_geno_err_model <- function(g, gp, h, hp, D, W, Ws) {
@@ -117,6 +118,10 @@ hap_obs_prob <- function(H1, H2, e) {
 #' that are in the haplotype.  This recycles if its length is less than the number of SNPs in the
 #' haplotypes.
 #' @param dropout_rates Haplotype-specific rates of allelic dropout.  Recycles if need be.
+#' @param scale_by_num_snps Logical.  If true, then the error rate is divided by the
+#' number of SNPs in each microhaplotype.
+#' @keywords internal
+#' @export
 #' @examples
 #' # five haplotypes in alphabetical order
 #' haps <- c("AACC", "GACC", "GATA", "GTCC", "GTTC")

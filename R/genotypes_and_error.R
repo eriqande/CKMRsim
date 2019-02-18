@@ -5,8 +5,8 @@
 #' This implements the function to index genotypes so that we can put
 #' them into matrices.  The paper mentions this indexing, in the section
 #' "Implementation."
-#' @param The first allele in the genotype
-#' @param The second allele in the genotype
+#' @param a The first allele in the genotype
+#' @param b The second allele in the genotype
 #' @param A the total number of alleles at the locus in the population.
 #' @details If a is not an allele with index lower than b, then this function
 #' automatically reorients the alleles so that it is. This is vectorized and
@@ -68,6 +68,7 @@ index_ab <- function(a, b, A) {
 #' marker in D. The contents of each list component is a list that includes the allele frequencies
 #' (as a vector named with the Allele names), and also another list of matrices with nA * (nA+1) / 2 rows and
 #' columns.  The rows and columns of this matrix are named by the genotypes.
+#' @export
 #' @examples
 #' data(kappas)
 #' lm_example <- long_markers_to_X_l_list(long_markers[1:18,], kappa_matrix = kappas)
@@ -128,8 +129,9 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
 #' The functions that compute genotyping error use the names of the allele to compute the
 #' probabilities of the observed genotype given the true genotype.
 #' @param ... extra arguments (after haps) to be passed to microhaplotype_geno_err_matrix
-#' #' @examples
-#' example(long_markers_to_X_l_list)
+#' @export
+#' @examples
+#' example(long_markers_to_X_l_list, package = "CKMRsim")
 #' mh_cl_example <- insert_C_l_matrices(mh_example)
 insert_C_l_matrices <- function(XL, ...) {
   lapply(XL, function(x) {
@@ -152,7 +154,7 @@ insert_C_l_matrices <- function(XL, ...) {
 #' but for now they are the same.  I just want to put that into the code at this
 #' point so I can work with them appropriately.
 #' @param L the list of X_l and C_l matrices
-#' @param type  whether the
+#' @export
 #' @examples
 #' example(insert_C_l_matrices)
 #' mh_yl_example <- insert_Y_l_matrices(mh_cl_example)

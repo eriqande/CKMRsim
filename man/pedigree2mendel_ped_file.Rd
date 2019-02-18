@@ -9,3 +9,4 @@ pedigree2mendel_ped_file(df, name, filename = NA)
 \description{
 for making a pedigree file with no observed genotypes on it
 }
+\keyword{internal}

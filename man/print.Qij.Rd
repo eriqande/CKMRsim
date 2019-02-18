@@ -4,7 +4,12 @@
 \alias{print.Qij}
 \title{print a Qij object nicely}
 \usage{
-\method{print}{Qij}(Q)
+\method{print}{Qij}(x, ...)
+}
+\arguments{
+\item{x}{an object of class \code{\link{Qij_class}}}
+
+\item{...}{additional arguments to print. (But nothing implemented).}
 }
 \description{
 For nice printing.

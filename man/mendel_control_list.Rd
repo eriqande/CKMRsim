@@ -8,6 +8,10 @@ mendel_control_list(ID, Reps, Seed)
 }
 \arguments{
 \item{ID}{the name/prefix to be given to all the files involved in this run.}
+
+\item{Reps}{the number of replicate simulations to perform}
+
+\item{Seed}{an integer number to be used as the seed for the simulations.}
 }
 \description{
 return a list of values for a Mendel definitions file for gene dropping

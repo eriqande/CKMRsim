@@ -15,9 +15,9 @@
 #' # helps to demonstrate the function.
 #' set.seed(5);  # for reproducibility
 #' A_few_markers <- long_markers %>%
-#'   sample_n(1000) %>%     # subsample 4000 alleles
+#'   dplyr::sample_n(1000) %>%     # subsample 4000 alleles
 #'   dplyr::group_by(Chrom, Locus) %>%
-#'  dplyr::mutate(NumAlle = n()) %>%
+#'   dplyr::mutate(NumAlle = n()) %>%
 #'   dplyr::filter(NumAlle > 1)  %>%  # chuck out loci only one allele now...
 #'   dplyr::select(-NumAlle)  # get rid of the NumAlle column we created
 #'
@@ -27,11 +27,11 @@ reindex_markers <- function(M) {
     dplyr::ungroup() %>%
     dplyr::arrange(Chrom, Pos, desc(Freq)) %>%
     dplyr::group_by(Chrom) %>%
-   dplyr::mutate(locidx = as.integer(factor(Locus, levels = unique(Locus)))) %>%
+    dplyr::mutate(locidx = as.integer(factor(Locus, levels = unique(Locus)))) %>%
     dplyr::group_by(Chrom, Locus) %>%
-   dplyr::mutate(alleidx = as.integer(factor(Allele, levels = unique(Allele))),
-           newfreq = Freq / sum(Freq)
-           ) %>%
+    dplyr::mutate(alleidx = as.integer(factor(Allele, levels = unique(Allele))),
+                  newfreq = Freq / sum(Freq)
+    ) %>%
     dplyr::select(-AlleIdx, -LocIdx, -Freq) %>%
     rename(Freq = newfreq, AlleIdx = alleidx, LocIdx = locidx) %>%
     dplyr::ungroup()

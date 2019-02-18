@@ -80,7 +80,7 @@ gprobs <- input_df \%>\%
 gprobs \%>\%
  dplyr::mutate(ggp = paste(g, gp, sep = "-")) \%>\%
   dplyr::group_by(ggp) \%>\%
-  summarise(probSum = sum(prob))
+  dplyr::summarise(probSum = sum(prob))
 
 # Eureka! it all checks out!
 }

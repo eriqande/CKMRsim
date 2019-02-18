@@ -10,6 +10,8 @@
 #' Chrom-underscore-Loc.
 #'
 #' @param df  A data frame in the format of \code{\link{long_markers}}.
+#' @keywords internal
+#' @export
 #' @examples
 #' data(long_markers)
 #' D <- markers2mendel_def_lines(long_markers)
@@ -36,6 +38,8 @@ markers2mendel_def_lines <- function(df) {
 #' D you can just do cat(D, sep = "", file = myMap.txt), for example.
 #'
 #' @param df  A data frame in the format of \code{\link{long_markers}}.
+#' @keywords internal
+#' @export
 #' @examples
 #' data(long_markers)
 #' D <- markers2mendel_map_lines(long_markers)
@@ -54,6 +58,7 @@ markers2mendel_map_lines <- function(df) {
 
 
 #' for making a pedigree file with no observed genotypes on it
+#' @keywords internal
 pedigree2mendel_ped_file <- function(df, name, filename = NA) {
 
 
@@ -91,6 +96,8 @@ id_prepend <- function(ID, suff) {
 #' return a list of values for a Mendel definitions file for gene dropping
 #'
 #' @param ID the name/prefix to be given to all the files involved in this run.
+#' @param Reps the number of replicate simulations to perform
+#' @param Seed an integer number to be used as the seed for the simulations.
 mendel_control_list <- function(ID, Reps, Seed) {
   ret <- list(
     # input files
@@ -132,6 +139,8 @@ mendel_control_list <- function(ID, Reps, Seed) {
 #' pedigree to drop genes upon.
 #' @param Dir The directory in which to write the files.  It must be created already.  Defaults to the
 #' current working directory.
+#' @keywords internal
+#' @export
 #' @examples
 #' # make a temp directory to place things into:
 #' tmpDir <- tempdir()
@@ -183,15 +192,21 @@ mendel_outped2genos <- function(Pedfile) {
 #' it is; 2) Indiv, the index of the target individual (typically 1 or 2); 3) Locus, the index
 #' of the locus; 4) Geno, the genotype of the individual as a single number.
 #' @examples
+#' # we don't run these because it depends on having Mendel installed
+#' \dontrun{
 #' # first prepare files for mendel simulation and run it in tmpDir
 #' # with naming prefix "mendel-example"
 #' example(run_mendel)
 #'
 #' # then grab the results
-#' results <- fast_mendel_outped2genos(file.path(tmpDir, "mendel-example-Ped.out"), file.path(tmpDir, "mendel-example-Def.in"))
+#' results <- fast_mendel_outped2genos(
+#'   file.path(tmpDir, "mendel-example-Ped.out"),
+#'   file.path(tmpDir, "mendel-example-Def.in")
+#'   )
 #'
 #' # finally show the results:
 #' results
+#' }
 fast_mendel_outped2genos <- function(OutPed, Def) {
 
   # I couldn't get pipe() to work, so I will just write to a tempfile and read back in
@@ -226,11 +241,13 @@ mendelBin <- function() {
 #' @param Control the "control file" with which to run mendel.  If not an absolute path
 #' it should be given relative to the Dir directory.
 #' @examples
+#' \dontrun{
 #' # first prepare the input files and define tmpDir
 #' example(write_all_mendel_files)
 #'
 #' # then run mendel
 #' run_mendel(tmpDir, "mendel-example-Control.in")
+#' }
 run_mendel <- function(Dir, Control) {
   COMM <- paste("cd",
                 Dir,
