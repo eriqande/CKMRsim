@@ -14,17 +14,27 @@
 #' probability that the pair shares 0 gene copies IBD, the second is the prob that they share 1 gene
 #' copy IBD, and the third is the prob that they share 2 gene copies IBD, all assuming no inbreeding.
 #' By default, this just uses the "MZ", "PO", "FS", "HS", and "U" rows from \code{\link{kappas}}.
+#' @inheritParams insert_C_l_matrices
 #' @export
-#' @section TODO  GOTTA INCORPORATE SPECIFICATION OF THE TRUE AND THE ASSUMED GTYP ERROR MODEL
-create_ckmr <- function(D, kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ]) {
+create_ckmr <- function(
+  D,
+  kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.1),
+  ge_mod_true_pars_list = list(epsilon = 0.1)
+  ) {
   # read in the "linked mhaps" but treat them as unlinked
   mhlist <- long_markers_to_X_l_list(D = D,
                                      kappa_matrix = kappa_matrix)
 
   # add the matrices that account for genotyping error
-  mhlist2 <- insert_C_l_matrices(mhlist,
-                                 snp_err_rates = 0.005,
-                                 scale_by_num_snps = TRUE)
+  mhlist2 <- insert_C_l_matrices(XL = mhlist,
+                                 ge_mod_assumed = ge_mod_assumed,
+                                 ge_mod_true = ge_mod_true,
+                                 ge_mod_assumed_pars_list = ge_mod_assumed_pars_list,
+                                 ge_mod_true_pars_list = ge_mod_true_pars_list
+                                )
 
   # do the matrix multiplication that gives the Y_l matrices
   mhlist3 <- insert_Y_l_matrices(mhlist2)

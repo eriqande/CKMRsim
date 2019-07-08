@@ -1,0 +1,254 @@
+---
+title: "First Stab at the GT_seq-ed Kelp Rockfish Juveniles"
+output: 
+  html_notebook:
+    toc: true
+---
+
+
+## Introduction
+
+Diana has given me some of the microhaplotype data for the juveniles (the same stuff that
+we ran through Colony), and I wanted to start using it while developing CKMR.  
+
+Goals here are to read the data in and do some analyses to predict power for identifying 
+full-siblings, then actually look for full siblings.  (For the second one there I am going 
+to have to make a new function that does pairwise comps within a single matrix....)
+
+
+## Libraries
+
+Get down and dirty in the tidyverse
+```{r}
+library(tidyverse)
+library(CKMRsim)
+library(stringr)
+```
+
+## Reading data in and processing
+
+I have added it to the development area of the repo
+```{r load-data, message=FALSE}
+files <- dir("../data/juv_hap_data_010916/", full.names = TRUE)
+all <- lapply(files, function(ff) read_csv(ff)) %>%
+  bind_rows()
+# it looks like this
+all[1:100,]
+```
+
+
+
+Let's grab all the haplotypes and put them into a tidier format:
+```{r tidy-ize-haps}
+# first the genotypes, adding some columns that CKMRsim is going to be looking for
+# note that Pos is silly here---will not get used for physical linkage, but needs to
+# have a value.
+clean_haps <- all %>%
+  select(-read.depth.1, -read.depth.2) %>%
+  gather(key = "gene_copy", value = "Allele", haplotype.1, haplotype.2) %>%
+  rename(Locus = locus,
+         indiv = indiv.ID) %>%
+  mutate(Pos = as.integer(factor(Locus, levels = unique(Locus))),
+         Chrom = "GTSeq") %>%
+  select(Chrom, Locus, Pos, indiv, gene_copy, Allele)
+
+# Toss individuals with fewer than 85 loci called:
+clean_haps2 <- clean_haps %>% 
+  group_by(indiv) %>% 
+  filter(n()/2 >= 85) %>%
+  ungroup()
+
+
+# then tally up the allele freqs and reindix for CKMRsim
+freqs <- clean_haps2 %>%
+  group_by(Chrom, Locus, Pos, Allele) %>%
+  summarise(counts = n()) %>%
+  mutate(Freq = counts/sum(counts)) %>%
+  select(-counts) %>%
+  mutate(LocIdx = 1,
+         AlleIdx = 1) %>%
+  reindex_markers()
+
+```
+
+Those freqs are sort of meaningless because we have a mixture here...
+
+## Making a genotypes matrix and run through structure
+
+In order to get set up for this, we need to go back to the original individual genotypes and 
+assign the LocIdx's and AlleIdx's to the alleles so that we can then convert the genotypes into
+a single integer that corresponds to what is in CKMRsim's matrices, and then smear that into a 
+big matrix.
+```{r assign-geno-numbers}
+# get the allele indexes on there (i.e. turn the alleles into numbers)
+# and also turn those into genotype numbers
+alle_idx_frame <- freqs %>%
+  select(Locus, Allele, LocIdx, AlleIdx) %>%
+  group_by(Locus) %>%
+  mutate(NumA = n()) %>%  # get the number of alleles at each locus
+  ungroup() %>%
+  left_join(clean_haps2, .)  %>%  # join the alle_idx's onto the actual genotype data
+  select(indiv, Locus, gene_copy, LocIdx, NumA, AlleIdx) %>%
+  spread(key = gene_copy, value = AlleIdx) %>%
+  mutate(GenoIdx = index_ab(a = haplotype.1, b = haplotype.2, A = NumA))
+
+
+
+# make a matrix of gene copies suitable for structure
+structure_mat <- alle_idx_frame %>%
+  mutate(geno_string = paste(haplotype.1, haplotype.2, sep = " ")) %>%
+  select(indiv, LocIdx, geno_string) %>%
+  spread(data = ., key = LocIdx, value = geno_string)
+```
+
+
+## Running the data through structure to identify different species
+
+We will do this with a baseline in the future, but for now just run structure.  To do that
+I have to make a structure file.  Should be no problem:
+```{r make-struct}
+structure_mat[is.na(structure_mat)] <- "-9 -9"  # missing data
+structure_mat %>%
+  write.table(., row.names = FALSE, col.names = FALSE, quote = FALSE, file = "struct_dat.txt", sep = "\t")
+```
+
+I then just ran that through structure's front end.  It was pretty clear that K = 3 was the correct 
+one.  Now we just have to grab those individuals assigned to the largest cluster. Let's get it.  I
+processed stuff with awk and can just read it as a data frame.
+```{r grab-struct}
+sres <- read.table("../sebastes_struct/short/Results/K3_q_vals.txt", header = TRUE, stringsAsFactors = FALSE) %>%
+  tbl_df()
+# the largest group is clust3:
+lapply(sres[-1], sum)
+
+# so get the list of kelps as those with clust3 > .95:
+kelps <- sres$indiv[sres$clust3 > 0.95]
+```
+
+## Now, do everything over with just the kelps
+
+```{r make-kelp-ckmr}
+kelp_haps <- clean_haps2 %>%
+  filter(indiv %in% kelps)
+
+kelp_freqs <- kelp_haps %>%
+  group_by(Chrom, Locus, Pos, Allele) %>%
+  summarise(counts = n()) %>%
+  mutate(Freq = counts/sum(counts)) %>%
+  select(-counts) %>%
+  mutate(LocIdx = 1,
+         AlleIdx = 1) %>%
+  reindex_markers()
+```
+
+## Power analysis with CKMR
+
+First make a ckmr object:
+```{r CKMR-create}
+CK <- create_ckmr(kelp_freqs, kappa_matrix = kappas[c("FS", "U"), ])
+
+# see what it tells us when we print it:
+CK
+```
+
+Then do the simulations to see what the false positive rates are for finding full sibs:
+```{r CKMR-sim-and-sample}
+Qs <- simulate_Qij(C = CK, froms = c("FS", "U"), tos = c("FS", "U"), reps = 10^4)
+
+# then do the importance sampling to get the FPRs
+mc_sample_simple(Qs, nu = "FS")
+```
+
+So, we don't expect too many unrelated individuals to look like full sibs.
+
+
+## Making genotype matrices
+```{r}
+kelp_idx_frame <- kelp_freqs %>%
+  select(Locus, Allele, LocIdx, AlleIdx) %>%
+  group_by(Locus) %>%
+  mutate(NumA = n()) %>%  # get the number of alleles at each locus
+  ungroup() %>%
+  left_join(kelp_haps, .)  %>%  # join the alle_idx's onto the actual genotype data
+  select(indiv, Locus, gene_copy, LocIdx, NumA, AlleIdx) %>%
+  spread(key = gene_copy, value = AlleIdx) %>%
+  mutate(GenoIdx = index_ab(a = haplotype.1, b = haplotype.2, A = NumA))
+
+# make a matrix of genotype integers 
+wide_kelp <- kelp_idx_frame %>%
+  select(indiv, LocIdx, GenoIdx) %>%
+  spread(data = ., key = LocIdx, value = GenoIdx)
+```
+
+Don't forget to set NA's to 0, and then decrease each value by 1:
+```{r make-mat}
+rocky_mat <- as.matrix(wide_kelp[, -1])
+rownames(rocky_mat) <- wide_kelp$indiv
+rocky_mat[is.na(rocky_mat)] <- 0
+rocky_mat <- rocky_mat - 1
+storage.mode(rocky_mat) <-  "integer"
+```
+
+## Looking for duplicated samples
+
+We can quickly look through rocky_mat for pairs of indivs with lots of matching genotypes.
+```{r check-for-dupes}
+pairwise_geno_id(S = rocky_mat, max_miss = 40) %>%
+  arrange(num_mismatch)
+```
+OK, that is not a huge number of them.
+
+## Doing the comparisons
+
+And we need to flatten the CKMR object appropriately
+```{r flatten}
+# flatten those out
+fs_flat <- flatten_ckmr(CK, "FS")
+unrel_flat <- flatten_ckmr(CK, "U")
+
+# then compute the log-likelihoods for the parent offspring relationship
+fs_logl_flat <- fs_flat
+fs_logl_flat$probs <- log(fs_flat$probs / unrel_flat$probs)
+
+```
+
+At this juncture, `rocky_mat` has what we want, and we are going to just compute all the pairwise comparisons, and then
+dump half of them by requiring that the first index be less than the smaller one....
+```{r do-comps, rows.print = 30}
+idx <- 1:nrow(rocky_mat)
+names(idx) <- idx
+comps <- lapply(idx, function(i) {
+    tmp <- comp_ind_pairwise(S = rocky_mat, T = rocky_mat, t = i, values = fs_logl_flat$probs, nGenos = fs_logl_flat$nGenos, Starts = fs_logl_flat$base0_locus_starts)
+    tmp[rev(top_index(tmp$value, 10)), ]  # just take the top 5 from each
+    }) %>%
+  dplyr::bind_rows(.id = "offspring") %>%
+  dplyr::tbl_df() %>%
+  filter(offspring < ind)
+
+# have a look at that
+result <- arrange(comps, desc(value)) %>%
+  mutate(number = 1:nrow(.)) %>%
+  mutate(id1 = rownames(rocky_mat)[as.integer(offspring)],
+         id2 = rownames(rocky_mat)[ind])
+
+result
+
+```
+Ignore the "offspring" name of the column.  It is just one individual against the other in the first two columns.
+
+That looks like 19 or so pairs (value > 10, say---see the CKMR simulations above), but no triples.  That is cool.
+
+
+
+## Plotting expected distribution of LogLs
+
+We might as well plot the values that we expect from true full siblings to make sure that the values we see are
+reasonable.
+```{r plot-logls}
+qlogls <- extract_logls(Qs, numer = c(FS = 1), denom = c(U = 1))
+ggplot(qlogls, aes(x = logl_ratio, fill = true_relat)) + 
+  geom_density()
+```
+Damn! That all looks good!
+
+The first three pairs in the table above are clearly duplicate samples.   Although the 1221-1230 pair at a logl of 64 or so seems to be a mystery.  We don't expect it to be that high, but it doesn't look like a duplicate either.  

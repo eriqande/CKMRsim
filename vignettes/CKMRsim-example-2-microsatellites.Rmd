@@ -1,0 +1,65 @@
+---
+title: "CKMRsim-example-2-microsatellites"
+author: "Eric C. Anderson"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: references.bib
+vignette: >
+  %\VignetteIndexEntry{CKMRsim-example-2-microsatellites}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+Now that y'all have, presumably, worked your way through the CKMRsim-example-1 vignette,
+we will run through another situation here in a study using microsatellites on brook trout.
+
+Before we get going, let's load some libraries:
+```{r}
+library(tidyverse)
+library(CKMRsim)
+```
+### Data Set  
+
+We use the data for one of the populations from 
+@ruzzantedValidationClosekinMarkrecapture.  These data come with 
+the CKMRsim package in a long-format tibble:
+```{r}
+
+brook_trout_genos
+```
+
+
+## Estimating Power for Relationship Inference
+
+Much like before, we have to start off with getting the allele frequencies.
+
+### Allele Frequency Input Format
+
+We use both parents and adults to estimate allele frequencies.  This could be
+problematic if there are enormous full-sibling groups amongst the offspring
+in the data set.
+
+```{r}
+bt_freqs <- brook_trout_genos %>%
+  filter(!is.na(Allele)) %>%
+  group_by(Chrom, Locus, Pos, LocIdx, Allele) %>%
+  summarise(n = n()) %>%
+  group_by(Locus) %>%
+  mutate(Freq = n / sum(n)) %>%
+  select(-n) %>%
+  mutate(AlleIdx  = 1) %>%
+  reindex_markers()
+``` 
+
+## References

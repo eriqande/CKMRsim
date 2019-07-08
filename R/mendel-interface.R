@@ -112,7 +112,7 @@ mendel_control_list <- function(ID, Reps, Seed) {
 
     # analysis options
     ANALYSIS_OPTION = "Gene_dropping",
-    REPETITIONS = Reps,
+    REPETITIONS = unname(Reps),
     SEED = Seed,
     MODEL = 2,
     KEEP_FOUNDER_GENOTYPES = "False",
@@ -231,7 +231,7 @@ mendelBin <- function() {
   } else {
     stop("Sorry, we don't know where to expect the mendel binary on an operating system of type ", Sys.info()['sysname'])
   }
-  if(!file.exists(path)) stop("Didn't find mendel binary where we expected it at ", path)
+  if(!file.exists(path)) stop("Didn't find mendel binary where we expected it at ", path, " Please download, then install, MENDEL v16.0 from http://software.genetics.ucla.edu/")
   path
 }
 

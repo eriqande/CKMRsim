@@ -1,0 +1,402 @@
+---
+title: "CKMRsim: Writing Genotyping Error Functions"
+author: "Eric C. Anderson"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: references.bib
+vignette: >
+  %\VignetteIndexEntry{CKMRsim-writing-geno-error-functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+`CKMRsim` allows users to specify genotyping error models for locus $\ell$ in terms of a matrix $\mathbf{C}_\ell$.
+If there are $G$ possible genotypes, then $\mathbf{C}_\ell$ is a $G \times G$
+matrix where the element in row $s$ and column $t$ is the probability that an individual
+truly carrying genotype $s$ is observed to have genotype $t$.  This model covers any possible
+type of genotyping error in which errors are independent between different loci and are also
+independent between different individuals.  That is a wide class of models.
+
+`CKMRsim` comes with some "pre-packaged" genotyping error models, but users might want to
+create their own that are tailored to the particular marker types that they work on. Currently,
+the way to define a genotyping error model is to define a function that takes an input
+`L`, which carries information about the locus, and any additional named parameters (like
+genotyping error rates.)  At some point, I will reimplement most of the list structures in
+`CKMRsim` as list-columns in tibbles, and then it will be much easier to define 
+locus-specific, and even allele-specific, error rates, etc.  For now, it is a little tough
+to do that cleanly and programmatically on a large scale...
+
+In this vignette, I will show how I created genotyping error functions for two of the 
+"pre-packaged" versions: True-Genotype-Independent Errors (TGIE), and a model tailored for
+microsatellites that includes allele mis-calling and allele dropout.
+
+## Basic Function Format
+
+Every genotyping error model function should have a name starting with `ge_model_`.
+For example we will name our TGIE model `ge_model_TGIE()`.  This naming convention is
+not a requirement, but it helps to keep things organized.  
+
+These `ge_model_` functions are required to have one argument named `L`.  This will be
+where information about the locus gets passed into the function.  Currently, the information
+available within `L` about the locus is contained in two list components:
+
+* `L$freqs` : a named vector of allele frequencies.  The names of the vector are the
+names of the corresponding alleles.  So, for example, if the names were microhaplotypes,
+like "ACCAT", then that information would be available for use.  Alternatively, if the
+names are microsatellite allele lengths, like "112", then those would also be
+available for creating the genotyping error model. Note that the alleles are listed 
+in this vector in the order in which CKMRsim represents them internally (for the C++ based
+functions), so whenever you do anything with the alleles, you want to keep them in this
+order!
+* `L$geno_freqs` : a named vector of genotype frequencies ordered in the way that
+`CKMRsim` has ordered the possible diploid genotypes that can be formed from the
+different alleles.  The names are the names of the genotypes, which are merely the 
+names of the two alleles in the genotype, separated by space-slash-space.
+For example "112 / 116". (Note that, by default, CKMRsim names genotypes this way.
+There should be no problem parsing such genotype names into the names of the constituent
+alleles, so long as alleles are never named have a space.  That should be a problem.  If
+you have spaces in your allele names, then please fix that!)
+  
+
+After the required `L` argument, the `ge_model_` function can have any other
+arguments that control the behavior of the genotyping error.
+
+The return value of the function must be the $G \times G$ matrix $\mathbf{C}_\ell$
+described above. The rows of this matrix must sum to one, since they are
+probabilities.  Note that $G$ is given by `length(L$geno_freqs)`. 
+
+
+## The TGIE Function
+
+True-genotype-independent error is a very simple genotyping error model that has been
+in use for a long time in relationship inference.  The main goal of it is to ensure that
+genotyping errors don't create zero-probability situations.  It is not intended to
+model the actual genotyping error process, but it is mathematically tractable in a lot
+of situations, and it is useful in cases where little is known about the genotyping error
+process.  One such situation occurs when someone gives you a file of genotypes that are coded
+up as integers, but those integers mean very little, i.e., they just denote separate alleles 
+which could be microsatellite alleles (but not the actual lengths), or they could be
+microhaplotype alleles (but not the actual variant sequences), or they could be SNPs (but
+not the actual bases, etc).  
+
+We will pretend for now that we are dealing with such integer-coded data and that we might have
+multiple alleles at each locus.  For example, the components of `L` might look like this:
+```r
+> L$freqs
+           1            2            3            4            5 
+6.329010e-01 3.662781e-01 4.104416e-04 2.462650e-04 8.208833e-05 
+           6 
+8.208833e-05 
+> L$geno_freqs
+       1 / 1        1 / 2        1 / 3        1 / 4        1 / 5 
+4.005637e-01 4.636356e-01 5.195378e-04 3.117227e-04 1.039076e-04 
+       1 / 6        2 / 2        2 / 3        2 / 4        2 / 5 
+1.039076e-04 1.341597e-01 3.006716e-04 1.804029e-04 6.013432e-05 
+       2 / 6        3 / 3        3 / 4        3 / 5        3 / 6 
+6.013432e-05 1.684623e-07 2.021548e-07 6.738493e-08 6.738493e-08 
+       4 / 4        4 / 5        4 / 6        5 / 5        5 / 6 
+6.064644e-08 4.043096e-08 4.043096e-08 6.738493e-09 1.347699e-08 
+       6 / 6 
+6.738493e-09 
+```
+This model is parameterized
+by a genotyping error rate, $\epsilon$, and errors occur independently between 
+individuals and loci.  With probability $1-\epsilon$ a genotyping error does not occur so that the observed
+genotype is the true genotype. With probability $\epsilon$ the genotype is subject to genotying error, in
+which case, the observed value is drawn from the remaining genotypes, proportionally to their frequencies.
+Under such a model, using $y_\ell$ to denote the observed genotype and $x_\ell$ to denote the true genotype, we have
+the row $s$ and column $t$ entry of $\mathbf{C}_\ell$ being the the conditional probability:
+\[
+P(y_\ell = g_{t} | x_\ell = g_{s}) = 
+\left\{
+\begin{array}{ll}
+(1-\epsilon), &  s = t \\
+\epsilon q(g_{t}) / (1 - g_s), & s \neq t.
+\end{array}
+\right.
+\]
+where $q(g_{s})$ is the frequency of genotype $s$.
+
+Thus, to implement TGIE, all we need to do is write code to return the matrix
+$\mathbf{C_\ell}$ given the input `L$geno_freqs` and another parameter `epsilon`.
+That looks like this:
+```r
+#' implements a simple true-genotype-independent genotyping error model
+#' @param L required locus specific information
+#' @param epsilon the rate at which genotypes are incorrectly observed.
+ge_model_TGIE <- function(L, epsilon = 0.01) {
+  # first make a matrix G x G matrix of the genotype frequencies
+  gmat <- matrix(rep(L$geno_freqs, length(L$geno_freqs)), byrow = TRUE, nrow = length(L$geno_freqs))
+
+  # Now, we make the diagonals 1 - epsilon exactly and rescale
+  # everything else to sum to epsilon.
+  diag(gmat) <- 0
+  gmat <- t(apply(gmat, 1, function(x) x * (epsilon/sum(x))))
+  diag(gmat) <- 1 - epsilon
+
+  # put the genotype names on for the row and column names since that can be
+  # handy down the road.
+  rownames(gmat) <- names(L$geno_freqs)
+  colnames(gmat) <- names(L$geno_freqs)
+
+  # return gmat, which is the matrix C.
+  gmat
+}
+
+```
+That is all there is to it.  And we can run it on a simple 2-allele example here:
+```{r}
+library(CKMRsim)
+L <- list(
+  freqs = c(A = 0.6, B = 0.4),
+  geno_freqs = c(`A / A` = 0.36, `A / B` = 0.48, `B / B` = 0.16)
+)
+
+C <- ge_model_TGIE(L, epsilon = 0.02)
+
+C
+```
+
+It is always good to check that your function returns a matrix whose rows
+sum to one.
+```{r}
+rowSums(C)
+```
+
+
+## A Quick Microsatellite Model
+
+Here we develop a microsatellite model that tries to capture a couple of features of microsatellites:
+
+1. If you mis-call an allele, you are more likely to mis-call it as an allele that is close in length
+to the true allele than one that is of very different length then the true allele.
+2. Some alleles don't amplify reliably, and this seems to happen more often with longer
+alleles (large-allele dropout), leaving the remaining allele to appear to be in homozygous form.
+
+Anyway, we note here that we have both allelic mis-calls and dropout errors.  CKMRsim includes a function
+called `combine_miscalls_and_dropouts()` that makes it fairly easy to implement the combination of these
+two types of errors, using a simple model (see the paper Anderson, in prep, for details.)  In order to use
+this function one needs to specify two different sets of probabilities:
+
+1. Mis-call probabilities: a matrix $\mathbf{W}$ that is $A \times A$ where $A$ is the number of alleles at the locus.
+The element in row $i$ and column $j$ is the probability that a true allele of type $i$ is called as type $j$.
+2. Dropout probabilities: a vector $D$ of length $A$ giving the probability that each different allele will
+drop out and not be observed/called (yielding a genotype that is homozygous for the remaining allele.)
+
+It is important to note that each of the two copies of a gene at a locus has a chance to drop out or be
+miscalled.  Thus, if you have a true genotype of $CD$ and the $C$ allele has a dropout rate of 0.01 and 
+$D$ a dropout rate of 0.02, then, a dropout will occur at the locus with probability $0.01 + 0.02 = 0.03$.
+
+To develop this model we will want to refer to an example locus.  We use one of
+the ones from the Ruzzante et al. data set in one of the brook trout populations.
+This is here:
+```{r}
+example_L_microsat
+```
+That shows what the `L` argument to our genotyping error model might 
+look like.  
+
+When we implement this, here is how we get the features we describe above.
+First, to get the matrix $\mathbf{W}$, taking account of proximity of 
+different alleles (in terms of length) we do this:
+
+* Allow the user to specify a basic underlying probability that an allele
+is mis-called.
+* Identify the step size between alleles as the minimum different between any
+two allele lengths.
+* If a mis-call error occurs, model the probability that an allele of length $X$
+is mistakenly called an allele of length $Y$ is proportional to the geometric 
+probability, with parameter $p$ (note that the user must set the parameter $p$).
+\[
+P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
+\]
+where $|Y-X|$ is the unsigned difference between $Y$ and $X$ in units of the 
+step size.  Note that if all allele lengths are a multiple of the step size, then
+this would be an equality, not just a proportion, but, in order to allow for
+intervals between alleles that might not be multiples of the step size, we will
+just allow for $|Y-X|$ to be a real number, and we will normalize over all possible
+alleles.  An interesting consequence of this normalization is that genotyping error probabilities
+may not be symmetrical: if allele 112 is adjacent to 116 and 120, but there is
+no 108 or 104, then 112 is more likely to be miscalled as 116 than 116 is to be
+miscalled as 112, because there is also a good chance that it will be miscalled as
+120 (whereas 112 doesn't have many likely miscall states below it.)
+
+
+Then, to get some sort of "large-allele dropout" effect, we will do this:
+
+* Have the user set a "base" drop out rate, $d$, which is the rate at which a 
+"typical" allele would drop out.
+* From the observed frequency distribution of alleles, compute the mean and the
+standard deviation of the allele-length distribution.
+* For each allele, compute a $z$-score that describes where it fits in that
+allele-length distribution.
+* For each allele with $z>0$ compute the dropout rate as $dsz$ where $d$
+is the base dropout rate, $s$ is a scaling factor that controls how much
+dropout rate increases with allele length, and $z$ is the allele's 
+$z$-score.
+
+Here is a function that accomplishes that.  This is just the function
+definition from the package.
+```{r, eval=FALSE}
+#' a simple "length-aware" genotyping error model for microsatellites
+#'
+#' In this genotyping error model, mis-calls are more likely to nearby
+#' allele lengths than distant ones, and larger alleles are more likely
+#' to drop out than small or average-sized ones.
+#'
+#' @param L an element of the list created by \code{\link{long_markers_to_X_l_list}}. Such
+#' an element basically holds the information at a single locus.  The idea here
+#' is that every ge_mod_* function takes in an object like L, and then can
+#' use any piece of information in it about alleles or genotypes to
+#' configure a genotyping error model. In the case of microsatellites,
+#' the names of the alleles must be the allele lengths, like "64" or "112".
+#' @param miscall_rate the rate at which alleles are miscalled.
+#' @param miscall_decay the parameter (or a geometric distribution) that determines
+#' how quickly the probability of the miscall being to a certain allele length
+#' decreases as you get further and further away from the true allele length.
+#' The larger this values, the more quickly the probability decays.  For every
+#' microsatellite allele step size further from the true allele size, the probability
+#' increases by a factor of 1 - miscall_decay.  Thus, if miscall_decay = 1
+#' then all errors are a step-size of one away, and if it is 0, then
+#' the miscall is equally likely to occur to any other allele length.
+#' @param dropout_rate the base rate at which alleles of "typical" size dropout.
+#' @param dropout_scale_factor the rate of drop out increases for alleles
+#' larger than the (frequency-weighted) average size of allele by a factor of
+#' dropout_scale_factor times the z-score of the allele length.
+#' @export
+#'
+ge_model_microsat1 <- function(L,
+                               miscall_rate = 0.005,
+                               miscall_decay = 0.8,
+                               dropout_rate = 0.01,
+                               dropout_scale_factor = 0.25
+) {
+
+  # first, compute the step-size as the minimum distance between any two alleles
+  lengths <- as.integer(names(L$freqs))
+  diffs <- outer(lengths, lengths, function(x,y) abs(x - y))
+  diag(diffs) <- NA
+  min_diff = min(diffs, na.rm = TRUE)
+
+  step_size = min_diff
+
+  # now, we compute the decay factors between all pairs of alleles,
+  # and then we multiply that by the base-miscall rate to get the
+  # matrix W of allele-to-allele miscall rates.
+  steps <- diffs/step_size
+
+  preW <- miscall_decay * (1 - miscall_decay) ^ (steps - 1)
+
+  # and those need to be normalized so that the off-diagonals sum to miscall_rate
+  W <- t(apply(preW, 1, function(x) x * miscall_rate / sum(x, na.rm = TRUE)))
+  # and we put 1 - miscall_rate on the diagonal
+  diag(W) <- 1 - miscall_rate
+  # and we MUST put the allele lengths on there as the names
+  rownames(W) <- names(L$freqs)
+  colnames(W) <- names(L$freqs)
+
+
+
+  # Now, let's make the vector D of dropout rates.
+  # first get the mean allele length
+  mean_len <- sum(lengths * L$freqs)
+
+  # and then we get the variance and the standard deviation.
+  # Note that we have the freqs of each lengths, but not the sample
+  # sizes, so we can't do the n-1 sort of correction for variance.
+  var_len <- sum( L$freqs * (lengths - mean_len) ^ 2)
+  sd_len <- sqrt(var_len)
+
+  # now compute the z-scores
+  zscores <- (lengths - mean_len) / sd_len
+
+  # now we can compute the vector D of dropout probabilities
+  D <- rep(dropout_rate, length.out = length(L$freqs))
+  D[zscores > 0] <- dropout_rate * (1 + zscores[zscores > 0] * dropout_scale_factor)
+  names(D) <- names(L$freqs)
+
+  # And now we create the matrix C by pushing all these into the function
+  # that combines allelic mis-calls and dropouts. Note that by setting Ws
+  # to W here we assume that the occurrence of a dropout does not affect the
+  # rate at which mis-calls occur.
+  ret <- combine_miscalls_and_dropouts(geno_names = names(L$geno_freqs),
+                                D = D,
+                                W = W,
+                                Ws = W)
+  
+  ret
+
+}
+
+```
+
+We can run that function with the default values to see what the results look like.
+The matrix is quite large (there are many genotypic states) but so we just look at the
+first 4 rows and columns.
+```{r}
+default <- ge_model_microsat1(example_L_microsat)
+default[1:4, 1:4]
+```
+Note that, because of the way dropout errors occur, you are more likely to
+encounter a genotyping error when the true genotype is a heterozygote.
+
+It will be worth the user's time to play around with different settings to see the
+effect of them.
+
+
+## A Genotyping Error Model for Microhaplotypes
+
+Microhaplotypes are clusters of a handful of SNPs that are all close enough to one another that
+they can be assayed by amplifying the segment of DNA they are on and then sequencing it on a 
+next generation sequencing machine.  Since such machines are given the sequence of a single piece
+of DNA (typically about 100 to 300 bp long), the alleles that occur together on such a read are certain
+to have been together on the same haplotype.  These microhaplotypes are thus multiallelic markers. 
+The main type of genotyping error that occurs with them is a dropout error, in which an individual
+carries one or two copies of the gene that do not amplify well, and thus will not yield enough reads to
+detect that allele.  On top of that, sequencing errors might lead one to read an incorrect sequence
+for one of the alleles.  In this case, it is more likely that the erroneous haplotype is "close" to the
+true one (i.e., differs at few SNPs), rather than far from it (different at many SNPs from the true
+haplotype.)
+
+The alleles of a microhaplotype can be named by the allelic type of the SNPs within it.  For example,
+at a microsatellite composed of 5 SNPs, one allele might be "ACCGT".  Here we show a simple
+error model for genotypes involving such microhaplotype alleles.  It has the following features:
+
+1. The locus has a single allele mis-call rate, call it `miscall_rate`.  In some circumstances,
+we might want loci with many SNPs to have a higher miscall rate.  This is achieved by multiplying
+the miscall rate by the number of SNPs.  
+2. If a miscall occurs, with allele $X$ being mis-called as allele $Y$, then the probability of miscalling
+$Y$ when the truth is $X$ is inversely proportional to the number of SNP alleles at which $X$ and $Y$ 
+differ.
+3. There is a locus-specific allelic dropout rate $d$.  In a future release we will make it
+less cumbersome to allow allele-specific dropout rates.
+4. The allelic mis-calls and dropouts are combined using the function we have seen 
+before, `combine_miscalls_and_dropouts()`.
+
+We have, in the package, an example of what a microhaplotype locus might look like:
+```{r}
+example_L_microhap
+```
+
+So, we will need a function to compute distances between the microhap alleles,
+and then we will need to use that to compute a matrix $\mathbf{W}$, like we did
+for microhaplotypes, and then we will combine that with dropout rates.  In this function
+those dropout rates are made the same for every allele, but that could be
+changed.
+
+Here is what such a function looks like:
+```{r, eval=FALSE}
+
+```
+

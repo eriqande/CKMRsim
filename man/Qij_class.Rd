@@ -17,7 +17,7 @@ Qij_class(Q, unlinked, forceLinkagePO, miss_mask_mat, rando_miss_wts,
 \item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
 lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
-missing data given missing data rates, etc. (Need to make another function to do that.)}
+missing data given missing data rates, etc.}
 
 \item{rando_miss_wts}{weights to be given to different loci that influence whether they
 will be one of the rando_miss_n missing loci in any iteration.  These will be recycled

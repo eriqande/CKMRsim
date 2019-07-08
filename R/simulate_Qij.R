@@ -8,12 +8,19 @@
 #' relationships under different relationship hypotheses.
 #' This function does that.
 #' @param C the ckmr object upon which to base the simulations.
-#' @param froms a vector of names of the relationship IDs to simulate from. For each relationship ID in
-#' froms, genotype values will get simulated from the Y_l_true values in C.
-#' @param tos a vector of names of the relationship IDs to calculate the genotype log probs of the simulated
+#' @param sim_relats a vector of names of the relationship IDs (these were the rownames
+#' in the \code{kappa_matrix} argument to \code{\link{create_ckmr}} to simulate from.
+#' For each relationship ID in sim_relats, genotype values will get simulated
+#' from the \code{Y_l_true} values in \code{C}.
+#' @param calc_relats a vector of names of the relationship IDs to calculate the
+#' genotype log probabilities of the simulated
 #' genotypes from.  Genotype log probs are calculated using the Y_l matrices.
-#' @param reps An integer. The number of pairs to simulate for each relationship in \code{froms}.
-#' Default is 10,000.
+#' @param froms a synonym for \code{sim_relats} for compatibility to an earlier version
+#' of CKMRsim.
+#' @param tos a synonym for \code{calc_relats} for compatibility to an earlier version
+#' of CKMRsim.
+#' @param reps a synonym for \code{calc_relats} for compatibility to an earlier version
+#' of CKMRsim.
 #' @param unlinked A logical indicating whether to simulate the markers as unlinked.  By default this is
 #' TRUE.  If FALSE, then genotypes at linked markers will be simulated using the program MENDEL, genotyping
 #' errors will be applied to them, and the Q_ij values themselves will still be computed under the assumption
@@ -27,7 +34,7 @@
 #' @param miss_mask_mat  A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 #' the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
 #' lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
-#' missing data given missing data rates, etc. (Need to make another function to do that.)
+#' missing data given missing data rates, etc.
 #' @param rando_miss_wts weights to be given to different loci that influence whether they
 #' will be one of the rando_miss_n missing loci in any iteration.  These will be recycled
 #' (or truncated) to have length equal to the number of loci, and they will be normalized
@@ -40,16 +47,37 @@
 #' let's you get a sense for how well you will do, on average, with a certain number of
 #' missing loci.
 #' @export
-simulate_Qij <- function(C, froms, tos, reps = 10^4, unlinked = TRUE, forceLinkagePO = FALSE, pedigree_list = NULL,
+simulate_Qij <- function(C, sim_relats, calc_relats, reps = 10^4, unlinked = TRUE, forceLinkagePO = FALSE, pedigree_list = NULL,
                          miss_mask_mat = NULL,
                          rando_miss_wts = NULL,
-                         rando_miss_n = 0) {
+                         rando_miss_n = 0,
+                         froms,
+                         tos) {
+
+  # here is a bunch of ugly stuff to deal with retaining compatibility with older scripts
+  # now that I have changed the name of the froms option to sim_relats and the tos option
+  # to calc_relats.
+  if(missing(sim_relats) && missing(froms)) stop("You have to provide an argument for sim_relats or froms (you can use either for compatibility to older versions) but you must give one of them.")
+  if(missing(calc_relats) && missing(tos)) stop("You have to provide an argument for calc_relats or tos (you can use either for compatibility to older versions) but you must give one of them.")
+
+  if(!missing(sim_relats) && !missing(froms)) stop("You have provided an argument for sim_relats and froms (you can use either for compatibility to older versions) but you must give exactly of them. froms is deprecated, so stop using that one!")
+  if(!missing(calc_relats) && !missing(tos)) stop("You have to provide an argument for calc_relats or tos (you can use either for compatibility to older versions) but you must give exactly one of them. tos is deprecated, so stop using that one!")
+
+  if(missing(sim_relats)) {
+    sim_relats = froms
+  }
+  if(missing(calc_relats)) {
+    calc_relats = tos
+  }
+
+
+
   if(unlinked == FALSE && is.null(pedigree_list)) stop("If you choose unlinked == TRUE, you must supply a pedigree_list")
   if(unlinked == TRUE) {
-    ret <- simulate_and_calc_Q(C$loci, reps = reps, froms = froms, tos = tos, miss_mask_mat = miss_mask_mat,
+    ret <- simulate_and_calc_Q(C$loci, reps = reps, froms = sim_relats, tos = calc_relats, miss_mask_mat = miss_mask_mat,
                                rando_miss_wts = rando_miss_wts, rando_miss_n = rando_miss_n)
   } else {
-    ret <- simulate_and_calc_Q(YL = C$loci, reps = reps, froms = froms, tos = tos, df = C$orig_data, pedigrees = pedigree_list,
+    ret <- simulate_and_calc_Q(YL = C$loci, reps = reps, froms = sim_relats, tos = calc_relats, df = C$orig_data, pedigrees = pedigree_list,
                                forceLinkagePO = forceLinkagePO, miss_mask_mat = miss_mask_mat,
                                rando_miss_wts = rando_miss_wts, rando_miss_n = rando_miss_n)
   }

@@ -128,3 +128,69 @@
 #' \code{Pos} has a random position (in base pairs) for each locus.  The
 #' \code{Allele} column gives the sequences of each allele/haplotype observed in the population.
 "linked_mhaps"
+
+
+#' Microsatellite data from brook trout
+#'
+#' These are genotypes of 307 brook trout from a study by Ruzzante et al.
+#' in 2019. Each fish was typed at 33 microsatellite loci.  Missing data
+#' are denoted by NAs.
+#' The columns are: Population, age_class, Sample_ID, Length,
+#' Age, Chrom, Locus, Pos, gene_copy, Allele.
+"brook_trout_genos"
+
+
+#' An example microsatellite locus
+#'
+#' These data are from Locus SFOC113 from Ruzzante et al.  It is included
+#' mostly to show how one might make a microsatellite genotyping error model.
+#' This is a list with two components, each of them vectors:
+#' \itemize{
+#' \item{freqs: }{ The frequencies of the different alleles.  The names are the allele
+#' lengths.}
+#' \item{geno_freqs: }{ The expected frequencies of the possible genotypes
+#' given the allele freqs.  The names are the names of the genotypes, which
+#' are the allele lengths separate by " / ".}
+#' }
+"example_L_microsat"
+
+
+#' An example biallelic locus
+#'
+#' A simple example biallelic locus with made up allele frequencies.
+#' This is a list with two components, each of them vectors:
+#' \itemize{
+#' \item{freqs: }{ The frequencies of the different alleles.  The names of the alleles
+#' are just "A" and "B"}
+#' \item{geno_freqs: }{ The expected frequencies of the possible genotypes
+#' given the allele freqs.  The names are the names of the genotypes, which
+#' are the allele lengths separate by " / ".}
+#' }
+"example_L_biallelic"
+
+
+
+#' An example microhaplotype locus
+#'
+#' A simple example microhaplotype locus with three SNPs and six alleles.
+#' This was taken from a rockfish data that we had in the lab.
+#' This is a list with two components, each of them vectors:
+#' \itemize{
+#' \item{freqs: }{ The frequencies of the different alleles.  The names of
+#' give the sequence of SNP allele at the microhaplotype.}
+#' \item{geno_freqs: }{ The expected frequencies of the possible genotypes
+#' given the allele freqs.  The names are the names of the genotypes, which
+#' are the allele names separate by " / ".}
+#' }
+"example_L_microhap"
+
+
+
+
+
+
+
+
+
+
+

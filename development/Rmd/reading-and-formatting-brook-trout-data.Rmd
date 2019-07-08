@@ -1,0 +1,45 @@
+---
+title: "Reading and Formatting Brook Trout Data"
+output: html_notebook
+---
+
+Daniel Ruzzante sent some data that I will package up into an rda file and
+use in this package.
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+First, we read them in.  Then we will format them
+to a long format.
+```{r}
+fish <- list(
+  offspring = read_xlsx("../data/RCU_33_LOCI_OFFSPRING.xlsx"),
+  parent = read_xlsx("../data/RCU_33_LOCI_PARENTS.xlsx")
+) %>% bind_rows(.id = "age_class") %>%
+  select(-`Number of 0s`, -`Number of Loci`)
+
+loc_names <- names(fish)[seq(6, ncol(fish), by = 2)]
+
+# rename locus columns, gather and separate
+names(fish)[seq(6, ncol(fish), by = 2)] <- str_c(loc_names, "---1")
+names(fish)[seq(7, ncol(fish), by = 2)] <- str_c(loc_names, "---2")
+
+btg <- fish %>%
+  gather(key = "loc", value = "Allele", -(age_class:Age)) %>%
+  separate(loc, into = c("Locus", "gene_copy"), sep = "---") %>%
+  mutate(Chrom = "Unk",
+         Pos = as.integer(factor(Locus, levels = loc_names))) %>%
+  rename(Sample_ID = `Sample ID`) %>%
+  select(Population, age_class, Sample_ID, Length, Age, Chrom, Locus, Pos, gene_copy, Allele) %>%
+  mutate(LocIdx = Pos) %>%
+  arrange(age_class, Sample_ID, Pos, gene_copy) %>%
+  mutate(Allele = ifelse(Allele == 0, NA, Allele))  # make missing data NA
+```
+
+Then save it to the package.
+```{r}
+brook_trout_genos <- btg
+save(brook_trout_genos, file = "../../data/brook_trout_genos.rda", compress = "xz")
+```

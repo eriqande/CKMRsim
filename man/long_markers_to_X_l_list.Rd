@@ -4,7 +4,7 @@
 \alias{long_markers_to_X_l_list}
 \title{convert a  long data frame of marker allele frequencies to a list of X_l matrices}
 \usage{
-long_markers_to_X_l_list(D, kappa_matrix)
+long_markers_to_X_l_list(D, kappa_matrix, allele_separator = " / ")
 }
 \arguments{
 \item{D}{a data frame in the format of \code{\link{long_markers}}.  Monomorphic loci should have
@@ -16,6 +16,11 @@ three columns, and rownames giving the abbreviated name of the pairwise relation
 is a three-vector which are the Cotterman coefficients for the relationship. The first element is the
 probability that the pair shares 0 gene copies IBD, the second is the prob that they share 1 gene
 copy IBD, and the third is the prob that they share 2 gene copies IBD, all assuming no inbreeding.}
+
+\item{allele_separator}{This string is used to separate allele names in the names of genotypes.
+By default it is " / ".  This should not get confused by any elements in actual allele names, as
+long as the allele names don't have any spaces in them.  This gets used to parse the genotype
+names down the road.}
 }
 \value{
 This returns a named list.  The names of the components are the Chrom.Locus.Pos of the

@@ -62,7 +62,7 @@
 #'  dplyr::mutate(prob = general_allele_based_geno_err_model(g, gp, h, hp, D, W, Ws))
 #'
 #' # now, confirm that, for each true genotype, when we sum over the
-#' # probs of the observed genotypes, we get 1.
+    #' # probs of the observed genotypes, we get 1.
 #' gprobs %>%
 #'  dplyr::mutate(ggp = paste(g, gp, sep = "-")) %>%
 #'   dplyr::group_by(ggp) %>%

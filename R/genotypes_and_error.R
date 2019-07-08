@@ -64,6 +64,10 @@ index_ab <- function(a, b, A) {
 #' is a three-vector which are the Cotterman coefficients for the relationship. The first element is the
 #' probability that the pair shares 0 gene copies IBD, the second is the prob that they share 1 gene
 #' copy IBD, and the third is the prob that they share 2 gene copies IBD, all assuming no inbreeding.
+#' @param allele_separator This string is used to separate allele names in the names of genotypes.
+#' By default it is " / ".  This should not get confused by any elements in actual allele names, as
+#' long as the allele names don't have any spaces in them.  This gets used to parse the genotype
+#' names down the road.
 #' @return This returns a named list.  The names of the components are the Chrom.Locus.Pos of the
 #' marker in D. The contents of each list component is a list that includes the allele frequencies
 #' (as a vector named with the Allele names), and also another list of matrices with nA * (nA+1) / 2 rows and
@@ -73,7 +77,7 @@ index_ab <- function(a, b, A) {
 #' data(kappas)
 #' lm_example <- long_markers_to_X_l_list(long_markers[1:18,], kappa_matrix = kappas)
 #' mh_example <- long_markers_to_X_l_list(microhaps, kappa_matrix = kappas)
-long_markers_to_X_l_list <- function(D, kappa_matrix) {
+long_markers_to_X_l_list <- function(D, kappa_matrix, allele_separator = " / ") {
 
   D2 <- D %>%
    dplyr::mutate(gname = paste(Chrom, Locus, Pos, sep = "."))
@@ -90,7 +94,7 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
       # for the dimnames of the X_l matrices
       geno_names <- expand.grid(gp = x$Allele, g = x$Allele) %>%
         dplyr::filter(as.integer(factor(g, levels = x$Allele)) <= as.integer(factor(gp, levels = x$Allele))) %>%
-       dplyr::mutate(name = paste(g, gp, sep = "-")) %>%
+       dplyr::mutate(name = paste(g, gp, sep = allele_separator)) %>%
         dplyr::select(name) %>%
         unlist %>%
         unname
@@ -98,6 +102,15 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
       # store the allele frequencies with the allele names
       loc_ret$freqs <- x$Freq
       names(loc_ret$freqs) <- x$Allele
+
+      # while we are at it, let's also just get the genotype freqs, straight up,
+      # under the assumption of HWE
+      f <- x$Freq
+      o <- outer(f, f) # this gets the freq of all ordered genotypes
+      o[lower.tri(o)] <- 2 * o[lower.tri(o)] # factor of 2 for heterozygotes
+      geno_freqs <- o[lower.tri(o, diag = TRUE)]
+      names(geno_freqs) <- geno_names
+      loc_ret$geno_freqs <- geno_freqs
 
       loc_ret$X_l <- lapply(1:nrow(kappa_matrix), function(K) {
         tmp <- make_matrix_X_l(p = x$Freq, kappa_matrix[K, ])
@@ -128,16 +141,50 @@ long_markers_to_X_l_list <- function(D, kappa_matrix) {
 #' The key thing that each list component needs is the named vector freqs of the allele frequencies.
 #' The functions that compute genotyping error use the names of the allele to compute the
 #' probabilities of the observed genotype given the true genotype.
-#' @param ... extra arguments (after haps) to be passed to microhaplotype_geno_err_matrix
+#' @param ge_mod_assumed The genotyping error model assumed for the analysis.
+#' @param ge_mod_true The actual, "true" genotyping error model for the simulation.
+#' @param ge_mod_assumed_pars_list a named list of extra arguments (besides L)
+#' to be passed to the ge_mod_assumed function.
+#' @param ge_mod_true_pars_list a named list of extra arguments (besides L)
+#' to be passed to the ge_mod_true function.
 #' @export
 #' @examples
 #' example(long_markers_to_X_l_list, package = "CKMRsim")
-#' mh_cl_example <- insert_C_l_matrices(mh_example)
-insert_C_l_matrices <- function(XL, ...) {
+#' mh_cl_example <- insert_C_l_matrices(
+#'     mh_example,
+#'     ge_mod_assumed = ge_model_microhap1,
+#'     ge_mod_true = ge_model_microhap1
+#' )
+insert_C_l_matrices <- function(
+  XL,
+  ge_mod_assumed,
+  ge_mod_true,
+  ge_mod_assumed_pars_list = NULL,
+  ge_mod_true_pars_list = NULL
+  ) {
+
+
+
   lapply(XL, function(x) {
-    if(is.null(names(x$freqs))) stop("No names attribute on the allele frequencies")
-    x$C_l_true <- microhaplotype_geno_err_matrix(haps = names(x$freqs), ...)
-    x$C_l <- microhaplotype_geno_err_matrix(haps = names(x$freqs), ...)
+
+    # take care of the extra parameters for the assumed genotyping model
+    if(is.null(ge_mod_assumed_pars_list)) {
+      ass_list <- list(L = x)
+    } else {
+      ass_list <- c(list(L = x), ge_mod_assumed_pars_list)
+    }
+
+    # take care of the extra parameters for the true genotyping model
+    if(is.null(ge_mod_true_pars_list)) {
+      true_list <- list(L = x)
+    } else {
+      true_list <- c(list(L = x), ge_mod_true_pars_list)
+    }
+
+
+
+    x$C_l_true <- do.call(ge_mod_true, true_list)
+    x$C_l <- do.call(ge_mod_assumed, ass_list)
     x
   })
 }

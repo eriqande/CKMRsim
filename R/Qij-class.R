@@ -61,8 +61,8 @@ format.Qij <- function(Q) {
   } else {
     ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype, " with PO treated as ", attributes(Q)$PO_sim)
   }
-  ret[3] <- paste0("\"Froms\" relationships: ", paste(names(Q), collapse = ", "))
-  ret[4] <- paste0("\"Tos\"   relationships: ", paste(names(Q[[1]]), collapse = ", "))
+  ret[3] <- paste0("\"sim_relats\" relationships: ", paste(names(Q), collapse = ", "))
+  ret[4] <- paste0("\"calc_relats\"   relationships: ", paste(names(Q[[1]]), collapse = ", "))
   ret[5] <- paste0("rando_miss_n: ", attributes(Q)$rando_miss_n)
   ret
 }

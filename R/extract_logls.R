@@ -1,6 +1,6 @@
 
 
-#' Extract log-likelihood ratios and assocatiated values from a Qij object
+#' Extract log-likelihood ratios and associated values from a Qij object
 #'
 #' This function applies the prior weights on the pairs for the numerator (for generality)
 #' and denominator and returns the log-likelihood ratios in a tidy format

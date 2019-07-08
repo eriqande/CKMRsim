@@ -4,7 +4,8 @@
 \alias{insert_C_l_matrices}
 \title{insert the matrix C_l into each element of the list of X_l matrices}
 \usage{
-insert_C_l_matrices(XL, ...)
+insert_C_l_matrices(XL, ge_mod_assumed, ge_mod_true,
+  ge_mod_assumed_pars_list = NULL, ge_mod_true_pars_list = NULL)
 }
 \arguments{
 \item{XL}{a list of the loci like that created using \code{\link{long_markers_to_X_l_list}}.
@@ -12,7 +13,15 @@ The key thing that each list component needs is the named vector freqs of the al
 The functions that compute genotyping error use the names of the allele to compute the
 probabilities of the observed genotype given the true genotype.}
 
-\item{...}{extra arguments (after haps) to be passed to microhaplotype_geno_err_matrix}
+\item{ge_mod_assumed}{The genotyping error model assumed for the analysis.}
+
+\item{ge_mod_true}{The actual, "true" genotyping error model for the simulation.}
+
+\item{ge_mod_assumed_pars_list}{a named list of extra arguments (besides L)
+to be passed to the ge_mod_assumed function.}
+
+\item{ge_mod_true_pars_list}{a named list of extra arguments (besides L)
+to be passed to the ge_mod_true function.}
 }
 \description{
 After you have gotten the X_l matrices using \code{\link{long_markers_to_X_l_list}}
@@ -27,5 +36,9 @@ and C_l is what gets applied in the likelihood calculations.
 }
 \examples{
 example(long_markers_to_X_l_list, package = "CKMRsim")
-mh_cl_example <- insert_C_l_matrices(mh_example)
+mh_cl_example <- insert_C_l_matrices(
+    mh_example,
+    ge_mod_assumed = ge_model_microhap1,
+    ge_mod_true = ge_model_microhap1
+)
 }

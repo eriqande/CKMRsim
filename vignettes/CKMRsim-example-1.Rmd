@@ -1,0 +1,352 @@
+---
+title: "CKMRsim-example-1"
+author: "Eric C. Anderson"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: references.bib
+vignette: >
+  %\VignetteIndexEntry{CKMRsim-example-1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+In this example, we will work through a relatively complete analysis of data from 
+kelp rockfish.  These data have been used in two publications to date
+[@baetscherDispersalNearshoreMarine2019; @baetscherMicrohaplotypesProvideIncreased2018].
+The genotype data are included in the package as a gzip compressed csv file.  The
+contents are identical to what can be downloaded from Dryad at:
+[http://datadryad.org/bitstream/handle/10255/dryad.205630/kelp_genos_used_two_col.csv?sequence=1](http://datadryad.org/bitstream/handle/10255/dryad.205630/kelp_genos_used_two_col.csv?sequence=1).
+
+Before we get started let's load the packages we need.  We'll be using a lot of
+functions from the tidyverse, so let's do it.
+```{r setup}
+library(tidyverse)
+library(CKMRsim)
+```
+
+## Reading in the Genotype Data set
+
+We first must read in the genotypes of the individuals. This file holds genotypes of all the adults
+and all of the juveniles.  The first part of our analysis involves simulations using allele frequencies.
+Since we don't expect large full sibling groups in our data, it is reasonable to use both adults _and_ 
+juveniles, together, to estimate allele frequencies in this kelp rockfish population. 
+
+It is
+also worth noting that, in general, it is important to include most/all of the individuals
+you will be using in your CKMR study when estimating allele frequencies.  This is because
+all alleles that you might encounter when doing kin-finding must have been accounted for and
+must have allele frequencies computed for them.  Especially when using multiallelic markers like
+microhaplotypes or microsatellites, it is important to make sure that every allele that you
+might encounter during kin-finding is accounted for during the allele frequency and power estimation
+phases of the analysis.
+
+The file that holds the genotypes comes with 
+the `CKMRsim` package at:
+```{r}
+geno_path <- system.file("extdata/kelp_genos_used_two_col.csv.gz", package = "CKMRsim")
+```
+When we read that in, we get a lot of warnings (not shown) that column names have been deduplicated. This
+is because each locus in the file occupies two columns and the names of those columns are the 
+same (i.e., the name of the locus.)
+```{r, warning=FALSE}
+genos1 <- read_csv(geno_path)
+```
+
+Let's look at the first bit of the resulting tibble:
+```{r}
+genos1[1:10, 1:10]
+```
+
+That is not a super informative print out.  But it does show us that the `NMFS_DNA_ID` column is
+the identifier for the indvidual fish, and that the genetic data start in column 2.  Also, the
+even columns have the locus name and the odd columns (after the first one) are named with the
+locus names plus a `_1` appended to them.  The alleles of each genotype are recorded as numbers.
+
+## Estimating Power for Relationship Inference
+
+Estimating the power that this set of markers is expected to give us for
+pairwise relationship inference involves doing Monte Carlo simulations from
+the allele frequencies in the population.  So, we are going to first have
+to estimate the allele frequencies from our genotype data set. And, we
+have to present those allele frequencies in a specific format that
+`CKMRsim` is expecting.
+
+### Allele Frequency Input Format
+
+`CKMRsim` is designed to be able to work with information about markers that
+are in known locations on different chromosomes within the genome.  Note that
+genome coordinates of markers _are not required_ but the input format has a place
+to record the chromome and position of each marker.  If these are not known,
+we fill them in with dummy values, as will be shown.  If simulations are done
+without physical linkage, then the values used have no effect.
+
+The package data `long_markers` shows an example of the allele frequency
+format that `CKMRsim` expects.  It looks like this:
+```{r}
+long_markers
+```
+
+The main columns are as follows:
+
+* `Chrom` should be a character or integer denoting which chromosome the marker
+is on.  (For example `1` or `X` or `Omy12`)
+* `Locus` gives a character vector with the names of the markers/loci.  Please don't use spaces
+in the marker names!
+* `Pos` gives the genome coordinates of the marker.  This needs to be a number (double or integer)
+* `Allele` gives the name of each allele at each locus.  This _must_ be a character vector.  So,
+in our example, we will coerce the numbers we have for each locus into a character vector. Please
+do not use spaces in allele names.
+* `Freq` is the frequency of each allele in the population.  These should sum to 1.0 over each
+locus.
+
+The remaining columns, `LocIdx` and `AlleIdx` are integer indices that get assigned to each
+locus and to each allele within each index.  These columns get filled by using the 
+`reindex_markers()` function.
+
+### Computing Allele Frequencies from Genotype Data
+
+The strategy for doing this in the tidyverse is to make a long data frame with columns
+`NMFS_DNA_ID`, `Locus`, `gene_copy` and `Allele`, and then summarising as appropriate.  Notice that, 
+since these fish are diploids, we will let `gene_copy` be `a` or `b` to denote whether we are
+talking about the allelic type of the first or second gene copy of the locus in a diploid individual.
+To do this, we will rename the column headers to look like `Locus.gene_copy`, then do some gathering
+and separating:
+```{r}
+# make note of the current order of loci in the data set
+nc <- ncol(genos1)
+loci <- names(genos1)[seq(2, nc, by = 2)]
+
+#  reset the locus names
+names(genos1)[seq(3, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "b", sep = ".")
+names(genos1)[seq(2, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "a", sep = ".")
+
+# then make some long format genotypes
+long_genos <- genos1 %>% 
+  gather(key = "loc", value = "Allele", -NMFS_DNA_ID) %>%
+  separate(loc, into = c("Locus", "gene_copy"), sep = "\\.") %>%
+  mutate(Allele = as.character(Allele))
+```
+Now we can compute the allele frequencies, and while we are at it, we will say that 
+these markers are all on chromosome `Unk` in positions given by their order in the
+original data set.  And we add columns for AlleIdx and LocIdx, as required to
+pass this tibble into `reindex_markers()`, but we can leave each entry as NA.
+```{r}
+alle_freqs <- long_genos %>%
+  count(Locus, Allele) %>%
+  group_by(Locus) %>%
+  mutate(Freq = n / sum(n),
+         Chrom = "Unk",
+         Pos = as.integer(factor(Locus, levels = loci))) %>%
+  ungroup() %>%
+  select(Chrom, Pos, Locus, Allele, Freq) %>%
+  arrange(Pos, desc(Freq)) %>%
+  mutate(AlleIdx = NA,
+         LocIdx = NA)
+
+# see what that looks like:
+alle_freqs
+
+```
+ 
+Once that is done, we pass them through the `reindex_markers()` function to yield
+a data frame of allele frequencies that `CKRMsim` can use to do simulations.
+```{r}
+afreqs_ready <- reindex_markers(alle_freqs)
+```
+
+We now have what we need to do a simulation analysis of power for
+pairwise relationship inference from these markers.
+
+Note that we will come back to `long_genos` later to actually do the
+pairwise relationship inference.
+
+### Create a CKMR object (`create_ckmr()`)
+
+The first step in the simulation process is to create an object of class `ckmr` which
+holds a large number of matrices useful for simulating genotypes (and thus for estimating
+power for relationship inference).  The main function that
+we use for this is `create_ckmr()`.  This function takes, as input, the allele frequencies
+formatted as we have above, and a few other settings having to do with the relationships 
+that the user is interested in simulation and the genotyping
+error models that the user want to consider, and then it creates all the necessary elements
+for doing the simulations.
+
+Specifically, the arguments you need to pass to `create_ckmr()` are as follows:
+
+* `D` : the tibble of allele frequencies that has been run through `reindex_markers()`.
+* `kappa_matrix` : A matrix that describes the pairwise relationships that you will be wanting
+to jointly simulate genotypes and likelihoods for.  Each row is named by what you want to 
+call the relationship and there are three columns which give, respectively, the probability
+that a pair with such a relationship share 0, 1, or 2 genes _identical-by-descent_.  The CKMRsim
+package comes with a matrix called `kappas` that has this information for 12 relationships:
+    - **MZ** : monozgotic twins (or "self").  This can be used to figure out how much power you
+    have for identifying the same individual, sampled twice.
+    - **PO** : parent-offspring.
+    - **FS** : full siblings.
+    - **HS** : half siblings.
+    - **GP** : grandparent - grandoffspring.
+    - **AN** : aunt-neice (same as uncle-nephew or any such avuncular relationship)
+    - **DFC** : double first cousins.
+    - **FC** : first cousins.
+    - **HC** : half cousins.
+    - **U** : unrelated.
+The `kappas` matrix looks like this:
+    ```{r}
+    kappas
+    ```
+* `ge_mod_assumed` : a function that describes the genotyping error model that will be applied to
+the simulated data when computing the likelihoods of the genotypes. In this case we will use
+`ge_model_TGIE` which is appropriate for integer-coded data. More information about this is in the
+vignette about writing genotyping error functions: [the-tgie-function](CKMRsim-writing-geno-error-funcs.html#the-tgie-function).
+* `ge_mod_true` : a function that describes the genotyping error model that will actually be used to
+simulate the genotype data.  Being able to separately specify these two models (assumed and true)
+allows the user to investigate the effects of misspecification of the genotyping error model.
+* `ge_mod_assumed_pars_list` a list of named parameters for the assumed genotyping error model (or,
+leave blank to use the defaults).
+* `ge_mod_true_pars_list` a list of named parameters for the true genotyping error model (or,
+leave blank to use the defaults).
+
+For the present example we are going to start with the assumption that the true and the assumed
+genotyping error models are the same: true-genotype-independent model with error rate (epsilon)
+equal to 1 in 100.  We will be concerned with how well we can distinguish Parent-offspring pairs
+from unrelated, and full-sibling pairs from unrelated, and we also want to see if half-siblings might
+sometimes look like full siblings.  So, we will create this ckmr object with the following relationships:
+PO, FS, HS, U. We do all that like this:
+```{r}
+ex1_ckmr <- create_ckmr(
+  D = alle_freqs,
+  kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.01),
+  ge_mod_true_pars_list = list(epsilon = 0.01)
+)
+```
+Now, when we print this object we get a little summary of what is in it:
+```{r}
+ex1_ckmr
+```
+This is an S3 object of class `ckmr`.
+
+### Simulate genotype pairs and calculate their log-probabilities (`simulate_Qij()`)
+
+Once we have created our `ckmr` object, we can use it to efficiently simulate the
+multilocus genotypes of pairs of individuals (of different relationships).  At the same
+time, we can calculate the log-probability of those genotypes of simulated pairs of individuals
+under the assumption that they are of one relationship type or another.  Those log genotype
+probabilities are the main ingredient for computing the log-likelihood ratios used for
+inferring relationships.  
+
+The main function that we use in this step is `simulate_Qij()`.  This function simulates
+genotypes from different relationships, and then for each simulated genotype pair it also
+calculates the log probability of the pair of genotypes _conditional on the pair being_
+of one or several relationships.
+This function has four main inputs that we discuss here (the others allow the addition of
+missing data and physical linkage, and are discussed in other vignettes).
+
+* `C` : the `ckmr` object to use for simulation and probabilty calculation.
+* `sim_relats` : the set of true relationships you want to simulate genotypes from.  
+* `calc_relats` : the set of assumed relationships you wish to compute genotype probabilities
+for, from the simulated data.
+* `reps` : for each relationship in `sim_relats`, the number of genotype pairs to simulate. This
+is, by default 10,000.
+
+The arguments `sim_relats` and `calc_relats` can use some extra discussion here.  Keep in mind that
+we are going to use the output of this function to learn about the distribution of likelihood
+ratios.  For example, if we are trying to identify parent-offspring pairs, we will typically
+use the ratio of he probability of a pair's genotypes given that they are parent-offspring, 
+divided by the probability of the pair's genotypes given that they are unrelated.  We can denote
+such a likelihood ratio by PO/U.  If we are looking for full sibling pairs, we would, rather,
+typically use the likelihood ratio FS/U.  If, on the other we hand we wanted to know how well
+full-siblings might be resolved from half-siblings, we could use FS/HS.  Whatever the
+target of one's question, in order for CKMRsim to calculate such likelihood ratios from the
+simulated data, it is necessary to compute the probabilities that are used in the ratios---that 
+is what the `calc_relats` argument is for.  You should set it to
+a vector of the relationships that occur in the
+numerator or the denominator of the likelihood ratios that you might want to investigate.  For example,
+if we want to investigate the distribution of the ratios PO/U, FS/U, and FS/HS, then
+`calc_relats` should be `c("PO", "FS", "HS", "U")`.
+
+`sim_relats` refers to the set of relationships that pairs of individuals are simulated
+from.  You will typically be interested in the distribution of a likelihood ratio
+_when the truth is relationship X_.  For example, if doing parentage inference, then to compute
+false positive and false negative rates, you will need to know the distribution of PO/U 
+when pairs are truly unrelated (U) and when they are truly parent-offspring, (PO).  But, you
+might also be interested to know what the distribution of PO/U looks like when the pairs
+are actually full-siblings.  If you were interested in all of the above, then you would set
+`sim_relats` equal to `c("PO", "FS", "U")`.
+
+In this vignette, for our current example, we will assume that we want to know
+whether our set of markers has sufficient power for identifying PO pairs and FS
+pairs from U pairs by using the likelihood ratios PO/U and FS/U.  So, we will
+clearly want `calc_relats = c("PO", "FS", "U")`.  But, let us also imagine that
+we are curious whether individuals that are truly HS might be mistakenly identified
+as FS; in such a case we will be curious about the distribution of FS/U when the 
+truth is HS, so we will also need to simulate from HS.  Hence we
+will use `sim_relats = c("PO", "FS", "HS", "U")
+
+It is worth pointing out at this point that any relationship found in
+`calc_relats` or `sim_relats` must have been included as a rowname in
+the `kappa_matrix` argument to `create_ckmr()`!
+
+Here we simulate all the genotype-pair probabilities we will need:
+```{r}
+ex1_Qs <- simulate_Qij(ex1_ckmr, 
+                       calc_relats = c("PO", "FS", "U"),
+                       sim_relats = c("PO", "FS", "HS", "U") )
+```
+
+If we print the resulting S3 object (of class `Qij`), we get a little information
+about it:
+```{r}
+ex1_Qs
+```
+
+### Compute log-likelihood ratios to view them (`extract_logls()`)
+
+This next step is not entirely necessary, but it helps to create
+pictures to understand what we are doing here, and the `extract_logls()`
+function lets us get simulated log-likelihood ratios out of the `Qij` 
+object we created above and plot a histogram or a density plot
+of the distributions.  This is helpful for developing
+intuition about things and understanding what is going on.
+
+The main function here is `extract_logls()`.  It simply takes an object of
+class `Qij` and uses the information within it to compute log-likelihood ratios
+from all the genotype probabilities that are stored within it.  There is one
+small twist: the numerator and denominator of the likelihood ratios can be
+mixtures of different relationship categories.  For example, instead of 
+just computing PO/U, you might want to compute a log likelihood ratio that
+reflects your belief that, of the genotyping pairs you are sampling, 
+95% are unrelated and the other 5% are full siblings.  Then you might
+want to base your inference on a log-likelihood ratio that looked like:
+PO/(0.95 * U + 0.05 * FS).  
+
+Often you will not want to do that, but, because `extract_logls()` is designed
+to do that, you have explicitly tell it how much weight to give each
+relationship category in the numerator and the denominator of the log likelihood
+ratio. 
+
+An example here should help.  Let's say we are interested in the distribution
+of the log likelihood ratio PO/U.  Then we would do:
+```{r}
+PO_U_logls <- extract_logls(ex1_Qs,
+                            numer = c(PO = 1),
+                            denom = c(U = 1))
+```
+
+
+
+
+## Literature Cited

@@ -36,7 +36,7 @@ ckmr_class <- function(L) {
   stopifnot(names(L) == c("orig_data", "loci"))
 
   # gonna just do minimal checking here
-  check_there <- all(sapply(L$loci, function(x) base::setequal(names(x), c("freqs", "X_l", "C_l_true", "C_l", "Y_l_true", "Y_l") )))
+  check_there <- all(sapply(L$loci, function(x) base::setequal(names(x), c("freqs", "geno_freqs", "X_l", "C_l_true", "C_l", "Y_l_true", "Y_l") )))
   if(!check_there) stop("L doesn't seem to have the right components to be a ckmr object.")
 
   class(L) <- "ckmr"

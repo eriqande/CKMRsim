@@ -12,9 +12,12 @@ NULL
 
 
 #### Import functions from packages ####
-#' @importFrom stats quantile runif sd setNames
-#' @importFrom utils read.table write.table
 #' @importFrom dplyr n n_distinct rename
+#' @importFrom stats quantile runif sd setNames
+#' @importFrom tibble tibble
+#' @importFrom tidyr separate
+#' @importFrom utils read.table write.table
+
 
 
 
@@ -67,7 +70,8 @@ if(getRversion() >= "2.15.1")  {
       "name",
       "newfreq",
       "pedname",
-      "xxx"
+      "xxx",
+      "gnames"
     )
   )
 }

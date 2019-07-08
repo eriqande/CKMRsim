@@ -4,7 +4,10 @@
 \alias{create_ckmr}
 \title{prepare to simulate pairwise relationships from locus data}
 \usage{
-create_ckmr(D, kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ])
+create_ckmr(D, kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE, ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.1),
+  ge_mod_true_pars_list = list(epsilon = 0.1))
 }
 \arguments{
 \item{D}{a data frame in the format of \code{\link{long_markers}}.  Monomorphic loci should have
@@ -17,6 +20,16 @@ is a three-vector which are the Cotterman coefficients for the relationship. The
 probability that the pair shares 0 gene copies IBD, the second is the prob that they share 1 gene
 copy IBD, and the third is the prob that they share 2 gene copies IBD, all assuming no inbreeding.
 By default, this just uses the "MZ", "PO", "FS", "HS", and "U" rows from \code{\link{kappas}}.}
+
+\item{ge_mod_assumed}{The genotyping error model assumed for the analysis.}
+
+\item{ge_mod_true}{The actual, "true" genotyping error model for the simulation.}
+
+\item{ge_mod_assumed_pars_list}{a named list of extra arguments (besides L)
+to be passed to the ge_mod_assumed function.}
+
+\item{ge_mod_true_pars_list}{a named list of extra arguments (besides L)
+to be passed to the ge_mod_true function.}
 }
 \description{
 Starting from a data frame of marker information like that
@@ -24,7 +37,3 @@ in \code{\link{microhaps}} or \code{\link{long_markers}}. This
 function takes care of all the calculations necessary to simulate
 log-likelihood ratios of genotypes given different pairwise relationships.
 }
-\section{TODO  GOTTA INCORPORATE SPECIFICATION OF THE TRUE AND THE ASSUMED GTYP ERROR MODEL}{
-NA
-}
-
