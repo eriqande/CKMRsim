@@ -119,15 +119,15 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
 #### EXPORTED FUNCTIONS #####
 #' sample Q values to get and analyze a sample of Lambdas with simple (non-mixture) hypotheses
 #'
-#' Once you have gotten an output from simulate_and_calc_Q you can pass that
+#' Once you have gotten an object of class Qij from \code{\link{simulate_Qij}} you can pass that
 #' to this function along with instructions on what quantities to compute.
 #' This version assumes that the denominator of Lambda and the true relationship can be specified as a
 #' a simple, single
 #' relationship (typically, and by default, "U"), rather than a mixture of
-#' possible relationships. Code for the latter has not yet been implemented
+#' possible relationships. Code for the latter has not yet been implemented.
 #'
 #' The output is a long format data frame.
-#' @param Q the list that is the output of simulate_and_calc_Q.
+#' @param Q the Qij object that is the output of simulate_Qij.
 #' @param nu the name of the relationship that is in the \strong{nu}merator
 #' of the likelihood ratio (Lambda) whose distribution you wish to learn about.
 #' It is a string, for example "FS", or "PO", or "U".  The Q values for that

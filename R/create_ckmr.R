@@ -24,6 +24,11 @@ create_ckmr <- function(
   ge_mod_assumed_pars_list = list(epsilon = 0.1),
   ge_mod_true_pars_list = list(epsilon = 0.1)
   ) {
+
+  # first, make sure there are no missing data allele in D
+  if(any(is.na(D$Allele))) stop("Some entries in Allele column in D are NA.  This cannot be so.  Please fix.  Aborting...")
+
+
   # read in the "linked mhaps" but treat them as unlinked
   mhlist <- long_markers_to_X_l_list(D = D,
                                      kappa_matrix = kappa_matrix)

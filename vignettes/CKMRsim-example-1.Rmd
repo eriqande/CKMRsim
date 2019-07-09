@@ -56,11 +56,13 @@ the `CKMRsim` package at:
 ```{r}
 geno_path <- system.file("extdata/kelp_genos_used_two_col.csv.gz", package = "CKMRsim")
 ```
-When we read that in, we get a lot of warnings (not shown) that column names have been deduplicated. This
+When we read that in, we get a lot of warnings (they
+have been suppressed here so that the vignette will pass CRAN checks)
+that column names have been deduplicated. This
 is because each locus in the file occupies two columns and the names of those columns are the 
 same (i.e., the name of the locus.)
 ```{r, warning=FALSE}
-genos1 <- read_csv(geno_path)
+genos1 <- suppressWarnings(read_csv(geno_path))
 ```
 
 Let's look at the first bit of the resulting tibble:
@@ -73,6 +75,33 @@ the identifier for the indvidual fish, and that the genetic data start in column
 even columns have the locus name and the odd columns (after the first one) are named with the
 locus names plus a `_1` appended to them.  The alleles of each genotype are recorded as numbers.
 
+### Which are adults and which are juveniles?
+
+We also have in the package two data files that list the IDs of the fish that are
+adults (and potentially parents) and which are juveniles (and potentially offspring).
+These correspond to the dryad files `kelp_adults.rds` and `kelp_juveniles.rds`.
+We get those data and then make a tibble of IDs with a column telling what life
+stage they were sampled at, and keep only those IDs that we have genotypes for in
+`genos1`:
+```{r}
+adults <- read_rds(path = system.file("extdata/kelp_adults.rds", package = "CKMRsim"))
+juvies <- read_rds(path = system.file("extdata/kelp_juveniles.rds", package = "CKMRsim"))
+
+
+life_stages <- bind_rows(
+  tibble(stage = "adult",
+         NMFS_DNA_ID = adults),
+  tibble(stage = "juvenile",
+         NMFS_DNA_ID = juvies)
+) %>%
+  filter(NMFS_DNA_ID %in% genos1$NMFS_DNA_ID)
+```
+
+Here we can see the numbers of adult and juvenile fish we are dealing with:
+```{r}
+life_stages %>%
+  count(stage)
+```
 ## Estimating Power for Relationship Inference
 
 Estimating the power that this set of markers is expected to give us for
@@ -121,22 +150,45 @@ The strategy for doing this in the tidyverse is to make a long data frame with c
 since these fish are diploids, we will let `gene_copy` be `a` or `b` to denote whether we are
 talking about the allelic type of the first or second gene copy of the locus in a diploid individual.
 To do this, we will rename the column headers to look like `Locus.gene_copy`, then do some gathering
-and separating:
+and separating.
+
+**MISSING DATA:** Note that missing data in this data set is denoted by `0`, and it
+must be denoted by `NA`.  So, turn Allele == 0 to NA:
+
 ```{r}
 # make note of the current order of loci in the data set
 nc <- ncol(genos1)
 loci <- names(genos1)[seq(2, nc, by = 2)]
 
 #  reset the locus names
-names(genos1)[seq(3, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "b", sep = ".")
-names(genos1)[seq(2, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "a", sep = ".")
+names(genos1)[seq(3, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "1", sep = ".")
+names(genos1)[seq(2, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "2", sep = ".")
 
 # then make some long format genotypes
 long_genos <- genos1 %>% 
   gather(key = "loc", value = "Allele", -NMFS_DNA_ID) %>%
   separate(loc, into = c("Locus", "gene_copy"), sep = "\\.") %>%
-  mutate(Allele = as.character(Allele))
+  mutate(Allele = as.character(Allele)) %>%
+  mutate(Allele = ifelse(Allele == "0", NA, Allele)) %>%
+  rename(Indiv = NMFS_DNA_ID)
 ```
+
+**IMPORTANT NOTE**  The data frame `long_genos` here is a long-format specification
+of multilocus genotypes of individuals.  This is a a basic input type that will
+be used later in CKMRsim.  It looks like this:
+```{r}
+long_genos
+```
+Note this about the data frame:
+
+1. It has four columns: Indiv, Locus, gene_copy, and Allele.  
+2. Alleles are named with characters (even if they are numbers, they must be coerced to characters).
+3. The gene_copy column contains either a 1 or a 2 in every row, telling us which
+copy of the gene (in a diploid) is which allele.  
+4. Missing data in the Allele column is given by NA.
+
+
+
 Now we can compute the allele frequencies, and while we are at it, we will say that 
 these markers are all on chromosome `Unk` in positions given by their order in the
 original data set.  And we add columns for AlleIdx and LocIdx, as required to
@@ -152,13 +204,17 @@ alle_freqs <- long_genos %>%
   select(Chrom, Pos, Locus, Allele, Freq) %>%
   arrange(Pos, desc(Freq)) %>%
   mutate(AlleIdx = NA,
-         LocIdx = NA)
+         LocIdx = NA) %>%
+  filter(!is.na(Allele))
 
 # see what that looks like:
 alle_freqs
 
 ```
  
+**Note:** It is very important to remove the NAs from the allele frequencies as is done
+in the last step above.
+
 Once that is done, we pass them through the `reindex_markers()` function to yield
 a data frame of allele frequencies that `CKRMsim` can use to do simulations.
 ```{r}
@@ -219,18 +275,18 @@ leave blank to use the defaults).
 
 For the present example we are going to start with the assumption that the true and the assumed
 genotyping error models are the same: true-genotype-independent model with error rate (epsilon)
-equal to 1 in 100.  We will be concerned with how well we can distinguish Parent-offspring pairs
+equal to 1 in 200.  We will be concerned with how well we can distinguish Parent-offspring pairs
 from unrelated, and full-sibling pairs from unrelated, and we also want to see if half-siblings might
 sometimes look like full siblings.  So, we will create this ckmr object with the following relationships:
 PO, FS, HS, U. We do all that like this:
 ```{r}
 ex1_ckmr <- create_ckmr(
-  D = alle_freqs,
+  D = afreqs_ready,
   kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ],
   ge_mod_assumed = ge_model_TGIE,
   ge_mod_true = ge_model_TGIE,
-  ge_mod_assumed_pars_list = list(epsilon = 0.01),
-  ge_mod_true_pars_list = list(epsilon = 0.01)
+  ge_mod_assumed_pars_list = list(epsilon = 0.005),
+  ge_mod_true_pars_list = list(epsilon = 0.005)
 )
 ```
 Now, when we print this object we get a little summary of what is in it:
@@ -345,6 +401,282 @@ PO_U_logls <- extract_logls(ex1_Qs,
                             numer = c(PO = 1),
                             denom = c(U = 1))
 ```
+That returns a tibble of log likelihood values for the numerator and the denominator
+and also the ratio of the two, one row for each simulated value in `ex1_Qs` (in the present
+case that is 10,000 values for each of the true relationship being PO, FS, HS, and U):
+```{r}
+PO_U_logls
+```
+
+We can visualize the distribution of each of these quite easily with `ggplot`:
+```{r, fig.width=6.5}
+ggplot(PO_U_logls,
+            aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.25)
+```
+
+OK, that shows that there is very little overlap in the PO/U log likelihood ratio between unrelated 
+pairs and parent-offspring pairs; however pairs that are truly full siblings are quite likely to
+have a high PO/U log likelihood ratio, and even half-sib pairs have considerable overlap in PO/U
+log likelihood ratio values with true parent-offspring pairs.
+
+Let's look at the above plot, but limit our focus to PO and U pairs:
+```{r, fig.width=6.5}
+ggplot(PO_U_logls %>% filter(true_relat %in% c("PO", "U")),
+            aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.25)
+```
+
+This shows that if we are only trying to distinguish PO pairs from U pairs, then
+we should apparently do quite well if we say that every pair we see with a 
+PO/U logl ratio (that is the shorthand we will use, henceforth, for "log likelihood ratio")
+greater than, say, 5, is a PO pair.  From the picture, it appears that there
+is no probability density under the U curve above 0 (and certainly not 5).  **However**
+you must keep in mind that, if you are comparing, say, 5000 offspring to 5000 parents,
+then there are 25 million pairs (almost all of them unrelated), which equates to 
+25 million chances to incorrectly declare one of those unrelated pairs a parent-offspring
+pair.  What is required here is some way to compute accurately, the very small probability
+that an unrelated pair has a PO/U logl ratio > 5.  Because, even if that probability is only
+1 in a million, you will still expect 25 of the unrelated pairs to have a PO/U logl ratio that
+exceeds 5!
+
+The next section discusses the CKMRsim function `mc_sample_simple()` that allows these
+small probabilities to be estimated.
+
+Before we proceed there, let us also imagine that we might be interested in
+distinguishing full-siblings from unrelated pairs.  In that case, it would be
+best to use the FS/U logl ratio.  The distributions of those (for the truth being
+either FS or U) can be visualized like so:
+```{r, fig.width=6.5}
+FS_U_logls <- extract_logls(ex1_Qs,
+                            numer = c(FS = 1),
+                            denom = c(U = 1))
+
+ggplot(FS_U_logls %>% filter(true_relat %in% c("FS", "U")),
+            aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.25)
+```
+
+### Estimating False Negative and False Positive Rates (`mc_sample_simple()`)
+
+The function `mc_sample_simple()` lets you estimate false positive rates and
+false negative rates from the simulated values in an object of class Qij.
+The function is configured so that it will automatically compute both 
+regular or "vanilla" Monte Carlo estimates of these probabilities, and also
+_importance sampling_ (IS) Monte Carlo estimates, which are particularly 
+good for estimating very small probabilities.
+
+By default, it uses importance sampling to compute false positive
+rates that are associated with
+false-negative rates of 0.3, 0.2, 0.1, 0.05, 0.01, and 0.001, but you can
+set those false negative rates to be whatever you wish.
+
+Here is a simple use case to estimate false positive rates when the
+true relationship is U, but we are looking for PO pairs.  This will,
+by default, use importance sampling.
+```{r}
+ex1_PO_is <- mc_sample_simple(ex1_Qs, 
+                 nu = "PO",
+                 de = "U")
+
+ex1_PO_is
+```
+
+This shows false positive rates (FPR) of around $10^{-6}$ and smaller when the false
+negative rate (FNR) is 0.01 and greater.  
+
+If we wanted to see what the results would look like if we were using a logl ratio
+of 5 as a cutoff, we could do this:
+```{r}
+ex1_PO_is_5 <- mc_sample_simple(ex1_Qs, 
+                 nu = "PO",
+                 de = "U", 
+                 lambda_stars = 5)
+
+ex1_PO_is_5
+```
+
+We see we would have had a false positive rate around `r sprintf("%.2e", ex1_PO_is_5$FPR[ex1_PO_is_5$Lambda_star == 5])`,
+if we used a logl ratio cutoff
+of 5.  Since there are 1847 adults and 4244 juvniles in this study, there will be 
+$1847 \times 4244 = 7,838,668$ pairs being tested for being parent-offspring pairs.
+A per-pair FPR of `r sprintf("%.2e", ex1_PO_is_5$FPR[ex1_PO_is_5$Lambda_star == 5])`
+would leave us with an expected number of false positive
+pairs on the order of `r sprintf("%.0f", 7838668 * ex1_PO_is_5$FPR[ex1_PO_is_5$Lambda_star == 5])`.
+
+
+My general recommendation for being confident about not erroneously identifying 
+unrelated individuals as related pairs is to require that the FPR be about 10 to 100 times
+smaller than the reciprocal of the number of comparisons.  So, in this case,
+```{r}
+0.1 * (4244 * 1847) ^ (-1)
+```
+or smaller would be a good FPR to shoot for. That would be a logl ratio cutoff
+of between 12 and 15.  For fun, let's look at FPRs and FNRs at a number
+of such cutoffs:
+```{r}
+ex1_PO_is_8_12 <- mc_sample_simple(ex1_Qs, 
+                 nu = "PO",
+                 de = "U", 
+                 lambda_stars = seq(12, 15, by = .1))
+ex1_PO_is_8_12
+```
+ 
+Let's find the logl ratio value that gives the largest FPR smaller than
+1.275727e-08:
+```{r}
+ex1_PO_is_8_12 %>%
+  filter(FPR > 1.275727e-08) %>%
+  arrange(FPR) %>%
+  slice(1)
+```
+
+This suggests that requiring a logl ratio cutoff of about 15 should mean almost no 
+false positives, but perhaps a false negative or two (if the genotyping error rate is accurate).
+
+#### What about for finding full-siblings?
+
+We can do the same for full siblings.  Note that with 4244 juveniles that
+we might sift through, looking for full siblings, we will be making 
+4244 * 4243 / 2 comparisons, which is about 9 million.  So, we would like to have an FPR
+of about 1e-08 or less, and that corresponds to a false negative rate of about 0.2.
+```{r}
+ex1_FS_is <- mc_sample_simple(ex1_Qs, 
+                 nu = "FS",
+                 de = "U")
+ex1_FS_is
+```
+
+Note! The results here differ from those reported in the data for 
+@baetscherDispersalNearshoreMarine2019 because we are using a different genotyping error
+model here, with a higher error rate than is likely...
+
+
+ 
+## Actually doing the comparisons
+
+Now that we have computed the power for relationship inference and identified 
+reasonable logl ratio cutoffs for doing pairwise relationship inference, the 
+next step is to actually do all the pairwise comparisons and find kin pairs.
+
+Before we do that, it is always good practice to first look for duplicate samples.
+
+### Screen for duplicate samples (`find_close_matching_genotypes()`)
+
+Believe it or not, when your lab
+is handling tens of thousands of samples, it is quite possible that the same
+DNA ended up in two different wells that are supposed to represent different
+individuals. Fortunately, it is easy to find duplicate samples because they 
+typically share the same genotype at all loci (apart from a few due that would
+be due to genotyping errors.)
+
+We have a function `find_close_matching_genotypes()` for that.  It operates
+on the long genotypes data frame, and also uses some information within
+the ckmr object that we created from the allele frequencies
+computed from that long genotype data frame. It returns all pairs of individuals with fewer
+than `max_mismatch` loci at which genotypes mismatch.
+```{r}
+matchers <- find_close_matching_genotypes(LG = long_genos,
+                                          CK = ex1_ckmr,
+                                          max_mismatch = 6)
+
+matchers
+```
+
+This suggests that any duplicate genotypes have already been removed from this
+data set.  Good.
+
+
+### Compute Logl Ratios for All Pairwise Comparisons (`pairwise_kin_logl_ratios()`)
+
+We have a simple function that computes the log likelihood ratio
+for all pairwise comparisons between two sets of individuals.
+Each set of individuals is specified as a long-format genotype
+data frame that derives from the long-format genotype data
+frame that went into making the allele frequencies for the ckmr
+object. You pass it two such long-format genotype data frames,
+the associated ckmr object, and then you specify the relationship
+you want in the numerator and in the denominator for the log likelihood
+ratio.  Let's use it first to compare all parents to all offspring.
+
+#### Looking for parent offspring pairs
+First, break `long_genos` into two data frames:
+```{r}
+parent_ids <- life_stages %>%
+  filter(stage == "adult") %>%
+  pull(NMFS_DNA_ID)
+
+offspring_ids <- life_stages %>%
+  filter(stage == "juvenile") %>%
+  pull(NMFS_DNA_ID)
+
+candidate_parents <- long_genos %>% 
+  filter(Indiv %in% parent_ids)
+
+candidate_offspring <- long_genos %>% 
+  filter(Indiv %in% offspring_ids)
+```
+
+Then, use those: 
+```{r}
+po_pairwise_logls <- pairwise_kin_logl_ratios(D1 = candidate_parents, 
+                                              D2 = candidate_offspring, 
+                                              CK = ex1_ckmr,
+                                              numer = "PO",
+                                              denom = "U",
+                                              num_cores = 1)
+# note, num_cores is set to 1 because more than that breaks
+# it on CRAN checks.  But, leave it blank (i.e., don't use the
+# num_core option) to, by default, use all
+# your cores in parallel on a non-windows machine.
+
+```
+If desired we can retain only those with logl ratio > 12, which is in the 
+vicinity of a reasonable cutoff of about 15 which we determined through
+simulation.
+```{r}
+po_pairwise_logls %>%
+  filter(logl_ratio > 12) %>%
+  arrange(desc(logl_ratio))
+```
+
+#### Looking for full-sib pairs among the juveniles
+
+We can look for full-sib pairs among the juveniles using the same function.
+We just pass the same set of offspring genotypes in for both the `D1` and
+the `D2` parameters to the function.
+```{r}
+fs_pairwise_logls <- pairwise_kin_logl_ratios(D1 = candidate_offspring,
+                                              D2 = candidate_offspring,
+                                              CK = ex1_ckmr,
+                                              numer = "FS",
+                                              denom = "U", 
+                                              num_cores = 1)
+
+# note, num_cores is set to 1 because more than that breaks
+# it on CRAN checks.  But, leave it blank (i.e., don't use the
+# num_core option) to, by default, use all
+# your cores in parallel on a non-windows machine.
+```
+
+Now, look at all those with logl_ratio > 12 as well, (also close to about 
+14 or 15, which we determined from simulation to be a reasonable cutoff value, 
+albeit with a high false negative rate.)
+```{r}
+fs_pairwise_logls %>%
+  filter(logl_ratio > 12) %>%
+  arrange(desc(logl_ratio))
+```
+
+
+There are two step that really should be done before that:
+
+1. Observe the distribution of internal heterozygosity across all individuals
+in the data set.  This will be used to compare to values from kin pairs to
+detect cases where, for example, two individuals of the wrong species are 
+identified as kin in a data set, or when two individuals look similar because
+they each suffered some odd contamination or genotyping problem.
+2. 
 
 
 

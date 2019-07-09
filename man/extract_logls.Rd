@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_logls.R
 \name{extract_logls}
 \alias{extract_logls}
-\title{Extract log-likelihood ratios and assocatiated values from a Qij object}
+\title{Extract log-likelihood ratios and associated values from a Qij object}
 \usage{
 extract_logls(Q, numer, denom)
 }

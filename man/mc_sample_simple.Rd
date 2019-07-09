@@ -9,7 +9,7 @@ mc_sample_simple(Q, nu, de = "U", tr = "U", method = c("IS",
   0.01), lambda_stars = NULL, Q_for_fnrs = NULL)
 }
 \arguments{
-\item{Q}{the list that is the output of simulate_and_calc_Q.}
+\item{Q}{the Qij object that is the output of simulate_Qij.}
 
 \item{nu}{the name of the relationship that is in the \strong{nu}merator
 of the likelihood ratio (Lambda) whose distribution you wish to learn about.
@@ -56,12 +56,12 @@ A long format data frame.  It will have a column of \code{tot_loci} that gives t
 number of loci.
 }
 \description{
-Once you have gotten an output from simulate_and_calc_Q you can pass that
+Once you have gotten an object of class Qij from \code{\link{simulate_Qij}} you can pass that
 to this function along with instructions on what quantities to compute.
 This version assumes that the denominator of Lambda and the true relationship can be specified as a
 a simple, single
 relationship (typically, and by default, "U"), rather than a mixture of
-possible relationships. Code for the latter has not yet been implemented
+possible relationships. Code for the latter has not yet been implemented.
 }
 \details{
 The output is a long format data frame.

@@ -71,7 +71,21 @@ if(getRversion() >= "2.15.1")  {
       "newfreq",
       "pedname",
       "xxx",
-      "gnames"
+      "gnames",
+      "1",
+      "2",
+      "D1_indiv",
+      "D2_indiv",
+      "GenoIdx",
+      "Indiv",
+      "NumA",
+      "gene_copy",
+      "ind",
+      "ind1",
+      "ind2",
+      "num_mismatch",
+      "value"
     )
   )
 }
+
