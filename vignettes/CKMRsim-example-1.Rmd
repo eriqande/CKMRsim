@@ -38,7 +38,7 @@ library(CKMRsim)
 ## Reading in the Genotype Data set
 
 We first must read in the genotypes of the individuals. This file holds genotypes of all the adults
-and all of the juveniles.  The first part of our analysis involves simulations using allele frequencies.
+and all of the juveniles. The first part of our analysis involves simulations using allele frequencies.
 Since we don't expect large full sibling groups in our data, it is reasonable to use both adults _and_ 
 juveniles, together, to estimate allele frequencies in this kelp rockfish population. 
 
