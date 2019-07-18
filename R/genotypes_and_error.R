@@ -144,9 +144,10 @@ long_markers_to_X_l_list <- function(D, kappa_matrix, allele_separator = " / ") 
 #' @param ge_mod_assumed The genotyping error model assumed for the analysis.
 #' @param ge_mod_true The actual, "true" genotyping error model for the simulation.
 #' @param ge_mod_assumed_pars_list a named list of extra arguments (besides L)
-#' to be passed to the ge_mod_assumed function.
+#' to be passed to the ge_mod_assumed function.  Set it to NULL to use the default
+#' values for the genotyping error model.
 #' @param ge_mod_true_pars_list a named list of extra arguments (besides L)
-#' to be passed to the ge_mod_true function.
+#' to be passed to the ge_mod_true function. Set to NULL to use defaults.
 #' @export
 #' @examples
 #' example(long_markers_to_X_l_list, package = "CKMRsim")

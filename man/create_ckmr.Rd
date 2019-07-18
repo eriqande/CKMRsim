@@ -26,10 +26,11 @@ By default, this just uses the "MZ", "PO", "FS", "HS", and "U" rows from \code{\
 \item{ge_mod_true}{The actual, "true" genotyping error model for the simulation.}
 
 \item{ge_mod_assumed_pars_list}{a named list of extra arguments (besides L)
-to be passed to the ge_mod_assumed function.}
+to be passed to the ge_mod_assumed function.  Set it to NULL to use the default
+values for the genotyping error model.}
 
 \item{ge_mod_true_pars_list}{a named list of extra arguments (besides L)
-to be passed to the ge_mod_true function.}
+to be passed to the ge_mod_true function. Set to NULL to use defaults.}
 }
 \description{
 Starting from a data frame of marker information like that

@@ -2,10 +2,13 @@
 title: "CKMRsim-example-2-microsatellites"
 author: "Eric C. Anderson"
 date: "`r Sys.Date()`"
+bibliography: references.bib
 output: 
+  html_notebook:
+    toc: true
   rmarkdown::html_vignette:
     toc: true
-bibliography: references.bib
+
 vignette: >
   %\VignetteIndexEntry{CKMRsim-example-2-microsatellites}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,126 +26,312 @@ knitr::opts_chunk$set(
 
 Now that y'all have, presumably, worked your way through the CKMRsim-example-1 vignette,
 we will run through another situation here (more quickly, and with considerably less
-discussion) in a study using microsatellites on Atlantic.
+discussion) in a study using next-generation-sequencing genotyped microsatellites on Atlantic
+salmon (_Salmo salar_).
 
 Before we get going, let's load some libraries:
-```{r}
+```{r, message=FALSE}
 library(tidyverse)
 library(CKMRsim)
 ```
 ### Data Set  
 
-We use the data for one of the populations from 
-@ruzzantedValidationClosekinMarkrecapture.  These data come with 
-the CKMRsim package in a long-format tibble:
+We start with the data for all of the populations from 
+@bradburyGenotypingbysequencingGenomewideMicrosatellite2018.  These data come with 
+the CKMRsim package in a wide-format tibble similar to the format used for the
+package `rubias` (minus a few columns).
 ```{r}
-
-brook_trout_genos
+labrador_salar_ngs_msats[1:5, 1:5]
 ```
-Note that missing data are denoted by NA, as they should be.
+
+We will develop a few analysis steps working on a single collection (POTMIDBTLUWST) from this
+data set. We will make a point of writing a function for each step, so that, when we are done,
+we might try repeating the whole affair for every collection in the data set, getting 
+our tidyverse/purrr on for that job.
+
+Here we grab just that one collection:
+```{r}
+D <- labrador_salar_ngs_msats %>%
+  filter(collection == "POTMIDBTLUWST") %>%
+  select(-collection)
+```
+
+## Preparing data for use with CKMRsim
+
+First, make a long-format data frame like CKMR expects for genotypes:
+```{r}
+make_long <- function(D) {
+  nc <- ncol(D)
+  loci <- names(D)[seq(3, nc, by = 2)]
+  names(D)[seq(3, nc, by = 2)] <- str_c(loci, "---", "2")
+  names(D)[seq(2, nc, by = 2)] <- str_c(loci, "---", "1")
+  
+  D %>% 
+    gather(key = "loccopy", value = "Allele", -indiv) %>%
+    separate(loccopy, into = c("Locus", "gene_copy"), sep = "---") %>%
+    rename(Indiv = indiv)
+}
+
+L <- make_long(D)
+```
+
+And once we have that we need to summarise the allele frequencies.  I really should
+have a CKMR function for this.  Note that we will drop monomorphic loci here.
+```{r}
+long2freqs <- function(L) {
+  L %>%
+    group_by(Locus, Allele) %>%
+    tally() %>%
+    filter(!is.na(Allele)) %>%
+    mutate(Freq = n / sum(n)) %>%
+    arrange(Locus, desc(Freq)) %>%
+    select(-n) %>%
+    group_by(Locus) %>%
+    filter(n() > 1) %>% # this removes monomorphic loci
+    mutate(AlleIdx = 1:n()) %>%
+    ungroup() %>%
+    mutate(LocIdx = as.integer(factor(Locus, levels = unique(Locus))),
+           Chrom = "Unk",  # Ian probably knows where these are, but I don't have that info at the moment.
+           Pos = LocIdx
+           ) %>% 
+    select(Chrom, Pos, Locus, Allele, Freq, LocIdx, AlleIdx) %>%
+    reindex_markers()  # this is a CKMRsim function
+}
+
+Fr <- long2freqs(L)
+```
+
+Any loci that were monomorphic must also be dropped from the original genotype data set.
+So, we will include all of the above (and tossing monomorphic loci) in a function that
+returns two tibbles: 1) the long format genos for use (later) in CKMRsim, and 2) the allele freqs
+for use in CKMRsim.
+```{r}
+prep_genos4CKMRsim <- function(D) {
+  L <- make_long(D)
+  Fr <- long2freqs(L)
+  Lp <- semi_join(L, Fr, by = "Locus")
+  list(Genos = Lp, Freqs = Fr)
+}
+
+# and now we do that all from the beginning again.
+# GaF = Genos and Freqs
+GaF <- labrador_salar_ngs_msats %>%
+  filter(collection == "POTMIDBTLUWST") %>%
+  select(-collection) %>%
+  prep_genos4CKMRsim(.)
+
+```
+
 
 ## Estimating Power for Relationship Inference
 
-Much like before, we have to start off with getting the allele frequencies.
+We will assume the microsatellite genotyping error model with a per-gene-copy 
+miscall rate of 0.003 and a per-gene-copy average-length-allele dropout rate
+of 0.004, with the standard z-scale inflation factor. We will assume true and
+assumed genotyping error models are the same, for now...
 
-### Allele Frequency Input Format
-
-We use both parents and adults to estimate allele frequencies.  This could be
-problematic if there are enormous full-sibling groups amongst the offspring
-in the data set.
-
+We will do this all in terms of functions that will be easy to apply to all the
+collections later...
 ```{r}
-bt_freqs <- brook_trout_genos %>%
-  filter(!is.na(Allele)) %>%
-  group_by(Chrom, Locus, Pos, LocIdx, Allele) %>%
-  summarise(n = n()) %>%
-  group_by(Locus) %>%
-  mutate(Freq = n / sum(n)) %>%
-  select(-n) %>%
-  mutate(AlleIdx  = 1) %>%
-  reindex_markers()
-``` 
+ngs_msat_create_ckmr <- function(Fr) {
+  create_ckmr(D = Fr,
+              kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ], 
+              ge_mod_assumed = ge_model_microsat1, 
+              ge_mod_true = ge_model_microsat1, 
+              ge_mod_assumed_pars_list = list(miscall_rate = 0.003, dropout_rate = 0.004), 
+              ge_mod_true_pars_list = list(miscall_rate = 0.003, dropout_rate = 0.004)
+            )
+}
 
-Note that `brook_trout_genos` can be easily modified to be in the exact
-format of a long-format genotype data frame.  We will do that later.
-
-Drop monomorphic loci:
-```{r}
-bt_freqs_poly <- bt_freqs %>% group_by(Locus) %>% filter(max(AlleIdx) > 1)
+# and use it:
+CK <- ngs_msat_create_ckmr(GaF$Freqs)
 ```
 
-### Power for parent-offspring inference
-
-First create a ckmr object.  We will use the microsatellite error model with default settings.
+Then, let's simulate 20,000 replicates.  In production, you will probably want to do more.
+We will assume no missing data at this point, but that can be changed in a future run.d
 ```{r}
-ex2_ckmr <- create_ckmr(
-  D = bt_freqs_poly,
-  kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ],
-  ge_mod_assumed = ge_model_microsat1,
-  ge_mod_true = ge_model_microsat1,
-  ge_mod_assumed_pars_list = list(miscall_rate = 0.0025,
-                                  dropout_rate = 0.0025),
-  ge_mod_true_pars_list = list(miscall_rate = 0.0025,
-                                  dropout_rate = 0.0025)
+simQs <- function(CK) {
+  simulate_Qij(C = CK, reps = 2e04,
+              sim_relats = c("PO", "FS", "HS", "U"),
+              calc_relats = c("PO", "FS", "U"))
+}
+
+Qs <- simQs(CK)
+```
+
+Now, let's extract some logls (for PO and FS) so that we can plot them
+```{r}
+logls <- bind_rows(
+  extract_logls(Qs, numer = c(PO = 1), denom = c(U = 1)),
+  extract_logls(Qs, numer = c(FS = 1), denom = c(U = 1))
 )
 ```
 
-Then simulate the Qij's:
+Now, we can plot those and get a picture of how we are doing with these killer microsats.
 ```{r}
-ex2_Qs <- simulate_Qij(ex2_ckmr, 
-                       sim_relats = c("PO", "FS", "U"),
-                       calc_relats = c("PO", "FS", "U")
-                      )
+ggplot(logls, aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.35) +
+  facet_wrap(~ numer_wts, ncol = 1) 
 ```
 
-Have a look at the distribution of the values:
-```{r, fig.width=6.5}
-ex2_logls_PO_U <- extract_logls(ex2_Qs, numer = c(PO = 1), 
-                                denom = c(U = 1))
+So, we see a lot of overlap between FS and PO, which we expect.  Not much other
+overlap, so I suspect that FS and PO will easily be distinguished from unrelated.
 
-
-ggplot(ex2_logls_PO_U,
-            aes(x = logl_ratio, fill = true_relat)) +
-  geom_density(alpha = 0.25)
-```
-
-What about for full sibs?
-```{r, fig.width=6.5}
-ex2_logls_FS_U <- extract_logls(ex2_Qs, numer = c(FS = 1), 
-                                denom = c(U = 1))
-
-
-ggplot(ex2_logls_FS_U,
-            aes(x = logl_ratio, fill = true_relat)) +
-  geom_density(alpha = 0.25)
-```
-
-That does not look great to me.  There is so much overlap that I doubt
-we would really need to do importance sampling.
-
-Let's compute some FPRs and FNRs:
+Let's now do importance sampling to see what the FPRs and FNRs are. We will get FPRs
+at a lot of FNRs spaced close together so that we can get the FNR that is closest to
+a "good" FPR (of about 1/100 the reciprocal of the number of comparisons).  Let's say for
+now that we are going to be shooting for 10e-10 (should be plenty low...).
 ```{r}
-# for parent-offspring PO/U logls
-mc_sample_simple(ex2_Qs, nu = "PO", de = "U", method = "vanilla")
+mc_samp <- function(Q) {
+  mc_sample_simple(
+    Q, 
+    nu = c("PO", "FS"),
+    FNRs = c(seq(0.001, 0.20, by = 0.001))  
+  )
+}
+
+FPRs <- mc_samp(Qs)
 ```
 
-Wait, hold on!  This says that even when you set your pairwise logl cutoff so high
-that you expect to miss fully 30% of true parent-offspring pairs, you still expect
-6 of every 1000 unrelated pairs to exceed that amount.  
+OK, now, we will want to choose the lowest FNR with an FPR < 1e10 for both FS and PO, and
+return that in a tibble.
 
-How many parent offspring pairs
-are we actually going to be investigating?
 ```{r}
-brook_trout_genos %>%
-  distinct(age_class, Sample_ID) %>%
-  count(age_class) %>%
-  pull(n) %>%
-  prod(.)
+get_low_FPR <- function(R, cutoff = 1e-10) {
+  R %>%
+    group_by(numerator) %>%
+    filter(FPR < cutoff) %>%
+    slice(1)
+}
+
+low_FPR <- get_low_FPR(FPRs)
+low_FPR
 ```
-So, that would suggest roughly 120 unrelated pairs are expected to
-have a logl_ratio exceeding that of 30% of true parental
-pairs.  Ouch.
+
+That is really encouraging.
 
 
+## Doing Relationship Inference
 
+Now, we can look for PO pairs and for FS pairs in the data set.  
+
+First, look for individuals that might be the same:
+```{r}
+matchers <- find_close_matching_genotypes(
+  LG = GaF$Genos, 
+  CK = CK, 
+  max_mismatch = 10)
+```
+There is no one even close to matching...not even with 10 loci mismatching
+
+Make a function to look for FS pairs (I think these guys were all sampled as juvies) and for each individual in the second data frame, just keep the top 10 hits.
+```{r}
+FS_candidates <- pairwise_kin_logl_ratios(
+  D1 = GaF$Genos, 
+  D2 = GaF$Genos, 
+  CK = CK, 
+  numer = "FS", 
+  denom = "U", 
+  keep_top = 10
+  ) %>%
+  arrange(desc(logl_ratio))
+
+FS_candidates
+```
+
+OK, that is pretty cool.
+
+### Do all the pairs and plot their distribution
+
+As Mark said, it is wortwhile to compare the distribution of logl_ratios for (unrelated)
+individuals to the simulated values to make sure there is nothing super weird going on.
+Let's do that.
+```{r}
+all_FS_comparisons <- pairwise_kin_logl_ratios(
+  D1 = GaF$Genos, 
+  D2 = GaF$Genos, 
+  CK = CK, 
+  numer = "FS", 
+  denom = "U")
+```
+
+And plot.
+```{r}
+DD <- logls %>% filter(true_relat == "U", numer_wts == "FS=1") %>%
+  select(logl_ratio) %>%
+  mutate(what = "simulated")
+
+to_plot <- all_FS_comparisons %>%
+  select(logl_ratio) %>%
+  mutate(what = "observed") %>%
+  bind_rows(., DD)
+
+ggplot(to_plot, aes(x = logl_ratio, fill = what)) +
+  geom_density(alpha = 0.3)
+```
+
+Aha! That is likely due to the population structure (this was a mixture of collections
+from several different places.)
+
+## Now, let's do that with every collection...
+
+```{r}
+first_steps <- labrador_salar_ngs_msats %>% 
+  group_by(collection) %>%
+  nest() %>%  # make data for each collection a tibble in a list column
+  mutate(GaF = map(.x = data, .f = prep_genos4CKMRsim), # prep geons and alle freqs
+         CK = map(GaF, function(x) ngs_msat_create_ckmr(x$Freqs)), # make ckmr objects
+         Qs = map(CK, simQs)
+         )
+  
+```
+
+Now, we can sample those and get some FPRs, etc.
+```{r}
+next_step <- first_steps %>%
+  mutate(FPRs = map(Qs, mc_samp),
+         lowFPR = map(FPRs, get_low_FPR))
+```
+
+From that we see that a few of the populations don't have power for 
+relationship inference as high as with the initial (large collection) group
+that we worked on. 
+
+Let's still see what we find for the 50 highest FS/U logl fish in each group.
+```{r}
+final <- next_step %>%
+  mutate(matchers = pmap(.l= list(x = GaF, y = CK, z = 10), 
+                         .f = function(x, y, z) find_close_matching_genotypes(LG = x$Genos, CK = y, max_mismatch = z)),
+         FS_candidates = pmap(.l = list(x = GaF, y = CK), 
+                              .f = function(x, y) pairwise_kin_logl_ratios(D1 = x$Genos, D2 = x$Genos, CK = y, numer = "FS", denom = "U", keep_top = 20) %>% arrange(desc(logl_ratio)) %>% slice(1:50))
+         )
+```
+
+And now at the very end it would be interesting to plot the highest 50 from each collection.
+Sounds like a job for unnest.
+
+While we are at it.  Let's figure out what the Logl_ratio value would be that gives
+us 1/100 * the reciprocal of the number of comparisons.
+
+```{r}
+# first, let's get that lambda_c
+DD4 <- final %>%
+  mutate(sample_size =  map_int(.x = data, .f = nrow),
+         coll_str = str_c(collection, " (", sample_size, ")"),
+         num_pairs = sample_size * (sample_size - 1) / 2,
+         lambda_crit = map2_dbl(.x = FPRs, .y = num_pairs, 
+                                .f = function(x, y) 
+                                  x %>% filter(FPR < 0.01 / y ) %>% slice(1) %>% pull(Lambda_star))
+         ) %>%
+  select(coll_str, lambda_crit, FS_candidates) %>%
+  unnest(FS_candidates)
+
+# now we can plot that nicely
+ggplot(DD4, aes(x = coll_str, y = logl_ratio)) + 
+  geom_jitter(colour = "blue", alpha = 0.2, width = 0.2) +
+  geom_point(aes(y = lambda_crit), size = 2, color = "red") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.5))
+  
+```
 ## References

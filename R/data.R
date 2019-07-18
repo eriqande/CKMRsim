@@ -188,7 +188,24 @@
 
 
 
-
+#' Next-generation-sequencing-genotyped microsatellites from Labrador Atlantic salmon
+#'
+#' A data frame of genotypes from multiple collections of Atlantic salmon
+#' \emph{Salmo salar}.  From Ian Bradbury and colleagues.  See citation XXXX.
+#'
+#' Each row is a single fish.  Column \code{collection} tells which collection the
+#' fish is from.  A collection is a group of fish that have similar allele frequencies
+#' (as if they are from a single population, or from multiple populations that are not much
+#' differentiated, genetically).  Column \code{indiv} gives the unique individual
+#' identifier for the individual. The remaining columns come in pairs, each giving one of
+#' the two gene copies in a diploid locus.  The second column of each locus has the same
+#' name as the first, with a "_1" appended to it.
+#'
+#' There are 1,468 fish from 26 different collections, genotyped at 101
+#' microsatellite loci.  Missing data are denoted with NA.  Alleles are coded
+#' by integers that give the length of the allele, as inferred from NGS read data
+#' using the program MEGASAT (CITATION XXXX).
+"labrador_salar_ngs_msats"
 
 
 
