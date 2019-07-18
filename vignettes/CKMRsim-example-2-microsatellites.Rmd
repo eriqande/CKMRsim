@@ -6,9 +6,6 @@ bibliography: references.bib
 output: 
   rmarkdown::html_vignette:
     toc: true
-  html_notebook:
-    toc: true
-  
 vignette: >
   %\VignetteIndexEntry{CKMRsim-example-2-microsatellites}
   %\VignetteEngine{knitr::rmarkdown}
@@ -253,7 +250,8 @@ all_FS_comparisons <- pairwise_kin_logl_ratios(
   D2 = GaF$Genos, 
   CK = CK, 
   numer = "FS", 
-  denom = "U")
+  denom = "U",
+  num_cores = 1)
 ```
 
 And plot.

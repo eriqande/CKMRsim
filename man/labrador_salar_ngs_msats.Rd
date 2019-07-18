@@ -3,7 +3,7 @@
 \docType{data}
 \name{labrador_salar_ngs_msats}
 \alias{labrador_salar_ngs_msats}
-\title{Next-generation-sequencing genotyped microsatellites from Labrador Atlantic salmon}
+\title{Next-generation-sequencing-genotyped microsatellites from Labrador Atlantic salmon}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1478 rows and 204 columns.}
 \usage{
 labrador_salar_ngs_msats
@@ -20,5 +20,10 @@ differentiated, genetically).  Column \code{indiv} gives the unique individual
 identifier for the individual. The remaining columns come in pairs, each giving one of
 the two gene copies in a diploid locus.  The second column of each locus has the same
 name as the first, with a "_1" appended to it.
+
+There are 1,468 fish from 26 different collections, genotyped at 101
+microsatellite loci.  Missing data are denoted with NA.  Alleles are coded
+by integers that give the length of the allele, as inferred from NGS read data
+using the program MEGASAT (CITATION XXXX).
 }
 \keyword{datasets}

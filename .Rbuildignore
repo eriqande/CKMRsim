@@ -6,3 +6,4 @@
 ^deprecated$
 ^doc$
 ^Meta$
+^\.travis\.yml$
