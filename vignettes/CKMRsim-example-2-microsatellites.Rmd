@@ -22,7 +22,8 @@ knitr::opts_chunk$set(
 ## Introduction
 
 Now that y'all have, presumably, worked your way through the CKMRsim-example-1 vignette,
-we will run through another situation here in a study using microsatellites on brook trout.
+we will run through another situation here (more quickly, and with considerably less
+discussion) in a study using microsatellites on Atlantic.
 
 Before we get going, let's load some libraries:
 ```{r}
@@ -38,7 +39,7 @@ the CKMRsim package in a long-format tibble:
 
 brook_trout_genos
 ```
-
+Note that missing data are denoted by NA, as they should be.
 
 ## Estimating Power for Relationship Inference
 
@@ -61,5 +62,87 @@ bt_freqs <- brook_trout_genos %>%
   mutate(AlleIdx  = 1) %>%
   reindex_markers()
 ``` 
+
+Note that `brook_trout_genos` can be easily modified to be in the exact
+format of a long-format genotype data frame.  We will do that later.
+
+Drop monomorphic loci:
+```{r}
+bt_freqs_poly <- bt_freqs %>% group_by(Locus) %>% filter(max(AlleIdx) > 1)
+```
+
+### Power for parent-offspring inference
+
+First create a ckmr object.  We will use the microsatellite error model with default settings.
+```{r}
+ex2_ckmr <- create_ckmr(
+  D = bt_freqs_poly,
+  kappa_matrix = kappas[c("PO", "FS", "HS", "U"), ],
+  ge_mod_assumed = ge_model_microsat1,
+  ge_mod_true = ge_model_microsat1,
+  ge_mod_assumed_pars_list = list(miscall_rate = 0.0025,
+                                  dropout_rate = 0.0025),
+  ge_mod_true_pars_list = list(miscall_rate = 0.0025,
+                                  dropout_rate = 0.0025)
+)
+```
+
+Then simulate the Qij's:
+```{r}
+ex2_Qs <- simulate_Qij(ex2_ckmr, 
+                       sim_relats = c("PO", "FS", "U"),
+                       calc_relats = c("PO", "FS", "U")
+                      )
+```
+
+Have a look at the distribution of the values:
+```{r, fig.width=6.5}
+ex2_logls_PO_U <- extract_logls(ex2_Qs, numer = c(PO = 1), 
+                                denom = c(U = 1))
+
+
+ggplot(ex2_logls_PO_U,
+            aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.25)
+```
+
+What about for full sibs?
+```{r, fig.width=6.5}
+ex2_logls_FS_U <- extract_logls(ex2_Qs, numer = c(FS = 1), 
+                                denom = c(U = 1))
+
+
+ggplot(ex2_logls_FS_U,
+            aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.25)
+```
+
+That does not look great to me.  There is so much overlap that I doubt
+we would really need to do importance sampling.
+
+Let's compute some FPRs and FNRs:
+```{r}
+# for parent-offspring PO/U logls
+mc_sample_simple(ex2_Qs, nu = "PO", de = "U", method = "vanilla")
+```
+
+Wait, hold on!  This says that even when you set your pairwise logl cutoff so high
+that you expect to miss fully 30% of true parent-offspring pairs, you still expect
+6 of every 1000 unrelated pairs to exceed that amount.  
+
+How many parent offspring pairs
+are we actually going to be investigating?
+```{r}
+brook_trout_genos %>%
+  distinct(age_class, Sample_ID) %>%
+  count(age_class) %>%
+  pull(n) %>%
+  prod(.)
+```
+So, that would suggest roughly 120 unrelated pairs are expected to
+have a logl_ratio exceeding that of 30% of true parental
+pairs.  Ouch.
+
+
 
 ## References
