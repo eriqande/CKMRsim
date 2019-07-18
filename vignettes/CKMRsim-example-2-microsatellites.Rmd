@@ -4,11 +4,11 @@ author: "Eric C. Anderson"
 date: "`r Sys.Date()`"
 bibliography: references.bib
 output: 
-  html_notebook:
-    toc: true
   rmarkdown::html_vignette:
     toc: true
-
+  html_notebook:
+    toc: true
+  
 vignette: >
   %\VignetteIndexEntry{CKMRsim-example-2-microsatellites}
   %\VignetteEngine{knitr::rmarkdown}
@@ -232,7 +232,8 @@ FS_candidates <- pairwise_kin_logl_ratios(
   CK = CK, 
   numer = "FS", 
   denom = "U", 
-  keep_top = 10
+  keep_top = 10,
+  num_cores = 1  # only on here for CRAN CHECK.  Remove for personal use
   ) %>%
   arrange(desc(logl_ratio))
 
@@ -303,7 +304,7 @@ final <- next_step %>%
   mutate(matchers = pmap(.l= list(x = GaF, y = CK, z = 10), 
                          .f = function(x, y, z) find_close_matching_genotypes(LG = x$Genos, CK = y, max_mismatch = z)),
          FS_candidates = pmap(.l = list(x = GaF, y = CK), 
-                              .f = function(x, y) pairwise_kin_logl_ratios(D1 = x$Genos, D2 = x$Genos, CK = y, numer = "FS", denom = "U", keep_top = 20) %>% arrange(desc(logl_ratio)) %>% slice(1:50))
+                              .f = function(x, y) pairwise_kin_logl_ratios(D1 = x$Genos, D2 = x$Genos, CK = y, numer = "FS", denom = "U", keep_top = 20, num_cores = 1) %>% arrange(desc(logl_ratio)) %>% slice(1:50))
          )
 ```
 
