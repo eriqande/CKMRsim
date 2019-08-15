@@ -160,19 +160,33 @@ Now, let's extract some logls (for PO and FS) so that we can plot them
 ```{r}
 logls <- bind_rows(
   extract_logls(Qs, numer = c(PO = 1), denom = c(U = 1)),
-  extract_logls(Qs, numer = c(FS = 1), denom = c(U = 1))
+  extract_logls(Qs, numer = c(FS = 1), denom = c(U = 1)),
+  extract_logls(Qs, numer = c(PO = 1), denom = c(FS = 1))
 )
 ```
 
 Now, we can plot those and get a picture of how we are doing with these killer microsats.
+
+This plots the PO/U and FS/U log likelihood ratios.
 ```{r}
-ggplot(logls, aes(x = logl_ratio, fill = true_relat)) +
+logls %>%
+  filter(denom_wts == "U=1") %>%
+ggplot(., aes(x = logl_ratio, fill = true_relat)) +
   geom_density(alpha = 0.35) +
   facet_wrap(~ numer_wts, ncol = 1) 
 ```
 
 So, we see a lot of overlap between FS and PO, which we expect.  Not much other
 overlap, so I suspect that FS and PO will easily be distinguished from unrelated.
+
+How much overlap between FS and PO when we use the PO/FS statistic?
+```{r}
+logls %>%
+  filter(denom_wts == "FS=1", numer_wts == "PO=1") %>%
+ggplot(., aes(x = logl_ratio, fill = true_relat)) +
+  geom_density(alpha = 0.35) +
+  facet_wrap(~ numer_wts, ncol = 1) 
+```
 
 Let's now do importance sampling to see what the FPRs and FNRs are. We will get FPRs
 at a lot of FNRs spaced close together so that we can get the FNR that is closest to
