@@ -209,12 +209,12 @@ insert_C_l_matrices <- function(
 insert_Y_l_matrices <- function(L) {
   lapply(L, function(a) {
     a$Y_l_true <- lapply(a$X_l, function(b) {
-      tmp <- t(b %*% a$C_l_true) %*% t(a$C_l_true)
+      tmp <- t(t(b %*% a$C_l_true) %*% a$C_l_true)  # we do the final t() cuz otherwise it is y2 by y1. Makes no difference for symmetrical stuff...
       names(dimnames(tmp)) <- c("obs_geno_indiv_1", "obs_geno_indiv_2")
       tmp
     })
     a$Y_l <- lapply(a$X_l, function(b) {
-      tmp <- t(b %*% a$C_l) %*% t(a$C_l)
+      tmp <- t(t(b %*% a$C_l) %*% a$C_l)
       names(dimnames(tmp)) <- c("obs_geno_indiv_1", "obs_geno_indiv_2")
       tmp
     })
