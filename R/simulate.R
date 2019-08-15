@@ -128,13 +128,15 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
   names(froms) <- froms
   names(tos) <- tos
 
-  # cycle over the relationships to simulate from
+
+  # produce text for message that will tell us if the simulation is being done as linked or not.
   if(!is.null(pedigrees)) {
     linktext <- "linked"
   } else {
     linktext <- "unlinked"
   }
 
+  # cycle over the relationships to simulate from
   lapply(froms, function(r) {
     # then simulate the indexes of the genotype pairs that are simulated at each locus
     if(is.null(pedigrees) || r == "U" || r == "MZ" || (r == "PO" && forceLinkagePO == FALSE) ) {

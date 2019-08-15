@@ -319,6 +319,9 @@ sample_linked_genotype_pairs <- function(df, ped, C = NULL, num = 1000) {
     g1e <- samp_from_mat(Clt[g1,])   # Ctl[g1,] is a matrix where each row corresponds to the probs of observed genos given the true geno of indiv1
     g2e <- samp_from_mat(Clt[g2,])
 
+    ## NOTE: IF I WANTED TO HAVE A FEATURE THAT ALLOWED WRITING OUT A FILE OF GENOTYPES
+    ## SIMULATED WITH PHYSICAL LINKAGE, THEN THIS WOULD BE THE PLACE TO DO IT...
+
     # here is the number of genos
     nG <- nrow(Clt)
 
