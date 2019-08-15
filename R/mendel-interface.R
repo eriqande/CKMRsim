@@ -112,7 +112,7 @@ mendel_control_list <- function(ID, Reps, Seed) {
 
     # analysis options
     ANALYSIS_OPTION = "Gene_dropping",
-    REPETITIONS = unname(Reps),
+    REPETITIONS = sprintf("%d", unname(Reps)),
     SEED = Seed,
     MODEL = 2,
     KEEP_FOUNDER_GENOTYPES = "False",
