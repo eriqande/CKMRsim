@@ -391,7 +391,7 @@ example_L_microhap
 
 So, we will need a function to compute distances between the microhap alleles,
 and then we will need to use that to compute a matrix $\mathbf{W}$, like we did
-for microhaplotypes, and then we will combine that with dropout rates.  In this function
+for microsatellites, and then we will combine that with dropout rates.  In this function
 those dropout rates are made the same for every allele, but that could be
 changed.
 
