@@ -1,0 +1,126 @@
+---
+title: "Simulating linked markers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulating linked markers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CKMRsim)
+library(tidyverse)
+```
+
+
+## Prerequisites
+
+INCLUDE STUFF HERE ABOUT HOW TO DOWNLOAD MENDEL AND WHERE IT SHOULD BE INSTALLED TO.
+NOTE THAT I NEED TO FIGURE THAT OUT ON WINDOZE.
+
+## An Example
+
+'CKMRsim' comes with an example data set of linked markers.  The data themselves are concocted---they are merely
+the microhaplotypes that have been assigned some fictitious positions within a genome---but that is useful for
+demonstration. The data are allele frequencies in the format required by 'CKMRsim'. Here are the first few
+lines of them"
+```{r}
+linked_mhaps
+```
+See that each marker is given a position (in base pairs) along the chromosome upon which it resides.
+
+By default, 'CKMRsim' assumes a simple recombination rate of 1 cM per megabase.  If you have an actual
+genetic linkage map for you markers, then you can accommodate that by giving base-pair positions (`Pos`)
+of the markers that correspond to the positions that would yield the observed recombination fractions
+under a constant rate of 1 cM/Mb.
+
+Here we will show the process of simulating full sibling pairs with and without the physical linkage
+in `linked_mhaps`.  We will also show that physical linkage does not affect parent-offspring or
+unrelated pairs.
+
+## Simulating Pairs
+
+Creating the CKMR object is just the same as it was in the "Example 1" vignette.
+```{r}
+ck_lmh <- create_ckmr(
+  D = linked_mhaps,
+  kappa_matrix = kappas[c("PO", "FS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.01),
+  ge_mod_true_pars_list = list(epsilon = 0.01)
+)
+```
+
+Simulating the markers under the assumption of no linkage is also the same:
+```{r}
+Qs_lmh_no_link <- simulate_Qij(ck_lmh,
+                               calc_relats = c("PO", "FS", "U"),
+                               sim_relats = c("PO", "FS", "U") 
+                               )
+```
+
+
+In order to simulate the markers with physical linkage, you use the same
+`simulate_Qij()` function, but you tell it to simulate with physical linkage
+_and_ you also have to give it a list of pedigrees so that it can pass the
+correct pedigrees to the program MENDEL, which actually does the simulation.
+`CKMRsim` comes with such a list. At the moment, it only has three entries"
+"PO", FS", "HS".  If you want to add more (like cousins) feel free.  Just note
+that the two focal individuals of the pair have to be individuals 1 and 2.  
+If you need help, ping me at [eric.anderson@noaa.gov](mailto:eric.anderson@noaa.gov).
+
+So, simulating with linkage looks like this:
+```{r}
+Qs_lmh_with_link <- simulate_Qij(ck_lmh,
+                               calc_relats = c("PO", "FS", "U"),
+                               sim_relats = c("PO", "FS", "U"), 
+                               unlinked = FALSE,
+                               pedigree_list = pedigrees
+                               )
+```
+Note that `CKMRsim` is wise enough to simply simulate markers as unlinked for the
+PO, U, and MZ cases (because, when dealing with pairs with those relationships,
+the presence of physical linkage makes no difference to the outcome).
+
+
+Carrying on, it is instructive to look at the distributions of the FS/U log-likelihood
+ratios.  They should differ between the cases with and without linkage, most notably the case
+with linkage should produce values with greater variance.  Let us see if that
+is the case. To do that, we extract the log-likelihood ratio values, put them together
+in a single data frame, and then plot them.  Note that the `extract_logls` function
+returns a column that says whether the simulation was done with or without linkage, so
+it is straightforward to do this in two lines:
+```{r}
+lnl_logls <- list(
+  extract_logls(Qs_lmh_no_link, numer = c(FS = 1), denom = c(U = 1)),
+  extract_logls(Qs_lmh_with_link, numer = c(FS = 1), denom = c(U = 1))
+) %>%
+  bind_rows()
+```
+
+Now compare the cases when the truth is full-sibling:
+```{r}
+lnl_logls %>%
+  filter(true_relat == "FS") %>%
+  ggplot(aes(x = logl_ratio, fill = simtype)) +
+  geom_histogram(bins = 70, 
+                 position = position_identity(),
+                 alpha = 0.5)
+```
+
+
+```{r}
+lnl_logls %>%
+  filter(true_relat == "FS") %>%
+  group_by(simtype) %>%
+  summarise(mean_logl_rat = mean(logl_ratio),
+            mean_numer = mean(numer_logl))
+```
