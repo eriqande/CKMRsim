@@ -1,0 +1,136 @@
+---
+title: "Tracking Down the Genotyping Error Discrepancy With Physical Linkage"
+output: html_notebook
+---
+
+Something is going awry, and it appears that genotyping errors are not
+getting propagated into the physically linked data.
+
+## Trying to Track it Down
+
+For the first thing I am going to try is creating a CKMR object and then
+using that to run one of the intermediate functions.
+```{r}
+library(CKMRsim)
+library(tidyverse)
+
+ck_lmh <- create_ckmr(
+  D = linked_mhaps,
+  kappa_matrix = kappas[c("PO", "FS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.000000005),
+  ge_mod_true_pars_list = list(epsilon = 0.25)
+)
+
+# here I also make one with essentially no genotyping error
+# because I want to see if that is what we are getting
+ck_lmh2 <- create_ckmr(
+  D = linked_mhaps,
+  kappa_matrix = kappas[c("PO", "FS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.000000005),
+  ge_mod_true_pars_list = list(epsilon = 0.0000000005) 
+)
+  
+```
+
+Once we have done that we can assign some variables to work through a function:
+```{r}
+r <- "FS"
+YL <- ck_lmh$loci
+reps <- 30000
+names(reps) <- "FS"
+
+df <- ck_lmh$orig_data
+
+# these functions get run inside simulate_and_calc_Q()
+# this is for the unlinked simulation
+gpu <- lapply(YL, function(y) { # this is cycling over loci
+        sample.int(n = length(y$Y_l_true[[r]]), size = reps[r], replace = TRUE, prob = y$Y_l_true[[r]])
+      })
+
+
+gpu2 <- lapply(ck_lmh2$loci, function(y) { # this is cycling over loci
+        sample.int(n = length(y$Y_l_true[[r]]), size = reps[r], replace = TRUE, prob = y$Y_l_true[[r]])
+      })
+
+# and this is for the linked simulation
+gpl <- sample_linked_genotype_pairs(df = ck_lmh$orig_data, ped = pedigrees[[r]], C = ck_lmh$loci, num = reps[r])
+gpl2 <- sample_linked_genotype_pairs(df = ck_lmh2$orig_data, ped = pedigrees[[r]], C = ck_lmh2$loci, num = reps[r])
+
+```
+
+Now, we want to compare these things.  We can do some tidyr for that.
+```{r}
+gps <- bind_rows (
+  linked = enframe(gpl),
+  linked2 = enframe(gpl2),
+  unlinked = enframe(gpu),
+  unlinked2 = enframe(gpu2),
+  .id = "type"
+  ) %>%
+  unnest(value)
+
+# now, count up the number of occurrences
+gcounts <- gps %>%
+  count(type, name, value) %>%
+  spread(key = type, value = n)
+
+```
+
+This is really weird.
+
+## A new hypothesis
+
+Perhaps `samp_from_mat()` is somehow using the same random number seeds, so that the
+number of genotypes that are identical between the two individuals is abnormally high.
+
+I can check on the fraction of of all simulated genes that have two gene copies identical
+in state.  Those pairs of genotypes will be found along the diagonals.  So, let's count  those
+diagonal genotypes up. First make a tibble of loci and the indices of the diaganals for Y_l:
+```{r}
+tmp <- lapply(ck_lmh$loci, function(x) {
+  matrix(seq(1:length(x$Y_l$U)), nrow = nrow(x$Y_l$U), ncol = ncol(x$Y_l$U)) %>%
+    diag()
+})
+
+diags <- tibble(
+  name = names(tmp),
+  diag = tmp
+)
+```
+
+Then determine whether each value is on the diagonal or not:
+```{r}
+diag_suss <- gps %>%
+  count(type, name, value) %>%
+  left_join(diags, by = "name") %>%
+  mutate(isDiag = map2_lgl(diag, value, function(x,y) y %in% x))
+
+# and count up
+diag_suss %>% 
+  group_by(type) %>%
+  summarise(fract_diag = sum(isDiag * n) / sum(n))
+
+```
+
+So, that is clearly too much identity by descent in the linked simulation.
+
+So, let's just try samp_from_mat():
+```{r}
+# get a matrix to sample from.  Let it be totally random:
+TR <- matrix(1/16, ncol = 16, nrow = 1e04)
+
+g1 <- samp_from_mat(TR)
+g2 <- samp_from_mat(TR)
+
+mean(g1 == g2)
+```
+Nope.  That indicates that it isn't a case of failng to seed the RNG.
+
+** WAIT! THE PROBLEM WAS WITH THE CALCULATION OF THE JOINT PROB (Y1,Y2) MATRIX
+IN THE UNLINKED CASE.  HOLY CRAP! SO, THAT IS FIXED NOW AND THIS STUFF IS NO LONGER
+TOTALLY GERMANE.  BUT WE WILL COMMIT IT FOR POSTERITY **
+
