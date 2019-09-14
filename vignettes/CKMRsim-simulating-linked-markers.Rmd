@@ -12,6 +12,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# here, set up a variable to only run the Mendel-requiring code
+# if on eric's computer with Mendel installed
+#DoMendel <- (Sys.info()["user"] == "eriq") && file.exists("/Applications/Mendel/mendel")
+DoMendel <- FALSE
+NoDoMendel <- !DoMendel
 ```
 
 ```{r setup}
@@ -78,14 +84,20 @@ that the two focal individuals of the pair have to be individuals 1 and 2.
 If you need help, ping me at [eric.anderson@noaa.gov](mailto:eric.anderson@noaa.gov).
 
 So, simulating with linkage looks like this:
-```{r}
+```{r, eval=DoMendel}
+# we only run this if it is on eric's laptop.  This way
+# we can build the vignette even on CRAN's machines that don't
+# have Mendel installed
 Qs_lmh_with_link <- simulate_Qij(ck_lmh,
-                               calc_relats = c("PO", "FS", "U"),
-                               sim_relats = c("PO", "FS", "U"), 
-                               unlinked = FALSE,
-                               pedigree_list = pedigrees
-                               )
+                                 calc_relats = c("PO", "FS", "U"),
+                                 sim_relats = c("PO", "FS", "U"), 
+                                 unlinked = FALSE,
+                                 pedigree_list = pedigrees
+)
+
 ```
+
+
 Note that `CKMRsim` is wise enough to simply simulate markers as unlinked for the
 PO, U, and MZ cases (because, when dealing with pairs with those relationships,
 the presence of physical linkage makes no difference to the outcome).
@@ -98,16 +110,22 @@ is the case. To do that, we extract the log-likelihood ratio values, put them to
 in a single data frame, and then plot them.  Note that the `extract_logls` function
 returns a column that says whether the simulation was done with or without linkage, so
 it is straightforward to do this in two lines:
-```{r}
+```{r, eval=DoMendel}
 lnl_logls <- list(
   extract_logls(Qs_lmh_no_link, numer = c(FS = 1), denom = c(U = 1)),
   extract_logls(Qs_lmh_with_link, numer = c(FS = 1), denom = c(U = 1))
 ) %>%
   bind_rows()
 ```
+```{r, eval=DoMendel, include=FALSE, echo=FALSE}
+saveRDS(lnl_logls, file = "data/lnl_logls.rds")
+```
+```{r, eval=NoDoMendel, include=FALSE, echo=FALSE}
+lnl_logls <- readRDS("data/lnl_logls.rds")
+```
 
 Now compare the cases when the truth is full-sibling:
-```{r}
+```{r, fig.width = 7}
 lnl_logls %>%
   filter(true_relat == "FS") %>%
   ggplot(aes(x = logl_ratio, fill = simtype)) +
@@ -116,6 +134,8 @@ lnl_logls %>%
                  alpha = 0.5)
 ```
 
+
+See, logl ratios have the same mean top and bottom.
 
 ```{r}
 lnl_logls %>%
