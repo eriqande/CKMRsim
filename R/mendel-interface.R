@@ -165,71 +165,18 @@ write_all_mendel_files <- function(ID, Reps, Seed, Markers, Pedigree, Dir = ".")
 }
 
 
-#' slurp up the pedigree output file from a Mendel genedrop and get the needed genotypes
-#'
-#' This assumes that the target individuals are numbered 1 and 2, and it pitches the data
-#' for everyone else, then it converts the genotypes into a big long format data frame.
-#' @param Pedfile  The name of the pedigree output file
-mendel_outped2genos <- function(Pedfile) {
-  x <- readLines(Pedfile)
-
-  x2 <- stringr::str_replace(x, "^.*xyz *, *", "") # make another vector with the crap pulled off the front
-
-  x3 <- x[stringr::str_detect(x2, "^[12] ")] # keep only the lines referring to the target individuals
-
-  # I stopped here because readLines is so slow!
-}
-
-#' read genotypes of target individuals out of Mendel output pedigree file.
-#'
-#' this is a version that uses awk and sed that I am sure will be much faster than
-#' the standard R readLines approach.  But only works if those tools are installed
-#' on the system.
-#' @param OutPed  path to the mendel output pedigree file
-#' @param Def path to the mendel defs file.  This is used to get the number of alleles at
-#' each locus, so, the model loci in the mendel run must be equal to the loci listed in Def.
-#' @return Returns a tbl_df with four columns: 1) Rep, a base-1 index of which simulated replicate
-#' it is; 2) Indiv, the index of the target individual (typically 1 or 2); 3) Locus, the index
-#' of the locus; 4) Geno, the genotype of the individual as a single number.
-#' @examples
-#' # we don't run these because it depends on having Mendel installed
-#' \dontrun{
-#' # first prepare files for mendel simulation and run it in tmpDir
-#' # with naming prefix "mendel-example"
-#' example(run_mendel)
-#'
-#' # then grab the results
-#' results <- fast_mendel_outped2genos(
-#'   file.path(tmpDir, "mendel-example-Ped.out"),
-#'   file.path(tmpDir, "mendel-example-Def.in")
-#'   )
-#'
-#' # finally show the results:
-#' results
-#' }
-fast_mendel_outped2genos <- function(OutPed, Def) {
-
-  # I couldn't get pipe() to work, so I will just write to a tempfile and read back in
-  tf <- tempfile()
-  scrpath <- system.file("script", "slurp_outped.sh", package = "CKMRsim")
-  command <- paste(scrpath, OutPed, Def, ">", tf)
-  system(command)
-  ret <- read.table(tf, stringsAsFactors = FALSE, colClasses = "integer") %>%
-    dplyr::tbl_df() %>%
-    setNames(c("Rep", "Indiv", "Locus", "Geno")) %>%
-   dplyr::mutate(Rep = Rep + 1L)
-  ret
-}
-
-
-
 #' Given the operating system, check for mendel program in the typical location
 #'
 mendelBin <- function() {
-  if(Sys.info()['sysname'] == "Darwin") {  # we are on a Mac
+
+  sys_name <- Sys.info()['sysname']
+
+  if(sys_name == "Darwin") {  # we are on a Mac
     path <- "/Applications/Mendel/mendel"
+  } else if(sys_name == "Windows") { # we are on a PC
+    path <- "C:/Program Files (x86)/Mendel-16/Mendel.exe"
   } else {
-    stop("Sorry, we don't know where to expect the mendel binary on an operating system of type ", Sys.info()['sysname'])
+    stop("Sorry, we don't know where to expect the mendel binary on an operating system of type ", sys_name, ". Send email to eric.anderson@noaa.gov and he can work with you to get things configured.")
   }
   if(!file.exists(path)) stop("Didn't find mendel binary where we expected it at ", path, " Please download, then install, MENDEL v16.0 from http://software.genetics.ucla.edu/")
   path
@@ -249,14 +196,22 @@ mendelBin <- function() {
 #' run_mendel(tmpDir, "mendel-example-Control.in")
 #' }
 run_mendel <- function(Dir, Control) {
-  COMM <- paste("cd",
-                Dir,
-                ";",
-                mendelBin(),
-                "-c",
-                Control
-                )
-  system(COMM)
+
+  nowdir <- getwd();
+  setwd(Dir)
+
+  system2(command = mendelBin(),
+          args = paste("-c", Control)
+          )
+
+  # COMM <- paste("cd",
+  #               Dir,
+  #               ";",
+  #               mendelBin(),
+  #               "-c",
+  #               Control
+  #               )
+  # system(COMM)
 }
 
 
