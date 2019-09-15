@@ -15,7 +15,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7
 )
 ```
 
@@ -347,4 +348,5 @@ ggplot(DD4, aes(x = coll_str, y = logl_ratio)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1.0, vjust = 0.5))
   
 ```
+
 ## References
