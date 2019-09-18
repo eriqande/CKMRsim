@@ -28,8 +28,11 @@ library(tidyverse)
 
 ## Prerequisites
 
-INCLUDE STUFF HERE ABOUT HOW TO DOWNLOAD MENDEL AND WHERE IT SHOULD BE INSTALLED TO.
-NOTE THAT I NEED TO FIGURE THAT OUT ON WINDOZE.
+In order to pursue simulations in the face of physical linkage, you must download
+and install the external dependency, Mendel version 16.  For Windows and Mac OS X, 
+CKMRsim will look for the Mendel binary in its default install location. So download
+it from [http://software.genetics.ucla.edu/mendel](http://software.genetics.ucla.edu/mendel) and do a default install.
+Note that you need to register with your email in order to download Mendel.
 
 ## An Example
 

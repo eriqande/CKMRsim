@@ -1,21 +1,36 @@
-# CKMRsim
+CKMRsim
+================
 
-[![DOI](https://zenodo.org/badge/55812404.svg)](https://zenodo.org/badge/latestdoi/55812404)
+This package implements Monte Carlo methods (including efficient
+importance sampling approaches) for assessing the false positive and
+false negative rates expected when using a particular set of genetic
+markers for pairwise relationship inference. It also provides functions
+implemented in C++ for computing likelihood ratios for different
+relationships between all pairs of individuals in a data set.
 
+CKMRsim can be installed with devtools. It requires that development
+tools be installed on your system to allow compilation of C++ via RCpp.
 
-This is an R package in development.  Not much else here now.
-
-NOTES:
-
-When you define a pedigree for gene dropping, individuals 1 and 2 are the focal
-individauls of the pair and they must have observed parents (because MENDEL output
-is hard to parse otherwise...).  Hence PO must look like:
+``` r
+devtools::install_github("eriqande/CKMRsim", build_vignettes = TRUE)
 ```
-  Kid Pa Ma Sex Observed
-1   1  2  3   1        1
-2   2  4  5   1        1
-3   3  0  0   2        0
-4   4  0  0   1        0
-5   5  0  0   2        0
+
+After this, the various vignettes can be accessed and read like this:
+
+``` r
+vignette("CKMRsim-example-1")
+
+vignette("CKMRsim-example-2-microsatellites")
+
+vignette("CKMRsim-simulating-linked-markers")
+
+vignette("CKMRsim-writing-geno-error-funcs")
 ```
-instead of having just three lines.
+
+In order to pursue simulations in the face of physical linkage, you must
+download and install the external dependency, Mendel version 16. For
+Windows and Mac OS X, CKMRsim will look for the Mendel binary in its
+default install location. So download it from
+<http://software.genetics.ucla.edu/mendel> and do a default install.
+Note that you need to register with your email in order to download
+Mendel.
