@@ -7,3 +7,4 @@
 ^doc$
 ^Meta$
 ^\.travis\.yml$
+^README\.Rmd$
