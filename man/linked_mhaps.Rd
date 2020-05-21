@@ -4,13 +4,15 @@
 \name{linked_mhaps}
 \alias{linked_mhaps}
 \title{Microhaplotype data from kelp rockfish \emph{Sebastes atrovirens} with pretend linkage positions}
-\format{This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+\format{
+This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
 is in the format of \code{\link{long_markers}}. However since true positions
 of these markers in the genome are not known I just pretended that we knew some (randomly generated)
 locations.   The column
 \code{Chrom} Is randomly given  \code{Locus} has the name of each locus in it.  The column
 \code{Pos} has a random position (in base pairs) for each locus.  The
-\code{Allele} column gives the sequences of each allele/haplotype observed in the population.}
+\code{Allele} column gives the sequences of each allele/haplotype observed in the population.
+}
 \usage{
 linked_mhaps
 }

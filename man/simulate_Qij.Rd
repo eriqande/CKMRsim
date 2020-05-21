@@ -4,9 +4,20 @@
 \alias{simulate_Qij}
 \title{compute the all-locus genotype pair probs for pairs simulated given specified relationships}
 \usage{
-simulate_Qij(C, sim_relats, calc_relats, reps = 10^4, unlinked = TRUE,
-  forceLinkagePO = FALSE, pedigree_list = NULL, miss_mask_mat = NULL,
-  rando_miss_wts = NULL, rando_miss_n = 0, froms, tos)
+simulate_Qij(
+  C,
+  sim_relats,
+  calc_relats,
+  reps = 10^4,
+  unlinked = TRUE,
+  forceLinkagePO = FALSE,
+  pedigree_list = NULL,
+  miss_mask_mat = NULL,
+  rando_miss_wts = NULL,
+  rando_miss_n = 0,
+  froms,
+  tos
+)
 }
 \arguments{
 \item{C}{the ckmr object upon which to base the simulations.}

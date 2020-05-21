@@ -4,8 +4,13 @@
 \alias{insert_C_l_matrices}
 \title{insert the matrix C_l into each element of the list of X_l matrices}
 \usage{
-insert_C_l_matrices(XL, ge_mod_assumed, ge_mod_true,
-  ge_mod_assumed_pars_list = NULL, ge_mod_true_pars_list = NULL)
+insert_C_l_matrices(
+  XL,
+  ge_mod_assumed,
+  ge_mod_true,
+  ge_mod_assumed_pars_list = NULL,
+  ge_mod_true_pars_list = NULL
+)
 }
 \arguments{
 \item{XL}{a list of the loci like that created using \code{\link{long_markers_to_X_l_list}}.

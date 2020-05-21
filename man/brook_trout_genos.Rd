@@ -4,7 +4,9 @@
 \name{brook_trout_genos}
 \alias{brook_trout_genos}
 \title{Microsatellite data from brook trout}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 20262 rows and 11 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 20262 rows and 11 columns.
+}
 \usage{
 brook_trout_genos
 }

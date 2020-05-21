@@ -4,8 +4,10 @@
 \name{kappas}
 \alias{kappas}
 \title{A matrix of Cotterman coefficients for a variety of pairwise relationships}
-\format{A matrix.  The rows are relationships (see the CKMRsim paper for abbreviations).
-The columns are the kappas.}
+\format{
+A matrix.  The rows are relationships (see the CKMRsim paper for abbreviations).
+The columns are the kappas.
+}
 \usage{
 kappas
 }

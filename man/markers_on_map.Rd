@@ -4,7 +4,8 @@
 \name{markers_on_map}
 \alias{markers_on_map}
 \title{An example of how to specify markers mapped onto chromosomes}
-\format{A named list of chromosomes upon which mapped markers are available.  The component
+\format{
+A named list of chromosomes upon which mapped markers are available.  The component
 corresponding to a chromome is itself a list which may or may not be named.  If it is named
 then its names are the names of the loci. The loci should be in sorted order along the chromosome.
 Each locus within a chromosome is represented as a list with the following components.
@@ -13,7 +14,8 @@ Each locus within a chromosome is represented as a list with the following compo
   can think of the first locus as having a certain rate of recombination with the very beginning of
   the chromosome, and then pos is the cumulative sum of the inter-locus recombination fractions. }
   \item{freqs}{The allele frequencies at the locus}
-}}
+}
+}
 \usage{
 markers_on_map
 }

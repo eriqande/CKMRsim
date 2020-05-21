@@ -4,9 +4,18 @@
 \alias{simulate_and_calc_Q}
 \title{compute all-locus genotype pair probs for pairs simulated given specified relationships}
 \usage{
-simulate_and_calc_Q(YL, reps = 10^4, froms = NULL, tos = NULL,
-  df = NULL, pedigrees = NULL, forceLinkagePO = FALSE,
-  miss_mask_mat = NULL, rando_miss_wts = NULL, rando_miss_n = 0)
+simulate_and_calc_Q(
+  YL,
+  reps = 10^4,
+  froms = NULL,
+  tos = NULL,
+  df = NULL,
+  pedigrees = NULL,
+  forceLinkagePO = FALSE,
+  miss_mask_mat = NULL,
+  rando_miss_wts = NULL,
+  rando_miss_n = 0
+)
 }
 \arguments{
 \item{YL}{the list that holds the Y_l and Y_l_true matrices}

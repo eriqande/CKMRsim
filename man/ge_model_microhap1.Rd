@@ -4,8 +4,12 @@
 \alias{ge_model_microhap1}
 \title{create matrix C for probability of observed genotypes from microhaplotype data}
 \usage{
-ge_model_microhap1(L, miscall_rate = 0.005, dropout_rate = 0.005,
-  per_snp_rate = FALSE)
+ge_model_microhap1(
+  L,
+  miscall_rate = 0.005,
+  dropout_rate = 0.005,
+  per_snp_rate = FALSE
+)
 }
 \arguments{
 \item{L}{an element of the list created by \code{\link{long_markers_to_X_l_list}}. Such

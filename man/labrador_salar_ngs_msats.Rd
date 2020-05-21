@@ -4,7 +4,9 @@
 \name{labrador_salar_ngs_msats}
 \alias{labrador_salar_ngs_msats}
 \title{Next-generation-sequencing-genotyped microsatellites from Labrador Atlantic salmon}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1478 rows and 204 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1478 rows and 204 columns.
+}
 \usage{
 labrador_salar_ngs_msats
 }

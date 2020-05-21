@@ -4,9 +4,17 @@
 \alias{mc_sample_simple}
 \title{sample Q values to get and analyze a sample of Lambdas with simple (non-mixture) hypotheses}
 \usage{
-mc_sample_simple(Q, nu, de = "U", tr = "U", method = c("IS",
-  "vanilla", "both")[1], pstar = NA, FNRs = c(0.3, 0.2, 0.1, 0.05,
-  0.01), lambda_stars = NULL, Q_for_fnrs = NULL)
+mc_sample_simple(
+  Q,
+  nu,
+  de = "U",
+  tr = "U",
+  method = c("IS", "vanilla", "both")[1],
+  pstar = NA,
+  FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01),
+  lambda_stars = NULL,
+  Q_for_fnrs = NULL
+)
 }
 \arguments{
 \item{Q}{the Qij object that is the output of simulate_Qij.}

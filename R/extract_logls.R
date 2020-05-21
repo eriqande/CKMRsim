@@ -83,12 +83,12 @@ extract_logls <- function(Q, numer, denom) {
     logls <- numer_logl - denom_logl
 
     # now, some care in retrieving the log probability of being simulated from the true relationship
-    if(simtype == "linked" | !(true_relat %in% names(x))) {
+    if (simtype == "linked" | !(true_relat %in% names(x))) {
       true_log_prob <- NA
     } else {
       true_log_prob <- x[[true_relat]]
     }
-    dplyr::data_frame(simtype = simtype,
+    tibble(simtype = simtype,
                       PO_sim = PO_sim,
                       rando_miss_n = attributes(Q)$rando_miss_n,
                       numer_wts = numer_string,

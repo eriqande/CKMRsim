@@ -4,7 +4,9 @@
 \name{example_L_microsat}
 \alias{example_L_microsat}
 \title{An example microsatellite locus}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \usage{
 example_L_microsat
 }

@@ -14,7 +14,7 @@
 #'   \item{Ma}{alphanumeric character specifier of the mom's name.  Must be <15 characters.}
 #'   \item{Sex}{Integer specifier of sex of the individual: 0 - unknown, 1 - male, 2 - female.}
 #'   \item{Observed}{Integer specifying if the individual is observed.  Typically there will be two observed
-#'                   individuals.  Those should probably be 1 and 2. }
+#'                   individuals.  Those should always be 1 and 2. }
 #' }
 "pedigrees"
 

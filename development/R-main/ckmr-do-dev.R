@@ -33,7 +33,7 @@ PED <- "development/data/spip4K_ped.txt.gz"
 genos <- read_delim(GENO, delim = " ")
 
 # then prepare a data frame with number of alleles
-numa <- dplyr::data_frame(LocIdx = 1:length(CK$loci), NumAlle = sapply(CK$loci, function(x) length(x$freqs)))
+numa <- tibble(LocIdx = 1:length(CK$loci), NumAlle = sapply(CK$loci, function(x) length(x$freqs)))
 
 # then compute the genotype index of each pair of alleles
 wide_genos <- dplyr::left_join(genos, numa) %>%

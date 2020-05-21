@@ -4,8 +4,13 @@
 \alias{ge_model_microsat1}
 \title{a simple "length-aware" genotyping error model for microsatellites}
 \usage{
-ge_model_microsat1(L, miscall_rate = 0.005, miscall_decay = 0.8,
-  dropout_rate = 0.01, dropout_scale_factor = 0.25)
+ge_model_microsat1(
+  L,
+  miscall_rate = 0.005,
+  miscall_decay = 0.8,
+  dropout_rate = 0.01,
+  dropout_scale_factor = 0.25
+)
 }
 \arguments{
 \item{L}{an element of the list created by \code{\link{long_markers_to_X_l_list}}. Such

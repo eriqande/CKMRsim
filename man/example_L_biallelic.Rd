@@ -4,7 +4,9 @@
 \name{example_L_biallelic}
 \alias{example_L_biallelic}
 \title{An example biallelic locus}
-\format{An object of class \code{list} of length 2.}
+\format{
+An object of class \code{list} of length 2.
+}
 \usage{
 example_L_biallelic
 }

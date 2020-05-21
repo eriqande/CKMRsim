@@ -1,0 +1,83 @@
+---
+title: "CKMRsim-pairwise-relationships"
+author: "Eric C. Anderson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CKMRsim-pairwise-relationships}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+CKMRsim is all about inference of pairwise relationships from genetic data. This vignette documents
+the named pairwise relationships that come "pre-loaded" with CKMRsim.  By saying that they are
+"pre-loaded" we mean that each relationship's IBD coefficients are included in the package's
+`kappa` matrix and that the pedigree specifying the relationship (for simulating linked markers)
+is included in the `pedigrees` list. Both `kappas` and `pedigrees` are included
+as part of the built-in data for this package.
+
+First, we shall print out a table of the identify coefficients for the different 
+relationships.  
+```{r, message=FALSE, warning=FALSE}
+library(CKMRsim)
+library(tibble)
+library(dplyr)
+library(stringr)
+
+long_names <- c(
+  MZ = "Monozygotic (identical) twins",
+  PO = "Parent-offspring",
+  FS = "Full siblings",
+  HS = "Half siblings",
+  GP = "Grandparent-grandchild",
+  AN = "Aunt-niece",
+  DFC = "Double first cousins",
+  FC = "First cousins",
+  HFC = "Half first cousins",
+  DHFC = "Double half first cousins",
+  SC = "Second cousins",
+  HSC = "Half second cousins",
+  U = "Unrelated"
+)
+
+rtable <- as_tibble(kappas) %>%
+  mutate(
+    abbreviation = rownames(kappas),
+    relationship = long_names
+    ) %>%
+  select(relationship, abbreviation, everything())
+
+rtable
+```
+
+And now we will show a series pedigrees that depict the relationships, 
+(except for monozygous twins and unrelated, which don't yield interesting
+pedigrees) alongside the IBD
+coefficient values. In these pedigrees,
+the nodes corresponding to members of the pair are shaded (gray) and are labeled 1 and 2.
+
+Due to the way output files from Mendel are parsed.  It is necessary that the members of the
+pair not be founders in the pedigree.  This is why the pedigrees for GP and PO have
+founders above the oldest members of the pair.
+
+
+```{r, results='asis', echo=FALSE}
+for (i in 2:(nrow(rtable) - 1)) {
+  tit <- str_c("\n\n## ", rtable$relationship[i], "\n")
+  kap <- str_c(
+    "\n$\\kappa_0 = ", rtable$kappa0[i], 
+    " ~~~~~~~\\kappa_1 = ", rtable$kappa1[i], 
+    " ~~~~~~~\\kappa_2 = ", rtable$kappa2[i], 
+    "$\n")
+  fig <- str_c("\n![", rtable$abbreviation[i], ":  ", rtable$relationship[i], "](images/", rtable$abbreviation[i],  ".png)\n\n")
+  cat(tit, kap, fig)
+}
+```
+

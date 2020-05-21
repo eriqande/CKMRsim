@@ -4,7 +4,8 @@
 \name{long_markers}
 \alias{long_markers}
 \title{A long format way of specifying markers.}
-\format{A data frame with necessary columns:
+\format{
+A data frame with necessary columns:
 \describe{
   \item{Chrom}{The name of the chromosome.  This should always be an integer (or maybe "X" or "Y")}
   \item{Locus}{The name of the locus.  This can be any string.}
@@ -16,7 +17,8 @@
   \item{LocIdx}{The index of the locus within the chromosome.  This goes from 1 up to the
   number of loci on the chromosome.  These should be ordered according to Pos}
 
-}}
+}
+}
 \usage{
 long_markers
 }

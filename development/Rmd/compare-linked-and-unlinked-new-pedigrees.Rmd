@@ -1,0 +1,135 @@
+---
+title: "Compare Kappas and Pedigrees"
+output: html_notebook
+---
+
+I just added a bunch of new pedigrees and a few new kappas to the package
+and want to do a quick sanity check here.
+
+
+```{r}
+library(tidyverse)
+library(CKMRsim)
+```
+
+First, make a linked markers CKMR object:
+```{r}
+# c("PO", "FS", "HS", "AN", "GP", "DFC", "FC", "HFC", "DHFC", "SC", "HSC", "U")
+ckmr <- create_ckmr(
+  D = linked_mhaps,
+  kappa_matrix = kappas,
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.01),
+  ge_mod_true_pars_list = list(epsilon = 0.01)
+)
+```
+
+
+Now, we only want to sim from the focal relationship and calc for the
+focal relationship and U. So:
+```{r}
+simcalc <- function(R = "FC", reps = 1e4) {
+  Qs_no_link <- simulate_Qij(
+    ckmr,
+    calc_relats = c(R, "U"),
+    sim_relats = c(R),
+    reps = reps
+  )
+  Qs_link <- simulate_Qij(
+    ckmr,
+    calc_relats = c(R, "U"),
+    sim_relats = c(R), 
+    unlinked = FALSE,
+    pedigree_list = pedigrees,
+    reps = reps
+  )
+  vec <- 1;
+  names(vec) <- R
+  logls <- bind_rows(
+    extract_logls(Qs_no_link, vec, c(U = 1)),
+    extract_logls(Qs_link, vec, c(U = 1))
+  )
+  
+  plot <- ggplot(logls, aes(x = logl_ratio, fill = simtype)) + 
+    geom_histogram(bins = 100, position = "identity", alpha = 0.6) +
+    ggtitle(R)
+  
+  list(logls = logls, plot = plot)
+}
+
+
+```
+
+Now, let's try running that over all the different relationships:
+```{r}
+vals <- c("PO", "FS", "HS", "AN", "DFC", "FC", "HFC", "DHFC", "SC", "HSC")
+names(vals) <- vals
+
+plot_and_logls <- lapply(vals, function(R) {simcalc(R, reps = 5e4)})
+```
+
+Now we just want to make some plots. We want the pedigree in one panel and the logls
+on the other.
+
+```{r}
+library(cowplot)
+
+pednames <- c(
+  AN = "aunt-niece", 
+  DFC = "double-first-cousins", 
+  DHFC = "double-half-first-cousins", 
+  FC = "first-cousins", 
+  HFC = "half-first-cousins", 
+  HSC = "half-second-cousins", 
+  SC = "second-cousins"
+)
+
+side_by_sides <- lapply(names(pednames), function(x) {
+
+  pname <- pednames[[x]]
+  pfile <- str_c("../pedigree-development/", pname, ".png")
+  gplot <- plot_and_logls[[x]]$plot
+
+  ped_fig <- ggdraw() + draw_image(pfile)
+  plot_grid(ped_fig, gplot, align = "v", rel_heights  = 1, rel_widths = c(1, 2), nrow = 1)
+
+})
+names(side_by_sides) <- names(pednames)
+```
+
+Save these for putting in the talk:
+```{r}
+ggsave(side_by_sides$AN, filename = "../outputs/AN.png", height = 5, width = 9)
+ggsave(side_by_sides$DFC, filename = "../outputs/DFC.png", height = 5, width = 9)
+ggsave(side_by_sides$FC, filename = "../outputs/FC.png", height = 5, width = 9)
+ggsave(side_by_sides$HFC, filename = "../outputs/HFC.png", height = 5, width = 9)
+ggsave(side_by_sides$SC, filename = "../outputs/SC.png", height = 5, width = 9)
+```
+
+That will be good for my presentation.
+
+Now, how about means and standard deviations:
+```{r}
+tmp <- lapply(plot_and_logls, function(x) x$logls) %>%
+  bind_rows(.id = "relationship") %>%
+ # filter(relationship != "PO") %>%
+  group_by(relationship, simtype) %>%
+  summarise(
+    mean_LLR = mean(logl_ratio),
+    sd = sd(logl_ratio),
+    var = var(logl_ratio)
+  ) %>%
+  mutate(tmp = mean(mean_LLR)) %>%
+  arrange(desc(tmp)) %>%
+  select(-tmp, -sd)
+
+tmp$mean_LLR = sprintf("%.2f", tmp$mean_LLR)
+tmp$var = sprintf("%.2f", tmp$var) 
+
+pivot_wider(
+  tmp, 
+  names_from = simtype,
+  values_from = c(mean_LLR, var)
+) %>% View()
+```

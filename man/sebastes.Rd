@@ -4,7 +4,8 @@
 \name{sebastes}
 \alias{sebastes}
 \title{Microhaplotype data from kelp rockfish \emph{Sebastes atrovirens}}
-\format{This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+\format{
+This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
 is in the format of \code{\link{long_markers}}. However since true positions
 of these markers in the genome are not known, it is instructive to see from these data
 how to insert them into the format of \code{\link{long_markers}}.  Simply the column
@@ -12,7 +13,8 @@ how to insert them into the format of \code{\link{long_markers}}.  Simply the co
 a GTseq procedure.  \code{Locus} has the name of each locus in it.  The column
 \code{Pos} has a simple index for each locus.  They don't denote genomic positions, but they
 are useful for sorting things if you run the data through \code{\link{reindex_markers}}.  The
-\code{Allele} column gives the sequences of each allele/haplotype observed in the population.}
+\code{Allele} column gives the sequences of each allele/haplotype observed in the population.
+}
 \usage{
 sebastes
 }

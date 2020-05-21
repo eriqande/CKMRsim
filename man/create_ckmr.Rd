@@ -4,10 +4,14 @@
 \alias{create_ckmr}
 \title{prepare to simulate pairwise relationships from locus data}
 \usage{
-create_ckmr(D, kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ],
-  ge_mod_assumed = ge_model_TGIE, ge_mod_true = ge_model_TGIE,
+create_ckmr(
+  D,
+  kappa_matrix = kappas[c("MZ", "PO", "FS", "HS", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
   ge_mod_assumed_pars_list = list(epsilon = 0.1),
-  ge_mod_true_pars_list = list(epsilon = 0.1))
+  ge_mod_true_pars_list = list(epsilon = 0.1)
+)
 }
 \arguments{
 \item{D}{a data frame in the format of \code{\link{long_markers}}.  Monomorphic loci should have

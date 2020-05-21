@@ -3,7 +3,6 @@
 \docType{package}
 \name{CKMRsim}
 \alias{CKMRsim}
-\alias{CKMRsim-package}
 \title{My package documentation}
 \description{
 bla bla, need to write more here

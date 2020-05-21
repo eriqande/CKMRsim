@@ -4,7 +4,9 @@
 \name{markers40}
 \alias{markers40}
 \title{40 dinucleotide markers for a quick test data set}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 80 rows and 7 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 80 rows and 7 columns.
+}
 \usage{
 markers40
 }

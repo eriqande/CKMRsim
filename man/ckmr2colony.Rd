@@ -4,8 +4,14 @@
 \alias{ckmr2colony}
 \title{make a rudimentary colony input file}
 \usage{
-ckmr2colony(CKF, CKG, freqs_known = TRUE, outfile = "Colony2.dat",
-  err_rate = c(0.01), drop_rate = c(0.01))
+ckmr2colony(
+  CKF,
+  CKG,
+  freqs_known = TRUE,
+  outfile = "Colony2.dat",
+  err_rate = c(0.01),
+  drop_rate = c(0.01)
+)
 }
 \arguments{
 \item{CKF}{a data frame like long_markers that has the allele freqs and indexes, etc.}

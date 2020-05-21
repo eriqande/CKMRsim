@@ -41,7 +41,7 @@ format_mixed_r <- function(R, colchars = ",") {
 imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs) {
   # get the importance weights and the corresponding lambdas when
   # the sample is from pstar
-  iw <- dplyr::data_frame(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
+  iw <- tibble(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
                    impwt = exp(Q[[pstar]][[tr]] - Q[[pstar]][[pstar]])) %>%
     dplyr::arrange(dplyr::desc(lambda)) %>%
     dplyr::mutate(FPR = cumsum(impwt))
@@ -78,7 +78,7 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs
     sum(iw$lambda >= x)
   }) %>% unlist() %>% unname()
 
-    dplyr::data_frame(FNR = FNRs, FPR = fpr, se = se, num_nonzero_wts = nnz, Lambda_star = cutoffs) %>%
+    tibble(FNR = FNRs, FPR = fpr, se = se, num_nonzero_wts = nnz, Lambda_star = cutoffs) %>%
       dplyr::arrange(FNR, Lambda_star)
 }
 
@@ -110,7 +110,7 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
     unname()
 
 
-  dplyr::data_frame(FNR = FNRs, FPR = tmp, Lambda_star = cutoffs) %>%
+  tibble(FNR = FNRs, FPR = tmp, Lambda_star = cutoffs) %>%
     dplyr::arrange(FNR)
 }
 

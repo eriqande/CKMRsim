@@ -4,8 +4,15 @@
 \alias{pairwise_kin_logl_ratios}
 \title{compute pairwise log likelihood ratios between two sets of individuals}
 \usage{
-pairwise_kin_logl_ratios(D1, D2, CK, numer, denom, keep_top = NULL,
-  num_cores = parallel::detectCores())
+pairwise_kin_logl_ratios(
+  D1,
+  D2,
+  CK,
+  numer,
+  denom,
+  keep_top = NULL,
+  num_cores = parallel::detectCores()
+)
 }
 \arguments{
 \item{D1}{long format genotype data frame of the first set of individuals.  If doing

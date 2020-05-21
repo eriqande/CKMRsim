@@ -204,6 +204,8 @@ run_mendel <- function(Dir, Control) {
           args = paste("-c", Control)
           )
 
+  setwd(nowdir)
+
   # COMM <- paste("cd",
   #               Dir,
   #               ";",

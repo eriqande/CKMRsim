@@ -4,8 +4,14 @@
 \alias{Qij_class}
 \title{Constructor function for the class Qij}
 \usage{
-Qij_class(Q, unlinked, forceLinkagePO, miss_mask_mat, rando_miss_wts,
-  rando_miss_n)
+Qij_class(
+  Q,
+  unlinked,
+  forceLinkagePO,
+  miss_mask_mat,
+  rando_miss_wts,
+  rando_miss_n
+)
 }
 \arguments{
 \item{Q}{the list of lists to be turned into a Qij object.}
