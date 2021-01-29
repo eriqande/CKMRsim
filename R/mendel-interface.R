@@ -17,15 +17,33 @@
 #' D <- markers2mendel_def_lines(long_markers)
 #' cat(D[1:100], sep = "")
 markers2mendel_def_lines <- function(df) {
-  tmp <- df %>%
+
+  t1 <- df %>%
     dplyr::ungroup() %>%
     dplyr::arrange(Chrom, LocIdx, AlleIdx) %>%
-    dplyr::group_by(Chrom, LocIdx) %>%
-   dplyr::mutate(LocLine = paste(Chrom, "_", LocIdx, ",", Chrom, ",", n_distinct(AlleIdx), sep = ""),
+    dplyr::group_by(Chrom, LocIdx)
+
+  # form all the locus names and make sure none of them are more than 16 characters
+  illegal_names <- t1 %>%
+    dplyr::summarise(loc_name = paste0(Chrom, "_", LocIdx)) %>%
+    dplyr::ungroup() %>%
+    dplyr::filter(nchar(loc_name) > 16)
+
+  if(nrow(illegal_names) > 0) {
+    top10 <- paste(unique(illegal_names$loc_name)[1:10], collapse = ", ")
+    outstr <- paste("Names formed as Chrom_LocusIndex to pass to Mendel are > 16 characters.\n\nExamples: ", top10, "\n\nPlease give your chromosomes shorter names.\n\n", collapse = "")
+    stop(outstr)
+  }
+
+  tmp <- t1 %>%
+   dplyr::mutate(LocLine = paste(Chrom, "_", LocIdx, ",,", n_distinct(AlleIdx), sep = ""),
            LocScrub = ifelse(AlleIdx == 1, paste(LocLine,"\n"), ""),
            AlleLine = paste(AlleIdx, ",", Freq, "\n", sep = ""),
            TextVec = paste(LocScrub, AlleLine, sep = "   ")
     )
+
+  # Note, in the LocLine above we leave the chromosome name blank (the two commas next to one another)
+  # so that Mendel knows that it is autosomal.
 
   tmp$TextVec
 }

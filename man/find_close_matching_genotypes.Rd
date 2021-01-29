@@ -16,10 +16,10 @@ find_close_matching_genotypes(LG, CK, max_mismatch)
 \value{
 a data frame with columns:
 \describe{
-  \item{indiv_1}{the id (from the rownames in S) of the firt member of the pair}
-  \item{indiv_2}{the id (from the rownames in S) of the second individual of the pair}
-  \item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
-  \item{num_loc}{the total number of loci missing in neither individual}
+\item{indiv_1}{the id (from the rownames in S) of the firt member of the pair}
+\item{indiv_2}{the id (from the rownames in S) of the second individual of the pair}
+\item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
+\item{num_loc}{the total number of loci missing in neither individual}
 }
 }
 \description{

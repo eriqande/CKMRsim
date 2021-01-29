@@ -11,6 +11,13 @@
 #' @param n number of chromosomes
 #' @param L length of genome in Gigabases
 #' @param sl length of the smallest chromosome as a fraction of the largest chromosome
+#' @return A list with three components:
+#'   - `chrom_lengths`: a tibble with columns idx (chromsome index), chrom (chromosome name),
+#'   scaled_length (length of the chromosome as a fraction of the whole genome), and num_bases.
+#'   Note that the names of the chromosomes are like "fc01", "fc02", and so on.  fc stands for
+#'   "fake chromosome."
+#'   - `chrom_length_plot`: a ggplot object that shows the simulated lengths of the chromosomes.
+#'   - `chrom_length_parameters`: the parameters used in the function.
 #' @export
 #' @examples
 #' gcl <- geometric_chromo_lengths(
@@ -30,7 +37,7 @@ geometric_chromo_lengths <- function(n, L, sl) {
   # now, make a tibble of lengths
   lengths <- tibble::tibble(
     idx = 1:n,
-    chrom = paste0("fake_chrom_", sprintf("%02d", idx)),
+    chrom = paste0("fc", sprintf("%02d", idx)),
     scaled_length = (1 - p) ^ (idx - 1),
   ) %>%
     dplyr::mutate(num_bases = floor(L * 1e9 * (scaled_length / sum(scaled_length))))

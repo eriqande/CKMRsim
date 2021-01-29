@@ -7,12 +7,12 @@
 \format{
 A named list of pedigrees, each one specified in a data frame with five columns in the following order:
 \describe{
-  \item{Kid}{alphanumeric character specifier of the kid's name.  Must be <15 characters.}
-  \item{Pa}{alphanumeric character specifier of the dad's name.  Must be <15 characters.}
-  \item{Ma}{alphanumeric character specifier of the mom's name.  Must be <15 characters.}
-  \item{Sex}{Integer specifier of sex of the individual: 0 - unknown, 1 - male, 2 - female.}
-  \item{Observed}{Integer specifying if the individual is observed.  Typically there will be two observed
-                  individuals.  Those should always be 1 and 2. }
+\item{Kid}{alphanumeric character specifier of the kid's name.  Must be <15 characters.}
+\item{Pa}{alphanumeric character specifier of the dad's name.  Must be <15 characters.}
+\item{Ma}{alphanumeric character specifier of the mom's name.  Must be <15 characters.}
+\item{Sex}{Integer specifier of sex of the individual: 0 - unknown, 1 - male, 2 - female.}
+\item{Observed}{Integer specifying if the individual is observed.  Typically there will be two observed
+individuals.  Those should always be 1 and 2. }
 }
 }
 \usage{

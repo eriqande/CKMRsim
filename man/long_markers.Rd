@@ -7,15 +7,15 @@
 \format{
 A data frame with necessary columns:
 \describe{
-  \item{Chrom}{The name of the chromosome.  This should always be an integer (or maybe "X" or "Y")}
-  \item{Locus}{The name of the locus.  This can be any string.}
-  \item{Pos}{The position of the locus in \emph{bases} along the chromosome.}
-  \item{Allele}{The name of allele.  Any string is OK}
-  \item{Freq}{The frequency of the allele in the population}
-  \item{AlleIdx}{The index of the allele.  These have to go from 1 up to the number of
-  alleles at the locus.  Order is immaterial. }
-  \item{LocIdx}{The index of the locus within the chromosome.  This goes from 1 up to the
-  number of loci on the chromosome.  These should be ordered according to Pos}
+\item{Chrom}{The name of the chromosome.  This should always be an integer (or maybe "X" or "Y")}
+\item{Locus}{The name of the locus.  This can be any string.}
+\item{Pos}{The position of the locus in \emph{bases} along the chromosome.}
+\item{Allele}{The name of allele.  Any string is OK}
+\item{Freq}{The frequency of the allele in the population}
+\item{AlleIdx}{The index of the allele.  These have to go from 1 up to the number of
+alleles at the locus.  Order is immaterial. }
+\item{LocIdx}{The index of the locus within the chromosome.  This goes from 1 up to the
+number of loci on the chromosome.  These should be ordered according to Pos}
 
 }
 }

@@ -17,10 +17,10 @@ comparisons.  Missing data is denoted by -1 (or any integer < 0).}
 \value{
 a data frame with columns:
 \describe{
-  \item{ind1}{the base-1 index in S of the first individual of the pair}
-  \item{ind2}{the base-1 index in S of the second individual of the pair}
-  \item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
-  \item{num_loc}{the total number of loci missing in neither individual}
+\item{ind1}{the base-1 index in S of the first individual of the pair}
+\item{ind2}{the base-1 index in S of the second individual of the pair}
+\item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
+\item{num_loc}{the total number of loci missing in neither individual}
 }
 }
 \description{

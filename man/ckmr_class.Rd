@@ -19,24 +19,24 @@ data frame of markers that went into its construction) and \code{loci}, a compon
 each component corresponds to a locus and has the following
 components
 \describe{
-  \item{freqs}{A vector of allele frequencies, named by the alleles.}
-  \item{X_l}{A list, named by the pairwise relationships investigated, of matrices
-  giving the probabilities of pairwise genotypes between two individauls having that
-  relationship. }
-  \item{C_l}{A matrix of probabilities giving the conditional probability of observing
-  each possible genotype, given the true underyling state of the genotype in an individual.
-  This is what encodes the genotyping error model that is \emph{assumed} for computing the Q ratios
-  (See the paper).}
-  \item{C_l_true}{A matrix of probabilities giving the conditional probability of observing
-  each possible genotype, given the true underyling state of the genotype in an individual.
-  This is what encodes the genotyping error model that is \emph{actually the true model} and which
-  is used for simulating the genotypes when computing the Q ratios
-  (See the paper).}
-  \item{Y_l}{The assumed probability of observing pairwise genotypes between two individuals.  This is a
-  list of matrices, one for each relationship, as named.  The quantities are obtained by
-  matrix multiplication of \code{X_l} to \code{C_l}.}
-  \item{Y_l_true}{The true probability of observing pairwise genotypes between two individuals.  This is a
-  list of matrices, one for each relationship, as named.  The quantities are obtained by
-  matrix multiplication of \code{X_l} to \code{C_l_true}.}
+\item{freqs}{A vector of allele frequencies, named by the alleles.}
+\item{X_l}{A list, named by the pairwise relationships investigated, of matrices
+giving the probabilities of pairwise genotypes between two individauls having that
+relationship. }
+\item{C_l}{A matrix of probabilities giving the conditional probability of observing
+each possible genotype, given the true underyling state of the genotype in an individual.
+This is what encodes the genotyping error model that is \emph{assumed} for computing the Q ratios
+(See the paper).}
+\item{C_l_true}{A matrix of probabilities giving the conditional probability of observing
+each possible genotype, given the true underyling state of the genotype in an individual.
+This is what encodes the genotyping error model that is \emph{actually the true model} and which
+is used for simulating the genotypes when computing the Q ratios
+(See the paper).}
+\item{Y_l}{The assumed probability of observing pairwise genotypes between two individuals.  This is a
+list of matrices, one for each relationship, as named.  The quantities are obtained by
+matrix multiplication of \code{X_l} to \code{C_l}.}
+\item{Y_l_true}{The true probability of observing pairwise genotypes between two individuals.  This is a
+list of matrices, one for each relationship, as named.  The quantities are obtained by
+matrix multiplication of \code{X_l} to \code{C_l_true}.}
 }
 }
