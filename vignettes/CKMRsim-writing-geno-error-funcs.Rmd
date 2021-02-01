@@ -1,5 +1,5 @@
 ---
-title: "CKMRsim: Writing Genotyping Error Functions"
+title: "CKMRsim-writing-geno-error-functions"
 author: "Eric C. Anderson"
 date: "`r Sys.Date()`"
 output: 

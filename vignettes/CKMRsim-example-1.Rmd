@@ -84,8 +84,8 @@ We get those data and then make a tibble of IDs with a column telling what life
 stage they were sampled at, and keep only those IDs that we have genotypes for in
 `genos1`:
 ```{r}
-adults <- read_rds(path = system.file("extdata/kelp_adults.rds", package = "CKMRsim"))
-juvies <- read_rds(path = system.file("extdata/kelp_juveniles.rds", package = "CKMRsim"))
+adults <- read_rds(file = system.file("extdata/kelp_adults.rds", package = "CKMRsim"))
+juvies <- read_rds(file = system.file("extdata/kelp_juveniles.rds", package = "CKMRsim"))
 
 
 life_stages <- bind_rows(

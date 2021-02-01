@@ -55,7 +55,7 @@ comp_ind_pairwise <- function(S, T, t, values, nGenos, Starts) {
 #' comparisons.
 #' @param s a vector of base-1 indexes of the source individual in each pair.
 #' @param t a vector of base-1 indexes of the target individual in each pair.  This vector is parallel to s.  So,
-#' for example (s[i], t[i]) designates a pair that you wish to investigate (individual s[i] in S and t[i] in T)
+#' for example `(s[i], t[i])` designates a pair that you wish to investigate (individual `s[i]` in S and `t[i]` in T)
 #' @param values the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.
 #' @param nGenos a vector of the number of genotypes at each locus
 #' @param Starts the base0 indexes of the starting positions of each locus in probs.

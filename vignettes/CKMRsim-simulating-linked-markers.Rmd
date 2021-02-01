@@ -1,8 +1,8 @@
 ---
-title: "Simulating linked markers"
+title: "Simulating-linked-markers"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simulating linked markers}
+  %\VignetteIndexEntry{Simulating-linked-markers}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

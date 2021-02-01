@@ -2,6 +2,18 @@
 title: "CKMRsim-pairwise-relationships"
 author: "Eric C. Anderson"
 date: "`r Sys.Date()`"
+resource_files:
+  - images/AN.png
+  - images/DFC.png
+  - images/DHFC.png
+  - images/FC.png
+  - images/FS.png
+  - images/GP.png
+  - images/HFC.png
+  - images/HS.png
+  - images/HSC.png
+  - images/PO.png
+  - images/SC.png
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{CKMRsim-pairwise-relationships}

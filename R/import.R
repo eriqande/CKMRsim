@@ -13,7 +13,7 @@ NULL
 
 #### Import functions from packages ####
 #' @importFrom dplyr n n_distinct rename
-#' @importFrom stats quantile runif sd setNames
+#' @importFrom stats quantile rmultinom runif sd setNames
 #' @importFrom tibble tibble
 #' @importFrom tidyr separate
 #' @importFrom utils read.table write.table
@@ -28,6 +28,7 @@ if(getRversion() >= "2.15.1")  {
   utils::globalVariables(
     c(
       ".",
+      "AbsoluteIndex",
       "AlleIdx",
       "AlleLine",
       "Allele",
@@ -79,11 +80,18 @@ if(getRversion() >= "2.15.1")  {
       "GenoIdx",
       "Indiv",
       "NumA",
+      "chrom",
       "gene_copy",
+      "idx",
       "ind",
       "ind1",
       "ind2",
+      "loc_name",
+      "num_bases",
+      "num_markers",
       "num_mismatch",
+      "pos",
+      "scaled_length",
       "value"
     )
   )

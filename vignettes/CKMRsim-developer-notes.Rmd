@@ -1,10 +1,10 @@
 ---
-title: "Developer Notes"
+title: "CKMRsim-developer-notes"
 author: "Eric C. Anderson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{CKMRsim-developer-notes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

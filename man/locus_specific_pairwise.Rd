@@ -20,7 +20,7 @@ comparisons.}
 \item{s}{a vector of base-1 indexes of the source individual in each pair.}
 
 \item{t}{a vector of base-1 indexes of the target individual in each pair.  This vector is parallel to s.  So,
-for example (s\link{i}, t\link{i}) designates a pair that you wish to investigate (individual s\link{i} in S and t\link{i} in T)}
+for example \verb{(s[i], t[i])} designates a pair that you wish to investigate (individual \code{s[i]} in S and \code{t[i]} in T)}
 
 \item{values}{the vector of genotype specific values.  See the probs field of \code{\link{flatten_ckmr}}.}
 
