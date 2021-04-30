@@ -26,4 +26,6 @@ find_close_matching_genotypes <- function(LG, CK, max_mismatch) {
     dplyr::arrange(num_mismatch) %>%
     dplyr::mutate(indiv_1 = rownames(S)[ind1],
            indiv_2 = rownames(S)[ind2])
+
+  matchers
 }

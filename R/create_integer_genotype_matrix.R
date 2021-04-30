@@ -45,6 +45,7 @@ create_integer_genotype_matrix <- function(LG, AF) {
     dplyr::mutate(GenoIdx = index_ab(a = `1`, b = `2`, A = NumA)) %>%  # get the genotype indexes
     dplyr::ungroup() %>%
     dplyr::select(Indiv, LocIdx, GenoIdx) %>%
+    tidyr::complete(Indiv, LocIdx = AF$LocIdx) %>% # add missing alles
     tidyr::spread(data = ., key = LocIdx, value = GenoIdx) # now spread it into a data frame that looks like the matrix we want
 
   # now, turn that into a base-0 integer matrix
