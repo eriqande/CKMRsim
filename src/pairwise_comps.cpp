@@ -33,6 +33,7 @@ DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVect
   NumericVector val(nS);
   IntegerVector nonmiss(nS);  // for the number of non_missing loci
 
+  if(L != T.ncol()) stop("S and T must have same number of columns");
 
   for(i=0;i<nS;i++) {
     sum = 0.0;
