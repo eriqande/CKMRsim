@@ -9,7 +9,7 @@ pairwise_kin_logl_ratios(
   D2,
   CK,
   numer,
-  denom,
+  denom = NULL,
   keep_top = NULL,
   num_cores = parallel::detectCores()
 )
@@ -27,7 +27,8 @@ parent-offspring, this should be the offspring.}
 This relationship must appear in the ckmr object CK.}
 
 \item{denom}{the relationship that should be the denominator of the logl ratio.
-This relationship must appear in the ckmr object CK.}
+This relationship must appear in the ckmr object CK. Leave empty to only calculate the
+log likelihood of of the numerator.}
 
 \item{keep_top}{If this is given as an integer, then for each individual in D2, only the keep_top
 individuals with the highest logl ratios are retained for the result.  The rest
@@ -43,5 +44,5 @@ in D1 to every individual in D2.  If D1 and D2 are different objects, it is assu
 that they include disjoint groups of individuals, and all pairs are returned. If
 D1 and D2 are the same object, then the output is filtered so that each
 pairwise comparison appears only once, and so that the comparisons between the
-same indvividual are dropped.
+same individual are dropped.
 }

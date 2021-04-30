@@ -1,7 +1,7 @@
 Package: CKMRsim
 Type: Package
 Title: Inference of Pairwise Relationships Using Likelihood Ratios
-Version: 0.1
+Version: 0.1.1.999
 Authors@R: c(
     person(given = c("Eric", "C."), family = "Anderson", email = "eric.anderson@noaa.gov", role = c("aut", "cre"))
   )
