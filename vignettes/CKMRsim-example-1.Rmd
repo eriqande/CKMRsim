@@ -567,7 +567,7 @@ Believe it or not, when your lab
 is handling tens of thousands of samples, it is quite possible that the same
 DNA ended up in two different wells that are supposed to represent different
 individuals. Fortunately, it is easy to find duplicate samples because they 
-typically share the same genotype at all loci (apart from a few due that would
+typically share the same genotype at all loci (apart from a few that would
 be due to genotyping errors.)
 
 We have a function `find_close_matching_genotypes()` for that.  It operates
