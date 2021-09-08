@@ -64,6 +64,8 @@ if(getRversion() >= "2.15.1")  {
       "hp",
       "id",
       "impwt",
+      "indiv_1",
+      "indiv_2",
       "kappas",
       "lambda",
       "list_name",

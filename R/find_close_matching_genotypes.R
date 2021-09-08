@@ -24,8 +24,11 @@ find_close_matching_genotypes <- function(LG, CK, max_mismatch) {
 
   matchers <- pairwise_geno_id(S, max_miss = max_mismatch) %>%
     dplyr::arrange(num_mismatch) %>%
-    dplyr::mutate(indiv_1 = rownames(S)[ind1],
-           indiv_2 = rownames(S)[ind2])
+    dplyr::mutate(
+      indiv_1 = rownames(S)[ind1],
+      indiv_2 = rownames(S)[ind2]
+    ) %>%
+    dplyr::select(indiv_1, indiv_2, dplyr::everything())
 
   matchers
 }

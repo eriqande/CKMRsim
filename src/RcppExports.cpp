@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // make_matrix_X_l
 NumericMatrix make_matrix_X_l(NumericVector p, NumericVector kappa);
 RcppExport SEXP _CKMRsim_make_matrix_X_l(SEXP pSEXP, SEXP kappaSEXP) {
