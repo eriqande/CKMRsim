@@ -156,10 +156,10 @@ DataFrame pairwise_geno_id(IntegerMatrix S, int max_miss) {
   int nS = S.nrow();
   int i,j,l,n,mm, bailed = 0;
   int G1, G2;
-  std::vector<int> ind1;
-  std::vector<int> ind2;
-  std::vector<int> num_mismatch;
-  std::vector<int> num_loc;
+  IntegerVector ind1;
+  IntegerVector ind2;
+  IntegerVector num_mismatch;
+  IntegerVector num_loc;
 
 
   for(i=0;i<nS;i++) {
