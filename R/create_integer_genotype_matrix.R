@@ -34,19 +34,19 @@ create_integer_genotype_matrix <- function(LG, AF) {
     dplyr::filter(!is.na(Allele))
 
   # now, make a data frame of genotype indexes
-  LGI_wide_frame <- AF %>%
+LGI_wide_frame <- AF %>%
     dplyr::select(Locus, Allele, LocIdx, AlleIdx) %>%
     dplyr::group_by(Locus) %>%
     dplyr::mutate(NumA = dplyr::n()) %>%  # get the number of alleles at each locus
     dplyr::ungroup() %>%
     dplyr::left_join(LG2, ., by = c("Locus", "Allele")) %>%  # join the alle_idx's onto the actual genotype data
     dplyr::select(Indiv, Locus, gene_copy, LocIdx, NumA, AlleIdx) %>%
-    tidyr::spread(key = gene_copy, value = AlleIdx) %>%
+    tidyr::pivot_wider(names_from = gene_copy, values_from = AlleIdx) %>%
     dplyr::mutate(GenoIdx = index_ab(a = `1`, b = `2`, A = NumA)) %>%  # get the genotype indexes
     dplyr::ungroup() %>%
     dplyr::select(Indiv, LocIdx, GenoIdx) %>%
     tidyr::complete(Indiv, LocIdx = AF$LocIdx) %>% # add missing alles
-    tidyr::spread(data = ., key = LocIdx, value = GenoIdx) # now spread it into a data frame that looks like the matrix we want
+    tidyr::pivot_wider(data = ., names_from = LocIdx, values_from = GenoIdx)
 
   # now, turn that into a base-0 integer matrix
   mat <- as.matrix(LGI_wide_frame[, -1])

@@ -6,7 +6,7 @@
 #' missing data, and then it makes it easy to toss out pairs without even
 #' looking at all the loci, so it is faster for all the comparisons.
 #'
-#' @param LG a long genotypes data frame
+#' @param LG a long genotypes data frame.
 #' @param CK a ckmr object created from the allele frequencies computed from LG.
 #' @param max_mismatch maximum allowable number of mismatching genotypes betwen the pairs.
 #' @return a data frame with columns:

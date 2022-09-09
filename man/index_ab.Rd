@@ -38,6 +38,7 @@ dplyr::mutate(Idx = 1:length(a),
 # when a > b
 wrong_ord <- all_genos \%>\%
  dplyr::filter(a >= b) \%>\%
+ arrange(b, a) \%>\%
 dplyr::mutate(Idx = 1:length(a),
       Indab = index_ab(b, a, A))
 

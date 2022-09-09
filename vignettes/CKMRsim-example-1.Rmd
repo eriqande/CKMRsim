@@ -158,11 +158,11 @@ must be denoted by `NA`.  So, turn Allele == 0 to NA:
 ```{r}
 # make note of the current order of loci in the data set
 nc <- ncol(genos1)
-loci <- names(genos1)[seq(2, nc, by = 2)]
+loci <- str_replace(names(genos1)[seq(2, nc, by = 2)], "\\.\\.\\.[0-9]+$", "")
 
 #  reset the locus names
-names(genos1)[seq(3, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "1", sep = ".")
-names(genos1)[seq(2, nc, by = 2)] <- str_c(names(genos1)[seq(2, nc, by = 2)], "2", sep = ".")
+names(genos1)[seq(2, nc, by = 2)] <- str_c(loci, "1", sep = ".")
+names(genos1)[seq(3, nc, by = 2)] <- str_c(loci, "2", sep = ".")
 
 # then make some long format genotypes
 long_genos <- genos1 %>% 
@@ -669,7 +669,7 @@ fs_pairwise_logls %>%
 ```
 
 
-There are two step that really should be done before that:
+There are two steps that really should be done before that:
 
 1. Observe the distribution of internal heterozygosity across all individuals
 in the data set.  This will be used to compare to values from kin pairs to

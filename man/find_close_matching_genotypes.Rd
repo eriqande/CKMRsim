@@ -7,7 +7,7 @@
 find_close_matching_genotypes(LG, CK, max_mismatch)
 }
 \arguments{
-\item{LG}{a long genotypes data frame}
+\item{LG}{a long genotypes data frame.}
 
 \item{CK}{a ckmr object created from the allele frequencies computed from LG.}
 
