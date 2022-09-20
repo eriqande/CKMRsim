@@ -9,6 +9,7 @@ resource_files:
   - images/FC.png
   - images/FS.png
   - images/GP.png
+  - images/HAN.png
   - images/HFC.png
   - images/HS.png
   - images/HSC.png
@@ -51,6 +52,7 @@ long_names <- c(
   GP = "Grandparent-grandchild",
   AN = "Aunt-niece",
   DFC = "Double first cousins",
+  HAN = "Half aunt-niece",
   FC = "First cousins",
   HFC = "Half first cousins",
   DHFC = "Double half first cousins",
