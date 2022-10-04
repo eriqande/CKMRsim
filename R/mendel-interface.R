@@ -187,16 +187,10 @@ write_all_mendel_files <- function(ID, Reps, Seed, Markers, Pedigree, Dir = ".")
 #'
 mendelBin <- function() {
 
-  sys_name <- Sys.info()['sysname']
+  path <- system.file("bin/mendel", package = "CKMRsim")
+  if(path == "") stop("To simulate with physical linkage, you need the Mendel binary. \n*** To install Mendel for CKMRsim, issue this command in your R console: ***\n\n    install_mendel(Dir = system.file(package = \"CKMRsim\"))
+\n***")
 
-  if(sys_name == "Darwin") {  # we are on a Mac
-    path <- "/Applications/Mendel/mendel"
-  } else if(sys_name == "Windows") { # we are on a PC
-    path <- "C:/Program Files (x86)/Mendel-16/Mendel.exe"
-  } else {
-    stop("Sorry, we don't know where to expect the mendel binary on an operating system of type ", sys_name, ". Send email to eric.anderson@noaa.gov and he can work with you to get things configured.")
-  }
-  if(!file.exists(path)) stop("Didn't find mendel binary where we expected it at ", path, " Please download, then install, MENDEL v16.0 from http://software.genetics.ucla.edu/")
   path
 }
 

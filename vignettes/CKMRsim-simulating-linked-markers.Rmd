@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # here, set up a variable to only run the Mendel-requiring code
 # if on eric's computer with Mendel installed
-#DoMendel <- (Sys.info()["user"] == "eriq") && file.exists("/Applications/Mendel/mendel")
+DoMendel <- (Sys.info()["user"] == "eriq") && system.file("bin/mendel", package = "CKMRsim") != ""
 DoMendel <- FALSE
 NoDoMendel <- !DoMendel
 ```
