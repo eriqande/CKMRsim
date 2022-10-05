@@ -187,7 +187,13 @@ write_all_mendel_files <- function(ID, Reps, Seed, Markers, Pedigree, Dir = ".")
 #'
 mendelBin <- function() {
 
+  Sys <- Sys.info()["sysname"]
+
   path <- system.file("bin/mendel", package = "CKMRsim")
+  if(Sys == "Windows") {
+    path <- system.file("bin/Mendel.exe", package = "CKMRsim")
+  }
+
   if(path == "") stop("To simulate with physical linkage, you need the Mendel binary. \n*** To install Mendel for CKMRsim, issue this command in your R console: ***\n\n    install_mendel(Dir = system.file(package = \"CKMRsim\"))
 \n***")
 

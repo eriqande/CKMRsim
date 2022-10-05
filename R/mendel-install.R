@@ -33,7 +33,7 @@ install_mendel <- function(
   # first check the OS
   Sys <- Sys.info()["sysname"]
 
-  if(!(Sys %in% c("Darwin", "Linux"))) {
+  if(!(Sys %in% c("Darwin", "Linux", "Windows"))) {
     stop(paste("spip binary not available for operating system ", Sys, collapse = ""))
   }
 
@@ -64,16 +64,16 @@ install_mendel <- function(
 
   # get the path to the result
   Bin_file <- file.path(Dest_dir, "mendel")
+  if(Sys == "Windows") {
+    Bin_file <- file.path(Dest_dir, "Mendel.exe")
+  }
 
-  # finally, change the file permissions to be user and group executable and writeable
+  # finally, change the file permissions to be user and group executable and writable
   # and world readable
   Sys.chmod(Bin_file, mode = "0774", use_umask = FALSE)
 
   # and remove the zip
   file.remove(Dest_file)
-
-
-
 
 }
 
