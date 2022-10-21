@@ -34,14 +34,8 @@ install_mendel <- function(
   Sys <- Sys.info()["sysname"]
 
   if(!(Sys %in% c("Darwin", "Linux", "Windows"))) {
-    stop(paste("spip binary not available for operating system ", Sys, collapse = ""))
+    stop(paste("mendel binary not available for operating system ", Sys, collapse = ""))
   }
-
-  # then get the basename of the file we want
-  #pname <- paste("spip-", Sys, sep = "", collapse = "")
-  #if(Sys == "Windows") {
-  #  pname <- paste(pname, ".zip", sep = "")
-  #}
 
   # have a variable to hold the base GitHub address:
   Git_base <- "https://github.com/eriqande/mbin/raw/main/bin/"
@@ -64,8 +58,17 @@ install_mendel <- function(
 
   # get the path to the result
   Bin_file <- file.path(Dest_dir, "mendel")
+
+  # all sorts of Windows stuff here:
+  #  1. We need to make the Bin_file name Mendel.exe
+  #  2. We put a dll in the same location and hope that works.
   if(Sys == "Windows") {
     Bin_file <- file.path(Dest_dir, "Mendel.exe")
+    utils::download.file(
+      url = "https://github.com/eriqande/mbin/raw/main/lib/libiomp5md.dll",
+      destfile = file.path("/Users/eriq/Library/R/4.2/library/CKMRsim/bin", "libiomp5md.dll")
+    )
+
   }
 
   # finally, change the file permissions to be user and group executable and writable
