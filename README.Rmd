@@ -31,8 +31,8 @@ vignette("CKMRsim-writing-geno-error-funcs")
 ```
 
 In order to pursue simulations in the face of physical linkage, you must download
-and install the external dependency, Mendel version 16.  For Windows and Mac OS X, 
-CKMRsim will look for the Mendel binary in its default install location. So download
-it from [http://software.genetics.ucla.edu/mendel](http://software.genetics.ucla.edu/mendel) and do a default install.
-Note that you need to register with your email in order to download Mendel.
+and install the external dependency, Mendel version 16.  This was formerly
+available at [http://software.genetics.ucla.edu/mendel](http://software.genetics.ucla.edu/mendel), but it seems that the site is no longer maintained or connected.
+
+Instead, you can now install it the `install_mendel()` function.
 

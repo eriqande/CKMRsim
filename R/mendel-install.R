@@ -5,21 +5,21 @@
 # system to download the binaries directly into the R library.
 
 
-#' Download the spip binary and install it where CKMRpop expects it
+#' Download the mendel binary and install it where CKMRpop expects it
 #'
 #' This checks the operating system and installs the correct version
-#' (either Darwin or Linux for Mac or Linux, respectively.)  To install
-#' the spip binary this function downloads it from its GitHub site.  It also
-#' installs a windows implementation of awk.
-#' @param Dir the directory to install spip into.  Because of restrictions
+#' of mendel for you operating system (Mac, Linux, or Windows).  To install
+#' the binary it downloads it from Eric's mbin repo on GitHub.  It also
+#' installs in the same directory an intel libiomp DLL on Windows.
+#' @param Dir the directory to install mendel into.  Because of restrictions
 #' on functions writing to the user's home filespace, this is set, by default,
-#' to a temporary directory.  But to really use this function to install spip,
-#' this parameter must be set to `system.file(package = "CKMRpop")`.
+#' to a temporary directory.  But to really use this function to install mendel,
+#' this parameter must be set to `system.file(package = "CKMRsim")`.
 #' @export
-#' @return No return value.  Called for side effect of installing the 'spip' binary.
+#' @return No return value.  Called for side effect of installing the 'mendel' binary.
 #' @examples
 #' \dontrun{
-#' install_spip(Dir = system.file(package = "CKMRpop"))
+#' install_mendel(Dir = system.file(package = "CKMRsim"))
 #' }
 install_mendel <- function(
     Dir = tempfile()
