@@ -64,11 +64,6 @@ install_mendel <- function(
   #  2. We put a dll in the same location and hope that works.
   if(Sys == "Windows") {
     Bin_file <- file.path(Dest_dir, "Mendel.exe")
-    utils::download.file(
-      url = "https://github.com/eriqande/mbin/raw/main/lib/libiomp5md.dll",
-      destfile = file.path("/Users/eriq/Library/R/4.2/library/CKMRsim/bin", "libiomp5md.dll")
-    )
-
   }
 
   # finally, change the file permissions to be user and group executable and writable
