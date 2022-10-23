@@ -2,27 +2,27 @@
 % Please edit documentation in R/mendel-install.R
 \name{install_mendel}
 \alias{install_mendel}
-\title{Download the spip binary and install it where CKMRpop expects it}
+\title{Download the mendel binary and install it where CKMRpop expects it}
 \usage{
 install_mendel(Dir = tempfile())
 }
 \arguments{
-\item{Dir}{the directory to install spip into.  Because of restrictions
+\item{Dir}{the directory to install mendel into.  Because of restrictions
 on functions writing to the user's home filespace, this is set, by default,
-to a temporary directory.  But to really use this function to install spip,
-this parameter must be set to \code{system.file(package = "CKMRpop")}.}
+to a temporary directory.  But to really use this function to install mendel,
+this parameter must be set to \code{system.file(package = "CKMRsim")}.}
 }
 \value{
-No return value.  Called for side effect of installing the 'spip' binary.
+No return value.  Called for side effect of installing the 'mendel' binary.
 }
 \description{
 This checks the operating system and installs the correct version
-(either Darwin or Linux for Mac or Linux, respectively.)  To install
-the spip binary this function downloads it from its GitHub site.  It also
-installs a windows implementation of awk.
+of mendel for you operating system (Mac, Linux, or Windows).  To install
+the binary it downloads it from Eric's mbin repo on GitHub.  It also
+installs in the same directory an intel libiomp DLL on Windows.
 }
 \examples{
 \dontrun{
-install_spip(Dir = system.file(package = "CKMRpop"))
+install_mendel(Dir = system.file(package = "CKMRsim"))
 }
 }
