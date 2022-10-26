@@ -8,14 +8,16 @@ markers for pairwise relationship inference. It also provides functions
 implemented in C++ for computing likelihood ratios for different
 relationships between all pairs of individuals in a data set.
 
-CKMRsim can be installed with devtools. It requires that development
-tools be installed on your system to allow compilation of C++ via RCpp.
+CKMRsim can be installed with the ‘remotes’ packages\` It requires that
+development tools be installed on your system to allow compilation of
+C++ via RCpp.
 
 ``` r
-devtools::install_github("eriqande/CKMRsim", build_vignettes = TRUE)
+remotes::install_github("eriqande/CKMRsim", build_vignettes = TRUE)
 ```
 
-After this, the various vignettes can be accessed and read like this:
+Once that is done (and note that building the vignettes can take a
+while), you can read the vignettes with:
 
 ``` r
 vignette("CKMRsim-example-1")
@@ -25,12 +27,17 @@ vignette("CKMRsim-example-2-microsatellites")
 vignette("CKMRsim-simulating-linked-markers")
 
 vignette("CKMRsim-writing-geno-error-funcs")
+
+vignette("CKMRsim-pairwise-relationships")
 ```
 
-In order to pursue simulations in the face of physical linkage, you must
-download and install the external dependency, Mendel version 16. For
-Windows and Mac OS X, CKMRsim will look for the Mendel binary in its
-default install location. So download it from
-<http://software.genetics.ucla.edu/mendel> and do a default install.
-Note that you need to register with your email in order to download
-Mendel.
+An easier way to get to read these vignetttes is to find them in the
+“articles” tab at CKMRsim’s pkgdown page at:
+<https://eriqande.github.io/CKMRsim/>
+
+Doing simulations in the face of physical linkage requires the Mendel
+program version 16. This was formerly available at
+<http://software.genetics.ucla.edu/mendel>, but it seems that the site
+is no longer maintained or connected.
+
+Instead, you can now install it with the `install_mendel()` function.

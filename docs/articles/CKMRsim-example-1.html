@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CKMRsim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,6 +69,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -84,13 +83,14 @@
 
       
 
-      </header><script src="CKMRsim-example-1_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>CKMRsim-example-1</h1>
-                        <h4 class="author">Eric C. Anderson</h4>
+                        <h4 data-toc-skip class="author">Eric C.
+Anderson</h4>
             
-            <h4 class="date">2021-02-01</h4>
+            <h4 data-toc-skip class="date">2022-10-26</h4>
       
       
       <div class="hidden name"><code>CKMRsim-example-1.Rmd</code></div>
@@ -99,229 +99,503 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>In this example, we will work through a relatively complete analysis of data from kelp rockfish. These data have been used in two publications to date <span class="citation">(Baetscher et al. 2019, 2018)</span>. The genotype data are included in the package as a gzip compressed csv file. The contents are identical to what can be downloaded from Dryad at: <a href="http://datadryad.org/bitstream/handle/10255/dryad.205630/kelp_genos_used_two_col.csv?sequence=1">http://datadryad.org/bitstream/handle/10255/dryad.205630/kelp_genos_used_two_col.csv?sequence=1</a>.</p>
-<p>Before we get started let’s load the packages we need. We’ll be using a lot of functions from the tidyverse, so let’s do it.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>In this example, we will work through a relatively complete analysis
+of data from kelp rockfish. These data have been used in two
+publications to date <span class="citation">(Baetscher et al. 2019,
+2018)</span>. The genotype data are included in the package as a gzip
+compressed csv file. The contents are identical to what can be
+downloaded from Dryad at: <a href="http://datadryad.org/bitstream/handle/10255/dryad.205630/kelp_genos_used_two_col.csv?sequence=1" class="external-link">http://datadryad.org/bitstream/handle/10255/dryad.205630/kelp_genos_used_two_col.csv?sequence=1</a>.</p>
+<p>Before we get started let’s load the packages we need. We’ll be using
+a lot of functions from the tidyverse, so let’s do it.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</span>
-<span class="co">#&gt; ✓ ggplot2 3.3.2     ✓ purrr   0.3.4</span>
-<span class="co">#&gt; ✓ tibble  3.0.4     ✓ dplyr   1.0.2</span>
-<span class="co">#&gt; ✓ tidyr   1.1.2     ✓ stringr 1.4.0</span>
-<span class="co">#&gt; ✓ readr   1.4.0     ✓ forcats 0.5.0</span>
-<span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span>
-<span class="co">#&gt; x dplyr::filter() masks stats::filter()</span>
-<span class="co">#&gt; x dplyr::lag()    masks stats::lag()</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
+<span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.1 ──</span>
+<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2</span> 3.3.6     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr  </span> 0.3.4</span>
+<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble </span> 3.1.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr  </span> 1.0.9</span>
+<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr  </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr</span> 1.4.0</span>
+<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr  </span> 2.1.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats</span> 0.5.1</span>
+<span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span>
+<span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span>
+<span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="reading-in-the-genotype-data-set" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reading-in-the-genotype-data-set" class="anchor"></a>Reading in the Genotype Data set</h2>
-<p>We first must read in the genotypes of the individuals. This file holds genotypes of all the adults and all of the juveniles. The first part of our analysis involves simulations using allele frequencies. Since we don’t expect large full sibling groups in our data, it is reasonable to use both adults <em>and</em> juveniles, together, to estimate allele frequencies in this kelp rockfish population.</p>
-<p>It is also worth noting that, in general, it is important to include most/all of the individuals you will be using in your CKMR study when estimating allele frequencies. This is because all alleles that you might encounter when doing kin-finding must have been accounted for and must have allele frequencies computed for them. Especially when using multiallelic markers like microhaplotypes or microsatellites, it is important to make sure that every allele that you might encounter during kin-finding is accounted for during the allele frequency and power estimation phases of the analysis.</p>
-<p>The file that holds the genotypes comes with the <code>CKMRsim</code> package at:</p>
+<div class="section level2">
+<h2 id="reading-in-the-genotype-data-set">Reading in the Genotype Data set<a class="anchor" aria-label="anchor" href="#reading-in-the-genotype-data-set"></a>
+</h2>
+<p>We first must read in the genotypes of the individuals. This file
+holds genotypes of all the adults and all of the juveniles. The first
+part of our analysis involves simulations using allele frequencies.
+Since we don’t expect large full sibling groups in our data, it is
+reasonable to use both adults <em>and</em> juveniles, together, to
+estimate allele frequencies in this kelp rockfish population.</p>
+<p>It is also worth noting that, in general, it is important to include
+most/all of the individuals you will be using in your CKMR study when
+estimating allele frequencies. This is because all alleles that you
+might encounter when doing kin-finding must have been accounted for and
+must have allele frequencies computed for them. Especially when using
+multiallelic markers like microhaplotypes or microsatellites, it is
+important to make sure that every allele that you might encounter during
+kin-finding is accounted for during the allele frequency and power
+estimation phases of the analysis.</p>
+<p>The file that holds the genotypes comes with the <code>CKMRsim</code>
+package at:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">geno_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_genos_used_two_col.csv.gz"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span></code></pre></div>
-<p>When we read that in, we get a lot of warnings (they have been suppressed here so that the vignette will pass CRAN checks) that column names have been deduplicated. This is because each locus in the file occupies two columns and the names of those columns are the same (i.e., the name of the locus.)</p>
+<code class="sourceCode R"><span class="va">geno_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_genos_used_two_col.csv.gz"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span></code></pre></div>
+<p>When we read that in, we get a lot of warnings (they have been
+suppressed here so that the vignette will pass CRAN checks) that column
+names have been deduplicated. This is because each locus in the file
+occupies two columns and the names of those columns are the same (i.e.,
+the name of the locus.)</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">genos1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">geno_path</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span>
-<span class="co">#&gt; cols(</span>
-<span class="co">#&gt;   .default = col_double(),</span>
-<span class="co">#&gt;   NMFS_DNA_ID = col_character()</span>
-<span class="co">#&gt; )</span>
-<span class="co">#&gt; ℹ Use `spec()` for the full column specifications.</span></code></pre></div>
+<code class="sourceCode R"><span class="va">genos1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="va">geno_path</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; New names:</span>
+<span class="co">#&gt; <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">6091</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">157</span></span>
+<span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span></span>
+<span class="co">#&gt; <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span> <span style="font-weight: bold;">Delimiter:</span> "," <span style="color: #BB0000;">chr</span></span>
+<span class="co">#&gt; (1): NMFS_DNA_ID <span style="color: #00BB00;">dbl</span> (156): Plate_1_A01_Sat_GW603857_consensus...2,</span>
+<span class="co">#&gt; Plate_1_A01_Sat_GW603857_...</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data. <span style="color: #00BBBB;">ℹ</span></span>
+<span class="co">#&gt; Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A01_Sat_GW603857_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_1_A01_Sat_GW603857_consensus...2`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A01_Sat_GW603857_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_1_A01_Sat_GW603857_consensus...3`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A11_Sat_GE820299_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_1_A11_Sat_GE820299_consensus...4`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A11_Sat_GE820299_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_1_A11_Sat_GE820299_consensus...5`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_A09_Sat_EW986980_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_2_A09_Sat_EW986980_consensus...6`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_A09_Sat_EW986980_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_2_A09_Sat_EW986980_consensus...7`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_C08_Sat_EW987116_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_2_C08_Sat_EW987116_consensus...8`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_C08_Sat_EW987116_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_2_C08_Sat_EW987116_consensus...9`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_3_C03_Sat_GE798118_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_3_C03_Sat_GE798118_consensus...10`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_3_C03_Sat_GE798118_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_3_C03_Sat_GE798118_consensus...11`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_E10_Sat_EW976030_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_4_E10_Sat_EW976030_consensus...12`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_E10_Sat_EW976030_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_4_E10_Sat_EW976030_consensus...13`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_G06_Sat_EW976181_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_4_G06_Sat_EW976181_consensus...14`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_G06_Sat_EW976181_consensus` -&gt;</span>
+<span class="co">#&gt;   `Plate_4_G06_Sat_EW976181_consensus...15`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1049` -&gt; `tag_id_1049...16`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1049` -&gt; `tag_id_1049...17`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_108` -&gt; `tag_id_108...18`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_108` -&gt; `tag_id_108...19`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1184` -&gt; `tag_id_1184...20`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1184` -&gt; `tag_id_1184...21`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1229` -&gt; `tag_id_1229...22`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1229` -&gt; `tag_id_1229...23`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1366` -&gt; `tag_id_1366...24`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1366` -&gt; `tag_id_1366...25`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1399` -&gt; `tag_id_1399...26`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1399` -&gt; `tag_id_1399...27`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1428` -&gt; `tag_id_1428...28`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1428` -&gt; `tag_id_1428...29`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_143` -&gt; `tag_id_143...30`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_143` -&gt; `tag_id_143...31`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1441` -&gt; `tag_id_1441...32`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1441` -&gt; `tag_id_1441...33`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1449` -&gt; `tag_id_1449...34`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1449` -&gt; `tag_id_1449...35`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1471` -&gt; `tag_id_1471...36`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1471` -&gt; `tag_id_1471...37`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1498` -&gt; `tag_id_1498...38`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1498` -&gt; `tag_id_1498...39`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1558` -&gt; `tag_id_1558...40`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1558` -&gt; `tag_id_1558...41`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1576` -&gt; `tag_id_1576...42`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1576` -&gt; `tag_id_1576...43`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1598` -&gt; `tag_id_1598...44`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1598` -&gt; `tag_id_1598...45`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1604` -&gt; `tag_id_1604...46`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1604` -&gt; `tag_id_1604...47`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1613` -&gt; `tag_id_1613...48`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1613` -&gt; `tag_id_1613...49`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_162` -&gt; `tag_id_162...50`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_162` -&gt; `tag_id_162...51`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1652` -&gt; `tag_id_1652...52`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1652` -&gt; `tag_id_1652...53`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_170` -&gt; `tag_id_170...54`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_170` -&gt; `tag_id_170...55`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1708` -&gt; `tag_id_1708...56`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1708` -&gt; `tag_id_1708...57`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1748` -&gt; `tag_id_1748...58`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1748` -&gt; `tag_id_1748...59`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1751` -&gt; `tag_id_1751...60`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1751` -&gt; `tag_id_1751...61`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1762` -&gt; `tag_id_1762...62`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1762` -&gt; `tag_id_1762...63`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_179` -&gt; `tag_id_179...64`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_179` -&gt; `tag_id_179...65`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1808` -&gt; `tag_id_1808...66`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1808` -&gt; `tag_id_1808...67`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1836` -&gt; `tag_id_1836...68`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1836` -&gt; `tag_id_1836...69`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1871` -&gt; `tag_id_1871...70`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1871` -&gt; `tag_id_1871...71`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1880` -&gt; `tag_id_1880...72`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1880` -&gt; `tag_id_1880...73`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1889` -&gt; `tag_id_1889...74`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1889` -&gt; `tag_id_1889...75`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1950` -&gt; `tag_id_1950...76`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1950` -&gt; `tag_id_1950...77`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1961` -&gt; `tag_id_1961...78`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1961` -&gt; `tag_id_1961...79`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1966` -&gt; `tag_id_1966...80`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1966` -&gt; `tag_id_1966...81`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1982` -&gt; `tag_id_1982...82`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1982` -&gt; `tag_id_1982...83`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1994` -&gt; `tag_id_1994...84`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1994` -&gt; `tag_id_1994...85`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1999` -&gt; `tag_id_1999...86`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1999` -&gt; `tag_id_1999...87`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2008` -&gt; `tag_id_2008...88`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2008` -&gt; `tag_id_2008...89`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2017` -&gt; `tag_id_2017...90`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2017` -&gt; `tag_id_2017...91`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2062` -&gt; `tag_id_2062...92`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2062` -&gt; `tag_id_2062...93`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2082` -&gt; `tag_id_2082...94`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2082` -&gt; `tag_id_2082...95`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2114` -&gt; `tag_id_2114...96`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2114` -&gt; `tag_id_2114...97`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2134` -&gt; `tag_id_2134...98`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2134` -&gt; `tag_id_2134...99`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2178` -&gt; `tag_id_2178...100`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2178` -&gt; `tag_id_2178...101`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_220` -&gt; `tag_id_220...102`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_220` -&gt; `tag_id_220...103`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2203` -&gt; `tag_id_2203...104`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2203` -&gt; `tag_id_2203...105`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_221` -&gt; `tag_id_221...106`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_221` -&gt; `tag_id_221...107`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2214` -&gt; `tag_id_2214...108`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2214` -&gt; `tag_id_2214...109`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2237` -&gt; `tag_id_2237...110`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2237` -&gt; `tag_id_2237...111`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2247` -&gt; `tag_id_2247...112`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2247` -&gt; `tag_id_2247...113`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2258` -&gt; `tag_id_2258...114`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2258` -&gt; `tag_id_2258...115`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2301` -&gt; `tag_id_2301...116`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2301` -&gt; `tag_id_2301...117`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_250` -&gt; `tag_id_250...118`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_250` -&gt; `tag_id_250...119`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2607` -&gt; `tag_id_2607...120`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2607` -&gt; `tag_id_2607...121`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2635` -&gt; `tag_id_2635...122`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2635` -&gt; `tag_id_2635...123`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_265` -&gt; `tag_id_265...124`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_265` -&gt; `tag_id_265...125`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_325` -&gt; `tag_id_325...126`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_325` -&gt; `tag_id_325...127`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_402` -&gt; `tag_id_402...128`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_402` -&gt; `tag_id_402...129`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_410` -&gt; `tag_id_410...130`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_410` -&gt; `tag_id_410...131`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_436` -&gt; `tag_id_436...132`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_436` -&gt; `tag_id_436...133`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_572` -&gt; `tag_id_572...134`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_572` -&gt; `tag_id_572...135`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_67` -&gt; `tag_id_67...136`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_67` -&gt; `tag_id_67...137`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_788` -&gt; `tag_id_788...138`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_788` -&gt; `tag_id_788...139`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_843` -&gt; `tag_id_843...140`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_843` -&gt; `tag_id_843...141`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_855` -&gt; `tag_id_855...142`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_855` -&gt; `tag_id_855...143`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_874` -&gt; `tag_id_874...144`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_874` -&gt; `tag_id_874...145`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_875` -&gt; `tag_id_875...146`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_875` -&gt; `tag_id_875...147`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_879` -&gt; `tag_id_879...148`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_879` -&gt; `tag_id_879...149`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_913` -&gt; `tag_id_913...150`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_913` -&gt; `tag_id_913...151`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_934` -&gt; `tag_id_934...152`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_934` -&gt; `tag_id_934...153`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_942` -&gt; `tag_id_942...154`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_942` -&gt; `tag_id_942...155`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_981` -&gt; `tag_id_981...156`</span>
+<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_981` -&gt; `tag_id_981...157`</span></code></pre></div>
 <p>Let’s look at the first bit of the resulting tibble:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">genos1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
-<span class="co">#&gt; # A tibble: 10 x 10</span>
-<span class="co">#&gt;    NMFS_DNA_ID Plate_1_A01_Sat… Plate_1_A01_Sat… Plate_1_A11_Sat…</span>
-<span class="co">#&gt;    &lt;chr&gt;                  &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 R011743                    1                1                3</span>
-<span class="co">#&gt;  2 R011744                    1                1                1</span>
-<span class="co">#&gt;  3 R011753                    1                1                1</span>
-<span class="co">#&gt;  4 R011755                    1                2                1</span>
-<span class="co">#&gt;  5 R011765                    1                1                2</span>
-<span class="co">#&gt;  6 R011766                    1                2                1</span>
-<span class="co">#&gt;  7 R011769                    1                2                1</span>
-<span class="co">#&gt;  8 R011772                    1                1                1</span>
-<span class="co">#&gt;  9 R011775                    1                2                1</span>
-<span class="co">#&gt; 10 R011778                    1                1                1</span>
-<span class="co">#&gt; # … with 6 more variables: Plate_1_A11_Sat_GE820299_consensus_1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   Plate_2_A09_Sat_EW986980_consensus &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   Plate_2_A09_Sat_EW986980_consensus_1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   Plate_2_C08_Sat_EW987116_consensus &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   Plate_2_C08_Sat_EW987116_consensus_1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   Plate_3_C03_Sat_GE798118_consensus &lt;dbl&gt;</span></code></pre></div>
-<p>That is not a super informative print out. But it does show us that the <code>NMFS_DNA_ID</code> column is the identifier for the indvidual fish, and that the genetic data start in column 2. Also, the even columns have the locus name and the odd columns (after the first one) are named with the locus names plus a <code>_1</code> appended to them. The alleles of each genotype are recorded as numbers.</p>
-<div id="which-are-adults-and-which-are-juveniles" class="section level3">
-<h3 class="hasAnchor">
-<a href="#which-are-adults-and-which-are-juveniles" class="anchor"></a>Which are adults and which are juveniles?</h3>
-<p>We also have in the package two data files that list the IDs of the fish that are adults (and potentially parents) and which are juveniles (and potentially offspring). These correspond to the dryad files <code>kelp_adults.rds</code> and <code>kelp_juveniles.rds</code>. We get those data and then make a tibble of IDs with a column telling what life stage they were sampled at, and keep only those IDs that we have genotypes for in <code>genos1</code>:</p>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 10</span></span>
+<span class="co">#&gt;    NMFS_DNA_ID Plate_1_A01_Sat_GW603857_conse… Plate_1_A01_Sat… Plate_1_A11_Sat…</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R011743                                   1                1                3</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R011744                                   1                1                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R011753                                   1                1                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R011755                                   1                2                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R011765                                   1                1                2</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R011766                                   1                2                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R011769                                   1                2                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R011772                                   1                1                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R011775                                   1                2                1</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R011778                                   1                1                1</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 6 more variables: Plate_1_A11_Sat_GE820299_consensus...5 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_A09_Sat_EW986980_consensus...6 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_A09_Sat_EW986980_consensus...7 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_C08_Sat_EW987116_consensus...8 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_C08_Sat_EW987116_consensus...9 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   Plate_3_C03_Sat_GE798118_consensus...10 &lt;dbl&gt;</span></span></code></pre></div>
+<p>That is not a super informative print out. But it does show us that
+the <code>NMFS_DNA_ID</code> column is the identifier for the indvidual
+fish, and that the genetic data start in column 2. Also, the even
+columns have the locus name and the odd columns (after the first one)
+are named with the locus names plus a <code>_1</code> appended to them.
+The alleles of each genotype are recorded as numbers.</p>
+<div class="section level3">
+<h3 id="which-are-adults-and-which-are-juveniles">Which are adults and which are juveniles?<a class="anchor" aria-label="anchor" href="#which-are-adults-and-which-are-juveniles"></a>
+</h3>
+<p>We also have in the package two data files that list the IDs of the
+fish that are adults (and potentially parents) and which are juveniles
+(and potentially offspring). These correspond to the dryad files
+<code>kelp_adults.rds</code> and <code>kelp_juveniles.rds</code>. We get
+those data and then make a tibble of IDs with a column telling what life
+stage they were sampled at, and keep only those IDs that we have
+genotypes for in <code>genos1</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adults</span> <span class="op">&lt;-</span> <span class="fu">read_rds</span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_adults.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">juvies</span> <span class="op">&lt;-</span> <span class="fu">read_rds</span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_juveniles.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">adults</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_adults.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">juvies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_juveniles.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span>
 
 
-<span class="va">life_stages</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span>
-  <span class="fu">tibble</span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"adult"</span>,
+<span class="va">life_stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"adult"</span>,
          NMFS_DNA_ID <span class="op">=</span> <span class="va">adults</span><span class="op">)</span>,
-  <span class="fu">tibble</span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"juvenile"</span>,
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"juvenile"</span>,
          NMFS_DNA_ID <span class="op">=</span> <span class="va">juvies</span><span class="op">)</span>
-<span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span> <span class="op">%in%</span> <span class="va">genos1</span><span class="op">$</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span></code></pre></div>
-<p>Here we can see the numbers of adult and juvenile fish we are dealing with:</p>
+<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">genos1</span><span class="op">$</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span></code></pre></div>
+<p>Here we can see the numbers of adult and juvenile fish we are dealing
+with:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">life_stages</span> <span class="op">%&gt;%</span>
-  <span class="fu">count</span><span class="op">(</span><span class="va">stage</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 2 x 2</span>
+<code class="sourceCode R"><span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">stage</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span>
 <span class="co">#&gt;   stage        n</span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt;</span>
-<span class="co">#&gt; 1 adult     1847</span>
-<span class="co">#&gt; 2 juvenile  4244</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adult     <span style="text-decoration: underline;">1</span>847</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> juvenile  <span style="text-decoration: underline;">4</span>244</span></code></pre></div>
 </div>
 </div>
-<div id="estimating-power-for-relationship-inference" class="section level2">
-<h2 class="hasAnchor">
-<a href="#estimating-power-for-relationship-inference" class="anchor"></a>Estimating Power for Relationship Inference</h2>
-<p>Estimating the power that this set of markers is expected to give us for pairwise relationship inference involves doing Monte Carlo simulations from the allele frequencies in the population. So, we are going to first have to estimate the allele frequencies from our genotype data set. And, we have to present those allele frequencies in a specific format that <code>CKMRsim</code> is expecting.</p>
-<div id="allele-frequency-input-format" class="section level3">
-<h3 class="hasAnchor">
-<a href="#allele-frequency-input-format" class="anchor"></a>Allele Frequency Input Format</h3>
-<p><code>CKMRsim</code> is designed to be able to work with information about markers that are in known locations on different chromosomes within the genome. Note that genome coordinates of markers <em>are not required</em> but the input format has a place to record the chromome and position of each marker. If these are not known, we fill them in with dummy values, as will be shown. If simulations are done without physical linkage, then the values used have no effect.</p>
-<p>The package data <code>long_markers</code> shows an example of the allele frequency format that <code>CKMRsim</code> expects. It looks like this:</p>
+<div class="section level2">
+<h2 id="estimating-power-for-relationship-inference">Estimating Power for Relationship Inference<a class="anchor" aria-label="anchor" href="#estimating-power-for-relationship-inference"></a>
+</h2>
+<p>Estimating the power that this set of markers is expected to give us
+for pairwise relationship inference involves doing Monte Carlo
+simulations from the allele frequencies in the population. So, we are
+going to first have to estimate the allele frequencies from our genotype
+data set. And, we have to present those allele frequencies in a specific
+format that <code>CKMRsim</code> is expecting.</p>
+<div class="section level3">
+<h3 id="allele-frequency-input-format">Allele Frequency Input Format<a class="anchor" aria-label="anchor" href="#allele-frequency-input-format"></a>
+</h3>
+<p><code>CKMRsim</code> is designed to be able to work with information
+about markers that are in known locations on different chromosomes
+within the genome. Note that genome coordinates of markers <em>are not
+required</em> but the input format has a place to record the chromome
+and position of each marker. If these are not known, we fill them in
+with dummy values, as will be shown. If simulations are done without
+physical linkage, then the values used have no effect.</p>
+<p>The package data <code>long_markers</code> shows an example of the
+allele frequency format that <code>CKMRsim</code> expects. It looks like
+this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">long_markers</span>
-<span class="co">#&gt; # A tibble: 53,637 x 7</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 53,637 × 7</span></span>
 <span class="co">#&gt;    Chrom Locus     Pos Allele LocIdx AlleIdx   Freq</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     4 chr4-1   3845 a1          1       1 0.790 </span>
-<span class="co">#&gt;  2     4 chr4-1   3845 a2          1       2 0.210 </span>
-<span class="co">#&gt;  3     4 chr4-2  71520 a1          2       1 0.485 </span>
-<span class="co">#&gt;  4     4 chr4-2  71520 a3          2       2 0.237 </span>
-<span class="co">#&gt;  5     4 chr4-2  71520 a2          2       3 0.167 </span>
-<span class="co">#&gt;  6     4 chr4-2  71520 a4          2       4 0.112 </span>
-<span class="co">#&gt;  7     4 chr4-3 105104 a3          3       1 0.499 </span>
-<span class="co">#&gt;  8     4 chr4-3 105104 a2          3       2 0.402 </span>
-<span class="co">#&gt;  9     4 chr4-3 105104 a1          3       3 0.0989</span>
-<span class="co">#&gt; 10     4 chr4-4 256481 a4          4       1 0.402 </span>
-<span class="co">#&gt; # … with 53,627 more rows</span></code></pre></div>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a1          1       1 0.790 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a2          1       2 0.210 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a1          2       1 0.485 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a3          2       2 0.237 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a2          2       3 0.167 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a4          2       4 0.112 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a3          3       1 0.499 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a2          3       2 0.402 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a1          3       3 0.098<span style="text-decoration: underline;">9</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     4 chr4-4 <span style="text-decoration: underline;">256</span>481 a4          4       1 0.402 </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 53,627 more rows</span></span></code></pre></div>
 <p>The main columns are as follows:</p>
 <ul>
 <li>
-<code>Chrom</code> should be a character or integer denoting which chromosome the marker is on. (For example <code>1</code> or <code>X</code> or <code>Omy12</code>)</li>
+<code>Chrom</code> should be a character or integer denoting which
+chromosome the marker is on. (For example <code>1</code> or
+<code>X</code> or <code>Omy12</code>)</li>
 <li>
-<code>Locus</code> gives a character vector with the names of the markers/loci. Please don’t use spaces in the marker names!</li>
+<code>Locus</code> gives a character vector with the names of the
+markers/loci. Please don’t use spaces in the marker names!</li>
 <li>
-<code>Pos</code> gives the genome coordinates of the marker. This needs to be a number (double or integer)</li>
+<code>Pos</code> gives the genome coordinates of the marker. This
+needs to be a number (double or integer)</li>
 <li>
-<code>Allele</code> gives the name of each allele at each locus. This <em>must</em> be a character vector. So, in our example, we will coerce the numbers we have for each locus into a character vector. Please do not use spaces in allele names.</li>
+<code>Allele</code> gives the name of each allele at each locus.
+This <em>must</em> be a character vector. So, in our example, we will
+coerce the numbers we have for each locus into a character vector.
+Please do not use spaces in allele names.</li>
 <li>
-<code>Freq</code> is the frequency of each allele in the population. These should sum to 1.0 over each locus.</li>
+<code>Freq</code> is the frequency of each allele in the population.
+These should sum to 1.0 over each locus.</li>
 </ul>
-<p>The remaining columns, <code>LocIdx</code> and <code>AlleIdx</code> are integer indices that get assigned to each locus and to each allele within each index. These columns get filled by using the <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code> function.</p>
+<p>The remaining columns, <code>LocIdx</code> and <code>AlleIdx</code>
+are integer indices that get assigned to each locus and to each allele
+within each index. These columns get filled by using the
+<code><a href="../reference/reindex_markers.html">reindex_markers()</a></code> function.</p>
 </div>
-<div id="computing-allele-frequencies-from-genotype-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#computing-allele-frequencies-from-genotype-data" class="anchor"></a>Computing Allele Frequencies from Genotype Data</h3>
-<p>The strategy for doing this in the tidyverse is to make a long data frame with columns <code>NMFS_DNA_ID</code>, <code>Locus</code>, <code>gene_copy</code> and <code>Allele</code>, and then summarising as appropriate. Notice that, since these fish are diploids, we will let <code>gene_copy</code> be <code>a</code> or <code>b</code> to denote whether we are talking about the allelic type of the first or second gene copy of the locus in a diploid individual. To do this, we will rename the column headers to look like <code>Locus.gene_copy</code>, then do some gathering and separating.</p>
-<p><strong>MISSING DATA:</strong> Note that missing data in this data set is denoted by <code>0</code>, and it must be denoted by <code>NA</code>. So, turn Allele == 0 to NA:</p>
+<div class="section level3">
+<h3 id="computing-allele-frequencies-from-genotype-data">Computing Allele Frequencies from Genotype Data<a class="anchor" aria-label="anchor" href="#computing-allele-frequencies-from-genotype-data"></a>
+</h3>
+<p>The strategy for doing this in the tidyverse is to make a long data
+frame with columns <code>NMFS_DNA_ID</code>, <code>Locus</code>,
+<code>gene_copy</code> and <code>Allele</code>, and then summarising as
+appropriate. Notice that, since these fish are diploids, we will let
+<code>gene_copy</code> be <code>a</code> or <code>b</code> to denote
+whether we are talking about the allelic type of the first or second
+gene copy of the locus in a diploid individual. To do this, we will
+rename the column headers to look like <code>Locus.gene_copy</code>,
+then do some gathering and separating.</p>
+<p><strong>MISSING DATA:</strong> Note that missing data in this data
+set is denoted by <code>0</code>, and it must be denoted by
+<code>NA</code>. So, turn Allele == 0 to NA:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># make note of the current order of loci in the data set</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span>
-<span class="va">loci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span>
+<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span>
+<span class="va">loci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span>, <span class="st">"\\.\\.\\.[0-9]+$"</span>, <span class="st">""</span><span class="op">)</span>
 
 <span class="co">#  reset the locus names</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">3</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">str_c</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span>, <span class="st">"1"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">str_c</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span>, <span class="st">"2"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">loci</span>, <span class="st">"1"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">loci</span>, <span class="st">"2"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
 
 <span class="co"># then make some long format genotypes</span>
-<span class="va">long_genos</span> <span class="op">&lt;-</span> <span class="va">genos1</span> <span class="op">%&gt;%</span> 
-  <span class="fu">gather</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"loc"</span>, value <span class="op">=</span> <span class="st">"Allele"</span>, <span class="op">-</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">separate</span><span class="op">(</span><span class="va">loc</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Locus"</span>, <span class="st">"gene_copy"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\\."</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">Allele</span> <span class="op">==</span> <span class="st">"0"</span>, <span class="cn">NA</span>, <span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">rename</span><span class="op">(</span>Indiv <span class="op">=</span> <span class="va">NMFS_DNA_ID</span><span class="op">)</span></code></pre></div>
-<p><strong>IMPORTANT NOTE</strong> The data frame <code>long_genos</code> here is a long-format specification of multilocus genotypes of individuals. This is a a basic input type that will be used later in CKMRsim. It looks like this:</p>
+<span class="va">long_genos</span> <span class="op">&lt;-</span> <span class="va">genos1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"loc"</span>, value <span class="op">=</span> <span class="st">"Allele"</span>, <span class="op">-</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">loc</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Locus"</span>, <span class="st">"gene_copy"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\\."</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">Allele</span> <span class="op">==</span> <span class="st">"0"</span>, <span class="cn">NA</span>, <span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>Indiv <span class="op">=</span> <span class="va">NMFS_DNA_ID</span><span class="op">)</span></code></pre></div>
+<p><strong>IMPORTANT NOTE</strong> The data frame
+<code>long_genos</code> here is a long-format specification of
+multilocus genotypes of individuals. This is a a basic input type that
+will be used later in CKMRsim. It looks like this:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">long_genos</span>
-<span class="co">#&gt; # A tibble: 950,196 x 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 950,196 × 4</span></span>
 <span class="co">#&gt;    Indiv   Locus                              gene_copy Allele</span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;                              &lt;chr&gt;     &lt;chr&gt; </span>
-<span class="co">#&gt;  1 R011743 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  2 R011744 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  3 R011753 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  4 R011755 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  5 R011765 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  6 R011766 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  7 R011769 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  8 R011772 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt;  9 R011775 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt; 10 R011778 Plate_1_A01_Sat_GW603857_consensus 2         1     </span>
-<span class="co">#&gt; # … with 950,186 more rows</span></code></pre></div>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R011743 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R011744 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R011753 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R011755 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R011765 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R011766 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R011769 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R011772 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R011775 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R011778 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 950,186 more rows</span></span></code></pre></div>
 <p>Note this about the data frame:</p>
 <ol style="list-style-type: decimal">
 <li>It has four columns: Indiv, Locus, gene_copy, and Allele.<br>
 </li>
-<li>Alleles are named with characters (even if they are numbers, they must be coerced to characters).</li>
-<li>The gene_copy column contains either a 1 or a 2 in every row, telling us which copy of the gene (in a diploid) is which allele.<br>
+<li>Alleles are named with characters (even if they are numbers, they
+must be coerced to characters).</li>
+<li>The gene_copy column contains either a 1 or a 2 in every row,
+telling us which copy of the gene (in a diploid) is which allele.<br>
 </li>
 <li>Missing data in the Allele column is given by NA.</li>
 </ol>
-<p>Now we can compute the allele frequencies, and while we are at it, we will say that these markers are all on chromosome <code>Unk</code> in positions given by their order in the original data set. And we add columns for AlleIdx and LocIdx, as required to pass this tibble into <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code>, but we can leave each entry as NA.</p>
+<p>Now we can compute the allele frequencies, and while we are at it, we
+will say that these markers are all on chromosome <code>Unk</code> in
+positions given by their order in the original data set. And we add
+columns for AlleIdx and LocIdx, as required to pass this tibble into
+<code><a href="../reference/reindex_markers.html">reindex_markers()</a></code>, but we can leave each entry as NA.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alle_freqs</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op">%&gt;%</span>
-  <span class="fu">count</span><span class="op">(</span><span class="va">Locus</span>, <span class="va">Allele</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">group_by</span><span class="op">(</span><span class="va">Locus</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>Freq <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="va">alle_freqs</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">Locus</span>, <span class="va">Allele</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Locus</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Freq <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,
          Chrom <span class="op">=</span> <span class="st">"Unk"</span>,
-         Pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Locus</span>, levels <span class="op">=</span> <span class="va">loci</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">select</span><span class="op">(</span><span class="va">Chrom</span>, <span class="va">Pos</span>, <span class="va">Locus</span>, <span class="va">Allele</span>, <span class="va">Freq</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">arrange</span><span class="op">(</span><span class="va">Pos</span>, <span class="fu">desc</span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>AlleIdx <span class="op">=</span> <span class="cn">NA</span>,
-         LocIdx <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span>
+         Pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Locus</span>, levels <span class="op">=</span> <span class="va">loci</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Chrom</span>, <span class="va">Pos</span>, <span class="va">Locus</span>, <span class="va">Allele</span>, <span class="va">Freq</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Pos</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>AlleIdx <span class="op">=</span> <span class="cn">NA</span>,
+         LocIdx <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># see what that looks like:</span>
 <span class="va">alle_freqs</span>
-<span class="co">#&gt; # A tibble: 993 x 7</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 993 × 7</span></span>
 <span class="co">#&gt;    Chrom   Pos Locus                              Allele     Freq AlleIdx LocIdx</span>
-<span class="co">#&gt;    &lt;chr&gt; &lt;int&gt; &lt;chr&gt;                              &lt;chr&gt;     &lt;dbl&gt; &lt;lgl&gt;   &lt;lgl&gt; </span>
-<span class="co">#&gt;  1 Unk       1 Plate_1_A01_Sat_GW603857_consensus 1       6.33e-1 NA      NA    </span>
-<span class="co">#&gt;  2 Unk       1 Plate_1_A01_Sat_GW603857_consensus 2       3.66e-1 NA      NA    </span>
-<span class="co">#&gt;  3 Unk       1 Plate_1_A01_Sat_GW603857_consensus 3       4.10e-4 NA      NA    </span>
-<span class="co">#&gt;  4 Unk       1 Plate_1_A01_Sat_GW603857_consensus 4       2.46e-4 NA      NA    </span>
-<span class="co">#&gt;  5 Unk       1 Plate_1_A01_Sat_GW603857_consensus 5       8.21e-5 NA      NA    </span>
-<span class="co">#&gt;  6 Unk       1 Plate_1_A01_Sat_GW603857_consensus 6       8.21e-5 NA      NA    </span>
-<span class="co">#&gt;  7 Unk       2 Plate_1_A11_Sat_GE820299_consensus 1       7.01e-1 NA      NA    </span>
-<span class="co">#&gt;  8 Unk       2 Plate_1_A11_Sat_GE820299_consensus 2       2.49e-1 NA      NA    </span>
-<span class="co">#&gt;  9 Unk       2 Plate_1_A11_Sat_GE820299_consensus 3       2.45e-2 NA      NA    </span>
-<span class="co">#&gt; 10 Unk       2 Plate_1_A11_Sat_GE820299_consensus 4       1.19e-2 NA      NA    </span>
-<span class="co">#&gt; # … with 983 more rows</span></code></pre></div>
-<p><strong>Note:</strong> It is very important to remove the NAs from the allele frequencies as is done in the last step above.</p>
-<p>Once that is done, we pass them through the <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code> function to yield a data frame of allele frequencies that <code>CKRMsim</code> can use to do simulations.</p>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 1       6.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 2       3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 3       4.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 4       2.46<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 5       8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 6       8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 1       7.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 2       2.49<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 3       2.45<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 4       1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 983 more rows</span></span></code></pre></div>
+<p><strong>Note:</strong> It is very important to remove the NAs from
+the allele frequencies as is done in the last step above.</p>
+<p>Once that is done, we pass them through the
+<code><a href="../reference/reindex_markers.html">reindex_markers()</a></code> function to yield a data frame of allele
+frequencies that <code>CKRMsim</code> can use to do simulations.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">afreqs_ready</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reindex_markers.html">reindex_markers</a></span><span class="op">(</span><span class="va">alle_freqs</span><span class="op">)</span></code></pre></div>
-<p>We now have what we need to do a simulation analysis of power for pairwise relationship inference from these markers.</p>
-<p>Note that we will come back to <code>long_genos</code> later to actually do the pairwise relationship inference.</p>
+<p>We now have what we need to do a simulation analysis of power for
+pairwise relationship inference from these markers.</p>
+<p>Note that we will come back to <code>long_genos</code> later to
+actually do the pairwise relationship inference.</p>
 </div>
-<div id="create-a-ckmr-object-create_ckmr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-a-ckmr-object-create_ckmr" class="anchor"></a>Create a CKMR object (<code>create_ckmr()</code>)</h3>
-<p>The first step in the simulation process is to create an object of class <code>ckmr</code> which holds a large number of matrices useful for simulating genotypes (and thus for estimating power for relationship inference). The main function that we use for this is <code><a href="../reference/create_ckmr.html">create_ckmr()</a></code>. This function takes, as input, the allele frequencies formatted as we have above, and a few other settings having to do with the relationships that the user is interested in simulation and the genotyping error models that the user want to consider, and then it creates all the necessary elements for doing the simulations.</p>
-<p>Specifically, the arguments you need to pass to <code><a href="../reference/create_ckmr.html">create_ckmr()</a></code> are as follows:</p>
+<div class="section level3">
+<h3 id="create-a-ckmr-object-create_ckmr">Create a CKMR object (<code>create_ckmr()</code>)<a class="anchor" aria-label="anchor" href="#create-a-ckmr-object-create_ckmr"></a>
+</h3>
+<p>The first step in the simulation process is to create an object of
+class <code>ckmr</code> which holds a large number of matrices useful
+for simulating genotypes (and thus for estimating power for relationship
+inference). The main function that we use for this is
+<code><a href="../reference/create_ckmr.html">create_ckmr()</a></code>. This function takes, as input, the allele
+frequencies formatted as we have above, and a few other settings having
+to do with the relationships that the user is interested in simulation
+and the genotyping error models that the user want to consider, and then
+it creates all the necessary elements for doing the simulations.</p>
+<p>Specifically, the arguments you need to pass to
+<code><a href="../reference/create_ckmr.html">create_ckmr()</a></code> are as follows:</p>
 <ul>
 <li>
-<code>D</code> : the tibble of allele frequencies that has been run through <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code>.</li>
+<code>D</code> : the tibble of allele frequencies that has been run
+through <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code>.</li>
 <li>
-<code>kappa_matrix</code> : A matrix that describes the pairwise relationships that you will be wanting to jointly simulate genotypes and likelihoods for. Each row is named by what you want to call the relationship and there are three columns which give, respectively, the probability that a pair with such a relationship share 0, 1, or 2 genes <em>identical-by-descent</em>. The CKMRsim package comes with a matrix called <code>kappas</code> that has this information for 12 relationships:
+<code>kappa_matrix</code> : A matrix that describes the pairwise
+relationships that you will be wanting to jointly simulate genotypes and
+likelihoods for. Each row is named by what you want to call the
+relationship and there are three columns which give, respectively, the
+probability that a pair with such a relationship share 0, 1, or 2 genes
+<em>identical-by-descent</em>. The CKMRsim package comes with a matrix
+called <code>kappas</code> that has this information for 12
+relationships:
 <ul>
 <li>
-<strong>MZ</strong> : monozgotic twins (or “self”). This can be used to figure out how much power you have for identifying the same individual, sampled twice.</li>
+<strong>MZ</strong> : monozgotic twins (or “self”). This can be used
+to figure out how much power you have for identifying the same
+individual, sampled twice.</li>
 <li>
 <strong>PO</strong> : parent-offspring.</li>
 <li>
@@ -331,7 +605,8 @@
 <li>
 <strong>GP</strong> : grandparent - grandoffspring.</li>
 <li>
-<strong>AN</strong> : aunt-neice (same as uncle-nephew or any such avuncular relationship)</li>
+<strong>AN</strong> : aunt-neice (same as uncle-nephew or any such
+avuncular relationship)</li>
 <li>
 <strong>DFC</strong> : double first cousins.</li>
 <li>
@@ -339,7 +614,8 @@
 <li>
 <strong>HC</strong> : half cousins.</li>
 <li>
-<strong>U</strong> : unrelated. The <code>kappas</code> matrix looks like this:</li>
+<strong>U</strong> : unrelated. The <code>kappas</code> matrix looks
+like this:</li>
 </ul>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kappas</span>
@@ -351,6 +627,7 @@
 <span class="co">#&gt; GP   0.500000 0.50000 0.000000</span>
 <span class="co">#&gt; AN   0.500000 0.50000 0.000000</span>
 <span class="co">#&gt; DFC  0.562500 0.37500 0.062500</span>
+<span class="co">#&gt; HAN  0.750000 0.25000 0.000000</span>
 <span class="co">#&gt; FC   0.750000 0.25000 0.000000</span>
 <span class="co">#&gt; HFC  0.875000 0.12500 0.000000</span>
 <span class="co">#&gt; DHFC 0.765625 0.21875 0.015625</span>
@@ -359,25 +636,46 @@
 <span class="co">#&gt; U    1.000000 0.00000 0.000000</span></code></pre></div>
 </li>
 <li>
-<code>ge_mod_assumed</code> : a function that describes the genotyping error model that will be applied to the simulated data when computing the likelihoods of the genotypes. In this case we will use <code>ge_model_TGIE</code> which is appropriate for integer-coded data. More information about this is in the vignette about writing genotyping error functions: <a href="CKMRsim-writing-geno-error-funcs.html#the-tgie-function">the-tgie-function</a>.</li>
+<code>ge_mod_assumed</code> : a function that describes the
+genotyping error model that will be applied to the simulated data when
+computing the likelihoods of the genotypes. In this case we will use
+<code>ge_model_TGIE</code> which is appropriate for integer-coded data.
+More information about this is in the vignette about writing genotyping
+error functions: <a href="CKMRsim-writing-geno-error-funcs.html#the-tgie-function">the-tgie-function</a>.</li>
 <li>
-<code>ge_mod_true</code> : a function that describes the genotyping error model that will actually be used to simulate the genotype data. Being able to separately specify these two models (assumed and true) allows the user to investigate the effects of misspecification of the genotyping error model.</li>
+<code>ge_mod_true</code> : a function that describes the genotyping
+error model that will actually be used to simulate the genotype data.
+Being able to separately specify these two models (assumed and true)
+allows the user to investigate the effects of misspecification of the
+genotyping error model.</li>
 <li>
-<code>ge_mod_assumed_pars_list</code> a list of named parameters for the assumed genotyping error model (or, leave blank to use the defaults).</li>
+<code>ge_mod_assumed_pars_list</code> a list of named parameters for
+the assumed genotyping error model (or, leave blank to use the
+defaults).</li>
 <li>
-<code>ge_mod_true_pars_list</code> a list of named parameters for the true genotyping error model (or, leave blank to use the defaults).</li>
+<code>ge_mod_true_pars_list</code> a list of named parameters for
+the true genotyping error model (or, leave blank to use the
+defaults).</li>
 </ul>
-<p>For the present example we are going to start with the assumption that the true and the assumed genotyping error models are the same: true-genotype-independent model with error rate (epsilon) equal to 1 in 200. We will be concerned with how well we can distinguish Parent-offspring pairs from unrelated, and full-sibling pairs from unrelated, and we also want to see if half-siblings might sometimes look like full siblings. So, we will create this ckmr object with the following relationships: PO, FS, HS, U. We do all that like this:</p>
+<p>For the present example we are going to start with the assumption
+that the true and the assumed genotyping error models are the same:
+true-genotype-independent model with error rate (epsilon) equal to 1 in
+200. We will be concerned with how well we can distinguish
+Parent-offspring pairs from unrelated, and full-sibling pairs from
+unrelated, and we also want to see if half-siblings might sometimes look
+like full siblings. So, we will create this ckmr object with the
+following relationships: PO, FS, HS, U. We do all that like this:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_ckmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_ckmr.html">create_ckmr</a></span><span class="op">(</span>
   D <span class="op">=</span> <span class="va">afreqs_ready</span>,
-  kappa_matrix <span class="op">=</span> <span class="va">kappas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span>, <span class="op">]</span>,
+  kappa_matrix <span class="op">=</span> <span class="va">kappas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span>, <span class="op">]</span>,
   ge_mod_assumed <span class="op">=</span> <span class="va">ge_model_TGIE</span>,
   ge_mod_true <span class="op">=</span> <span class="va">ge_model_TGIE</span>,
-  ge_mod_assumed_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>,
-  ge_mod_true_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>
+  ge_mod_assumed_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>,
+  ge_mod_true_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
-<p>Now, when we print this object we get a little summary of what is in it:</p>
+<p>Now, when we print this object we get a little summary of what is in
+it:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_ckmr</span>
 <span class="co">#&gt; A ckmr object with 78 loci having between 3 and 27 alleles.</span>
@@ -386,36 +684,98 @@
 <span class="co">#&gt; Assumed and true genotyping error models are the same</span></code></pre></div>
 <p>This is an S3 object of class <code>ckmr</code>.</p>
 </div>
-<div id="simulate-genotype-pairs-and-calculate-their-log-probabilities-simulate_qij" class="section level3">
-<h3 class="hasAnchor">
-<a href="#simulate-genotype-pairs-and-calculate-their-log-probabilities-simulate_qij" class="anchor"></a>Simulate genotype pairs and calculate their log-probabilities (<code>simulate_Qij()</code>)</h3>
-<p>Once we have created our <code>ckmr</code> object, we can use it to efficiently simulate the multilocus genotypes of pairs of individuals (of different relationships). At the same time, we can calculate the log-probability of those genotypes of simulated pairs of individuals under the assumption that they are of one relationship type or another. Those log genotype probabilities are the main ingredient for computing the log-likelihood ratios used for inferring relationships.</p>
-<p>The main function that we use in this step is <code><a href="../reference/simulate_Qij.html">simulate_Qij()</a></code>. This function simulates genotypes from different relationships, and then for each simulated genotype pair it also calculates the log probability of the pair of genotypes <em>conditional on the pair being</em> of one or several relationships. This function has four main inputs that we discuss here (the others allow the addition of missing data and physical linkage, and are discussed in other vignettes).</p>
+<div class="section level3">
+<h3 id="simulate-genotype-pairs-and-calculate-their-log-probabilities-simulate_qij">Simulate genotype pairs and calculate their log-probabilities
+(<code>simulate_Qij()</code>)<a class="anchor" aria-label="anchor" href="#simulate-genotype-pairs-and-calculate-their-log-probabilities-simulate_qij"></a>
+</h3>
+<p>Once we have created our <code>ckmr</code> object, we can use it to
+efficiently simulate the multilocus genotypes of pairs of individuals
+(of different relationships). At the same time, we can calculate the
+log-probability of those genotypes of simulated pairs of individuals
+under the assumption that they are of one relationship type or another.
+Those log genotype probabilities are the main ingredient for computing
+the log-likelihood ratios used for inferring relationships.</p>
+<p>The main function that we use in this step is
+<code><a href="../reference/simulate_Qij.html">simulate_Qij()</a></code>. This function simulates genotypes from
+different relationships, and then for each simulated genotype pair it
+also calculates the log probability of the pair of genotypes
+<em>conditional on the pair being</em> of one or several relationships.
+This function has four main inputs that we discuss here (the others
+allow the addition of missing data and physical linkage, and are
+discussed in other vignettes).</p>
 <ul>
 <li>
-<code>C</code> : the <code>ckmr</code> object to use for simulation and probabilty calculation.</li>
+<code>C</code> : the <code>ckmr</code> object to use for simulation
+and probabilty calculation.</li>
 <li>
-<code>sim_relats</code> : the set of true relationships you want to simulate genotypes from.<br>
+<code>sim_relats</code> : the set of true relationships you want to
+simulate genotypes from.<br>
 </li>
 <li>
-<code>calc_relats</code> : the set of assumed relationships you wish to compute genotype probabilities for, from the simulated data.</li>
+<code>calc_relats</code> : the set of assumed relationships you wish
+to compute genotype probabilities for, from the simulated data.</li>
 <li>
-<code>reps</code> : for each relationship in <code>sim_relats</code>, the number of genotype pairs to simulate. This is, by default 10,000.</li>
+<code>reps</code> : for each relationship in
+<code>sim_relats</code>, the number of genotype pairs to simulate. This
+is, by default 10,000.</li>
 </ul>
-<p>The arguments <code>sim_relats</code> and <code>calc_relats</code> can use some extra discussion here. Keep in mind that we are going to use the output of this function to learn about the distribution of likelihood ratios. For example, if we are trying to identify parent-offspring pairs, we will typically use the ratio of he probability of a pair’s genotypes given that they are parent-offspring, divided by the probability of the pair’s genotypes given that they are unrelated. We can denote such a likelihood ratio by PO/U. If we are looking for full sibling pairs, we would, rather, typically use the likelihood ratio FS/U. If, on the other we hand we wanted to know how well full-siblings might be resolved from half-siblings, we could use FS/HS. Whatever the target of one’s question, in order for CKMRsim to calculate such likelihood ratios from the simulated data, it is necessary to compute the probabilities that are used in the ratios—that is what the <code>calc_relats</code> argument is for. You should set it to a vector of the relationships that occur in the numerator or the denominator of the likelihood ratios that you might want to investigate. For example, if we want to investigate the distribution of the ratios PO/U, FS/U, and FS/HS, then <code>calc_relats</code> should be <code><a href="https://rdrr.io/r/base/c.html">c("PO", "FS", "HS", "U")</a></code>.</p>
-<p><code>sim_relats</code> refers to the set of relationships that pairs of individuals are simulated from. You will typically be interested in the distribution of a likelihood ratio <em>when the truth is relationship X</em>. For example, if doing parentage inference, then to compute false positive and false negative rates, you will need to know the distribution of PO/U when pairs are truly unrelated (U) and when they are truly parent-offspring, (PO). But, you might also be interested to know what the distribution of PO/U looks like when the pairs are actually full-siblings. If you were interested in all of the above, then you would set <code>sim_relats</code> equal to <code><a href="https://rdrr.io/r/base/c.html">c("PO", "FS", "U")</a></code>.</p>
-<p>In this vignette, for our current example, we will assume that we want to know whether our set of markers has sufficient power for identifying PO pairs and FS pairs from U pairs by using the likelihood ratios PO/U and FS/U. So, we will clearly want <code>calc_relats = c("PO", "FS", "U")</code>. But, let us also imagine that we are curious whether individuals that are truly HS might be mistakenly identified as FS; in such a case we will be curious about the distribution of FS/U when the truth is HS, so we will also need to simulate from HS. Hence we will use `sim_relats = c(“PO”, “FS”, “HS”, “U”)</p>
-<p>It is worth pointing out at this point that any relationship found in <code>calc_relats</code> or <code>sim_relats</code> must have been included as a rowname in the <code>kappa_matrix</code> argument to <code><a href="../reference/create_ckmr.html">create_ckmr()</a></code>!</p>
-<p>Here we simulate all the genotype-pair probabilities we will need:</p>
+<p>The arguments <code>sim_relats</code> and <code>calc_relats</code>
+can use some extra discussion here. Keep in mind that we are going to
+use the output of this function to learn about the distribution of
+likelihood ratios. For example, if we are trying to identify
+parent-offspring pairs, we will typically use the ratio of he
+probability of a pair’s genotypes given that they are parent-offspring,
+divided by the probability of the pair’s genotypes given that they are
+unrelated. We can denote such a likelihood ratio by PO/U. If we are
+looking for full sibling pairs, we would, rather, typically use the
+likelihood ratio FS/U. If, on the other we hand we wanted to know how
+well full-siblings might be resolved from half-siblings, we could use
+FS/HS. Whatever the target of one’s question, in order for CKMRsim to
+calculate such likelihood ratios from the simulated data, it is
+necessary to compute the probabilities that are used in the ratios—that
+is what the <code>calc_relats</code> argument is for. You should set it
+to a vector of the relationships that occur in the numerator or the
+denominator of the likelihood ratios that you might want to investigate.
+For example, if we want to investigate the distribution of the ratios
+PO/U, FS/U, and FS/HS, then <code>calc_relats</code> should be
+<code>c("PO", "FS", "HS", "U")</code>.</p>
+<p><code>sim_relats</code> refers to the set of relationships that pairs
+of individuals are simulated from. You will typically be interested in
+the distribution of a likelihood ratio <em>when the truth is
+relationship X</em>. For example, if doing parentage inference, then to
+compute false positive and false negative rates, you will need to know
+the distribution of PO/U when pairs are truly unrelated (U) and when
+they are truly parent-offspring, (PO). But, you might also be interested
+to know what the distribution of PO/U looks like when the pairs are
+actually full-siblings. If you were interested in all of the above, then
+you would set <code>sim_relats</code> equal to
+<code>c("PO", "FS", "U")</code>.</p>
+<p>In this vignette, for our current example, we will assume that we
+want to know whether our set of markers has sufficient power for
+identifying PO pairs and FS pairs from U pairs by using the likelihood
+ratios PO/U and FS/U. So, we will clearly want
+<code>calc_relats = c("PO", "FS", "U")</code>. But, let us also imagine
+that we are curious whether individuals that are truly HS might be
+mistakenly identified as FS; in such a case we will be curious about the
+distribution of FS/U when the truth is HS, so we will also need to
+simulate from HS. Hence we will use `sim_relats = c(“PO”, “FS”, “HS”,
+“U”)</p>
+<p>It is worth pointing out at this point that any relationship found in
+<code>calc_relats</code> or <code>sim_relats</code> must have been
+included as a rowname in the <code>kappa_matrix</code> argument to
+<code><a href="../reference/create_ckmr.html">create_ckmr()</a></code>!</p>
+<p>Here we simulate all the genotype-pair probabilities we will
+need:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_Qs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_Qij.html">simulate_Qij</a></span><span class="op">(</span><span class="va">ex1_ckmr</span>, 
-                       calc_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span>,
-                       sim_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span> <span class="op">)</span>
+                       calc_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span>,
+                       sim_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span> <span class="op">)</span>
 <span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: PO</span>
 <span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: FS</span>
 <span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: HS</span>
 <span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: U</span></code></pre></div>
-<p>If we print the resulting S3 object (of class <code>Qij</code>), we get a little information about it:</p>
+<p>If we print the resulting S3 object (of class <code>Qij</code>), we
+get a little information about it:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_Qs</span>
 <span class="co">#&gt; A Qij object with 10000 reps</span>
@@ -424,84 +784,150 @@
 <span class="co">#&gt; "calc_relats"   relationships: PO, FS, U</span>
 <span class="co">#&gt; rando_miss_n: 0</span></code></pre></div>
 </div>
-<div id="compute-log-likelihood-ratios-to-view-them-extract_logls" class="section level3">
-<h3 class="hasAnchor">
-<a href="#compute-log-likelihood-ratios-to-view-them-extract_logls" class="anchor"></a>Compute log-likelihood ratios to view them (<code>extract_logls()</code>)</h3>
-<p>This next step is not entirely necessary, but it helps to create pictures to understand what we are doing here, and the <code><a href="../reference/extract_logls.html">extract_logls()</a></code> function lets us get simulated log-likelihood ratios out of the <code>Qij</code> object we created above and plot a histogram or a density plot of the distributions. This is helpful for developing intuition about things and understanding what is going on.</p>
-<p>The main function here is <code><a href="../reference/extract_logls.html">extract_logls()</a></code>. It simply takes an object of class <code>Qij</code> and uses the information within it to compute log-likelihood ratios from all the genotype probabilities that are stored within it. There is one small twist: the numerator and denominator of the likelihood ratios can be mixtures of different relationship categories. For example, instead of just computing PO/U, you might want to compute a log likelihood ratio that reflects your belief that, of the genotyping pairs you are sampling, 95% are unrelated and the other 5% are full siblings. Then you might want to base your inference on a log-likelihood ratio that looked like: PO/(0.95 * U + 0.05 * FS).</p>
-<p>Often you will not want to do that, but, because <code><a href="../reference/extract_logls.html">extract_logls()</a></code> is designed to do that, you have explicitly tell it how much weight to give each relationship category in the numerator and the denominator of the log likelihood ratio.</p>
-<p>An example here should help. Let’s say we are interested in the distribution of the log likelihood ratio PO/U. Then we would do:</p>
+<div class="section level3">
+<h3 id="compute-log-likelihood-ratios-to-view-them-extract_logls">Compute log-likelihood ratios to view them
+(<code>extract_logls()</code>)<a class="anchor" aria-label="anchor" href="#compute-log-likelihood-ratios-to-view-them-extract_logls"></a>
+</h3>
+<p>This next step is not entirely necessary, but it helps to create
+pictures to understand what we are doing here, and the
+<code><a href="../reference/extract_logls.html">extract_logls()</a></code> function lets us get simulated
+log-likelihood ratios out of the <code>Qij</code> object we created
+above and plot a histogram or a density plot of the distributions. This
+is helpful for developing intuition about things and understanding what
+is going on.</p>
+<p>The main function here is <code><a href="../reference/extract_logls.html">extract_logls()</a></code>. It simply
+takes an object of class <code>Qij</code> and uses the information
+within it to compute log-likelihood ratios from all the genotype
+probabilities that are stored within it. There is one small twist: the
+numerator and denominator of the likelihood ratios can be mixtures of
+different relationship categories. For example, instead of just
+computing PO/U, you might want to compute a log likelihood ratio that
+reflects your belief that, of the genotyping pairs you are sampling, 95%
+are unrelated and the other 5% are full siblings. Then you might want to
+base your inference on a log-likelihood ratio that looked like: PO/(0.95
+* U + 0.05 * FS).</p>
+<p>Often you will not want to do that, but, because
+<code><a href="../reference/extract_logls.html">extract_logls()</a></code> is designed to do that, you have explicitly
+tell it how much weight to give each relationship category in the
+numerator and the denominator of the log likelihood ratio.</p>
+<p>An example here should help. Let’s say we are interested in the
+distribution of the log likelihood ratio PO/U. Then we would do:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">PO_U_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_logls.html">extract_logls</a></span><span class="op">(</span><span class="va">ex1_Qs</span>,
-                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>PO <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>That returns a tibble of log likelihood values for the numerator and the denominator and also the ratio of the two, one row for each simulated value in <code>ex1_Qs</code> (in the present case that is 10,000 values for each of the true relationship being PO, FS, HS, and U):</p>
+                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>PO <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
+                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>That returns a tibble of log likelihood values for the numerator and
+the denominator and also the ratio of the two, one row for each
+simulated value in <code>ex1_Qs</code> (in the present case that is
+10,000 values for each of the true relationship being PO, FS, HS, and
+U):</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">PO_U_logls</span>
-<span class="co">#&gt; # A tibble: 40,000 x 11</span>
-<span class="co">#&gt;    simtype PO_sim rando_miss_n numer_wts denom_wts true_relat   rep numer_logl</span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;      &lt;int&gt;      &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 unlink… not_f…            0 PO=1      U=1       PO             1      -260.</span>
-<span class="co">#&gt;  2 unlink… not_f…            0 PO=1      U=1       PO             2      -228.</span>
-<span class="co">#&gt;  3 unlink… not_f…            0 PO=1      U=1       PO             3      -202.</span>
-<span class="co">#&gt;  4 unlink… not_f…            0 PO=1      U=1       PO             4      -222.</span>
-<span class="co">#&gt;  5 unlink… not_f…            0 PO=1      U=1       PO             5      -265.</span>
-<span class="co">#&gt;  6 unlink… not_f…            0 PO=1      U=1       PO             6      -230.</span>
-<span class="co">#&gt;  7 unlink… not_f…            0 PO=1      U=1       PO             7      -244.</span>
-<span class="co">#&gt;  8 unlink… not_f…            0 PO=1      U=1       PO             8      -246.</span>
-<span class="co">#&gt;  9 unlink… not_f…            0 PO=1      U=1       PO             9      -228.</span>
-<span class="co">#&gt; 10 unlink… not_f…            0 PO=1      U=1       PO            10      -199.</span>
-<span class="co">#&gt; # … with 39,990 more rows, and 3 more variables: denom_logl &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   logl_ratio &lt;dbl&gt;, true_log_prob &lt;dbl&gt;</span></code></pre></div>
-<p>We can visualize the distribution of each of these quite easily with <code>ggplot</code>:</p>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 40,000 × 11</span></span>
+<span class="co">#&gt;    simtype  PO_sim  rando_miss_n numer_wts denom_wts true_relat   rep numer_logl</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> unlinked not_fo…            0 PO=1      U=1       PO             1      -<span style="color: #BB0000;">235.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> unlinked not_fo…            0 PO=1      U=1       PO             2      -<span style="color: #BB0000;">244.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> unlinked not_fo…            0 PO=1      U=1       PO             3      -<span style="color: #BB0000;">214.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> unlinked not_fo…            0 PO=1      U=1       PO             4      -<span style="color: #BB0000;">258.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> unlinked not_fo…            0 PO=1      U=1       PO             5      -<span style="color: #BB0000;">237.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> unlinked not_fo…            0 PO=1      U=1       PO             6      -<span style="color: #BB0000;">227.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> unlinked not_fo…            0 PO=1      U=1       PO             7      -<span style="color: #BB0000;">226.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> unlinked not_fo…            0 PO=1      U=1       PO             8      -<span style="color: #BB0000;">229.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> unlinked not_fo…            0 PO=1      U=1       PO             9      -<span style="color: #BB0000;">227.</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> unlinked not_fo…            0 PO=1      U=1       PO            10      -<span style="color: #BB0000;">211.</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 39,990 more rows, and 3 more variables: denom_logl &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   logl_ratio &lt;dbl&gt;, true_log_prob &lt;dbl&gt;</span></span></code></pre></div>
+<p>We can visualize the distribution of each of these quite easily with
+<code>ggplot</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span>,
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span>,
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
 <p><img src="CKMRsim-example-1_files/figure-html/unnamed-chunk-19-1.png" width="624"></p>
-<p>OK, that shows that there is very little overlap in the PO/U log likelihood ratio between unrelated pairs and parent-offspring pairs; however pairs that are truly full siblings are quite likely to have a high PO/U log likelihood ratio, and even half-sib pairs have considerable overlap in PO/U log likelihood ratio values with true parent-offspring pairs.</p>
-<p>Let’s look at the above plot, but limit our focus to PO and U pairs:</p>
+<p>OK, that shows that there is very little overlap in the PO/U log
+likelihood ratio between unrelated pairs and parent-offspring pairs;
+however pairs that are truly full siblings are quite likely to have a
+high PO/U log likelihood ratio, and even half-sib pairs have
+considerable overlap in PO/U log likelihood ratio values with true
+parent-offspring pairs.</p>
+<p>Let’s look at the above plot, but limit our focus to PO and U
+pairs:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
 <p><img src="CKMRsim-example-1_files/figure-html/unnamed-chunk-20-1.png" width="624"></p>
-<p>This shows that if we are only trying to distinguish PO pairs from U pairs, then we should apparently do quite well if we say that every pair we see with a PO/U logl ratio (that is the shorthand we will use, henceforth, for “log likelihood ratio”) greater than, say, 5, is a PO pair. From the picture, it appears that there is no probability density under the U curve above 0 (and certainly not 5). <strong>However</strong> you must keep in mind that, if you are comparing, say, 5000 offspring to 5000 parents, then there are 25 million pairs (almost all of them unrelated), which equates to 25 million chances to incorrectly declare one of those unrelated pairs a parent-offspring pair. What is required here is some way to compute accurately, the very small probability that an unrelated pair has a PO/U logl ratio &gt; 5. Because, even if that probability is only 1 in a million, you will still expect 25 of the unrelated pairs to have a PO/U logl ratio that exceeds 5!</p>
-<p>The next section discusses the CKMRsim function <code><a href="../reference/mc_sample_simple.html">mc_sample_simple()</a></code> that allows these small probabilities to be estimated.</p>
-<p>Before we proceed there, let us also imagine that we might be interested in distinguishing full-siblings from unrelated pairs. In that case, it would be best to use the FS/U logl ratio. The distributions of those (for the truth being either FS or U) can be visualized like so:</p>
+<p>This shows that if we are only trying to distinguish PO pairs from U
+pairs, then we should apparently do quite well if we say that every pair
+we see with a PO/U logl ratio (that is the shorthand we will use,
+henceforth, for “log likelihood ratio”) greater than, say, 5, is a PO
+pair. From the picture, it appears that there is no probability density
+under the U curve above 0 (and certainly not 5).
+<strong>However</strong> you must keep in mind that, if you are
+comparing, say, 5000 offspring to 5000 parents, then there are 25
+million pairs (almost all of them unrelated), which equates to 25
+million chances to incorrectly declare one of those unrelated pairs a
+parent-offspring pair. What is required here is some way to compute
+accurately, the very small probability that an unrelated pair has a PO/U
+logl ratio &gt; 5. Because, even if that probability is only 1 in a
+million, you will still expect 25 of the unrelated pairs to have a PO/U
+logl ratio that exceeds 5!</p>
+<p>The next section discusses the CKMRsim function
+<code><a href="../reference/mc_sample_simple.html">mc_sample_simple()</a></code> that allows these small probabilities to
+be estimated.</p>
+<p>Before we proceed there, let us also imagine that we might be
+interested in distinguishing full-siblings from unrelated pairs. In that
+case, it would be best to use the FS/U logl ratio. The distributions of
+those (for the truth being either FS or U) can be visualized like
+so:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">FS_U_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_logls.html">extract_logls</a></span><span class="op">(</span><span class="va">ex1_Qs</span>,
-                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>FS <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>FS <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
+                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">FS_U_logls</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">FS_U_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
 <p><img src="CKMRsim-example-1_files/figure-html/unnamed-chunk-21-1.png" width="624"></p>
 </div>
-<div id="estimating-false-negative-and-false-positive-rates-mc_sample_simple" class="section level3">
-<h3 class="hasAnchor">
-<a href="#estimating-false-negative-and-false-positive-rates-mc_sample_simple" class="anchor"></a>Estimating False Negative and False Positive Rates (<code>mc_sample_simple()</code>)</h3>
-<p>The function <code><a href="../reference/mc_sample_simple.html">mc_sample_simple()</a></code> lets you estimate false positive rates and false negative rates from the simulated values in an object of class Qij. The function is configured so that it will automatically compute both regular or “vanilla” Monte Carlo estimates of these probabilities, and also <em>importance sampling</em> (IS) Monte Carlo estimates, which are particularly good for estimating very small probabilities.</p>
-<p>By default, it uses importance sampling to compute false positive rates that are associated with false-negative rates of 0.3, 0.2, 0.1, 0.05, 0.01, and 0.001, but you can set those false negative rates to be whatever you wish.</p>
-<p>Here is a simple use case to estimate false positive rates when the true relationship is U, but we are looking for PO pairs. This will, by default, use importance sampling.</p>
+<div class="section level3">
+<h3 id="estimating-false-negative-and-false-positive-rates-mc_sample_simple">Estimating False Negative and False Positive Rates
+(<code>mc_sample_simple()</code>)<a class="anchor" aria-label="anchor" href="#estimating-false-negative-and-false-positive-rates-mc_sample_simple"></a>
+</h3>
+<p>The function <code><a href="../reference/mc_sample_simple.html">mc_sample_simple()</a></code> lets you estimate false
+positive rates and false negative rates from the simulated values in an
+object of class Qij. The function is configured so that it will
+automatically compute both regular or “vanilla” Monte Carlo estimates of
+these probabilities, and also <em>importance sampling</em> (IS) Monte
+Carlo estimates, which are particularly good for estimating very small
+probabilities.</p>
+<p>By default, it uses importance sampling to compute false positive
+rates that are associated with false-negative rates of 0.3, 0.2, 0.1,
+0.05, 0.01, and 0.001, but you can set those false negative rates to be
+whatever you wish.</p>
+<p>Here is a simple use case to estimate false positive rates when the
+true relationship is U, but we are looking for PO pairs. This will, by
+default, use importance sampling.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_PO_is</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
                  nu <span class="op">=</span> <span class="st">"PO"</span>,
                  de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span>
 
 <span class="va">ex1_PO_is</span>
-<span class="co">#&gt; # A tibble: 5 x 10</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span>
 <span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;           &lt;int&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    </span>
-<span class="co">#&gt; 1  0.01 4.32e- 9 3.52e-10            9900        14.2 PO    IS        PO       </span>
-<span class="co">#&gt; 2  0.05 1.79e-10 8.39e-12            9500        18.6 PO    IS        PO       </span>
-<span class="co">#&gt; 3  0.1  2.36e-11 8.92e-13            9000        21.0 PO    IS        PO       </span>
-<span class="co">#&gt; 4  0.2  1.72e-12 5.42e-14            8000        24.0 PO    IS        PO       </span>
-<span class="co">#&gt; 5  0.3  2.19e-13 6.28e-15            7000        26.2 PO    IS        PO       </span>
-<span class="co">#&gt; # … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></code></pre></div>
-<p>This shows false positive rates (FPR) of around <span class="math inline">\(10^{-6}\)</span> and smaller when the false negative rate (FNR) is 0.01 and greater.</p>
-<p>If we wanted to see what the results would look like if we were using a logl ratio of 5 as a cutoff, we could do this:</p>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 5.08<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.95<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.1 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.07<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 9.41<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.7 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  2.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 7.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.1 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<p>This shows false positive rates (FPR) of around <span class="math inline">\(10^{-6}\)</span> and smaller when the false
+negative rate (FNR) is 0.01 and greater.</p>
+<p>If we wanted to see what the results would look like if we were using
+a logl ratio of 5 as a cutoff, we could do this:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_PO_is_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
                  nu <span class="op">=</span> <span class="st">"PO"</span>,
@@ -509,120 +935,165 @@
                  lambda_stars <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 
 <span class="va">ex1_PO_is_5</span>
-<span class="co">#&gt; # A tibble: 6 x 10</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 10</span></span>
 <span class="co">#&gt;      FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;           &lt;int&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 0.0001 9.82e- 7 4.63e- 7            9999         5   PO    IS        PO       </span>
-<span class="co">#&gt; 2 0.01   4.32e- 9 3.52e-10            9900        14.2 PO    IS        PO       </span>
-<span class="co">#&gt; 3 0.05   1.79e-10 8.39e-12            9500        18.6 PO    IS        PO       </span>
-<span class="co">#&gt; 4 0.1    2.36e-11 8.92e-13            9000        21.0 PO    IS        PO       </span>
-<span class="co">#&gt; 5 0.2    1.72e-12 5.42e-14            8000        24.0 PO    IS        PO       </span>
-<span class="co">#&gt; 6 0.3    2.19e-13 6.28e-15            7000        26.2 PO    IS        PO       </span>
-<span class="co">#&gt; # … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></code></pre></div>
-<p>We see we would have had a false positive rate around 9.82e-07, if we used a logl ratio cutoff of 5. Since there are 1847 adults and 4244 juvniles in this study, there will be <span class="math inline">\(1847 \times 4244 = 7,838,668\)</span> pairs being tested for being parent-offspring pairs. A per-pair FPR of 9.82e-07 would leave us with an expected number of false positive pairs on the order of 8.</p>
-<p>My general recommendation for being confident about not erroneously identifying unrelated individuals as related pairs is to require that the FPR be about 10 to 100 times smaller than the reciprocal of the number of comparisons. So, in this case,</p>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.000<span style="text-decoration: underline;">2</span> 6.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> 3.31<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>998         5   PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0.01   5.08<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.95<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.1 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0.05   2.07<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 9.41<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 0.1    2.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.7 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 0.2    1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 0.3    2.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 7.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.1 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<p>We see we would have had a false positive rate around 6.16e-07, if we
+used a logl ratio cutoff of 5. Since there are 1847 adults and 4244
+juvniles in this study, there will be <span class="math inline">\(1847
+\times 4244 = 7,838,668\)</span> pairs being tested for being
+parent-offspring pairs. A per-pair FPR of 6.16e-07 would leave us with
+an expected number of false positive pairs on the order of 5.</p>
+<p>My general recommendation for being confident about not erroneously
+identifying unrelated individuals as related pairs is to require that
+the FPR be about 10 to 100 times smaller than the reciprocal of the
+number of comparisons. So, in this case,</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fl">0.1</span> <span class="op">*</span> <span class="op">(</span><span class="fl">4244</span> <span class="op">*</span> <span class="fl">1847</span><span class="op">)</span> <span class="op">^</span> <span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1.275727e-08</span></code></pre></div>
-<p>or smaller would be a good FPR to shoot for. That would be a logl ratio cutoff of between 12 and 15. For fun, let’s look at FPRs and FNRs at a number of such cutoffs:</p>
+<p>or smaller would be a good FPR to shoot for. That would be a logl
+ratio cutoff of between 12 and 15. For fun, let’s look at FPRs and FNRs
+at a number of such cutoffs:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_PO_is_8_12</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
                  nu <span class="op">=</span> <span class="st">"PO"</span>,
                  de <span class="op">=</span> <span class="st">"U"</span>, 
-                 lambda_stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">15</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>
+                 lambda_stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">15</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ex1_PO_is_8_12</span>
-<span class="co">#&gt; # A tibble: 36 x 10</span>
-<span class="co">#&gt;       FNR     FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;           &lt;int&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    </span>
-<span class="co">#&gt;  1 0.0039 1.69e-8 1.98e- 9            9961        12   PO    IS        PO       </span>
-<span class="co">#&gt;  2 0.0041 1.58e-8 1.81e- 9            9959        12.1 PO    IS        PO       </span>
-<span class="co">#&gt;  3 0.0042 1.52e-8 1.73e- 9            9958        12.2 PO    IS        PO       </span>
-<span class="co">#&gt;  4 0.0046 1.33e-8 1.46e- 9            9954        12.3 PO    IS        PO       </span>
-<span class="co">#&gt;  5 0.0047 1.29e-8 1.39e- 9            9953        12.4 PO    IS        PO       </span>
-<span class="co">#&gt;  6 0.0049 1.21e-8 1.27e- 9            9951        12.5 PO    IS        PO       </span>
-<span class="co">#&gt;  7 0.0051 1.14e-8 1.17e- 9            9949        12.6 PO    IS        PO       </span>
-<span class="co">#&gt;  8 0.0052 1.11e-8 1.12e- 9            9948        12.7 PO    IS        PO       </span>
-<span class="co">#&gt;  9 0.0053 1.08e-8 1.09e- 9            9947        12.8 PO    IS        PO       </span>
-<span class="co">#&gt; 10 0.0057 9.71e-9 9.44e-10            9943        12.9 PO    IS        PO       </span>
-<span class="co">#&gt; # … with 26 more rows, and 2 more variables: denominator &lt;chr&gt;,</span>
-<span class="co">#&gt; #   true_relat &lt;chr&gt;</span></code></pre></div>
-<p>Let’s find the logl ratio value that gives the largest FPR smaller than 1.275727e-08:</p>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 10</span></span>
+<span class="co">#&gt;       FNR      FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
+<span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.003<span style="text-decoration: underline;">7</span>  1.82<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.98<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>963        12   PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 0.003<span style="text-decoration: underline;">8</span>  1.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.89<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>962        12.1 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 0.004   1.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>960        12.2 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.004   1.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>960        12.3 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 0.004<span style="text-decoration: underline;">4</span>  1.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>956        12.4 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.004<span style="text-decoration: underline;">6</span>  1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>954        12.5 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.004<span style="text-decoration: underline;">8</span>  1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.31<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>952        12.6 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.005   1.27<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.23<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>950        12.7 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.005<span style="text-decoration: underline;">3</span>  1.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>947        12.8 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.005<span style="text-decoration: underline;">6</span>  1.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.03<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>944        12.9 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 26 more rows, and 2 more variables: denominator &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   true_relat &lt;chr&gt;</span></span></code></pre></div>
+<p>Let’s find the logl ratio value that gives the largest FPR smaller
+than 1.275727e-08:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_PO_is_8_12</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">FPR</span> <span class="op">&gt;</span> <span class="fl">1.275727e-08</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">arrange</span><span class="op">(</span><span class="va">FPR</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1 x 10</span>
-<span class="co">#&gt;      FNR     FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;           &lt;int&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 0.0047 1.29e-8 1.39e-9            9953        12.4 PO    IS        PO       </span>
-<span class="co">#&gt; # … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></code></pre></div>
-<p>This suggests that requiring a logl ratio cutoff of about 15 should mean almost no false positives, but perhaps a false negative or two (if the genotyping error rate is accurate).</p>
-<div id="what-about-for-finding-full-siblings" class="section level4">
-<h4 class="hasAnchor">
-<a href="#what-about-for-finding-full-siblings" class="anchor"></a>What about for finding full-siblings?</h4>
-<p>We can do the same for full siblings. Note that with 4244 juveniles that we might sift through, looking for full siblings, we will be making 4244 * 4243 / 2 comparisons, which is about 9 million. So, we would like to have an FPR of about 1e-08 or less, and that corresponds to a false negative rate of about 0.2.</p>
+<code class="sourceCode R"><span class="va">ex1_PO_is_8_12</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">FPR</span> <span class="op">&gt;</span> <span class="fl">1.275727e-08</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">FPR</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span>
+<span class="co">#&gt;      FNR       FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.004<span style="text-decoration: underline;">8</span>   1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.31<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>952        12.6 PO    IS        PO       </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<p>This suggests that requiring a logl ratio cutoff of about 15 should
+mean almost no false positives, but perhaps a false negative or two (if
+the genotyping error rate is accurate).</p>
+<div class="section level4">
+<h4 id="what-about-for-finding-full-siblings">What about for finding full-siblings?<a class="anchor" aria-label="anchor" href="#what-about-for-finding-full-siblings"></a>
+</h4>
+<p>We can do the same for full siblings. Note that with 4244 juveniles
+that we might sift through, looking for full siblings, we will be making
+4244 * 4243 / 2 comparisons, which is about 9 million. So, we would like
+to have an FPR of about 1e-08 or less, and that corresponds to a false
+negative rate of about 0.2.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex1_FS_is</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
                  nu <span class="op">=</span> <span class="st">"FS"</span>,
                  de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span>
 <span class="va">ex1_FS_is</span>
-<span class="co">#&gt; # A tibble: 5 x 10</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span>
 <span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;           &lt;int&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;    </span>
-<span class="co">#&gt; 1  0.01 1.81e- 6 1.80e- 7            9900        7.79 FS    IS        FS       </span>
-<span class="co">#&gt; 2  0.05 2.48e- 8 1.30e- 9            9500       13.4  FS    IS        FS       </span>
-<span class="co">#&gt; 3  0.1  2.08e- 9 8.77e-11            9000       16.3  FS    IS        FS       </span>
-<span class="co">#&gt; 4  0.2  7.80e-11 2.73e-12            8000       20.0  FS    IS        FS       </span>
-<span class="co">#&gt; 5  0.3  5.86e-12 1.93e-13            7000       22.7  FS    IS        FS       </span>
-<span class="co">#&gt; # … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></code></pre></div>
-<p>Note! The results here differ from those reported in the data for <span class="citation">Baetscher et al. (2019)</span> because we are using a different genotyping error model here, with a higher error rate than is likely…</p>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 1.44<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> 1.44<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>900        7.94 FS    IS        FS       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.23<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> 1.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>500       13.5  FS    IS        FS       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 8.82<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>000       16.4  FS    IS        FS       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  7.85<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 2.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">8</span>000       20.0  FS    IS        FS       </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  6.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 2.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span>            <span style="text-decoration: underline;">7</span>000       22.6  FS    IS        FS       </span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<p>Note! The results here differ from those reported in the data for
+<span class="citation">Baetscher et al. (2019)</span> because we are
+using a different genotyping error model here, with a higher error rate
+than is likely…</p>
 </div>
 </div>
 </div>
-<div id="actually-doing-the-comparisons" class="section level2">
-<h2 class="hasAnchor">
-<a href="#actually-doing-the-comparisons" class="anchor"></a>Actually doing the comparisons</h2>
-<p>Now that we have computed the power for relationship inference and identified reasonable logl ratio cutoffs for doing pairwise relationship inference, the next step is to actually do all the pairwise comparisons and find kin pairs.</p>
-<p>Before we do that, it is always good practice to first look for duplicate samples.</p>
-<div id="screen-for-duplicate-samples-find_close_matching_genotypes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#screen-for-duplicate-samples-find_close_matching_genotypes" class="anchor"></a>Screen for duplicate samples (<code>find_close_matching_genotypes()</code>)</h3>
-<p>Believe it or not, when your lab is handling tens of thousands of samples, it is quite possible that the same DNA ended up in two different wells that are supposed to represent different individuals. Fortunately, it is easy to find duplicate samples because they typically share the same genotype at all loci (apart from a few due that would be due to genotyping errors.)</p>
-<p>We have a function <code><a href="../reference/find_close_matching_genotypes.html">find_close_matching_genotypes()</a></code> for that. It operates on the long genotypes data frame, and also uses some information within the ckmr object that we created from the allele frequencies computed from that long genotype data frame. It returns all pairs of individuals with fewer than <code>max_mismatch</code> loci at which genotypes mismatch.</p>
+<div class="section level2">
+<h2 id="actually-doing-the-comparisons">Actually doing the comparisons<a class="anchor" aria-label="anchor" href="#actually-doing-the-comparisons"></a>
+</h2>
+<p>Now that we have computed the power for relationship inference and
+identified reasonable logl ratio cutoffs for doing pairwise relationship
+inference, the next step is to actually do all the pairwise comparisons
+and find kin pairs.</p>
+<p>Before we do that, it is always good practice to first look for
+duplicate samples.</p>
+<div class="section level3">
+<h3 id="screen-for-duplicate-samples-find_close_matching_genotypes">Screen for duplicate samples
+(<code>find_close_matching_genotypes()</code>)<a class="anchor" aria-label="anchor" href="#screen-for-duplicate-samples-find_close_matching_genotypes"></a>
+</h3>
+<p>Believe it or not, when your lab is handling tens of thousands of
+samples, it is quite possible that the same DNA ended up in two
+different wells that are supposed to represent different individuals.
+Fortunately, it is easy to find duplicate samples because they typically
+share the same genotype at all loci (apart from a few that would be due
+to genotyping errors.)</p>
+<p>We have a function <code><a href="../reference/find_close_matching_genotypes.html">find_close_matching_genotypes()</a></code> for
+that. It operates on the long genotypes data frame, and also uses some
+information within the ckmr object that we created from the allele
+frequencies computed from that long genotype data frame. It returns all
+pairs of individuals with fewer than <code>max_mismatch</code> loci at
+which genotypes mismatch.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">matchers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_close_matching_genotypes.html">find_close_matching_genotypes</a></span><span class="op">(</span>LG <span class="op">=</span> <span class="va">long_genos</span>,
                                           CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,
                                           max_mismatch <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
 
 <span class="va">matchers</span>
-<span class="co">#&gt; [1] ind1         ind2         num_mismatch num_loc      indiv_1     </span>
-<span class="co">#&gt; [6] indiv_2     </span>
+<span class="co">#&gt; [1] indiv_1      indiv_2      ind1         ind2         num_mismatch</span>
+<span class="co">#&gt; [6] num_loc     </span>
 <span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></code></pre></div>
-<p>This suggests that any duplicate genotypes have already been removed from this data set. Good.</p>
+<p>This suggests that any duplicate genotypes have already been removed
+from this data set. Good.</p>
 </div>
-<div id="compute-logl-ratios-for-all-pairwise-comparisons-pairwise_kin_logl_ratios" class="section level3">
-<h3 class="hasAnchor">
-<a href="#compute-logl-ratios-for-all-pairwise-comparisons-pairwise_kin_logl_ratios" class="anchor"></a>Compute Logl Ratios for All Pairwise Comparisons (<code>pairwise_kin_logl_ratios()</code>)</h3>
-<p>We have a simple function that computes the log likelihood ratio for all pairwise comparisons between two sets of individuals. Each set of individuals is specified as a long-format genotype data frame that derives from the long-format genotype data frame that went into making the allele frequencies for the ckmr object. You pass it two such long-format genotype data frames, the associated ckmr object, and then you specify the relationship you want in the numerator and in the denominator for the log likelihood ratio. Let’s use it first to compare all parents to all offspring.</p>
-<div id="looking-for-parent-offspring-pairs" class="section level4">
-<h4 class="hasAnchor">
-<a href="#looking-for-parent-offspring-pairs" class="anchor"></a>Looking for parent offspring pairs</h4>
+<div class="section level3">
+<h3 id="compute-logl-ratios-for-all-pairwise-comparisons-pairwise_kin_logl_ratios">Compute Logl Ratios for All Pairwise Comparisons
+(<code>pairwise_kin_logl_ratios()</code>)<a class="anchor" aria-label="anchor" href="#compute-logl-ratios-for-all-pairwise-comparisons-pairwise_kin_logl_ratios"></a>
+</h3>
+<p>We have a simple function that computes the log likelihood ratio for
+all pairwise comparisons between two sets of individuals. Each set of
+individuals is specified as a long-format genotype data frame that
+derives from the long-format genotype data frame that went into making
+the allele frequencies for the ckmr object. You pass it two such
+long-format genotype data frames, the associated ckmr object, and then
+you specify the relationship you want in the numerator and in the
+denominator for the log likelihood ratio. Let’s use it first to compare
+all parents to all offspring.</p>
+<div class="section level4">
+<h4 id="looking-for-parent-offspring-pairs">Looking for parent offspring pairs<a class="anchor" aria-label="anchor" href="#looking-for-parent-offspring-pairs"></a>
+</h4>
 <p>First, break <code>long_genos</code> into two data frames:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">parent_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"adult"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">pull</span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">parent_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"adult"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span>
 
-<span class="va">offspring_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"juvenile"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">pull</span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span>
+<span class="va">offspring_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"juvenile"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span>
 
-<span class="va">candidate_parents</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op">%in%</span> <span class="va">parent_ids</span><span class="op">)</span>
+<span class="va">candidate_parents</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">parent_ids</span><span class="op">)</span>
 
-<span class="va">candidate_offspring</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op">%in%</span> <span class="va">offspring_ids</span><span class="op">)</span></code></pre></div>
+<span class="va">candidate_offspring</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">offspring_ids</span><span class="op">)</span></code></pre></div>
 <p>Then, use those:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">po_pairwise_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pairwise_kin_logl_ratios.html">pairwise_kin_logl_ratios</a></span><span class="op">(</span>D1 <span class="op">=</span> <span class="va">candidate_parents</span>, 
@@ -635,27 +1106,32 @@
 <span class="co"># it on CRAN checks.  But, leave it blank (i.e., don't use the</span>
 <span class="co"># num_core option) to, by default, use all</span>
 <span class="co"># your cores in parallel on a non-windows machine.</span></code></pre></div>
-<p>If desired we can retain only those with logl ratio &gt; 12, which is in the vicinity of a reasonable cutoff of about 15 which we determined through simulation.</p>
+<p>If desired we can retain only those with logl ratio &gt; 12, which is
+in the vicinity of a reasonable cutoff of about 15 which we determined
+through simulation.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">po_pairwise_logls</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 8 x 4</span>
+<code class="sourceCode R"><span class="va">po_pairwise_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 4</span></span>
 <span class="co">#&gt;   D2_indiv D1_indiv logl_ratio num_loc</span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;   &lt;int&gt;</span>
-<span class="co">#&gt; 1 R031608  R019764        43.3      78</span>
-<span class="co">#&gt; 2 R015015  R012195        40.0      78</span>
-<span class="co">#&gt; 3 R014780  R016256        34.0      78</span>
-<span class="co">#&gt; 4 R015337  R015977        31.6      78</span>
-<span class="co">#&gt; 5 R031274  R019641        29.8      78</span>
-<span class="co">#&gt; 6 R015263  R019881        24.6      78</span>
-<span class="co">#&gt; 7 R013607  R019760        17.6      78</span>
-<span class="co">#&gt; 8 R029094  R015684        15.0      75</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> R031608  R019764        43.3      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> R015015  R012195        40.0      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> R014780  R016256        34.0      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> R015337  R015977        31.6      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> R031274  R019641        29.8      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> R015263  R019881        24.6      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">7</span> R013607  R019760        17.6      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">8</span> R029094  R015684        15.0      75</span></code></pre></div>
 </div>
-<div id="looking-for-full-sib-pairs-among-the-juveniles" class="section level4">
-<h4 class="hasAnchor">
-<a href="#looking-for-full-sib-pairs-among-the-juveniles" class="anchor"></a>Looking for full-sib pairs among the juveniles</h4>
-<p>We can look for full-sib pairs among the juveniles using the same function. We just pass the same set of offspring genotypes in for both the <code>D1</code> and the <code>D2</code> parameters to the function.</p>
+<div class="section level4">
+<h4 id="looking-for-full-sib-pairs-among-the-juveniles">Looking for full-sib pairs among the juveniles<a class="anchor" aria-label="anchor" href="#looking-for-full-sib-pairs-among-the-juveniles"></a>
+</h4>
+<p>We can look for full-sib pairs among the juveniles using the same
+function. We just pass the same set of offspring genotypes in for both
+the <code>D1</code> and the <code>D2</code> parameters to the
+function.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fs_pairwise_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pairwise_kin_logl_ratios.html">pairwise_kin_logl_ratios</a></span><span class="op">(</span>D1 <span class="op">=</span> <span class="va">candidate_offspring</span>,
                                               D2 <span class="op">=</span> <span class="va">candidate_offspring</span>,
@@ -669,42 +1145,57 @@
 <span class="co"># it on CRAN checks.  But, leave it blank (i.e., don't use the</span>
 <span class="co"># num_core option) to, by default, use all</span>
 <span class="co"># your cores in parallel on a non-windows machine.</span></code></pre></div>
-<p>Now, look at all those with logl_ratio &gt; 12 as well, (also close to about 14 or 15, which we determined from simulation to be a reasonable cutoff value, albeit with a high false negative rate.)</p>
+<p>Now, look at all those with logl_ratio &gt; 12 as well, (also close
+to about 14 or 15, which we determined from simulation to be a
+reasonable cutoff value, albeit with a high false negative rate.)</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fs_pairwise_logls</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 41 x 4</span>
+<code class="sourceCode R"><span class="va">fs_pairwise_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 41 × 4</span></span>
 <span class="co">#&gt;    D2_indiv D1_indiv logl_ratio num_loc</span>
-<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;   &lt;int&gt;</span>
-<span class="co">#&gt;  1 R014981  R014982        73.7      76</span>
-<span class="co">#&gt;  2 R021481  R027461        63.6      78</span>
-<span class="co">#&gt;  3 R031276  R031280        58.8      78</span>
-<span class="co">#&gt;  4 R014137  R014139        45.0      77</span>
-<span class="co">#&gt;  5 R013839  R014675        42.9      78</span>
-<span class="co">#&gt;  6 R020421  R027348        41.4      78</span>
-<span class="co">#&gt;  7 R021571  R025619        41.0      78</span>
-<span class="co">#&gt;  8 R014520  R014536        38.8      78</span>
-<span class="co">#&gt;  9 R021500  R021511        36.5      78</span>
-<span class="co">#&gt; 10 R015404  R020276        36.0      78</span>
-<span class="co">#&gt; # … with 31 more rows</span></code></pre></div>
-<p>There are two step that really should be done before that:</p>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R014981  R014982        73.7      76</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R021481  R027461        63.6      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R031276  R031280        58.8      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R014137  R014139        45.0      77</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R013839  R014675        42.9      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R020421  R027348        41.4      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R021571  R025619        41.0      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R014520  R014536        38.8      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R021500  R021511        36.5      78</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R015404  R020276        36.0      78</span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 31 more rows</span></span></code></pre></div>
+<p>There are two steps that really should be done before that:</p>
 <ol style="list-style-type: decimal">
-<li>Observe the distribution of internal heterozygosity across all individuals in the data set. This will be used to compare to values from kin pairs to detect cases where, for example, two individuals of the wrong species are identified as kin in a data set, or when two individuals look similar because they each suffered some odd contamination or genotyping problem.</li>
+<li>Observe the distribution of internal heterozygosity across all
+individuals in the data set. This will be used to compare to values from
+kin pairs to detect cases where, for example, two individuals of the
+wrong species are identified as kin in a data set, or when two
+individuals look similar because they each suffered some odd
+contamination or genotyping problem.</li>
 <li>
 </ol>
 </div>
 </div>
 </div>
-<div id="literature-cited" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#literature-cited" class="anchor"></a>Literature Cited</h2>
-<div id="refs" class="references">
-<div id="ref-baetscherDispersalNearshoreMarine2019">
-<p>Baetscher, Diana S., Eric C. Anderson, Elizabeth A. Gilbert-Horvath, Daniel P. Malone, Emily T. Saarman, Mark H. Carr, and John Carlos Garza. 2019. “Dispersal of a Nearshore Marine Fish Connects Marine Reserves and Adjacent Fished Areas Along an Open Coast.” <em>Molecular Ecology</em> 28 (7): 1611–23. <a href="https://doi.org/10.1111/mec.15044">https://doi.org/10.1111/mec.15044</a>.</p>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="literature-cited">Literature Cited<a class="anchor" aria-label="anchor" href="#literature-cited"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-baetscherDispersalNearshoreMarine2019" class="csl-entry">
+Baetscher, Diana S., Eric C. Anderson, Elizabeth A. Gilbert-Horvath,
+Daniel P. Malone, Emily T. Saarman, Mark H. Carr, and John Carlos Garza.
+2019. <span>“Dispersal of a Nearshore Marine Fish Connects Marine
+Reserves and Adjacent Fished Areas Along an Open Coast.”</span>
+<em>Molecular Ecology</em> 28 (7): 1611–23. <a href="https://doi.org/10.1111/mec.15044" class="external-link">https://doi.org/10.1111/mec.15044</a>.
 </div>
-<div id="ref-baetscherMicrohaplotypesProvideIncreased2018">
-<p>Baetscher, Diana S., Anthony J. Clemento, Thomas C. Ng, Eric C. Anderson, and John C. Garza. 2018. “Microhaplotypes Provide Increased Power from Short-Read DNA Sequences for Relationship Inference.” <em>Molecular Ecology Resources</em> 18 (2): 296–305. <a href="https://doi.org/10.1111/1755-0998.12737">https://doi.org/10.1111/1755-0998.12737</a>.</p>
+<div id="ref-baetscherMicrohaplotypesProvideIncreased2018" class="csl-entry">
+Baetscher, Diana S., Anthony J. Clemento, Thomas C. Ng, Eric C.
+Anderson, and John C. Garza. 2018. <span>“Microhaplotypes Provide
+Increased Power from Short-Read <span>DNA</span> Sequences for
+Relationship Inference.”</span> <em>Molecular Ecology Resources</em> 18
+(2): 296–305. <a href="https://doi.org/10.1111/1755-0998.12737" class="external-link">https://doi.org/10.1111/1755-0998.12737</a>.
 </div>
 </div>
 </div>
@@ -721,11 +1212,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Eric C. Anderson.</p>
+  <p></p>
+<p>Developed by Eric C. Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -733,6 +1226,8 @@
 
   
 
+
+  
 
   </body>
 </html>

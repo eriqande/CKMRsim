@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CKMRsim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,6 +69,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -84,13 +83,14 @@
 
       
 
-      </header><script src="CKMRsim-writing-geno-error-funcs_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>CKMRsim-writing-geno-error-functions</h1>
-                        <h4 class="author">Eric C. Anderson</h4>
+                        <h4 data-toc-skip class="author">Eric C.
+Anderson</h4>
             
-            <h4 class="date">2021-02-01</h4>
+            <h4 data-toc-skip class="date">2022-10-26</h4>
       
       
       <div class="hidden name"><code>CKMRsim-writing-geno-error-funcs.Rmd</code></div>
@@ -99,86 +99,163 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p><code>CKMRsim</code> allows users to specify genotyping error models for locus <span class="math inline">\(\ell\)</span> in terms of a matrix <span class="math inline">\(\mathbf{C}_\ell\)</span>. If there are <span class="math inline">\(G\)</span> possible genotypes, then <span class="math inline">\(\mathbf{C}_\ell\)</span> is a <span class="math inline">\(G \times G\)</span> matrix where the element in row <span class="math inline">\(s\)</span> and column <span class="math inline">\(t\)</span> is the probability that an individual truly carrying genotype <span class="math inline">\(s\)</span> is observed to have genotype <span class="math inline">\(t\)</span>. This model covers any possible type of genotyping error in which errors are independent between different loci and are also independent between different individuals. That is a wide class of models.</p>
-<p><code>CKMRsim</code> comes with some “pre-packaged” genotyping error models, but users might want to create their own that are tailored to the particular marker types that they work on. Currently, the way to define a genotyping error model is to define a function that takes an input <code>L</code>, which carries information about the locus, and any additional named parameters (like genotyping error rates.) At some point, I will reimplement most of the list structures in <code>CKMRsim</code> as list-columns in tibbles, and then it will be much easier to define locus-specific, and even allele-specific, error rates, etc. For now, it is a little tough to do that cleanly and programmatically on a large scale…</p>
-<p>In this vignette, I will show how I created genotyping error functions for two of the “pre-packaged” versions: True-Genotype-Independent Errors (TGIE), and a model tailored for microsatellites that includes allele mis-calling and allele dropout.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p><code>CKMRsim</code> allows users to specify genotyping error models
+for locus <span class="math inline">\(\ell\)</span> in terms of a matrix
+<span class="math inline">\(\mathbf{C}_\ell\)</span>. If there are <span class="math inline">\(G\)</span> possible genotypes, then <span class="math inline">\(\mathbf{C}_\ell\)</span> is a <span class="math inline">\(G \times G\)</span> matrix where the element in
+row <span class="math inline">\(s\)</span> and column <span class="math inline">\(t\)</span> is the probability that an individual
+truly carrying genotype <span class="math inline">\(s\)</span> is
+observed to have genotype <span class="math inline">\(t\)</span>. This
+model covers any possible type of genotyping error in which errors are
+independent between different loci and are also independent between
+different individuals. That is a wide class of models.</p>
+<p><code>CKMRsim</code> comes with some “pre-packaged” genotyping error
+models, but users might want to create their own that are tailored to
+the particular marker types that they work on. Currently, the way to
+define a genotyping error model is to define a function that takes an
+input <code>L</code>, which carries information about the locus, and any
+additional named parameters (like genotyping error rates.) At some
+point, I will reimplement most of the list structures in
+<code>CKMRsim</code> as list-columns in tibbles, and then it will be
+much easier to define locus-specific, and even allele-specific, error
+rates, etc. For now, it is a little tough to do that cleanly and
+programmatically on a large scale…</p>
+<p>In this vignette, I will show how I created genotyping error
+functions for two of the “pre-packaged” versions:
+True-Genotype-Independent Errors (TGIE), and a model tailored for
+microsatellites that includes allele mis-calling and allele dropout.</p>
 </div>
-<div id="basic-function-format" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-function-format" class="anchor"></a>Basic Function Format</h2>
-<p>Every genotyping error model function should have a name starting with <code>ge_model_</code>. For example we will name our TGIE model <code><a href="../reference/ge_model_TGIE.html">ge_model_TGIE()</a></code>. This naming convention is not a requirement, but it helps to keep things organized.</p>
-<p>These <code>ge_model_</code> functions are required to have one argument named <code>L</code>. This will be where information about the locus gets passed into the function. Currently, the information available within <code>L</code> about the locus is contained in two list components:</p>
+<div class="section level2">
+<h2 id="basic-function-format">Basic Function Format<a class="anchor" aria-label="anchor" href="#basic-function-format"></a>
+</h2>
+<p>Every genotyping error model function should have a name starting
+with <code>ge_model_</code>. For example we will name our TGIE model
+<code><a href="../reference/ge_model_TGIE.html">ge_model_TGIE()</a></code>. This naming convention is not a
+requirement, but it helps to keep things organized.</p>
+<p>These <code>ge_model_</code> functions are required to have one
+argument named <code>L</code>. This will be where information about the
+locus gets passed into the function. Currently, the information
+available within <code>L</code> about the locus is contained in two list
+components:</p>
 <ul>
 <li>
-<code>L$freqs</code> : a named vector of allele frequencies. The names of the vector are the names of the corresponding alleles. So, for example, if the names were microhaplotypes, like “ACCAT”, then that information would be available for use. Alternatively, if the names are microsatellite allele lengths, like “112”, then those would also be available for creating the genotyping error model. Note that the alleles are listed in this vector in the order in which CKMRsim represents them internally (for the C++ based functions), so whenever you do anything with the alleles, you want to keep them in this order!</li>
+<code>L$freqs</code> : a named vector of allele frequencies. The
+names of the vector are the names of the corresponding alleles. So, for
+example, if the names were microhaplotypes, like “ACCAT”, then that
+information would be available for use. Alternatively, if the names are
+microsatellite allele lengths, like “112”, then those would also be
+available for creating the genotyping error model. Note that the alleles
+are listed in this vector in the order in which CKMRsim represents them
+internally (for the C++ based functions), so whenever you do anything
+with the alleles, you want to keep them in this order!</li>
 <li>
-<code>L$geno_freqs</code> : a named vector of genotype frequencies ordered in the way that <code>CKMRsim</code> has ordered the possible diploid genotypes that can be formed from the different alleles. The names are the names of the genotypes, which are merely the names of the two alleles in the genotype, separated by space-slash-space. For example “112 / 116”. (Note that, by default, CKMRsim names genotypes this way. There should be no problem parsing such genotype names into the names of the constituent alleles, so long as alleles are never named have a space. That should be a problem. If you have spaces in your allele names, then please fix that!)</li>
+<code>L$geno_freqs</code> : a named vector of genotype frequencies
+ordered in the way that <code>CKMRsim</code> has ordered the possible
+diploid genotypes that can be formed from the different alleles. The
+names are the names of the genotypes, which are merely the names of the
+two alleles in the genotype, separated by space-slash-space. For example
+“112 / 116”. (Note that, by default, CKMRsim names genotypes this way.
+There should be no problem parsing such genotype names into the names of
+the constituent alleles, so long as alleles are never named have a
+space. That should be a problem. If you have spaces in your allele
+names, then please fix that!)</li>
 </ul>
-<p>After the required <code>L</code> argument, the <code>ge_model_</code> function can have any other arguments that control the behavior of the genotyping error.</p>
-<p>The return value of the function must be the <span class="math inline">\(G \times G\)</span> matrix <span class="math inline">\(\mathbf{C}_\ell\)</span> described above. The rows of this matrix must sum to one, since they are probabilities. Note that <span class="math inline">\(G\)</span> is given by <code><a href="https://rdrr.io/r/base/length.html">length(L$geno_freqs)</a></code>.</p>
+<p>After the required <code>L</code> argument, the
+<code>ge_model_</code> function can have any other arguments that
+control the behavior of the genotyping error.</p>
+<p>The return value of the function must be the <span class="math inline">\(G \times G\)</span> matrix <span class="math inline">\(\mathbf{C}_\ell\)</span> described above. The rows
+of this matrix must sum to one, since they are probabilities. Note that
+<span class="math inline">\(G\)</span> is given by
+<code>length(L$geno_freqs)</code>.</p>
 </div>
-<div id="the-tgie-function" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-tgie-function" class="anchor"></a>The TGIE Function</h2>
-<p>True-genotype-independent error is a very simple genotyping error model that has been in use for a long time in relationship inference. The main goal of it is to ensure that genotyping errors don’t create zero-probability situations. It is not intended to model the actual genotyping error process, but it is mathematically tractable in a lot of situations, and it is useful in cases where little is known about the genotyping error process. One such situation occurs when someone gives you a file of genotypes that are coded up as integers, but those integers mean very little, i.e., they just denote separate alleles which could be microsatellite alleles (but not the actual lengths), or they could be microhaplotype alleles (but not the actual variant sequences), or they could be SNPs (but not the actual bases, etc).</p>
-<p>We will pretend for now that we are dealing with such integer-coded data and that we might have multiple alleles at each locus. For example, the components of <code>L</code> might look like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;</span><span class="st"> </span>L<span class="op">$</span>freqs</span>
-<span id="cb1-2"><a href="#cb1-2"></a>           <span class="dv">1</span>            <span class="dv">2</span>            <span class="dv">3</span>            <span class="dv">4</span>            <span class="dv">5</span> </span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fl">6.329010e-01</span> <span class="fl">3.662781e-01</span> <span class="fl">4.104416e-04</span> <span class="fl">2.462650e-04</span> <span class="fl">8.208833e-05</span> </span>
-<span id="cb1-4"><a href="#cb1-4"></a>           <span class="dv">6</span> </span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="fl">8.208833e-05</span> </span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="op">&gt;</span><span class="st"> </span>L<span class="op">$</span>geno_freqs</span>
-<span id="cb1-7"><a href="#cb1-7"></a>       <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">1</span>        <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>        <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>        <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">4</span>        <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">5</span> </span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="fl">4.005637e-01</span> <span class="fl">4.636356e-01</span> <span class="fl">5.195378e-04</span> <span class="fl">3.117227e-04</span> <span class="fl">1.039076e-04</span> </span>
-<span id="cb1-9"><a href="#cb1-9"></a>       <span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>        <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span>        <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>        <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">4</span>        <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">5</span> </span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="fl">1.039076e-04</span> <span class="fl">1.341597e-01</span> <span class="fl">3.006716e-04</span> <span class="fl">1.804029e-04</span> <span class="fl">6.013432e-05</span> </span>
-<span id="cb1-11"><a href="#cb1-11"></a>       <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>        <span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">3</span>        <span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">4</span>        <span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">5</span>        <span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span> </span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="fl">6.013432e-05</span> <span class="fl">1.684623e-07</span> <span class="fl">2.021548e-07</span> <span class="fl">6.738493e-08</span> <span class="fl">6.738493e-08</span> </span>
-<span id="cb1-13"><a href="#cb1-13"></a>       <span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="dv">4</span>        <span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="dv">5</span>        <span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>        <span class="dv">5</span> <span class="op">/</span><span class="st"> </span><span class="dv">5</span>        <span class="dv">5</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span> </span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fl">6.064644e-08</span> <span class="fl">4.043096e-08</span> <span class="fl">4.043096e-08</span> <span class="fl">6.738493e-09</span> <span class="fl">1.347699e-08</span> </span>
-<span id="cb1-15"><a href="#cb1-15"></a>       <span class="dv">6</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span> </span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="fl">6.738493e-09</span> </span></code></pre></div>
-<p>This model is parameterized by a genotyping error rate, <span class="math inline">\(\epsilon\)</span>, and errors occur independently between individuals and loci. With probability <span class="math inline">\(1-\epsilon\)</span> a genotyping error does not occur so that the observed genotype is the true genotype. With probability <span class="math inline">\(\epsilon\)</span> the genotype is subject to genotying error, in which case, the observed value is drawn from the remaining genotypes, proportionally to their frequencies. Under such a model, using <span class="math inline">\(y_\ell\)</span> to denote the observed genotype and <span class="math inline">\(x_\ell\)</span> to denote the true genotype, we have the row <span class="math inline">\(s\)</span> and column <span class="math inline">\(t\)</span> entry of <span class="math inline">\(\mathbf{C}_\ell\)</span> being the the conditional probability: <span class="math display">\[
-P(y_\ell = g_{t} | x_\ell = g_{s}) = 
+<div class="section level2">
+<h2 id="the-tgie-function">The TGIE Function<a class="anchor" aria-label="anchor" href="#the-tgie-function"></a>
+</h2>
+<p>True-genotype-independent error is a very simple genotyping error
+model that has been in use for a long time in relationship inference.
+The main goal of it is to ensure that genotyping errors don’t create
+zero-probability situations. It is not intended to model the actual
+genotyping error process, but it is mathematically tractable in a lot of
+situations, and it is useful in cases where little is known about the
+genotyping error process. One such situation occurs when someone gives
+you a file of genotypes that are coded up as integers, but those
+integers mean very little, i.e., they just denote separate alleles which
+could be microsatellite alleles (but not the actual lengths), or they
+could be microhaplotype alleles (but not the actual variant sequences),
+or they could be SNPs (but not the actual bases, etc).</p>
+<p>We will pretend for now that we are dealing with such integer-coded
+data and that we might have multiple alleles at each locus. For example,
+the components of <code>L</code> might look like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> L<span class="sc">$</span>freqs</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>           <span class="dv">1</span>            <span class="dv">2</span>            <span class="dv">3</span>            <span class="dv">4</span>            <span class="dv">5</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fl">6.329010e-01</span> <span class="fl">3.662781e-01</span> <span class="fl">4.104416e-04</span> <span class="fl">2.462650e-04</span> <span class="fl">8.208833e-05</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>           <span class="dv">6</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fl">8.208833e-05</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> L<span class="sc">$</span>geno_freqs</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span> <span class="sc">/</span> <span class="dv">1</span>        <span class="dv">1</span> <span class="sc">/</span> <span class="dv">2</span>        <span class="dv">1</span> <span class="sc">/</span> <span class="dv">3</span>        <span class="dv">1</span> <span class="sc">/</span> <span class="dv">4</span>        <span class="dv">1</span> <span class="sc">/</span> <span class="dv">5</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fl">4.005637e-01</span> <span class="fl">4.636356e-01</span> <span class="fl">5.195378e-04</span> <span class="fl">3.117227e-04</span> <span class="fl">1.039076e-04</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       <span class="dv">1</span> <span class="sc">/</span> <span class="dv">6</span>        <span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>        <span class="dv">2</span> <span class="sc">/</span> <span class="dv">3</span>        <span class="dv">2</span> <span class="sc">/</span> <span class="dv">4</span>        <span class="dv">2</span> <span class="sc">/</span> <span class="dv">5</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fl">1.039076e-04</span> <span class="fl">1.341597e-01</span> <span class="fl">3.006716e-04</span> <span class="fl">1.804029e-04</span> <span class="fl">6.013432e-05</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>       <span class="dv">2</span> <span class="sc">/</span> <span class="dv">6</span>        <span class="dv">3</span> <span class="sc">/</span> <span class="dv">3</span>        <span class="dv">3</span> <span class="sc">/</span> <span class="dv">4</span>        <span class="dv">3</span> <span class="sc">/</span> <span class="dv">5</span>        <span class="dv">3</span> <span class="sc">/</span> <span class="dv">6</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fl">6.013432e-05</span> <span class="fl">1.684623e-07</span> <span class="fl">2.021548e-07</span> <span class="fl">6.738493e-08</span> <span class="fl">6.738493e-08</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>       <span class="dv">4</span> <span class="sc">/</span> <span class="dv">4</span>        <span class="dv">4</span> <span class="sc">/</span> <span class="dv">5</span>        <span class="dv">4</span> <span class="sc">/</span> <span class="dv">6</span>        <span class="dv">5</span> <span class="sc">/</span> <span class="dv">5</span>        <span class="dv">5</span> <span class="sc">/</span> <span class="dv">6</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fl">6.064644e-08</span> <span class="fl">4.043096e-08</span> <span class="fl">4.043096e-08</span> <span class="fl">6.738493e-09</span> <span class="fl">1.347699e-08</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>       <span class="dv">6</span> <span class="sc">/</span> <span class="dv">6</span> </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fl">6.738493e-09</span> </span></code></pre></div>
+<p>This model is parameterized by a genotyping error rate, <span class="math inline">\(\epsilon\)</span>, and errors occur independently
+between individuals and loci. With probability <span class="math inline">\(1-\epsilon\)</span> a genotyping error does not
+occur so that the observed genotype is the true genotype. With
+probability <span class="math inline">\(\epsilon\)</span> the genotype
+is subject to genotying error, in which case, the observed value is
+drawn from the remaining genotypes, proportionally to their frequencies.
+Under such a model, using <span class="math inline">\(y_\ell\)</span> to
+denote the observed genotype and <span class="math inline">\(x_\ell\)</span> to denote the true genotype, we
+have the row <span class="math inline">\(s\)</span> and column <span class="math inline">\(t\)</span> entry of <span class="math inline">\(\mathbf{C}_\ell\)</span> being the the conditional
+probability: <span class="math display">\[
+P(y_\ell = g_{t} | x_\ell = g_{s}) =
 \left\{
 \begin{array}{ll}
 (1-\epsilon), &amp;  s = t \\
 \epsilon q(g_{t}) / (1 - g_s), &amp; s \neq t.
 \end{array}
 \right.
-\]</span> where <span class="math inline">\(q(g_{s})\)</span> is the frequency of genotype <span class="math inline">\(s\)</span>.</p>
-<p>Thus, to implement TGIE, all we need to do is write code to return the matrix <span class="math inline">\(\mathbf{C_\ell}\)</span> given the input <code>L$geno_freqs</code> and another parameter <code>epsilon</code>. That looks like this:</p>
+\]</span> where <span class="math inline">\(q(g_{s})\)</span> is the
+frequency of genotype <span class="math inline">\(s\)</span>.</p>
+<p>Thus, to implement TGIE, all we need to do is write code to return
+the matrix <span class="math inline">\(\mathbf{C_\ell}\)</span> given
+the input <code>L$geno_freqs</code> and another parameter
+<code>epsilon</code>. That looks like this:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' implements a simple true-genotype-independent genotyping error model</span>
 <span class="co">#' @param L required locus specific information</span>
 <span class="co">#' @param epsilon the rate at which genotypes are incorrectly observed.</span>
 <span class="va">ge_model_TGIE</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">L</span>, <span class="va">epsilon</span> <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># first make a matrix G x G matrix of the genotype frequencies</span>
-  <span class="va">gmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span><span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">gmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span><span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span><span class="op">)</span>
 
   <span class="co"># Now, we make the diagonals 1 - epsilon exactly and rescale</span>
   <span class="co"># everything else to sum to epsilon.</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-  <span class="va">gmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">gmat</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">epsilon</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">epsilon</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+  <span class="va">gmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">gmat</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">epsilon</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">epsilon</span>
 
   <span class="co"># put the genotype names on for the row and column names since that can be</span>
   <span class="co"># handy down the road.</span>
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span>
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">gmat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span>
 
   <span class="co"># return gmat, which is the matrix C.</span>
   <span class="va">gmat</span>
 <span class="op">}</span></code></pre></div>
-<p>That is all there is to it. And we can run it on a simple 2-allele example here:</p>
+<p>That is all there is to it. And we can run it on a simple 2-allele
+example here:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span>
-<span class="va">L</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>A <span class="op">=</span> <span class="fl">0.6</span>, B <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span>,
-  geno_freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`A / A` <span class="op">=</span> <span class="fl">0.36</span>, `A / B` <span class="op">=</span> <span class="fl">0.48</span>, `B / B` <span class="op">=</span> <span class="fl">0.16</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span>
+<span class="va">L</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+  freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>A <span class="op">=</span> <span class="fl">0.6</span>, B <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span>,
+  geno_freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`A / A` <span class="op">=</span> <span class="fl">0.36</span>, `A / B` <span class="op">=</span> <span class="fl">0.48</span>, `B / B` <span class="op">=</span> <span class="fl">0.16</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="va">C</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ge_model_TGIE.html">ge_model_TGIE</a></span><span class="op">(</span><span class="va">L</span>, epsilon <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span>
@@ -188,27 +265,51 @@ P(y_\ell = g_{t} | x_\ell = g_{s}) =
 <span class="co">#&gt; A / A 0.980000000 0.01500000 0.005000000</span>
 <span class="co">#&gt; A / B 0.013846154 0.98000000 0.006153846</span>
 <span class="co">#&gt; B / B 0.008571429 0.01142857 0.980000000</span></code></pre></div>
-<p>It is always good to check that your function returns a matrix whose rows sum to one.</p>
+<p>It is always good to check that your function returns a matrix whose
+rows sum to one.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">C</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">C</span><span class="op">)</span>
 <span class="co">#&gt; A / A A / B B / B </span>
 <span class="co">#&gt;     1     1     1</span></code></pre></div>
 </div>
-<div id="a-quick-microsatellite-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#a-quick-microsatellite-model" class="anchor"></a>A Quick Microsatellite Model</h2>
-<p>Here we develop a microsatellite model that tries to capture a couple of features of microsatellites:</p>
+<div class="section level2">
+<h2 id="a-quick-microsatellite-model">A Quick Microsatellite Model<a class="anchor" aria-label="anchor" href="#a-quick-microsatellite-model"></a>
+</h2>
+<p>Here we develop a microsatellite model that tries to capture a couple
+of features of microsatellites:</p>
 <ol style="list-style-type: decimal">
-<li>If you mis-call an allele, you are more likely to mis-call it as an allele that is close in length to the true allele than one that is of very different length then the true allele.</li>
-<li>Some alleles don’t amplify reliably, and this seems to happen more often with longer alleles (large-allele dropout), leaving the remaining allele to appear to be in homozygous form.</li>
+<li>If you mis-call an allele, you are more likely to mis-call it as an
+allele that is close in length to the true allele than one that is of
+very different length then the true allele.</li>
+<li>Some alleles don’t amplify reliably, and this seems to happen more
+often with longer alleles (large-allele dropout), leaving the remaining
+allele to appear to be in homozygous form.</li>
 </ol>
-<p>Anyway, we note here that we have both allelic mis-calls and dropout errors. CKMRsim includes a function called <code><a href="../reference/combine_miscalls_and_dropouts.html">combine_miscalls_and_dropouts()</a></code> that makes it fairly easy to implement the combination of these two types of errors, using a simple model (see the paper Anderson, in prep, for details.) In order to use this function one needs to specify two different sets of probabilities:</p>
+<p>Anyway, we note here that we have both allelic mis-calls and dropout
+errors. CKMRsim includes a function called
+<code><a href="../reference/combine_miscalls_and_dropouts.html">combine_miscalls_and_dropouts()</a></code> that makes it fairly easy
+to implement the combination of these two types of errors, using a
+simple model (see the paper Anderson, in prep, for details.) In order to
+use this function one needs to specify two different sets of
+probabilities:</p>
 <ol style="list-style-type: decimal">
-<li>Mis-call probabilities: a matrix <span class="math inline">\(\mathbf{W}\)</span> that is <span class="math inline">\(A \times A\)</span> where <span class="math inline">\(A\)</span> is the number of alleles at the locus. The element in row <span class="math inline">\(i\)</span> and column <span class="math inline">\(j\)</span> is the probability that a true allele of type <span class="math inline">\(i\)</span> is called as type <span class="math inline">\(j\)</span>.</li>
-<li>Dropout probabilities: a vector <span class="math inline">\(D\)</span> of length <span class="math inline">\(A\)</span> giving the probability that each different allele will drop out and not be observed/called (yielding a genotype that is homozygous for the remaining allele.)</li>
+<li>Mis-call probabilities: a matrix <span class="math inline">\(\mathbf{W}\)</span> that is <span class="math inline">\(A \times A\)</span> where <span class="math inline">\(A\)</span> is the number of alleles at the locus.
+The element in row <span class="math inline">\(i\)</span> and column
+<span class="math inline">\(j\)</span> is the probability that a true
+allele of type <span class="math inline">\(i\)</span> is called as type
+<span class="math inline">\(j\)</span>.</li>
+<li>Dropout probabilities: a vector <span class="math inline">\(D\)</span> of length <span class="math inline">\(A\)</span> giving the probability that each
+different allele will drop out and not be observed/called (yielding a
+genotype that is homozygous for the remaining allele.)</li>
 </ol>
-<p>It is important to note that each of the two copies of a gene at a locus has a chance to drop out or be miscalled. Thus, if you have a true genotype of <span class="math inline">\(CD\)</span> and the <span class="math inline">\(C\)</span> allele has a dropout rate of 0.01 and <span class="math inline">\(D\)</span> a dropout rate of 0.02, then, a dropout will occur at the locus with probability <span class="math inline">\(0.01 + 0.02 = 0.03\)</span>.</p>
-<p>To develop this model we will want to refer to an example locus. We use one of the ones from the Ruzzante et al. data set in one of the brook trout populations. This is here:</p>
+<p>It is important to note that each of the two copies of a gene at a
+locus has a chance to drop out or be miscalled. Thus, if you have a true
+genotype of <span class="math inline">\(CD\)</span> and the <span class="math inline">\(C\)</span> allele has a dropout rate of 0.01 and
+<span class="math inline">\(D\)</span> a dropout rate of 0.02, then, a
+dropout will occur at the locus with probability <span class="math inline">\(0.01 + 0.02 = 0.03\)</span>.</p>
+<p>To develop this model we will want to refer to an example locus. We
+use one of the ones from the Ruzzante et al. data set in one of the
+brook trout populations. This is here:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">example_L_microsat</span>
 <span class="co">#&gt; $freqs</span>
@@ -230,23 +331,54 @@ P(y_\ell = g_{t} | x_\ell = g_{s}) =
 <span class="co">#&gt; 6.578659e-04 3.289329e-04 7.921802e-04 3.727907e-04 1.863953e-04 9.319767e-05 </span>
 <span class="co">#&gt;      76 / 76      76 / 70      76 / 85      70 / 70      70 / 85      85 / 85 </span>
 <span class="co">#&gt; 4.385773e-05 4.385773e-05 2.192886e-05 1.096443e-05 1.096443e-05 2.741108e-06</span></code></pre></div>
-<p>That shows what the <code>L</code> argument to our genotyping error model might look like.</p>
-<p>When we implement this, here is how we get the features we describe above. First, to get the matrix <span class="math inline">\(\mathbf{W}\)</span>, taking account of proximity of different alleles (in terms of length) we do this:</p>
+<p>That shows what the <code>L</code> argument to our genotyping error
+model might look like.</p>
+<p>When we implement this, here is how we get the features we describe
+above. First, to get the matrix <span class="math inline">\(\mathbf{W}\)</span>, taking account of proximity
+of different alleles (in terms of length) we do this:</p>
 <ul>
-<li>Allow the user to specify a basic underlying probability that an allele is mis-called.</li>
-<li>Identify the step size between alleles as the minimum different between any two allele lengths.</li>
-<li>If a mis-call error occurs, model the probability that an allele of length <span class="math inline">\(X\)</span> is mistakenly called an allele of length <span class="math inline">\(Y\)</span> is proportional to the geometric probability, with parameter <span class="math inline">\(p\)</span> (note that the user must set the parameter <span class="math inline">\(p\)</span>). <span class="math display">\[
+<li>Allow the user to specify a basic underlying probability that an
+allele is mis-called.</li>
+<li>Identify the step size between alleles as the minimum different
+between any two allele lengths.</li>
+<li>If a mis-call error occurs, model the probability that an allele of
+length <span class="math inline">\(X\)</span> is mistakenly called an
+allele of length <span class="math inline">\(Y\)</span> is proportional
+to the geometric probability, with parameter <span class="math inline">\(p\)</span> (note that the user must set the
+parameter <span class="math inline">\(p\)</span>). <span class="math display">\[
 P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
-\]</span> where <span class="math inline">\(|Y-X|\)</span> is the unsigned difference between <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> in units of the step size. Note that if all allele lengths are a multiple of the step size, then this would be an equality, not just a proportion, but, in order to allow for intervals between alleles that might not be multiples of the step size, we will just allow for <span class="math inline">\(|Y-X|\)</span> to be a real number, and we will normalize over all possible alleles. An interesting consequence of this normalization is that genotyping error probabilities may not be symmetrical: if allele 112 is adjacent to 116 and 120, but there is no 108 or 104, then 112 is more likely to be miscalled as 116 than 116 is to be miscalled as 112, because there is also a good chance that it will be miscalled as 120 (whereas 112 doesn’t have many likely miscall states below it.)</li>
+\]</span> where <span class="math inline">\(|Y-X|\)</span> is the
+unsigned difference between <span class="math inline">\(Y\)</span> and
+<span class="math inline">\(X\)</span> in units of the step size. Note
+that if all allele lengths are a multiple of the step size, then this
+would be an equality, not just a proportion, but, in order to allow for
+intervals between alleles that might not be multiples of the step size,
+we will just allow for <span class="math inline">\(|Y-X|\)</span> to be
+a real number, and we will normalize over all possible alleles. An
+interesting consequence of this normalization is that genotyping error
+probabilities may not be symmetrical: if allele 112 is adjacent to 116
+and 120, but there is no 108 or 104, then 112 is more likely to be
+miscalled as 116 than 116 is to be miscalled as 112, because there is
+also a good chance that it will be miscalled as 120 (whereas 112 doesn’t
+have many likely miscall states below it.)</li>
 </ul>
-<p>Then, to get some sort of “large-allele dropout” effect, we will do this:</p>
+<p>Then, to get some sort of “large-allele dropout” effect, we will do
+this:</p>
 <ul>
-<li>Have the user set a “base” drop out rate, <span class="math inline">\(d\)</span>, which is the rate at which a “typical” allele would drop out.</li>
-<li>From the observed frequency distribution of alleles, compute the mean and the standard deviation of the allele-length distribution.</li>
-<li>For each allele, compute a <span class="math inline">\(z\)</span>-score that describes where it fits in that allele-length distribution.</li>
-<li>For each allele with <span class="math inline">\(z&gt;0\)</span> compute the dropout rate as <span class="math inline">\(dsz\)</span> where <span class="math inline">\(d\)</span> is the base dropout rate, <span class="math inline">\(s\)</span> is a scaling factor that controls how much dropout rate increases with allele length, and <span class="math inline">\(z\)</span> is the allele’s <span class="math inline">\(z\)</span>-score.</li>
+<li>Have the user set a “base” drop out rate, <span class="math inline">\(d\)</span>, which is the rate at which a “typical”
+allele would drop out.</li>
+<li>From the observed frequency distribution of alleles, compute the
+mean and the standard deviation of the allele-length distribution.</li>
+<li>For each allele, compute a <span class="math inline">\(z\)</span>-score that describes where it fits in
+that allele-length distribution.</li>
+<li>For each allele with <span class="math inline">\(z&gt;0\)</span>
+compute the dropout rate as <span class="math inline">\(dsz\)</span>
+where <span class="math inline">\(d\)</span> is the base dropout rate,
+<span class="math inline">\(s\)</span> is a scaling factor that controls
+how much dropout rate increases with allele length, and <span class="math inline">\(z\)</span> is the allele’s <span class="math inline">\(z\)</span>-score.</li>
 </ul>
-<p>Here is a function that accomplishes that. This is just the function definition from the package.</p>
+<p>Here is a function that accomplishes that. This is just the function
+definition from the package.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' a simple "length-aware" genotyping error model for microsatellites</span>
 <span class="co">#'</span>
@@ -283,10 +415,10 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
 <span class="op">)</span> <span class="op">{</span>
 
   <span class="co"># first, compute the step-size as the minimum distance between any two alleles</span>
-  <span class="va">lengths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">diffs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/outer.html">outer</a></span><span class="op">(</span><span class="va">lengths</span>, <span class="va">lengths</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">diffs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
-  <span class="va">min_diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">diffs</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+  <span class="va">lengths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">diffs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/outer.html" class="external-link">outer</a></span><span class="op">(</span><span class="va">lengths</span>, <span class="va">lengths</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">diffs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+  <span class="va">min_diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">diffs</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
   <span class="va">step_size</span> <span class="op">=</span> <span class="va">min_diff</span>
 
@@ -298,38 +430,38 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
   <span class="va">preW</span> <span class="op">&lt;-</span> <span class="va">miscall_decay</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">miscall_decay</span><span class="op">)</span> <span class="op">^</span> <span class="op">(</span><span class="va">steps</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
 
   <span class="co"># and those need to be normalized so that the off-diagonals sum to miscall_rate</span>
-  <span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">preW</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">miscall_rate</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">W</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">preW</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">*</span> <span class="va">miscall_rate</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
   <span class="co"># and we put 1 - miscall_rate on the diagonal</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">miscall_rate</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">miscall_rate</span>
   <span class="co"># and we MUST put the allele lengths on there as the names</span>
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">W</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
 
 
 
   <span class="co"># Now, let's make the vector D of dropout rates.</span>
   <span class="co"># first get the mean allele length</span>
-  <span class="va">mean_len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">lengths</span> <span class="op">*</span> <span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
+  <span class="va">mean_len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">lengths</span> <span class="op">*</span> <span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
 
   <span class="co"># and then we get the variance and the standard deviation.</span>
   <span class="co"># Note that we have the freqs of each lengths, but not the sample</span>
   <span class="co"># sizes, so we can't do the n-1 sort of correction for variance.</span>
-  <span class="va">var_len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span> <span class="va">L</span><span class="op">$</span><span class="va">freqs</span> <span class="op">*</span> <span class="op">(</span><span class="va">lengths</span> <span class="op">-</span> <span class="va">mean_len</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>
-  <span class="va">sd_len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">var_len</span><span class="op">)</span>
+  <span class="va">var_len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span> <span class="va">L</span><span class="op">$</span><span class="va">freqs</span> <span class="op">*</span> <span class="op">(</span><span class="va">lengths</span> <span class="op">-</span> <span class="va">mean_len</span><span class="op">)</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>
+  <span class="va">sd_len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">var_len</span><span class="op">)</span>
 
   <span class="co"># now compute the z-scores</span>
   <span class="va">zscores</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">lengths</span> <span class="op">-</span> <span class="va">mean_len</span><span class="op">)</span> <span class="op">/</span> <span class="va">sd_len</span>
 
   <span class="co"># now we can compute the vector D of dropout probabilities</span>
-  <span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">dropout_rate</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">dropout_rate</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span><span class="op">)</span>
   <span class="va">D</span><span class="op">[</span><span class="va">zscores</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">dropout_rate</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">zscores</span><span class="op">[</span><span class="va">zscores</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span> <span class="op">*</span> <span class="va">dropout_scale_factor</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">D</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">D</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">freqs</span><span class="op">)</span>
 
   <span class="co"># And now we create the matrix C by pushing all these into the function</span>
   <span class="co"># that combines allelic mis-calls and dropouts. Note that by setting Ws</span>
   <span class="co"># to W here we assume that the occurrence of a dropout does not affect the</span>
   <span class="co"># rate at which mis-calls occur.</span>
-  <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine_miscalls_and_dropouts.html">combine_miscalls_and_dropouts</a></span><span class="op">(</span>geno_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span>,
+  <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine_miscalls_and_dropouts.html">combine_miscalls_and_dropouts</a></span><span class="op">(</span>geno_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">L</span><span class="op">$</span><span class="va">geno_freqs</span><span class="op">)</span>,
                                 D <span class="op">=</span> <span class="va">D</span>,
                                 W <span class="op">=</span> <span class="va">W</span>,
                                 Ws <span class="op">=</span> <span class="va">W</span><span class="op">)</span>
@@ -337,7 +469,9 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
   <span class="va">ret</span>
 
 <span class="op">}</span></code></pre></div>
-<p>We can run that function with the default values to see what the results look like. The matrix is quite large (there are many genotypic states) but so we just look at the first 4 rows and columns.</p>
+<p>We can run that function with the default values to see what the
+results look like. The matrix is quite large (there are many genotypic
+states) but so we just look at the first 4 rows and columns.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">default</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ge_model_microsat1.html">ge_model_microsat1</a></span><span class="op">(</span><span class="va">example_L_microsat</span><span class="op">)</span>
 <span class="va">default</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
@@ -346,22 +480,51 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
 <span class="co">#&gt; 79 / 61 0.009951501 9.680772e-01 3.706518e-05 4.633071e-03</span>
 <span class="co">#&gt; 79 / 73 0.010852496 1.723054e-05 9.676134e-01 3.446108e-06</span>
 <span class="co">#&gt; 79 / 58 0.009950312 4.816547e-03 7.706602e-06 9.680772e-01</span></code></pre></div>
-<p>Note that, because of the way dropout errors occur, you are more likely to encounter a genotyping error when the true genotype is a heterozygote.</p>
-<p>It will be worth the user’s time to play around with different settings to see the effect of them.</p>
+<p>Note that, because of the way dropout errors occur, you are more
+likely to encounter a genotyping error when the true genotype is a
+heterozygote.</p>
+<p>It will be worth the user’s time to play around with different
+settings to see the effect of them.</p>
 </div>
-<div id="a-genotyping-error-model-for-microhaplotypes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#a-genotyping-error-model-for-microhaplotypes" class="anchor"></a>A Genotyping Error Model for Microhaplotypes</h2>
-<p>Microhaplotypes are clusters of a handful of SNPs that are all close enough to one another that they can be assayed by amplifying the segment of DNA they are on and then sequencing it on a next generation sequencing machine. Since such machines are given the sequence of a single piece of DNA (typically about 100 to 300 bp long), the alleles that occur together on such a read are certain to have been together on the same haplotype. These microhaplotypes are thus multiallelic markers. The main type of genotyping error that occurs with them is a dropout error, in which an individual carries one or two copies of the gene that do not amplify well, and thus will not yield enough reads to detect that allele. On top of that, sequencing errors might lead one to read an incorrect sequence for one of the alleles. In this case, it is more likely that the erroneous haplotype is “close” to the true one (i.e., differs at few SNPs), rather than far from it (different at many SNPs from the true haplotype.)</p>
-<p>The alleles of a microhaplotype can be named by the allelic type of the SNPs within it. For example, at a microsatellite composed of 5 SNPs, one allele might be “ACCGT”. Here we show a simple error model for genotypes involving such microhaplotype alleles. It has the following features:</p>
+<div class="section level2">
+<h2 id="a-genotyping-error-model-for-microhaplotypes">A Genotyping Error Model for Microhaplotypes<a class="anchor" aria-label="anchor" href="#a-genotyping-error-model-for-microhaplotypes"></a>
+</h2>
+<p>Microhaplotypes are clusters of a handful of SNPs that are all close
+enough to one another that they can be assayed by amplifying the segment
+of DNA they are on and then sequencing it on a next generation
+sequencing machine. Since such machines are given the sequence of a
+single piece of DNA (typically about 100 to 300 bp long), the alleles
+that occur together on such a read are certain to have been together on
+the same haplotype. These microhaplotypes are thus multiallelic markers.
+The main type of genotyping error that occurs with them is a dropout
+error, in which an individual carries one or two copies of the gene that
+do not amplify well, and thus will not yield enough reads to detect that
+allele. On top of that, sequencing errors might lead one to read an
+incorrect sequence for one of the alleles. In this case, it is more
+likely that the erroneous haplotype is “close” to the true one (i.e.,
+differs at few SNPs), rather than far from it (different at many SNPs
+from the true haplotype.)</p>
+<p>The alleles of a microhaplotype can be named by the allelic type of
+the SNPs within it. For example, at a microsatellite composed of 5 SNPs,
+one allele might be “ACCGT”. Here we show a simple error model for
+genotypes involving such microhaplotype alleles. It has the following
+features:</p>
 <ol style="list-style-type: decimal">
-<li>The locus has a single allele mis-call rate, call it <code>miscall_rate</code>. In some circumstances, we might want loci with many SNPs to have a higher miscall rate. This is achieved by multiplying the miscall rate by the number of SNPs.<br>
+<li>The locus has a single allele mis-call rate, call it
+<code>miscall_rate</code>. In some circumstances, we might want loci
+with many SNPs to have a higher miscall rate. This is achieved by
+multiplying the miscall rate by the number of SNPs.<br>
 </li>
-<li>If a miscall occurs, with allele <span class="math inline">\(X\)</span> being mis-called as allele <span class="math inline">\(Y\)</span>, then the probability of miscalling <span class="math inline">\(Y\)</span> when the truth is <span class="math inline">\(X\)</span> is inversely proportional to the number of SNP alleles at which <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> differ.</li>
-<li>There is a locus-specific allelic dropout rate <span class="math inline">\(d\)</span>. In a future release we will make it less cumbersome to allow allele-specific dropout rates.</li>
-<li>The allelic mis-calls and dropouts are combined using the function we have seen before, <code><a href="../reference/combine_miscalls_and_dropouts.html">combine_miscalls_and_dropouts()</a></code>.</li>
+<li>If a miscall occurs, with allele <span class="math inline">\(X\)</span> being mis-called as allele <span class="math inline">\(Y\)</span>, then the probability of miscalling
+<span class="math inline">\(Y\)</span> when the truth is <span class="math inline">\(X\)</span> is inversely proportional to the number
+of SNP alleles at which <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> differ.</li>
+<li>There is a locus-specific allelic dropout rate <span class="math inline">\(d\)</span>. In a future release we will make it
+less cumbersome to allow allele-specific dropout rates.</li>
+<li>The allelic mis-calls and dropouts are combined using the function
+we have seen before, <code><a href="../reference/combine_miscalls_and_dropouts.html">combine_miscalls_and_dropouts()</a></code>.</li>
 </ol>
-<p>We have, in the package, an example of what a microhaplotype locus might look like:</p>
+<p>We have, in the package, an example of what a microhaplotype locus
+might look like:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">example_L_microhap</span>
 <span class="co">#&gt; $freqs</span>
@@ -377,7 +540,11 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
 <span class="co">#&gt; 1.134216e-02 6.616257e-03 9.451796e-04 4.253308e-03 4.962193e-03 7.088847e-04 </span>
 <span class="co">#&gt;    GCG / GCG    GCG / GTA    GTA / GTA </span>
 <span class="co">#&gt; 1.447306e-03 4.135161e-04 2.953686e-05</span></code></pre></div>
-<p>So, we will need a function to compute distances between the microhap alleles, and then we will need to use that to compute a matrix <span class="math inline">\(\mathbf{W}\)</span>, like we did for microsatellites, and then we will combine that with dropout rates. In this function those dropout rates are made the same for every allele, but that could be changed.</p>
+<p>So, we will need a function to compute distances between the microhap
+alleles, and then we will need to use that to compute a matrix <span class="math inline">\(\mathbf{W}\)</span>, like we did for
+microsatellites, and then we will combine that with dropout rates. In
+this function those dropout rates are made the same for every allele,
+but that could be changed.</p>
 <p>Here is what such a function looks like:</p>
 </div>
   </div>
@@ -393,11 +560,13 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
 
 
       <footer><div class="copyright">
-  <p>Developed by Eric C. Anderson.</p>
+  <p></p>
+<p>Developed by Eric C. Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -405,6 +574,8 @@ P(X~\mbox{is called as }Y) \propto p(1 - p)^{|Y-X| - 1}
 
   
 
+
+  
 
   </body>
 </html>

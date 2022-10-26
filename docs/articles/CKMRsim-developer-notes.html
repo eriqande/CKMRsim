@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CKMRsim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,6 +69,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -84,13 +83,14 @@
 
       
 
-      </header><script src="CKMRsim-developer-notes_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>CKMRsim-developer-notes</h1>
-                        <h4 class="author">Eric C. Anderson</h4>
+                        <h4 data-toc-skip class="author">Eric C.
+Anderson</h4>
             
-            <h4 class="date">2021-02-01</h4>
+            <h4 data-toc-skip class="date">2022-10-26</h4>
       
       
       <div class="hidden name"><code>CKMRsim-developer-notes.Rmd</code></div>
@@ -99,34 +99,44 @@
 
     
     
-<p>These are some notes that Eric kept while putting this package together, mostly to remind him of the flow of everything and to put little notes in describing how everything goes together.</p>
-<div id="marker-definitions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#marker-definitions" class="anchor"></a>Marker definitions</h2>
+<p>These are some notes that Eric kept while putting this package
+together, mostly to remind him of the flow of everything and to put
+little notes in describing how everything goes together.</p>
+<div class="section level2">
+<h2 id="marker-definitions">Marker definitions<a class="anchor" aria-label="anchor" href="#marker-definitions"></a>
+</h2>
 <p>Markers have to be defined in a data frame. Here is an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">long_markers</span></code></pre></div>
-<pre><code>## # A tibble: 53,637 x 7
-##    Chrom Locus     Pos Allele LocIdx AlleIdx   Freq
-##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt;
-##  1     4 chr4-1   3845 a1          1       1 0.790 
-##  2     4 chr4-1   3845 a2          1       2 0.210 
-##  3     4 chr4-2  71520 a1          2       1 0.485 
-##  4     4 chr4-2  71520 a3          2       2 0.237 
-##  5     4 chr4-2  71520 a2          2       3 0.167 
-##  6     4 chr4-2  71520 a4          2       4 0.112 
-##  7     4 chr4-3 105104 a3          3       1 0.499 
-##  8     4 chr4-3 105104 a2          3       2 0.402 
-##  9     4 chr4-3 105104 a1          3       3 0.0989
-## 10     4 chr4-4 256481 a4          4       1 0.402 
-## # … with 53,627 more rows</code></pre>
-<p>The data frame has to be in this format. It needs to have CHROM (which can be an int or string) Locus (chr) Pos (double or int), Allele need to be a character (even if it is an allele length). The LocIdx and AlleleIdx fields give the order of things that is desired. You can use <code>reindex_markers</code> to sort things into the allele frequency order and re-index them.</p>
-<p>If you don’t know the chrom or position you can just stick whatever you want in there.</p>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 53,637 × 7</span></span>
+<span class="co">##    Chrom Locus     Pos Allele LocIdx AlleIdx   Freq</span>
+<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a1          1       1 0.790 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a2          1       2 0.210 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a1          2       1 0.485 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a3          2       2 0.237 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a2          2       3 0.167 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a4          2       4 0.112 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a3          3       1 0.499 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a2          3       2 0.402 </span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a1          3       3 0.098<span style="text-decoration: underline;">9</span></span>
+<span class="co">## <span style="color: #BCBCBC;">10</span>     4 chr4-4 <span style="text-decoration: underline;">256</span>481 a4          4       1 0.402 </span>
+<span class="co">## <span style="color: #949494;"># … with 53,627 more rows</span></span></code></pre>
+<p>The data frame has to be in this format. It needs to have CHROM
+(which can be an int or string) Locus (chr) Pos (double or int), Allele
+need to be a character (even if it is an allele length). The LocIdx and
+AlleleIdx fields give the order of things that is desired. You can use
+<code>reindex_markers</code> to sort things into the allele frequency
+order and re-index them.</p>
+<p>If you don’t know the chrom or position you can just stick whatever
+you want in there.</p>
 </div>
-<div id="genotyping-error" class="section level2">
-<h2 class="hasAnchor">
-<a href="#genotyping-error" class="anchor"></a>Genotyping error</h2>
-<p>There are two main types of genotyping error model, but so far I have only implemented the allele-based one: <code>general_allele_based_geno_err_model</code>.</p>
+<div class="section level2">
+<h2 id="genotyping-error">Genotyping error<a class="anchor" aria-label="anchor" href="#genotyping-error"></a>
+</h2>
+<p>There are two main types of genotyping error model, but so far I have
+only implemented the allele-based one:
+<code>general_allele_based_geno_err_model</code>.</p>
 </div>
   </div>
 
@@ -141,11 +151,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Eric C. Anderson.</p>
+  <p></p>
+<p>Developed by Eric C. Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -153,6 +165,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,23 +36,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">CKMRsim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -76,6 +72,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -89,50 +88,67 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="ckmrsim" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#ckmrsim" class="anchor"></a>CKMRsim</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="ckmrsim">CKMRsim<a class="anchor" aria-label="anchor" href="#ckmrsim"></a>
+</h1></div>
 <p>This package implements Monte Carlo methods (including efficient importance sampling approaches) for assessing the false positive and false negative rates expected when using a particular set of genetic markers for pairwise relationship inference. It also provides functions implemented in C++ for computing likelihood ratios for different relationships between all pairs of individuals in a data set.</p>
-<p>CKMRsim can be installed with devtools. It requires that development tools be installed on your system to allow compilation of C++ via RCpp.</p>
+<p>CKMRsim can be installed with the ‘remotes’ packages` It requires that development tools be installed on your system to allow compilation of C++ via RCpp.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"eriqande/CKMRsim"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>After this, the various vignettes can be accessed and read like this:</p>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"eriqande/CKMRsim"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>Once that is done (and note that building the vignettes can take a while), you can read the vignettes with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-example-1"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-example-1"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-example-2-microsatellites"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-example-2-microsatellites"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-simulating-linked-markers"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-simulating-linked-markers"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-writing-geno-error-funcs"</span><span class="op">)</span></code></pre></div>
-<p>In order to pursue simulations in the face of physical linkage, you must download and install the external dependency, Mendel version 16. For Windows and Mac OS X, CKMRsim will look for the Mendel binary in its default install location. So download it from <a href="http://software.genetics.ucla.edu/mendel" class="uri">http://software.genetics.ucla.edu/mendel</a> and do a default install. Note that you need to register with your email in order to download Mendel.</p>
+<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-writing-geno-error-funcs"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-pairwise-relationships"</span><span class="op">)</span></code></pre></div>
+<p>An easier way to get to read these vignetttes is to find them in the “articles” tab at CKMRsim’s pkgdown page at: <a href="https://eriqande.github.io/CKMRsim/" class="uri">https://eriqande.github.io/CKMRsim/</a></p>
+<p>Doing simulations in the face of physical linkage requires the Mendel program version 16. This was formerly available at <a href="http://software.genetics.ucla.edu/mendel" class="external-link uri">http://software.genetics.ucla.edu/mendel</a>, but it seems that the site is no longer maintained or connected.</p>
+<p>Instead, you can now install it with the <code><a href="reference/install_mendel.html">install_mendel()</a></code> function.</p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>CC0</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing CKMRsim</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Eric C. Anderson <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Eric C. Anderson.</p>
+  <p></p>
+<p>Developed by Eric C. Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -140,6 +156,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://eriqande.github.io/CKMRsim/404.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/IDEAS.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-developer-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-example-1.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-example-2-microsatellites.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-pairwise-relationships.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-simulating-linked-markers.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-writing-geno-error-funcs.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/authors.html</loc>
+  </url>
+  <url>
     <loc>https://eriqande.github.io/CKMRsim/index.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/news/index.html</loc>
   </url>
   <url>
     <loc>https://eriqande.github.io/CKMRsim/reference/CKMRsim.html</loc>
@@ -82,6 +115,9 @@
     <loc>https://eriqande.github.io/CKMRsim/reference/id_prepend.html</loc>
   </url>
   <url>
+    <loc>https://eriqande.github.io/CKMRsim/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://eriqande.github.io/CKMRsim/reference/index_ab.html</loc>
   </url>
   <url>
@@ -89,6 +125,9 @@
   </url>
   <url>
     <loc>https://eriqande.github.io/CKMRsim/reference/insert_Y_l_matrices.html</loc>
+  </url>
+  <url>
+    <loc>https://eriqande.github.io/CKMRsim/reference/install_mendel.html</loc>
   </url>
   <url>
     <loc>https://eriqande.github.io/CKMRsim/reference/kappas.html</loc>
@@ -194,23 +233,5 @@
   </url>
   <url>
     <loc>https://eriqande.github.io/CKMRsim/reference/write_all_mendel_files.html</loc>
-  </url>
-  <url>
-    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-developer-notes.html</loc>
-  </url>
-  <url>
-    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-example-1.html</loc>
-  </url>
-  <url>
-    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-example-2-microsatellites.html</loc>
-  </url>
-  <url>
-    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-pairwise-relationships.html</loc>
-  </url>
-  <url>
-    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-simulating-linked-markers.html</loc>
-  </url>
-  <url>
-    <loc>https://eriqande.github.io/CKMRsim/articles/CKMRsim-writing-geno-error-funcs.html</loc>
   </url>
 </urlset>
