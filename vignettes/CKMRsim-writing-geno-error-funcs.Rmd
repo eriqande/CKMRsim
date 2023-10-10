@@ -65,8 +65,9 @@ different alleles.  The names are the names of the genotypes, which are merely t
 names of the two alleles in the genotype, separated by space-slash-space.
 For example "112 / 116". (Note that, by default, CKMRsim names genotypes this way.
 There should be no problem parsing such genotype names into the names of the constituent
-alleles, so long as alleles are never named have a space.  That should be a problem.  If
-you have spaces in your allele names, then please fix that!)
+alleles, so long as alleles never have spaces in their names.  Spaces in allele names
+would be a problem.  If
+you have spaces in your allele names, then please fix that!
   
 
 After the required `L` argument, the `ge_model_` function can have any other

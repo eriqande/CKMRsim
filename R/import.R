@@ -12,11 +12,11 @@ NULL
 
 
 #### Import functions from packages ####
-#' @importFrom dplyr n n_distinct rename
+#' @importFrom dplyr n n_distinct left_join mutate rename select
 #' @importFrom stats quantile rmultinom runif sd setNames
 #' @importFrom tibble tibble
-#' @importFrom tidyr separate
-#' @importFrom utils read.table write.table
+#' @importFrom tidyr pivot_wider separate
+#' @importFrom utils read.table unzip write.table
 
 
 
@@ -33,6 +33,12 @@ if(getRversion() >= "2.15.1")  {
       "AlleLine",
       "Allele",
       "Chrom",
+      "D1a",
+      "D1a_1",
+      "D1a_2",
+      "D2a",
+      "D2a_1",
+      "D2a_2",
       "FNR",
       "Freq",
       "Kid",
@@ -91,6 +97,7 @@ if(getRversion() >= "2.15.1")  {
       "loc_name",
       "num_bases",
       "num_markers",
+      "num_loc",
       "num_mismatch",
       "pos",
       "scaled_length",
