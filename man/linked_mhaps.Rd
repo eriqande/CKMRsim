@@ -5,7 +5,7 @@
 \alias{linked_mhaps}
 \title{Microhaplotype data from kelp rockfish \emph{Sebastes atrovirens} with pretend linkage positions}
 \format{
-This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+This tibble includes 825 alleles/haplotypes from 165 genomic regions and
 is in the format of \code{\link{long_markers}}. However since true positions
 of these markers in the genome are not known I just pretended that we knew some (randomly generated)
 locations.   The column

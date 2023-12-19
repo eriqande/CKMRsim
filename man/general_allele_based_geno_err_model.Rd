@@ -52,7 +52,7 @@ pg <- expand.grid(g=alles, gp=alles, stringsAsFactors = FALSE) \%>\%
 input_df <- cbind(pg[rep(1:nrow(pg), nrow(pg)), ],
                   pg[rep(1:nrow(pg), each = nrow(pg)), ])
 names(input_df)[3:4] <- c("h", "hp")
-input_df <- dplyr::tbl_df(input_df)
+input_df <- tibble::as_tibble(input_df)
 
 
 # here we make the matrix W (just some random numbers)

@@ -57,7 +57,7 @@
 
 #' A long format way of specifying markers.
 #'
-#' This is a tbl_df data frame (a la dplyr) that provides an example of how to
+#' This is a tibble that provides an example of how to
 #' specify markers.  This is particularly useful for pumping stuff into Mendel.
 #' And it is way easier than having everything in a big named list.
 #'
@@ -101,7 +101,7 @@
 #' MiSeq machine at the SWFSC lab in Santa Cruz.  Genotypes of roughly 150 individuals
 #' were called an resolved into haplotypes using the fact that each short read comes
 #' from a single chromosome.
-#' @format  This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+#' @format  This tibble includes 825 alleles/haplotypes from 165 genomic regions and
 #' is in the format of \code{\link{long_markers}}. However since true positions
 #' of these markers in the genome are not known, it is instructive to see from these data
 #' how to insert them into the format of \code{\link{long_markers}}.  Simply the column
@@ -120,7 +120,7 @@
 #' were called an resolved into haplotypes using the fact that each short read comes
 #' from a single chromosome. These were randomly assigned to some positions on some random
 #' chromosomes for testing linkage stuff.
-#' @format  This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+#' @format  This tibble includes 825 alleles/haplotypes from 165 genomic regions and
 #' is in the format of \code{\link{long_markers}}. However since true positions
 #' of these markers in the genome are not known I just pretended that we knew some (randomly generated)
 #' locations.   The column

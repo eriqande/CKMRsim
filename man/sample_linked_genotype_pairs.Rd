@@ -27,6 +27,6 @@ and it will pass them off to Mendel, drop the genes, do genotyping error and the
 a list of vectors which hold the genotype index that you can use to subscript the
 joint probability vectors with.  This function assumes that the loci in df are ordered
 appropriately (i.e have been run through reindex_markers()) and that the components in
-C are named Chrom.Locus.Pos, as is typical.  Obviously the C list should corresponds
+C are named Chrom.Locus.Pos, as is typical.  Obviously the C list should correspond
 exactly to the markers/alleles in df.
 }

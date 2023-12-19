@@ -25,7 +25,8 @@ markers2mendel_def_lines <- function(df) {
 
   # form all the locus names and make sure none of them are more than 16 characters
   illegal_names <- t1 %>%
-    dplyr::summarise(loc_name = paste0(Chrom, "_", LocIdx)) %>%
+    dplyr::mutate(loc_name = paste0(Chrom, "_", LocIdx)) %>%
+    dplyr::slice(1) %>%
     dplyr::ungroup() %>%
     dplyr::filter(nchar(loc_name) > 16)
 
@@ -81,7 +82,7 @@ pedigree2mendel_ped_file <- function(df, name, filename = NA) {
 
 
   df2 <- df %>%
-    dplyr::tbl_df() %>%
+   tibble::as_tibble() %>%
    dplyr::mutate(pedname = name,
            MZtwin_stat = "",
            Panew = ifelse(Pa == 0, "", Pa),
@@ -244,7 +245,7 @@ run_mendel <- function(Dir, Control) {
 #' a list of vectors which hold the genotype index that you can use to subscript the
 #' joint probability vectors with.  This function assumes that the loci in df are ordered
 #' appropriately (i.e have been run through reindex_markers()) and that the components in
-#' C are named Chrom.Locus.Pos, as is typical.  Obviously the C list should corresponds
+#' C are named Chrom.Locus.Pos, as is typical.  Obviously the C list should correspond
 #' exactly to the markers/alleles in df.
 #' @param df  A data frame in the format of \code{\link{long_markers}}.
 #' @param ped  The pedigree to be simulating from

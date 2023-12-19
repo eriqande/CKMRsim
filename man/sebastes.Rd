@@ -5,7 +5,7 @@
 \alias{sebastes}
 \title{Microhaplotype data from kelp rockfish \emph{Sebastes atrovirens}}
 \format{
-This tbl_df-ed data frame includes 825 alleles/haplotypes from 165 genomic regions and
+This tibble includes 825 alleles/haplotypes from 165 genomic regions and
 is in the format of \code{\link{long_markers}}. However since true positions
 of these markers in the genome are not known, it is instructive to see from these data
 how to insert them into the format of \code{\link{long_markers}}.  Simply the column

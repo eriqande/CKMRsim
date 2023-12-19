@@ -29,7 +29,7 @@
 #' ```r
 #' tag_mendelian_incompatibilities(po, geno) %>%
 #'  group_by(Locus) %>%
-#'  summarise(mean_incompat = mean(mend_incompat, na.rm = TRUE)) %>%
+#'  summarise(mean_incompat = mean(is_MI, na.rm = TRUE)) %>%
 #'  arrange(desc(mean_incompat))
 #' ```
 #' @export

@@ -23,7 +23,7 @@ number of loci on the chromosome.  These should be ordered according to Pos}
 long_markers
 }
 \description{
-This is a tbl_df data frame (a la dplyr) that provides an example of how to
+This is a tibble that provides an example of how to
 specify markers.  This is particularly useful for pumping stuff into Mendel.
 And it is way easier than having everything in a big named list.
 }
