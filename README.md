@@ -41,3 +41,6 @@ program version 16. This was formerly available at
 is no longer maintained or connected.
 
 Instead, you can now install it with the `install_mendel()` function.
+
+A tutorial on how to use CKMRsim, prepared for a workshop at TWS 2022, can be found at
+https://eriqande.github.io/tws-ckmr-2022/kin-finding-lab.html
