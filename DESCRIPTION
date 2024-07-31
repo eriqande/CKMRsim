@@ -1,7 +1,7 @@
 Package: CKMRsim
 Type: Package
 Title: Inference of Pairwise Relationships Using Likelihood Ratios
-Version: 0.1.2.999
+Version: 0.1.3
 Authors@R: c(
     person(given = c("Eric", "C."), family = "Anderson", email = "eric.anderson@noaa.gov", role = c("aut", "cre"))
   )
@@ -34,4 +34,3 @@ VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Encoding: UTF-8
-
