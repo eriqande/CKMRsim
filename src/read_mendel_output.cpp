@@ -12,12 +12,13 @@ using namespace Rcpp;
 //' of individuals are labeled 1 and 2.
 //' @param Input the path to the Mendel output file to read in.
 //' @param NumA the number of alleles at each locus
+//' @param verbose integer flag.  1 gives verbose output. 0 does not.
 //' @examples
 //' \dontrun{
 //' read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
 //' }
 // [[Rcpp::export]]
-List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
+List read_mendel_outped(CharacterVector Input, IntegerVector NumA, int verbose) {
   int i, slash;
   int aa,bb, a, b, A;
   std::string tempstr;
@@ -47,7 +48,7 @@ List read_mendel_outped(CharacterVector Input, IntegerVector NumA) {
   if(Num1 != Num2) stop("Different numbers of 1's and 2's in mendel output.");
 
   /* then allocate memory for return genotype values and reset the file */
-  Rcpp::Rcout << "Have scanned " << Num1 << " pairs in Mendel output file." << std::endl;
+  if(verbose) {Rcpp::Rcout << "Have scanned " << Num1 << " pairs in Mendel output file." << std::endl;}
   IntegerMatrix geno1(Num1, NumLoc);  // Return as matrix with Num1 rows and NumLoc columns.
   IntegerMatrix geno2(Num2, NumLoc);
   Num1 = -1;  // reset these to capture data into the matrices

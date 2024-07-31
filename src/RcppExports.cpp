@@ -68,14 +68,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // read_mendel_outped
-List read_mendel_outped(CharacterVector Input, IntegerVector NumA);
-RcppExport SEXP _CKMRsim_read_mendel_outped(SEXP InputSEXP, SEXP NumASEXP) {
+List read_mendel_outped(CharacterVector Input, IntegerVector NumA, int verbose);
+RcppExport SEXP _CKMRsim_read_mendel_outped(SEXP InputSEXP, SEXP NumASEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type Input(InputSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type NumA(NumASEXP);
-    rcpp_result_gen = Rcpp::wrap(read_mendel_outped(Input, NumA));
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_mendel_outped(Input, NumA, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -108,7 +109,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_CKMRsim_comp_ind_pairwise", (DL_FUNC) &_CKMRsim_comp_ind_pairwise, 6},
     {"_CKMRsim_locus_specific_pairwise", (DL_FUNC) &_CKMRsim_locus_specific_pairwise, 7},
     {"_CKMRsim_pairwise_geno_id", (DL_FUNC) &_CKMRsim_pairwise_geno_id, 2},
-    {"_CKMRsim_read_mendel_outped", (DL_FUNC) &_CKMRsim_read_mendel_outped, 2},
+    {"_CKMRsim_read_mendel_outped", (DL_FUNC) &_CKMRsim_read_mendel_outped, 3},
     {"_CKMRsim_samp_from_mat", (DL_FUNC) &_CKMRsim_samp_from_mat, 1},
     {"_CKMRsim_top_index", (DL_FUNC) &_CKMRsim_top_index, 2},
     {NULL, NULL, 0}

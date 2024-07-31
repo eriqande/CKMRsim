@@ -4,12 +4,14 @@
 \alias{read_mendel_outped}
 \title{pick the genotypes out of the Mendel output pedigree file to use to compute Q}
 \usage{
-read_mendel_outped(Input, NumA)
+read_mendel_outped(Input, NumA, verbose)
 }
 \arguments{
 \item{Input}{the path to the Mendel output file to read in.}
 
 \item{NumA}{the number of alleles at each locus}
+
+\item{verbose}{integer flag.  1 gives verbose output. 0 does not.}
 }
 \description{
 Not sure exactly how I am going to do this, as we need to include genotyping error on there as well.

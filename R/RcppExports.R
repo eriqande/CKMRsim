@@ -101,12 +101,13 @@ pairwise_geno_id <- function(S, max_miss) {
 #' of individuals are labeled 1 and 2.
 #' @param Input the path to the Mendel output file to read in.
 #' @param NumA the number of alleles at each locus
+#' @param verbose integer flag.  1 gives verbose output. 0 does not.
 #' @examples
 #' \dontrun{
 #' read_mendel_outped("/Users/eriq/Desktop/mendel-example-Ped.out")
 #' }
-read_mendel_outped <- function(Input, NumA) {
-    .Call('_CKMRsim_read_mendel_outped', PACKAGE = 'CKMRsim', Input, NumA)
+read_mendel_outped <- function(Input, NumA, verbose) {
+    .Call('_CKMRsim_read_mendel_outped', PACKAGE = 'CKMRsim', Input, NumA, verbose)
 }
 
 #' Sample 1 observation from cell probabilities that are columns of a matrix

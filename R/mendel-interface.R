@@ -206,6 +206,8 @@ mendelBin <- function() {
 #' @param Dir the directory in which to run mendel
 #' @param Control the "control file" with which to run mendel.  If not an absolute path
 #' it should be given relative to the Dir directory.
+#' @param discard_stderr If TRUE, stderr is discarded   Otherwise, it gets written to the R console.
+#' @param discard_stdout If TRUE, stdout is discarded.  Otherwise, it gets written to the R console.
 #' @examples
 #' \dontrun{
 #' # first prepare the input files and define tmpDir
@@ -214,14 +216,31 @@ mendelBin <- function() {
 #' # then run mendel
 #' run_mendel(tmpDir, "mendel-example-Control.in")
 #' }
-run_mendel <- function(Dir, Control) {
+run_mendel <- function(
+    Dir,
+    Control,
+    discard_stderr = getOption("CKMRsim.discard_stderr", default = FALSE),
+    discard_stdout = getOption("CKMRsim.discard_stdout", default = FALSE)
+) {
+
+  stderr <- ""
+  stdout <- ""
+  if(discard_stderr == TRUE) {
+    stderr = FALSE
+  }
+  if(discard_stdout == TRUE) {
+    stdout = FALSE
+  }
 
   nowdir <- getwd();
   setwd(Dir)
 
-  system2(command = mendelBin(),
-          args = paste("-c", Control)
-          )
+  system2(
+    command = mendelBin(),
+    args = paste("-c", Control),
+    stdout = stdout,
+    stderr = stderr
+  )
 
   setwd(nowdir)
 
@@ -275,7 +294,7 @@ sample_linked_genotype_pairs <- function(df, ped, C = NULL, num = 1000) {
   message("Mendel running in temp directory ", tmpDir)
   write_all_mendel_files("mendel-example", num, floor(runif(1, min = 100, max = 100000)), df, ped, Dir = tmpDir)
   run_mendel(tmpDir, "mendel-example-Control.in")
-  outgenos <- read_mendel_outped(file.path(tmpDir, "mendel-example-Ped.out"), alle_nums$n) %>%
+  outgenos <- read_mendel_outped(file.path(tmpDir, "mendel-example-Ped.out"), alle_nums$n, verbose = getOption("CKMRsim.linkage_verbosity", default = 1)) %>%
     lapply(function(x) {
       dimnames(x) = list(NULL, locus = as.character(alle_nums$list_name))
       x})

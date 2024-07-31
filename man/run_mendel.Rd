@@ -4,13 +4,22 @@
 \alias{run_mendel}
 \title{Run the mendel binary in directory Dir using control file Control}
 \usage{
-run_mendel(Dir, Control)
+run_mendel(
+  Dir,
+  Control,
+  discard_stderr = getOption("CKMRsim.discard_stderr", default = FALSE),
+  discard_stdout = getOption("CKMRsim.discard_stdout", default = FALSE)
+)
 }
 \arguments{
 \item{Dir}{the directory in which to run mendel}
 
 \item{Control}{the "control file" with which to run mendel.  If not an absolute path
 it should be given relative to the Dir directory.}
+
+\item{discard_stderr}{If TRUE, stderr is discarded   Otherwise, it gets written to the R console.}
+
+\item{discard_stdout}{If TRUE, stdout is discarded.  Otherwise, it gets written to the R console.}
 }
 \description{
 Run the mendel binary in directory Dir using control file Control
