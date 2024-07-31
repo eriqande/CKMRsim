@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CKMRsim-pairwise-relationships • CKMRsim</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CKMRsim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@
                         <h4 data-toc-skip class="author">Eric C.
 Anderson</h4>
             
-            <h4 data-toc-skip class="date">2022-10-26</h4>
+            <h4 data-toc-skip class="date">2024-07-31</h4>
       
       
       <div class="hidden name"><code>CKMRsim-pairwise-relationships.Rmd</code></div>
@@ -111,53 +111,53 @@ this package.</p>
 <p>First, we shall print out a table of the identify coefficients for
 the different relationships.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span>
-
-<span class="va">long_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  MZ <span class="op">=</span> <span class="st">"Monozygotic (identical) twins"</span>,
-  PO <span class="op">=</span> <span class="st">"Parent-offspring"</span>,
-  FS <span class="op">=</span> <span class="st">"Full siblings"</span>,
-  HS <span class="op">=</span> <span class="st">"Half siblings"</span>,
-  GP <span class="op">=</span> <span class="st">"Grandparent-grandchild"</span>,
-  AN <span class="op">=</span> <span class="st">"Aunt-niece"</span>,
-  DFC <span class="op">=</span> <span class="st">"Double first cousins"</span>,
-  HAN <span class="op">=</span> <span class="st">"Half aunt-niece"</span>,
-  FC <span class="op">=</span> <span class="st">"First cousins"</span>,
-  HFC <span class="op">=</span> <span class="st">"Half first cousins"</span>,
-  DHFC <span class="op">=</span> <span class="st">"Double half first cousins"</span>,
-  SC <span class="op">=</span> <span class="st">"Second cousins"</span>,
-  HSC <span class="op">=</span> <span class="st">"Half second cousins"</span>,
-  U <span class="op">=</span> <span class="st">"Unrelated"</span>
-<span class="op">)</span>
-
-<span class="va">rtable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">kappas</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-    abbreviation <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">kappas</span><span class="op">)</span>,
-    relationship <span class="op">=</span> <span class="va">long_names</span>
-    <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">relationship</span>, <span class="va">abbreviation</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">rtable</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 5</span></span>
-<span class="co">#&gt;    relationship                  abbreviation kappa0 kappa1 kappa2</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Monozygotic (identical) twins MZ            0     0      1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Parent-offspring              PO            0     1      0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Full siblings                 FS            0.25  0.5    0.25  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Half siblings                 HS            0.5   0.5    0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Grandparent-grandchild        GP            0.5   0.5    0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Aunt-niece                    AN            0.5   0.5    0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Double first cousins          DFC           0.562 0.375  0.062<span style="text-decoration: underline;">5</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Half aunt-niece               HAN           0.75  0.25   0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> First cousins                 FC            0.75  0.25   0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Half first cousins            HFC           0.875 0.125  0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Double half first cousins     DHFC          0.766 0.219  0.015<span style="text-decoration: underline;">6</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Second cousins                SC            0.938 0.062<span style="text-decoration: underline;">5</span> 0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Half second cousins           HSC           0.969 0.031<span style="text-decoration: underline;">2</span> 0     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Unrelated                     U             1     0      0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">long_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  MZ <span class="op">=</span> <span class="st">"Monozygotic (identical) twins"</span>,</span>
+<span>  PO <span class="op">=</span> <span class="st">"Parent-offspring"</span>,</span>
+<span>  FS <span class="op">=</span> <span class="st">"Full siblings"</span>,</span>
+<span>  HS <span class="op">=</span> <span class="st">"Half siblings"</span>,</span>
+<span>  GP <span class="op">=</span> <span class="st">"Grandparent-grandchild"</span>,</span>
+<span>  AN <span class="op">=</span> <span class="st">"Aunt-niece"</span>,</span>
+<span>  DFC <span class="op">=</span> <span class="st">"Double first cousins"</span>,</span>
+<span>  HAN <span class="op">=</span> <span class="st">"Half aunt-niece"</span>,</span>
+<span>  FC <span class="op">=</span> <span class="st">"First cousins"</span>,</span>
+<span>  HFC <span class="op">=</span> <span class="st">"Half first cousins"</span>,</span>
+<span>  DHFC <span class="op">=</span> <span class="st">"Double half first cousins"</span>,</span>
+<span>  SC <span class="op">=</span> <span class="st">"Second cousins"</span>,</span>
+<span>  HSC <span class="op">=</span> <span class="st">"Half second cousins"</span>,</span>
+<span>  U <span class="op">=</span> <span class="st">"Unrelated"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rtable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">kappas</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    abbreviation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">kappas</span><span class="op">)</span>,</span>
+<span>    relationship <span class="op">=</span> <span class="va">long_names</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">relationship</span>, <span class="va">abbreviation</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rtable</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 5</span></span></span>
+<span><span class="co">#&gt;    relationship                  abbreviation kappa0 kappa1 kappa2</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Monozygotic (identical) twins MZ            0     0      1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Parent-offspring              PO            0     1      0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Full siblings                 FS            0.25  0.5    0.25  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Half siblings                 HS            0.5   0.5    0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Grandparent-grandchild        GP            0.5   0.5    0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Aunt-niece                    AN            0.5   0.5    0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Double first cousins          DFC           0.562 0.375  0.062<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Half aunt-niece               HAN           0.75  0.25   0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> First cousins                 FC            0.75  0.25   0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Half first cousins            HFC           0.875 0.125  0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Double half first cousins     DHFC          0.766 0.219  0.015<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Second cousins                SC            0.938 0.062<span style="text-decoration: underline;">5</span> 0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Half second cousins           HSC           0.969 0.031<span style="text-decoration: underline;">2</span> 0     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Unrelated                     U             1     0      0</span></span></code></pre></div>
 <p>And now we will show a series pedigrees that depict the
 relationships, (except for monozygous twins and unrelated, which don’t
 yield interesting pedigrees) alongside the IBD coefficient values. In
@@ -172,8 +172,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0 ~~~~~~~\kappa_1 = 1
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/PO.png" alt=""><p class="caption">PO: Parent-offspring</p>
+<div class="float">
+<img src="images/PO.png" alt="PO: Parent-offspring"><div class="figcaption">PO: Parent-offspring</div>
 </div>
 </div>
 <div class="section level2">
@@ -181,8 +181,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.25 ~~~~~~~\kappa_1 = 0.5
 ~~~~~~~\kappa_2 = 0.25\)</span></p>
-<div class="figure">
-<img src="images/FS.png" alt=""><p class="caption">FS: Full siblings</p>
+<div class="float">
+<img src="images/FS.png" alt="FS: Full siblings"><div class="figcaption">FS: Full siblings</div>
 </div>
 </div>
 <div class="section level2">
@@ -190,8 +190,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/HS.png" alt=""><p class="caption">HS: Half siblings</p>
+<div class="float">
+<img src="images/HS.png" alt="HS: Half siblings"><div class="figcaption">HS: Half siblings</div>
 </div>
 </div>
 <div class="section level2">
@@ -199,8 +199,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/GP.png" alt=""><p class="caption">GP: Grandparent-grandchild</p>
+<div class="float">
+<img src="images/GP.png" alt="GP: Grandparent-grandchild"><div class="figcaption">GP: Grandparent-grandchild</div>
 </div>
 </div>
 <div class="section level2">
@@ -208,8 +208,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/AN.png" alt=""><p class="caption">AN: Aunt-niece</p>
+<div class="float">
+<img src="images/AN.png" alt="AN: Aunt-niece"><div class="figcaption">AN: Aunt-niece</div>
 </div>
 </div>
 <div class="section level2">
@@ -217,8 +217,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.5625 ~~~~~~~\kappa_1 = 0.375
 ~~~~~~~\kappa_2 = 0.0625\)</span></p>
-<div class="figure">
-<img src="images/DFC.png" alt=""><p class="caption">DFC: Double first cousins</p>
+<div class="float">
+<img src="images/DFC.png" alt="DFC: Double first cousins"><div class="figcaption">DFC: Double first cousins</div>
 </div>
 </div>
 <div class="section level2">
@@ -226,8 +226,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.75 ~~~~~~~\kappa_1 = 0.25
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/HAN.png" alt=""><p class="caption">HAN: Half aunt-niece</p>
+<div class="float">
+<img src="images/HAN.png" alt="HAN: Half aunt-niece"><div class="figcaption">HAN: Half aunt-niece</div>
 </div>
 </div>
 <div class="section level2">
@@ -235,8 +235,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.75 ~~~~~~~\kappa_1 = 0.25
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/FC.png" alt=""><p class="caption">FC: First cousins</p>
+<div class="float">
+<img src="images/FC.png" alt="FC: First cousins"><div class="figcaption">FC: First cousins</div>
 </div>
 </div>
 <div class="section level2">
@@ -244,8 +244,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.875 ~~~~~~~\kappa_1 = 0.125
 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/HFC.png" alt=""><p class="caption">HFC: Half first cousins</p>
+<div class="float">
+<img src="images/HFC.png" alt="HFC: Half first cousins"><div class="figcaption">HFC: Half first cousins</div>
 </div>
 </div>
 <div class="section level2">
@@ -253,8 +253,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.765625 ~~~~~~~\kappa_1 =
 0.21875 ~~~~~~~\kappa_2 = 0.015625\)</span></p>
-<div class="figure">
-<img src="images/DHFC.png" alt=""><p class="caption">DHFC: Double half first cousins</p>
+<div class="float">
+<img src="images/DHFC.png" alt="DHFC: Double half first cousins"><div class="figcaption">DHFC: Double half first cousins</div>
 </div>
 </div>
 <div class="section level2">
@@ -262,8 +262,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.9375 ~~~~~~~\kappa_1 =
 0.0625 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/SC.png" alt=""><p class="caption">SC: Second cousins</p>
+<div class="float">
+<img src="images/SC.png" alt="SC: Second cousins"><div class="figcaption">SC: Second cousins</div>
 </div>
 </div>
 <div class="section level2">
@@ -271,8 +271,8 @@ of the pair.</p>
 </h2>
 <p><span class="math inline">\(\kappa_0 = 0.96875 ~~~~~~~\kappa_1 =
 0.03125 ~~~~~~~\kappa_2 = 0\)</span></p>
-<div class="figure">
-<img src="images/HSC.png" alt=""><p class="caption">HSC: Half second cousins</p>
+<div class="float">
+<img src="images/HSC.png" alt="HSC: Half second cousins"><div class="figcaption">HSC: Half second cousins</div>
 </div>
 </div>
   </div>
@@ -294,7 +294,7 @@ of the pair.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

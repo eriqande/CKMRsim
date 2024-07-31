@@ -1,5 +1,5 @@
-pandoc: '2.18'
-pkgdown: 2.0.6
+pandoc: 3.1.12.1
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   CKMRsim-developer-notes: CKMRsim-developer-notes.html
@@ -8,7 +8,7 @@ articles:
   CKMRsim-pairwise-relationships: CKMRsim-pairwise-relationships.html
   CKMRsim-simulating-linked-markers: CKMRsim-simulating-linked-markers.html
   CKMRsim-writing-geno-error-funcs: CKMRsim-writing-geno-error-funcs.html
-last_built: 2022-10-26T16:21Z
+last_built: 2024-07-31T16:47Z
 urls:
   reference: https://eriqande.github.io/CKMRsim/reference
   article: https://eriqande.github.io/CKMRsim/articles

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CKMRsim-example-1 • CKMRsim</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CKMRsim</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@
                         <h4 data-toc-skip class="author">Eric C.
 Anderson</h4>
             
-            <h4 data-toc-skip class="date">2022-10-26</h4>
+            <h4 data-toc-skip class="date">2024-07-31</h4>
       
       
       <div class="hidden name"><code>CKMRsim-example-1.Rmd</code></div>
@@ -111,16 +111,18 @@ downloaded from Dryad at: <a href="http://datadryad.org/bitstream/handle/10255/d
 <p>Before we get started let’s load the packages we need. We’ll be using
 a lot of functions from the tidyverse, so let’s do it.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-<span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.1 ──</span>
-<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2</span> 3.3.6     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr  </span> 0.3.4</span>
-<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble </span> 3.1.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr  </span> 1.0.9</span>
-<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr  </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr</span> 1.4.0</span>
-<span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr  </span> 2.1.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats</span> 0.5.1</span>
-<span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span>
-<span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span>
-<span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.4</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 3.4.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.2     </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use the conflicted package (<span style="color: #0000BB; font-style: italic;">&lt;http://conflicted.r-lib.org/&gt;</span>) to force all conflicts to become errors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">CKMRsim</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="reading-in-the-genotype-data-set">Reading in the Genotype Data set<a class="anchor" aria-label="anchor" href="#reading-in-the-genotype-data-set"></a>
@@ -143,214 +145,215 @@ estimation phases of the analysis.</p>
 <p>The file that holds the genotypes comes with the <code>CKMRsim</code>
 package at:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">geno_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_genos_used_two_col.csv.gz"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">geno_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_genos_used_two_col.csv.gz"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span></span></code></pre></div>
 <p>When we read that in, we get a lot of warnings (they have been
 suppressed here so that the vignette will pass CRAN checks) that column
 names have been deduplicated. This is because each locus in the file
 occupies two columns and the names of those columns are the same (i.e.,
 the name of the locus.)</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">genos1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="va">geno_path</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; New names:</span>
-<span class="co">#&gt; <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">6091</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">157</span></span>
-<span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span></span>
-<span class="co">#&gt; <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span> <span style="font-weight: bold;">Delimiter:</span> "," <span style="color: #BB0000;">chr</span></span>
-<span class="co">#&gt; (1): NMFS_DNA_ID <span style="color: #00BB00;">dbl</span> (156): Plate_1_A01_Sat_GW603857_consensus...2,</span>
-<span class="co">#&gt; Plate_1_A01_Sat_GW603857_...</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data. <span style="color: #00BBBB;">ℹ</span></span>
-<span class="co">#&gt; Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A01_Sat_GW603857_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_1_A01_Sat_GW603857_consensus...2`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A01_Sat_GW603857_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_1_A01_Sat_GW603857_consensus...3`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A11_Sat_GE820299_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_1_A11_Sat_GE820299_consensus...4`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A11_Sat_GE820299_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_1_A11_Sat_GE820299_consensus...5`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_A09_Sat_EW986980_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_2_A09_Sat_EW986980_consensus...6`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_A09_Sat_EW986980_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_2_A09_Sat_EW986980_consensus...7`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_C08_Sat_EW987116_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_2_C08_Sat_EW987116_consensus...8`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_C08_Sat_EW987116_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_2_C08_Sat_EW987116_consensus...9`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_3_C03_Sat_GE798118_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_3_C03_Sat_GE798118_consensus...10`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_3_C03_Sat_GE798118_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_3_C03_Sat_GE798118_consensus...11`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_E10_Sat_EW976030_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_4_E10_Sat_EW976030_consensus...12`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_E10_Sat_EW976030_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_4_E10_Sat_EW976030_consensus...13`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_G06_Sat_EW976181_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_4_G06_Sat_EW976181_consensus...14`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_G06_Sat_EW976181_consensus` -&gt;</span>
-<span class="co">#&gt;   `Plate_4_G06_Sat_EW976181_consensus...15`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1049` -&gt; `tag_id_1049...16`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1049` -&gt; `tag_id_1049...17`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_108` -&gt; `tag_id_108...18`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_108` -&gt; `tag_id_108...19`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1184` -&gt; `tag_id_1184...20`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1184` -&gt; `tag_id_1184...21`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1229` -&gt; `tag_id_1229...22`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1229` -&gt; `tag_id_1229...23`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1366` -&gt; `tag_id_1366...24`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1366` -&gt; `tag_id_1366...25`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1399` -&gt; `tag_id_1399...26`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1399` -&gt; `tag_id_1399...27`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1428` -&gt; `tag_id_1428...28`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1428` -&gt; `tag_id_1428...29`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_143` -&gt; `tag_id_143...30`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_143` -&gt; `tag_id_143...31`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1441` -&gt; `tag_id_1441...32`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1441` -&gt; `tag_id_1441...33`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1449` -&gt; `tag_id_1449...34`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1449` -&gt; `tag_id_1449...35`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1471` -&gt; `tag_id_1471...36`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1471` -&gt; `tag_id_1471...37`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1498` -&gt; `tag_id_1498...38`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1498` -&gt; `tag_id_1498...39`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1558` -&gt; `tag_id_1558...40`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1558` -&gt; `tag_id_1558...41`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1576` -&gt; `tag_id_1576...42`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1576` -&gt; `tag_id_1576...43`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1598` -&gt; `tag_id_1598...44`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1598` -&gt; `tag_id_1598...45`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1604` -&gt; `tag_id_1604...46`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1604` -&gt; `tag_id_1604...47`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1613` -&gt; `tag_id_1613...48`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1613` -&gt; `tag_id_1613...49`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_162` -&gt; `tag_id_162...50`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_162` -&gt; `tag_id_162...51`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1652` -&gt; `tag_id_1652...52`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1652` -&gt; `tag_id_1652...53`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_170` -&gt; `tag_id_170...54`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_170` -&gt; `tag_id_170...55`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1708` -&gt; `tag_id_1708...56`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1708` -&gt; `tag_id_1708...57`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1748` -&gt; `tag_id_1748...58`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1748` -&gt; `tag_id_1748...59`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1751` -&gt; `tag_id_1751...60`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1751` -&gt; `tag_id_1751...61`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1762` -&gt; `tag_id_1762...62`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1762` -&gt; `tag_id_1762...63`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_179` -&gt; `tag_id_179...64`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_179` -&gt; `tag_id_179...65`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1808` -&gt; `tag_id_1808...66`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1808` -&gt; `tag_id_1808...67`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1836` -&gt; `tag_id_1836...68`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1836` -&gt; `tag_id_1836...69`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1871` -&gt; `tag_id_1871...70`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1871` -&gt; `tag_id_1871...71`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1880` -&gt; `tag_id_1880...72`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1880` -&gt; `tag_id_1880...73`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1889` -&gt; `tag_id_1889...74`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1889` -&gt; `tag_id_1889...75`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1950` -&gt; `tag_id_1950...76`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1950` -&gt; `tag_id_1950...77`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1961` -&gt; `tag_id_1961...78`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1961` -&gt; `tag_id_1961...79`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1966` -&gt; `tag_id_1966...80`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1966` -&gt; `tag_id_1966...81`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1982` -&gt; `tag_id_1982...82`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1982` -&gt; `tag_id_1982...83`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1994` -&gt; `tag_id_1994...84`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1994` -&gt; `tag_id_1994...85`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1999` -&gt; `tag_id_1999...86`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1999` -&gt; `tag_id_1999...87`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2008` -&gt; `tag_id_2008...88`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2008` -&gt; `tag_id_2008...89`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2017` -&gt; `tag_id_2017...90`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2017` -&gt; `tag_id_2017...91`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2062` -&gt; `tag_id_2062...92`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2062` -&gt; `tag_id_2062...93`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2082` -&gt; `tag_id_2082...94`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2082` -&gt; `tag_id_2082...95`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2114` -&gt; `tag_id_2114...96`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2114` -&gt; `tag_id_2114...97`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2134` -&gt; `tag_id_2134...98`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2134` -&gt; `tag_id_2134...99`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2178` -&gt; `tag_id_2178...100`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2178` -&gt; `tag_id_2178...101`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_220` -&gt; `tag_id_220...102`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_220` -&gt; `tag_id_220...103`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2203` -&gt; `tag_id_2203...104`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2203` -&gt; `tag_id_2203...105`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_221` -&gt; `tag_id_221...106`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_221` -&gt; `tag_id_221...107`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2214` -&gt; `tag_id_2214...108`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2214` -&gt; `tag_id_2214...109`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2237` -&gt; `tag_id_2237...110`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2237` -&gt; `tag_id_2237...111`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2247` -&gt; `tag_id_2247...112`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2247` -&gt; `tag_id_2247...113`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2258` -&gt; `tag_id_2258...114`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2258` -&gt; `tag_id_2258...115`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2301` -&gt; `tag_id_2301...116`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2301` -&gt; `tag_id_2301...117`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_250` -&gt; `tag_id_250...118`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_250` -&gt; `tag_id_250...119`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2607` -&gt; `tag_id_2607...120`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2607` -&gt; `tag_id_2607...121`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2635` -&gt; `tag_id_2635...122`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2635` -&gt; `tag_id_2635...123`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_265` -&gt; `tag_id_265...124`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_265` -&gt; `tag_id_265...125`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_325` -&gt; `tag_id_325...126`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_325` -&gt; `tag_id_325...127`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_402` -&gt; `tag_id_402...128`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_402` -&gt; `tag_id_402...129`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_410` -&gt; `tag_id_410...130`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_410` -&gt; `tag_id_410...131`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_436` -&gt; `tag_id_436...132`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_436` -&gt; `tag_id_436...133`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_572` -&gt; `tag_id_572...134`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_572` -&gt; `tag_id_572...135`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_67` -&gt; `tag_id_67...136`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_67` -&gt; `tag_id_67...137`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_788` -&gt; `tag_id_788...138`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_788` -&gt; `tag_id_788...139`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_843` -&gt; `tag_id_843...140`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_843` -&gt; `tag_id_843...141`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_855` -&gt; `tag_id_855...142`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_855` -&gt; `tag_id_855...143`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_874` -&gt; `tag_id_874...144`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_874` -&gt; `tag_id_874...145`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_875` -&gt; `tag_id_875...146`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_875` -&gt; `tag_id_875...147`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_879` -&gt; `tag_id_879...148`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_879` -&gt; `tag_id_879...149`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_913` -&gt; `tag_id_913...150`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_913` -&gt; `tag_id_913...151`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_934` -&gt; `tag_id_934...152`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_934` -&gt; `tag_id_934...153`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_942` -&gt; `tag_id_942...154`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_942` -&gt; `tag_id_942...155`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_981` -&gt; `tag_id_981...156`</span>
-<span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_981` -&gt; `tag_id_981...157`</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">genos1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="va">geno_path</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; New names:</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">6091</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">157</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span> <span style="font-weight: bold;">Delimiter:</span> "," <span style="color: #BB0000;">chr</span></span></span>
+<span><span class="co">#&gt; (1): NMFS_DNA_ID <span style="color: #00BB00;">dbl</span> (156): Plate_1_A01_Sat_GW603857_consensus...2,</span></span>
+<span><span class="co">#&gt; Plate_1_A01_Sat_GW603857_...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data. <span style="color: #00BBBB;">ℹ</span></span></span>
+<span><span class="co">#&gt; Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A01_Sat_GW603857_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_1_A01_Sat_GW603857_consensus...2`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A01_Sat_GW603857_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_1_A01_Sat_GW603857_consensus...3`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A11_Sat_GE820299_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_1_A11_Sat_GE820299_consensus...4`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_1_A11_Sat_GE820299_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_1_A11_Sat_GE820299_consensus...5`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_A09_Sat_EW986980_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_2_A09_Sat_EW986980_consensus...6`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_A09_Sat_EW986980_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_2_A09_Sat_EW986980_consensus...7`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_C08_Sat_EW987116_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_2_C08_Sat_EW987116_consensus...8`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_2_C08_Sat_EW987116_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_2_C08_Sat_EW987116_consensus...9`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_3_C03_Sat_GE798118_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_3_C03_Sat_GE798118_consensus...10`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_3_C03_Sat_GE798118_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_3_C03_Sat_GE798118_consensus...11`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_E10_Sat_EW976030_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_4_E10_Sat_EW976030_consensus...12`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_E10_Sat_EW976030_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_4_E10_Sat_EW976030_consensus...13`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_G06_Sat_EW976181_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_4_G06_Sat_EW976181_consensus...14`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `Plate_4_G06_Sat_EW976181_consensus` -&gt;</span></span>
+<span><span class="co">#&gt;   `Plate_4_G06_Sat_EW976181_consensus...15`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1049` -&gt; `tag_id_1049...16`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1049` -&gt; `tag_id_1049...17`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_108` -&gt; `tag_id_108...18`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_108` -&gt; `tag_id_108...19`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1184` -&gt; `tag_id_1184...20`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1184` -&gt; `tag_id_1184...21`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1229` -&gt; `tag_id_1229...22`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1229` -&gt; `tag_id_1229...23`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1366` -&gt; `tag_id_1366...24`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1366` -&gt; `tag_id_1366...25`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1399` -&gt; `tag_id_1399...26`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1399` -&gt; `tag_id_1399...27`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1428` -&gt; `tag_id_1428...28`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1428` -&gt; `tag_id_1428...29`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_143` -&gt; `tag_id_143...30`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_143` -&gt; `tag_id_143...31`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1441` -&gt; `tag_id_1441...32`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1441` -&gt; `tag_id_1441...33`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1449` -&gt; `tag_id_1449...34`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1449` -&gt; `tag_id_1449...35`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1471` -&gt; `tag_id_1471...36`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1471` -&gt; `tag_id_1471...37`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1498` -&gt; `tag_id_1498...38`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1498` -&gt; `tag_id_1498...39`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1558` -&gt; `tag_id_1558...40`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1558` -&gt; `tag_id_1558...41`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1576` -&gt; `tag_id_1576...42`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1576` -&gt; `tag_id_1576...43`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1598` -&gt; `tag_id_1598...44`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1598` -&gt; `tag_id_1598...45`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1604` -&gt; `tag_id_1604...46`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1604` -&gt; `tag_id_1604...47`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1613` -&gt; `tag_id_1613...48`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1613` -&gt; `tag_id_1613...49`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_162` -&gt; `tag_id_162...50`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_162` -&gt; `tag_id_162...51`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1652` -&gt; `tag_id_1652...52`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1652` -&gt; `tag_id_1652...53`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_170` -&gt; `tag_id_170...54`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_170` -&gt; `tag_id_170...55`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1708` -&gt; `tag_id_1708...56`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1708` -&gt; `tag_id_1708...57`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1748` -&gt; `tag_id_1748...58`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1748` -&gt; `tag_id_1748...59`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1751` -&gt; `tag_id_1751...60`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1751` -&gt; `tag_id_1751...61`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1762` -&gt; `tag_id_1762...62`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1762` -&gt; `tag_id_1762...63`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_179` -&gt; `tag_id_179...64`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_179` -&gt; `tag_id_179...65`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1808` -&gt; `tag_id_1808...66`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1808` -&gt; `tag_id_1808...67`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1836` -&gt; `tag_id_1836...68`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1836` -&gt; `tag_id_1836...69`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1871` -&gt; `tag_id_1871...70`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1871` -&gt; `tag_id_1871...71`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1880` -&gt; `tag_id_1880...72`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1880` -&gt; `tag_id_1880...73`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1889` -&gt; `tag_id_1889...74`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1889` -&gt; `tag_id_1889...75`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1950` -&gt; `tag_id_1950...76`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1950` -&gt; `tag_id_1950...77`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1961` -&gt; `tag_id_1961...78`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1961` -&gt; `tag_id_1961...79`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1966` -&gt; `tag_id_1966...80`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1966` -&gt; `tag_id_1966...81`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1982` -&gt; `tag_id_1982...82`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1982` -&gt; `tag_id_1982...83`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1994` -&gt; `tag_id_1994...84`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1994` -&gt; `tag_id_1994...85`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1999` -&gt; `tag_id_1999...86`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_1999` -&gt; `tag_id_1999...87`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2008` -&gt; `tag_id_2008...88`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2008` -&gt; `tag_id_2008...89`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2017` -&gt; `tag_id_2017...90`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2017` -&gt; `tag_id_2017...91`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2062` -&gt; `tag_id_2062...92`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2062` -&gt; `tag_id_2062...93`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2082` -&gt; `tag_id_2082...94`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2082` -&gt; `tag_id_2082...95`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2114` -&gt; `tag_id_2114...96`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2114` -&gt; `tag_id_2114...97`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2134` -&gt; `tag_id_2134...98`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2134` -&gt; `tag_id_2134...99`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2178` -&gt; `tag_id_2178...100`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2178` -&gt; `tag_id_2178...101`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_220` -&gt; `tag_id_220...102`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_220` -&gt; `tag_id_220...103`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2203` -&gt; `tag_id_2203...104`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2203` -&gt; `tag_id_2203...105`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_221` -&gt; `tag_id_221...106`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_221` -&gt; `tag_id_221...107`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2214` -&gt; `tag_id_2214...108`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2214` -&gt; `tag_id_2214...109`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2237` -&gt; `tag_id_2237...110`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2237` -&gt; `tag_id_2237...111`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2247` -&gt; `tag_id_2247...112`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2247` -&gt; `tag_id_2247...113`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2258` -&gt; `tag_id_2258...114`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2258` -&gt; `tag_id_2258...115`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2301` -&gt; `tag_id_2301...116`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2301` -&gt; `tag_id_2301...117`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_250` -&gt; `tag_id_250...118`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_250` -&gt; `tag_id_250...119`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2607` -&gt; `tag_id_2607...120`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2607` -&gt; `tag_id_2607...121`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2635` -&gt; `tag_id_2635...122`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_2635` -&gt; `tag_id_2635...123`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_265` -&gt; `tag_id_265...124`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_265` -&gt; `tag_id_265...125`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_325` -&gt; `tag_id_325...126`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_325` -&gt; `tag_id_325...127`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_402` -&gt; `tag_id_402...128`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_402` -&gt; `tag_id_402...129`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_410` -&gt; `tag_id_410...130`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_410` -&gt; `tag_id_410...131`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_436` -&gt; `tag_id_436...132`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_436` -&gt; `tag_id_436...133`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_572` -&gt; `tag_id_572...134`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_572` -&gt; `tag_id_572...135`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_67` -&gt; `tag_id_67...136`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_67` -&gt; `tag_id_67...137`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_788` -&gt; `tag_id_788...138`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_788` -&gt; `tag_id_788...139`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_843` -&gt; `tag_id_843...140`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_843` -&gt; `tag_id_843...141`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_855` -&gt; `tag_id_855...142`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_855` -&gt; `tag_id_855...143`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_874` -&gt; `tag_id_874...144`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_874` -&gt; `tag_id_874...145`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_875` -&gt; `tag_id_875...146`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_875` -&gt; `tag_id_875...147`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_879` -&gt; `tag_id_879...148`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_879` -&gt; `tag_id_879...149`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_913` -&gt; `tag_id_913...150`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_913` -&gt; `tag_id_913...151`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_934` -&gt; `tag_id_934...152`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_934` -&gt; `tag_id_934...153`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_942` -&gt; `tag_id_942...154`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_942` -&gt; `tag_id_942...155`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_981` -&gt; `tag_id_981...156`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `tag_id_981` -&gt; `tag_id_981...157`</span></span></code></pre></div>
 <p>Let’s look at the first bit of the resulting tibble:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">genos1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 10</span></span>
-<span class="co">#&gt;    NMFS_DNA_ID Plate_1_A01_Sat_GW603857_conse… Plate_1_A01_Sat… Plate_1_A11_Sat…</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R011743                                   1                1                3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R011744                                   1                1                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R011753                                   1                1                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R011755                                   1                2                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R011765                                   1                1                2</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R011766                                   1                2                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R011769                                   1                2                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R011772                                   1                1                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R011775                                   1                2                1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R011778                                   1                1                1</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 6 more variables: Plate_1_A11_Sat_GE820299_consensus...5 &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_A09_Sat_EW986980_consensus...6 &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_A09_Sat_EW986980_consensus...7 &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_C08_Sat_EW987116_consensus...8 &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   Plate_2_C08_Sat_EW987116_consensus...9 &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   Plate_3_C03_Sat_GE798118_consensus...10 &lt;dbl&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">genos1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 10</span></span></span>
+<span><span class="co">#&gt;    NMFS_DNA_ID Plate_1_A01_Sat_GW603857_consensus...2 Plate_1_A01_Sat_GW603857…¹</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R011743                                          1                          1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R011744                                          1                          1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R011753                                          1                          1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R011755                                          1                          2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R011765                                          1                          1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R011766                                          1                          2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R011769                                          1                          2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R011772                                          1                          1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R011775                                          1                          2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R011778                                          1                          1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated name: ¹​Plate_1_A01_Sat_GW603857_consensus...3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: Plate_1_A11_Sat_GE820299_consensus...4 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   Plate_1_A11_Sat_GE820299_consensus...5 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   Plate_2_A09_Sat_EW986980_consensus...6 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   Plate_2_A09_Sat_EW986980_consensus...7 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   Plate_2_C08_Sat_EW987116_consensus...8 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   Plate_2_C08_Sat_EW987116_consensus...9 &lt;dbl&gt;, …</span></span></span></code></pre></div>
 <p>That is not a super informative print out. But it does show us that
 the <code>NMFS_DNA_ID</code> column is the identifier for the indvidual
 fish, and that the genetic data start in column 2. Also, the even
@@ -368,27 +371,27 @@ those data and then make a tibble of IDs with a column telling what life
 stage they were sampled at, and keep only those IDs that we have
 genotypes for in <code>genos1</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adults</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_adults.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">juvies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_juveniles.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span>
-
-
-<span class="va">life_stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"adult"</span>,
-         NMFS_DNA_ID <span class="op">=</span> <span class="va">adults</span><span class="op">)</span>,
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"juvenile"</span>,
-         NMFS_DNA_ID <span class="op">=</span> <span class="va">juvies</span><span class="op">)</span>
-<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">genos1</span><span class="op">$</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">adults</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_adults.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">juvies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html" class="external-link">read_rds</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/kelp_juveniles.rds"</span>, package <span class="op">=</span> <span class="st">"CKMRsim"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">life_stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"adult"</span>,</span>
+<span>         NMFS_DNA_ID <span class="op">=</span> <span class="va">adults</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>stage <span class="op">=</span> <span class="st">"juvenile"</span>,</span>
+<span>         NMFS_DNA_ID <span class="op">=</span> <span class="va">juvies</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">genos1</span><span class="op">$</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span></span></code></pre></div>
 <p>Here we can see the numbers of adult and juvenile fish we are dealing
 with:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">stage</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span>
-<span class="co">#&gt;   stage        n</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adult     <span style="text-decoration: underline;">1</span>847</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> juvenile  <span style="text-decoration: underline;">4</span>244</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">stage</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<span><span class="co">#&gt;   stage        n</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adult     <span style="text-decoration: underline;">1</span>847</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> juvenile  <span style="text-decoration: underline;">4</span>244</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -414,21 +417,21 @@ physical linkage, then the values used have no effect.</p>
 allele frequency format that <code>CKMRsim</code> expects. It looks like
 this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">long_markers</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 53,637 × 7</span></span>
-<span class="co">#&gt;    Chrom Locus     Pos Allele LocIdx AlleIdx   Freq</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a1          1       1 0.790 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a2          1       2 0.210 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a1          2       1 0.485 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a3          2       2 0.237 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a2          2       3 0.167 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a4          2       4 0.112 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a3          3       1 0.499 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a2          3       2 0.402 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a1          3       3 0.098<span style="text-decoration: underline;">9</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     4 chr4-4 <span style="text-decoration: underline;">256</span>481 a4          4       1 0.402 </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 53,627 more rows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">long_markers</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 53,637 × 7</span></span></span>
+<span><span class="co">#&gt;    Chrom Locus     Pos Allele LocIdx AlleIdx   Freq</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a1          1       1 0.790 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     4 chr4-1   <span style="text-decoration: underline;">3</span>845 a2          1       2 0.210 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a1          2       1 0.485 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a3          2       2 0.237 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a2          2       3 0.167 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     4 chr4-2  <span style="text-decoration: underline;">71</span>520 a4          2       4 0.112 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a3          3       1 0.499 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a2          3       2 0.402 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     4 chr4-3 <span style="text-decoration: underline;">105</span>104 a1          3       3 0.098<span style="text-decoration: underline;">9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     4 chr4-4 <span style="text-decoration: underline;">256</span>481 a4          4       1 0.402 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 53,627 more rows</span></span></span></code></pre></div>
 <p>The main columns are as follows:</p>
 <ul>
 <li>
@@ -471,41 +474,41 @@ then do some gathering and separating.</p>
 set is denoted by <code>0</code>, and it must be denoted by
 <code>NA</code>. So, turn Allele == 0 to NA:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># make note of the current order of loci in the data set</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span>
-<span class="va">loci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span>, <span class="st">"\\.\\.\\.[0-9]+$"</span>, <span class="st">""</span><span class="op">)</span>
-
-<span class="co">#  reset the locus names</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">loci</span>, <span class="st">"1"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">loci</span>, <span class="st">"2"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span>
-
-<span class="co"># then make some long format genotypes</span>
-<span class="va">long_genos</span> <span class="op">&lt;-</span> <span class="va">genos1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"loc"</span>, value <span class="op">=</span> <span class="st">"Allele"</span>, <span class="op">-</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">loc</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Locus"</span>, <span class="st">"gene_copy"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\\."</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">Allele</span> <span class="op">==</span> <span class="st">"0"</span>, <span class="cn">NA</span>, <span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>Indiv <span class="op">=</span> <span class="va">NMFS_DNA_ID</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># make note of the current order of loci in the data set</span></span>
+<span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span></span>
+<span><span class="va">loci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span>, <span class="st">"\\.\\.\\.[0-9]+$"</span>, <span class="st">""</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#  reset the locus names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">loci</span>, <span class="st">"1"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">genos1</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span>, <span class="va">nc</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">loci</span>, <span class="st">"2"</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># then make some long format genotypes</span></span>
+<span><span class="va">long_genos</span> <span class="op">&lt;-</span> <span class="va">genos1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"loc"</span>, value <span class="op">=</span> <span class="st">"Allele"</span>, <span class="op">-</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span><span class="va">loc</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Locus"</span>, <span class="st">"gene_copy"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\\."</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Allele <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">Allele</span> <span class="op">==</span> <span class="st">"0"</span>, <span class="cn">NA</span>, <span class="va">Allele</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>Indiv <span class="op">=</span> <span class="va">NMFS_DNA_ID</span><span class="op">)</span></span></code></pre></div>
 <p><strong>IMPORTANT NOTE</strong> The data frame
 <code>long_genos</code> here is a long-format specification of
 multilocus genotypes of individuals. This is a a basic input type that
 will be used later in CKMRsim. It looks like this:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">long_genos</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 950,196 × 4</span></span>
-<span class="co">#&gt;    Indiv   Locus                              gene_copy Allele</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R011743 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R011744 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R011753 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R011755 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R011765 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R011766 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R011769 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R011772 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R011775 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R011778 Plate_1_A01_Sat_GW603857_consensus 1         1     </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 950,186 more rows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">long_genos</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 950,196 × 4</span></span></span>
+<span><span class="co">#&gt;    Indiv   Locus                              gene_copy Allele</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R011743 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R011744 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R011753 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R011755 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R011765 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R011766 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R011769 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R011772 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R011775 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R011778 Plate_1_A01_Sat_GW603857_consensus 1         1     </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 950,186 more rows</span></span></span></code></pre></div>
 <p>Note this about the data frame:</p>
 <ol style="list-style-type: decimal">
 <li>It has four columns: Indiv, Locus, gene_copy, and Allele.<br>
@@ -523,42 +526,42 @@ positions given by their order in the original data set. And we add
 columns for AlleIdx and LocIdx, as required to pass this tibble into
 <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code>, but we can leave each entry as NA.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">alle_freqs</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">Locus</span>, <span class="va">Allele</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Locus</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Freq <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,
-         Chrom <span class="op">=</span> <span class="st">"Unk"</span>,
-         Pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Locus</span>, levels <span class="op">=</span> <span class="va">loci</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Chrom</span>, <span class="va">Pos</span>, <span class="va">Locus</span>, <span class="va">Allele</span>, <span class="va">Freq</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Pos</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>AlleIdx <span class="op">=</span> <span class="cn">NA</span>,
-         LocIdx <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># see what that looks like:</span>
-<span class="va">alle_freqs</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 993 × 7</span></span>
-<span class="co">#&gt;    Chrom   Pos Locus                              Allele     Freq AlleIdx LocIdx</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 1       6.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 2       3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 3       4.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 4       2.46<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 5       8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 6       8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 1       7.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 2       2.49<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 3       2.45<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 4       1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 983 more rows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">alle_freqs</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">Locus</span>, <span class="va">Allele</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Locus</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Freq <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
+<span>         Chrom <span class="op">=</span> <span class="st">"Unk"</span>,</span>
+<span>         Pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Locus</span>, levels <span class="op">=</span> <span class="va">loci</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Chrom</span>, <span class="va">Pos</span>, <span class="va">Locus</span>, <span class="va">Allele</span>, <span class="va">Freq</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Pos</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>AlleIdx <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>         LocIdx <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Allele</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># see what that looks like:</span></span>
+<span><span class="va">alle_freqs</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 993 × 7</span></span></span>
+<span><span class="co">#&gt;    Chrom   Pos Locus                              Allele     Freq AlleIdx LocIdx</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 1       6.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 2       3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 3       4.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 4       2.46<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 5       8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Unk       1 Plate_1_A01_Sat_GW603857_consensus 6       8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 1       7.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 2       2.49<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 3       2.45<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Unk       2 Plate_1_A11_Sat_GE820299_consensus 4       1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 983 more rows</span></span></span></code></pre></div>
 <p><strong>Note:</strong> It is very important to remove the NAs from
 the allele frequencies as is done in the last step above.</p>
 <p>Once that is done, we pass them through the
 <code><a href="../reference/reindex_markers.html">reindex_markers()</a></code> function to yield a data frame of allele
 frequencies that <code>CKRMsim</code> can use to do simulations.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">afreqs_ready</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reindex_markers.html">reindex_markers</a></span><span class="op">(</span><span class="va">alle_freqs</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">afreqs_ready</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reindex_markers.html">reindex_markers</a></span><span class="op">(</span><span class="va">alle_freqs</span><span class="op">)</span></span></code></pre></div>
 <p>We now have what we need to do a simulation analysis of power for
 pairwise relationship inference from these markers.</p>
 <p>Note that we will come back to <code>long_genos</code> later to
@@ -618,22 +621,22 @@ avuncular relationship)</li>
 like this:</li>
 </ul>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">kappas</span>
-<span class="co">#&gt;        kappa0  kappa1   kappa2</span>
-<span class="co">#&gt; MZ   0.000000 0.00000 1.000000</span>
-<span class="co">#&gt; PO   0.000000 1.00000 0.000000</span>
-<span class="co">#&gt; FS   0.250000 0.50000 0.250000</span>
-<span class="co">#&gt; HS   0.500000 0.50000 0.000000</span>
-<span class="co">#&gt; GP   0.500000 0.50000 0.000000</span>
-<span class="co">#&gt; AN   0.500000 0.50000 0.000000</span>
-<span class="co">#&gt; DFC  0.562500 0.37500 0.062500</span>
-<span class="co">#&gt; HAN  0.750000 0.25000 0.000000</span>
-<span class="co">#&gt; FC   0.750000 0.25000 0.000000</span>
-<span class="co">#&gt; HFC  0.875000 0.12500 0.000000</span>
-<span class="co">#&gt; DHFC 0.765625 0.21875 0.015625</span>
-<span class="co">#&gt; SC   0.937500 0.06250 0.000000</span>
-<span class="co">#&gt; HSC  0.968750 0.03125 0.000000</span>
-<span class="co">#&gt; U    1.000000 0.00000 0.000000</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">kappas</span></span>
+<span><span class="co">#&gt;        kappa0  kappa1   kappa2</span></span>
+<span><span class="co">#&gt; MZ   0.000000 0.00000 1.000000</span></span>
+<span><span class="co">#&gt; PO   0.000000 1.00000 0.000000</span></span>
+<span><span class="co">#&gt; FS   0.250000 0.50000 0.250000</span></span>
+<span><span class="co">#&gt; HS   0.500000 0.50000 0.000000</span></span>
+<span><span class="co">#&gt; GP   0.500000 0.50000 0.000000</span></span>
+<span><span class="co">#&gt; AN   0.500000 0.50000 0.000000</span></span>
+<span><span class="co">#&gt; DFC  0.562500 0.37500 0.062500</span></span>
+<span><span class="co">#&gt; HAN  0.750000 0.25000 0.000000</span></span>
+<span><span class="co">#&gt; FC   0.750000 0.25000 0.000000</span></span>
+<span><span class="co">#&gt; HFC  0.875000 0.12500 0.000000</span></span>
+<span><span class="co">#&gt; DHFC 0.765625 0.21875 0.015625</span></span>
+<span><span class="co">#&gt; SC   0.937500 0.06250 0.000000</span></span>
+<span><span class="co">#&gt; HSC  0.968750 0.03125 0.000000</span></span>
+<span><span class="co">#&gt; U    1.000000 0.00000 0.000000</span></span></code></pre></div>
 </li>
 <li>
 <code>ge_mod_assumed</code> : a function that describes the
@@ -666,22 +669,22 @@ unrelated, and we also want to see if half-siblings might sometimes look
 like full siblings. So, we will create this ckmr object with the
 following relationships: PO, FS, HS, U. We do all that like this:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_ckmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_ckmr.html">create_ckmr</a></span><span class="op">(</span>
-  D <span class="op">=</span> <span class="va">afreqs_ready</span>,
-  kappa_matrix <span class="op">=</span> <span class="va">kappas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span>, <span class="op">]</span>,
-  ge_mod_assumed <span class="op">=</span> <span class="va">ge_model_TGIE</span>,
-  ge_mod_true <span class="op">=</span> <span class="va">ge_model_TGIE</span>,
-  ge_mod_assumed_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>,
-  ge_mod_true_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_ckmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_ckmr.html">create_ckmr</a></span><span class="op">(</span></span>
+<span>  D <span class="op">=</span> <span class="va">afreqs_ready</span>,</span>
+<span>  kappa_matrix <span class="op">=</span> <span class="va">kappas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span>, <span class="op">]</span>,</span>
+<span>  ge_mod_assumed <span class="op">=</span> <span class="va">ge_model_TGIE</span>,</span>
+<span>  ge_mod_true <span class="op">=</span> <span class="va">ge_model_TGIE</span>,</span>
+<span>  ge_mod_assumed_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span>,</span>
+<span>  ge_mod_true_pars_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>epsilon <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Now, when we print this object we get a little summary of what is in
 it:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_ckmr</span>
-<span class="co">#&gt; A ckmr object with 78 loci having between 3 and 27 alleles.</span>
-<span class="co">#&gt; Locus names: Unk.Plate_1_A01_Sat_GW603857_consensus.1, Unk.Plate_1_A11_Sat_GE820299_consensus.2,   ...   , Unk.tag_id_981.78</span>
-<span class="co">#&gt; Relationships:  PO, FS, HS, U</span>
-<span class="co">#&gt; Assumed and true genotyping error models are the same</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_ckmr</span></span>
+<span><span class="co">#&gt; A ckmr object with 78 loci having between 3 and 27 alleles.</span></span>
+<span><span class="co">#&gt; Locus names: Unk.Plate_1_A01_Sat_GW603857_consensus.1, Unk.Plate_1_A11_Sat_GE820299_consensus.2,   ...   , Unk.tag_id_981.78</span></span>
+<span><span class="co">#&gt; Relationships:  PO, FS, HS, U</span></span>
+<span><span class="co">#&gt; Assumed and true genotyping error models are the same</span></span></code></pre></div>
 <p>This is an S3 object of class <code>ckmr</code>.</p>
 </div>
 <div class="section level3">
@@ -767,22 +770,22 @@ included as a rowname in the <code>kappa_matrix</code> argument to
 <p>Here we simulate all the genotype-pair probabilities we will
 need:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_Qs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_Qij.html">simulate_Qij</a></span><span class="op">(</span><span class="va">ex1_ckmr</span>, 
-                       calc_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span>,
-                       sim_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span> <span class="op">)</span>
-<span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: PO</span>
-<span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: FS</span>
-<span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: HS</span>
-<span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: U</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_Qs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_Qij.html">simulate_Qij</a></span><span class="op">(</span><span class="va">ex1_ckmr</span>, </span>
+<span>                       calc_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span>,</span>
+<span>                       sim_relats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"FS"</span>, <span class="st">"HS"</span>, <span class="st">"U"</span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: PO</span></span>
+<span><span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: FS</span></span>
+<span><span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: HS</span></span>
+<span><span class="co">#&gt; Simulating unlinked markers from Y_l_true matrices for relationship: U</span></span></code></pre></div>
 <p>If we print the resulting S3 object (of class <code>Qij</code>), we
 get a little information about it:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_Qs</span>
-<span class="co">#&gt; A Qij object with 10000 reps</span>
-<span class="co">#&gt; simulated with markers unlinked</span>
-<span class="co">#&gt; "sim_relats" relationships: PO, FS, HS, U</span>
-<span class="co">#&gt; "calc_relats"   relationships: PO, FS, U</span>
-<span class="co">#&gt; rando_miss_n: 0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_Qs</span></span>
+<span><span class="co">#&gt; A Qij object with 10000 reps</span></span>
+<span><span class="co">#&gt; simulated with markers unlinked</span></span>
+<span><span class="co">#&gt; "sim_relats" relationships: PO, FS, HS, U</span></span>
+<span><span class="co">#&gt; "calc_relats"   relationships: PO, FS, U</span></span>
+<span><span class="co">#&gt; rando_miss_n: 0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="compute-log-likelihood-ratios-to-view-them-extract_logls">Compute log-likelihood ratios to view them
@@ -813,37 +816,37 @@ numerator and the denominator of the log likelihood ratio.</p>
 <p>An example here should help. Let’s say we are interested in the
 distribution of the log likelihood ratio PO/U. Then we would do:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">PO_U_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_logls.html">extract_logls</a></span><span class="op">(</span><span class="va">ex1_Qs</span>,
-                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>PO <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">PO_U_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_logls.html">extract_logls</a></span><span class="op">(</span><span class="va">ex1_Qs</span>,</span>
+<span>                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>PO <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>That returns a tibble of log likelihood values for the numerator and
 the denominator and also the ratio of the two, one row for each
 simulated value in <code>ex1_Qs</code> (in the present case that is
 10,000 values for each of the true relationship being PO, FS, HS, and
 U):</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">PO_U_logls</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 40,000 × 11</span></span>
-<span class="co">#&gt;    simtype  PO_sim  rando_miss_n numer_wts denom_wts true_relat   rep numer_logl</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> unlinked not_fo…            0 PO=1      U=1       PO             1      -<span style="color: #BB0000;">235.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> unlinked not_fo…            0 PO=1      U=1       PO             2      -<span style="color: #BB0000;">244.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> unlinked not_fo…            0 PO=1      U=1       PO             3      -<span style="color: #BB0000;">214.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> unlinked not_fo…            0 PO=1      U=1       PO             4      -<span style="color: #BB0000;">258.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> unlinked not_fo…            0 PO=1      U=1       PO             5      -<span style="color: #BB0000;">237.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> unlinked not_fo…            0 PO=1      U=1       PO             6      -<span style="color: #BB0000;">227.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> unlinked not_fo…            0 PO=1      U=1       PO             7      -<span style="color: #BB0000;">226.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> unlinked not_fo…            0 PO=1      U=1       PO             8      -<span style="color: #BB0000;">229.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> unlinked not_fo…            0 PO=1      U=1       PO             9      -<span style="color: #BB0000;">227.</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> unlinked not_fo…            0 PO=1      U=1       PO            10      -<span style="color: #BB0000;">211.</span></span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 39,990 more rows, and 3 more variables: denom_logl &lt;dbl&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   logl_ratio &lt;dbl&gt;, true_log_prob &lt;dbl&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">PO_U_logls</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 40,000 × 11</span></span></span>
+<span><span class="co">#&gt;    simtype  PO_sim  rando_miss_n numer_wts denom_wts true_relat   rep numer_logl</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> unlinked not_fo…            0 PO=1      U=1       PO             1      -<span style="color: #BB0000;">226.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> unlinked not_fo…            0 PO=1      U=1       PO             2      -<span style="color: #BB0000;">245.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> unlinked not_fo…            0 PO=1      U=1       PO             3      -<span style="color: #BB0000;">218.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> unlinked not_fo…            0 PO=1      U=1       PO             4      -<span style="color: #BB0000;">223.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> unlinked not_fo…            0 PO=1      U=1       PO             5      -<span style="color: #BB0000;">229.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> unlinked not_fo…            0 PO=1      U=1       PO             6      -<span style="color: #BB0000;">215.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> unlinked not_fo…            0 PO=1      U=1       PO             7      -<span style="color: #BB0000;">227.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> unlinked not_fo…            0 PO=1      U=1       PO             8      -<span style="color: #BB0000;">242.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> unlinked not_fo…            0 PO=1      U=1       PO             9      -<span style="color: #BB0000;">245.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> unlinked not_fo…            0 PO=1      U=1       PO            10      -<span style="color: #BB0000;">247.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 39,990 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: denom_logl &lt;dbl&gt;, logl_ratio &lt;dbl&gt;, true_log_prob &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>We can visualize the distribution of each of these quite easily with
 <code>ggplot</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span>,
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CKMRsim-example-1_files/figure-html/unnamed-chunk-19-1.png" width="624"></p>
 <p>OK, that shows that there is very little overlap in the PO/U log
 likelihood ratio between unrelated pairs and parent-offspring pairs;
@@ -854,9 +857,9 @@ parent-offspring pairs.</p>
 <p>Let’s look at the above plot, but limit our focus to PO and U
 pairs:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">PO_U_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PO"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CKMRsim-example-1_files/figure-html/unnamed-chunk-20-1.png" width="624"></p>
 <p>This shows that if we are only trying to distinguish PO pairs from U
 pairs, then we should apparently do quite well if we say that every pair
@@ -882,13 +885,13 @@ case, it would be best to use the FS/U logl ratio. The distributions of
 those (for the truth being either FS or U) can be visualized like
 so:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">FS_U_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_logls.html">extract_logls</a></span><span class="op">(</span><span class="va">ex1_Qs</span>,
-                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>FS <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">FS_U_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,
-            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">FS_U_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_logls.html">extract_logls</a></span><span class="op">(</span><span class="va">ex1_Qs</span>,</span>
+<span>                            numer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>FS <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>                            denom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">FS_U_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">true_relat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FS"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">logl_ratio</span>, fill <span class="op">=</span> <span class="va">true_relat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CKMRsim-example-1_files/figure-html/unnamed-chunk-21-1.png" width="624"></p>
 </div>
 <div class="section level3">
@@ -910,90 +913,90 @@ whatever you wish.</p>
 true relationship is U, but we are looking for PO pairs. This will, by
 default, use importance sampling.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_PO_is</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
-                 nu <span class="op">=</span> <span class="st">"PO"</span>,
-                 de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span>
-
-<span class="va">ex1_PO_is</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span>
-<span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 5.08<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.95<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.1 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.07<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 9.41<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.7 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  2.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 7.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.1 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_PO_is</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, </span>
+<span>                 nu <span class="op">=</span> <span class="st">"PO"</span>,</span>
+<span>                 de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ex1_PO_is</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span></span>
+<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 4.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.2 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.8 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  1.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 6.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.2 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>This shows false positive rates (FPR) of around <span class="math inline">\(10^{-6}\)</span> and smaller when the false
 negative rate (FNR) is 0.01 and greater.</p>
 <p>If we wanted to see what the results would look like if we were using
 a logl ratio of 5 as a cutoff, we could do this:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_PO_is_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
-                 nu <span class="op">=</span> <span class="st">"PO"</span>,
-                 de <span class="op">=</span> <span class="st">"U"</span>, 
-                 lambda_stars <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-
-<span class="va">ex1_PO_is_5</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 10</span></span>
-<span class="co">#&gt;      FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.000<span style="text-decoration: underline;">2</span> 6.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> 3.31<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>998         5   PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0.01   5.08<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.95<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.1 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0.05   2.07<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 9.41<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 0.1    2.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.7 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 0.2    1.87<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 0.3    2.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 7.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.1 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
-<p>We see we would have had a false positive rate around 6.16e-07, if we
+<code class="sourceCode R"><span><span class="va">ex1_PO_is_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, </span>
+<span>                 nu <span class="op">=</span> <span class="st">"PO"</span>,</span>
+<span>                 de <span class="op">=</span> <span class="st">"U"</span>, </span>
+<span>                 lambda_stars <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ex1_PO_is_5</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 10</span></span></span>
+<span><span class="co">#&gt;      FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.000<span style="text-decoration: underline;">1</span> 7.41<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> 3.60<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>999         5   PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0.01   4.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.2 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0.05   2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 0.1    2.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.8 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 0.2    1.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 0.3    2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 6.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.2 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
+<p>We see we would have had a false positive rate around 7.41e-07, if we
 used a logl ratio cutoff of 5. Since there are 1847 adults and 4244
 juvniles in this study, there will be <span class="math inline">\(1847
 \times 4244 = 7,838,668\)</span> pairs being tested for being
-parent-offspring pairs. A per-pair FPR of 6.16e-07 would leave us with
-an expected number of false positive pairs on the order of 5.</p>
+parent-offspring pairs. A per-pair FPR of 7.41e-07 would leave us with
+an expected number of false positive pairs on the order of 6.</p>
 <p>My general recommendation for being confident about not erroneously
 identifying unrelated individuals as related pairs is to require that
 the FPR be about 10 to 100 times smaller than the reciprocal of the
 number of comparisons. So, in this case,</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fl">0.1</span> <span class="op">*</span> <span class="op">(</span><span class="fl">4244</span> <span class="op">*</span> <span class="fl">1847</span><span class="op">)</span> <span class="op">^</span> <span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; [1] 1.275727e-08</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fl">0.1</span> <span class="op">*</span> <span class="op">(</span><span class="fl">4244</span> <span class="op">*</span> <span class="fl">1847</span><span class="op">)</span> <span class="op">^</span> <span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1.275727e-08</span></span></code></pre></div>
 <p>or smaller would be a good FPR to shoot for. That would be a logl
 ratio cutoff of between 12 and 15. For fun, let’s look at FPRs and FNRs
 at a number of such cutoffs:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_PO_is_8_12</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
-                 nu <span class="op">=</span> <span class="st">"PO"</span>,
-                 de <span class="op">=</span> <span class="st">"U"</span>, 
-                 lambda_stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">15</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">ex1_PO_is_8_12</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 10</span></span>
-<span class="co">#&gt;       FNR      FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.003<span style="text-decoration: underline;">7</span>  1.82<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.98<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>963        12   PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 0.003<span style="text-decoration: underline;">8</span>  1.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.89<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>962        12.1 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 0.004   1.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>960        12.2 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.004   1.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>960        12.3 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 0.004<span style="text-decoration: underline;">4</span>  1.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>956        12.4 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.004<span style="text-decoration: underline;">6</span>  1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>954        12.5 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.004<span style="text-decoration: underline;">8</span>  1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.31<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>952        12.6 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.005   1.27<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.23<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>950        12.7 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.005<span style="text-decoration: underline;">3</span>  1.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>947        12.8 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.005<span style="text-decoration: underline;">6</span>  1.10<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.03<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>944        12.9 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 26 more rows, and 2 more variables: denominator &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   true_relat &lt;chr&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_PO_is_8_12</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, </span>
+<span>                 nu <span class="op">=</span> <span class="st">"PO"</span>,</span>
+<span>                 de <span class="op">=</span> <span class="st">"U"</span>, </span>
+<span>                 lambda_stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">15</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ex1_PO_is_8_12</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 10</span></span></span>
+<span><span class="co">#&gt;       FNR     FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.004<span style="text-decoration: underline;">6</span> 1.65<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 2.03<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>954        12   PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 0.004<span style="text-decoration: underline;">9</span> 1.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>951        12.1 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 0.005  1.42<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>950        12.2 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.005<span style="text-decoration: underline;">2</span> 1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>948        12.3 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 0.005<span style="text-decoration: underline;">6</span> 1.15<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>944        12.4 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.005<span style="text-decoration: underline;">6</span> 1.15<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>944        12.5 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.005<span style="text-decoration: underline;">8</span> 1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>942        12.6 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.006  1.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>940        12.7 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.006<span style="text-decoration: underline;">2</span> 9.57<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span> 9.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>938        12.8 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.006<span style="text-decoration: underline;">3</span> 9.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span> 9.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>937        12.9 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 26 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Let’s find the logl ratio value that gives the largest FPR smaller
 than 1.275727e-08:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_PO_is_8_12</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">FPR</span> <span class="op">&gt;</span> <span class="fl">1.275727e-08</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">FPR</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span>
-<span class="co">#&gt;      FNR       FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.004<span style="text-decoration: underline;">8</span>   1.33<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.31<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>952        12.6 PO    IS        PO       </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_PO_is_8_12</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">FPR</span> <span class="op">&gt;</span> <span class="fl">1.275727e-08</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">FPR</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span></span>
+<span><span class="co">#&gt;      FNR       FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.005<span style="text-decoration: underline;">2</span>   1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>948        12.3 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>This suggests that requiring a logl ratio cutoff of about 15 should
 mean almost no false positives, but perhaps a false negative or two (if
 the genotyping error rate is accurate).</p>
@@ -1006,19 +1009,19 @@ that we might sift through, looking for full siblings, we will be making
 to have an FPR of about 1e-08 or less, and that corresponds to a false
 negative rate of about 0.2.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ex1_FS_is</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, 
-                 nu <span class="op">=</span> <span class="st">"FS"</span>,
-                 de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span>
-<span class="va">ex1_FS_is</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span>
-<span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 1.44<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> 1.44<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>900        7.94 FS    IS        FS       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.23<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> 1.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>500       13.5  FS    IS        FS       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 8.82<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>000       16.4  FS    IS        FS       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  7.85<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 2.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">8</span>000       20.0  FS    IS        FS       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  6.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 2.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span>            <span style="text-decoration: underline;">7</span>000       22.6  FS    IS        FS       </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ex1_FS_is</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mc_sample_simple.html">mc_sample_simple</a></span><span class="op">(</span><span class="va">ex1_Qs</span>, </span>
+<span>                 nu <span class="op">=</span> <span class="st">"FS"</span>,</span>
+<span>                 de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span></span>
+<span><span class="va">ex1_FS_is</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span></span>
+<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 1.70<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> 1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>900        7.92 FS    IS        FS       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.19<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> 1.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>500       13.5  FS    IS        FS       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 8.78<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>000       16.4  FS    IS        FS       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  8.17<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">8</span>000       19.9  FS    IS        FS       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  5.98<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 1.99<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span>            <span style="text-decoration: underline;">7</span>000       22.6  FS    IS        FS       </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Note! The results here differ from those reported in the data for
 <span class="citation">Baetscher et al. (2019)</span> because we are
 using a different genotyping error model here, with a higher error rate
@@ -1052,14 +1055,14 @@ frequencies computed from that long genotype data frame. It returns all
 pairs of individuals with fewer than <code>max_mismatch</code> loci at
 which genotypes mismatch.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">matchers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_close_matching_genotypes.html">find_close_matching_genotypes</a></span><span class="op">(</span>LG <span class="op">=</span> <span class="va">long_genos</span>,
-                                          CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,
-                                          max_mismatch <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
-
-<span class="va">matchers</span>
-<span class="co">#&gt; [1] indiv_1      indiv_2      ind1         ind2         num_mismatch</span>
-<span class="co">#&gt; [6] num_loc     </span>
-<span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">matchers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_close_matching_genotypes.html">find_close_matching_genotypes</a></span><span class="op">(</span>LG <span class="op">=</span> <span class="va">long_genos</span>,</span>
+<span>                                          CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,</span>
+<span>                                          max_mismatch <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">matchers</span></span>
+<span><span class="co">#&gt; [1] indiv_1      indiv_2      ind1         ind2         num_mismatch</span></span>
+<span><span class="co">#&gt; [6] num_loc     </span></span>
+<span><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span></code></pre></div>
 <p>This suggests that any duplicate genotypes have already been removed
 from this data set. Good.</p>
 </div>
@@ -1081,49 +1084,49 @@ all parents to all offspring.</p>
 </h4>
 <p>First, break <code>long_genos</code> into two data frames:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">parent_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"adult"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span>
-
-<span class="va">offspring_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"juvenile"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span>
-
-<span class="va">candidate_parents</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">parent_ids</span><span class="op">)</span>
-
-<span class="va">candidate_offspring</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">offspring_ids</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">parent_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"adult"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">offspring_ids</span> <span class="op">&lt;-</span> <span class="va">life_stages</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">stage</span> <span class="op">==</span> <span class="st">"juvenile"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">NMFS_DNA_ID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">candidate_parents</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">parent_ids</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">candidate_offspring</span> <span class="op">&lt;-</span> <span class="va">long_genos</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Indiv</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">offspring_ids</span><span class="op">)</span></span></code></pre></div>
 <p>Then, use those:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">po_pairwise_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pairwise_kin_logl_ratios.html">pairwise_kin_logl_ratios</a></span><span class="op">(</span>D1 <span class="op">=</span> <span class="va">candidate_parents</span>, 
-                                              D2 <span class="op">=</span> <span class="va">candidate_offspring</span>, 
-                                              CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,
-                                              numer <span class="op">=</span> <span class="st">"PO"</span>,
-                                              denom <span class="op">=</span> <span class="st">"U"</span>,
-                                              num_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co"># note, num_cores is set to 1 because more than that breaks</span>
-<span class="co"># it on CRAN checks.  But, leave it blank (i.e., don't use the</span>
-<span class="co"># num_core option) to, by default, use all</span>
-<span class="co"># your cores in parallel on a non-windows machine.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">po_pairwise_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pairwise_kin_logl_ratios.html">pairwise_kin_logl_ratios</a></span><span class="op">(</span>D1 <span class="op">=</span> <span class="va">candidate_parents</span>, </span>
+<span>                                              D2 <span class="op">=</span> <span class="va">candidate_offspring</span>, </span>
+<span>                                              CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,</span>
+<span>                                              numer <span class="op">=</span> <span class="st">"PO"</span>,</span>
+<span>                                              denom <span class="op">=</span> <span class="st">"U"</span>,</span>
+<span>                                              num_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co"># note, num_cores is set to 1 because more than that breaks</span></span>
+<span><span class="co"># it on CRAN checks.  But, leave it blank (i.e., don't use the</span></span>
+<span><span class="co"># num_core option) to, by default, use all</span></span>
+<span><span class="co"># your cores in parallel on a non-windows machine.</span></span></code></pre></div>
 <p>If desired we can retain only those with logl ratio &gt; 12, which is
 in the vicinity of a reasonable cutoff of about 15 which we determined
 through simulation.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">po_pairwise_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 4</span></span>
-<span class="co">#&gt;   D2_indiv D1_indiv logl_ratio num_loc</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> R031608  R019764        43.3      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> R015015  R012195        40.0      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> R014780  R016256        34.0      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> R015337  R015977        31.6      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> R031274  R019641        29.8      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> R015263  R019881        24.6      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">7</span> R013607  R019760        17.6      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">8</span> R029094  R015684        15.0      75</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">po_pairwise_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 4</span></span></span>
+<span><span class="co">#&gt;   D2_indiv D1_indiv logl_ratio num_loc</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> R031608  R019764        43.3      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> R015015  R012195        40.0      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> R014780  R016256        34.0      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> R015337  R015977        31.6      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> R031274  R019641        29.8      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> R015263  R019881        24.6      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> R013607  R019760        17.6      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> R029094  R015684        15.0      75</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="looking-for-full-sib-pairs-among-the-juveniles">Looking for full-sib pairs among the juveniles<a class="anchor" aria-label="anchor" href="#looking-for-full-sib-pairs-among-the-juveniles"></a>
@@ -1133,39 +1136,39 @@ function. We just pass the same set of offspring genotypes in for both
 the <code>D1</code> and the <code>D2</code> parameters to the
 function.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fs_pairwise_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pairwise_kin_logl_ratios.html">pairwise_kin_logl_ratios</a></span><span class="op">(</span>D1 <span class="op">=</span> <span class="va">candidate_offspring</span>,
-                                              D2 <span class="op">=</span> <span class="va">candidate_offspring</span>,
-                                              CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,
-                                              numer <span class="op">=</span> <span class="st">"FS"</span>,
-                                              denom <span class="op">=</span> <span class="st">"U"</span>, 
-                                              num_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; D1 and D2 are identical: dropping self comparisons and keeping only first instance of each pair</span>
-
-<span class="co"># note, num_cores is set to 1 because more than that breaks</span>
-<span class="co"># it on CRAN checks.  But, leave it blank (i.e., don't use the</span>
-<span class="co"># num_core option) to, by default, use all</span>
-<span class="co"># your cores in parallel on a non-windows machine.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fs_pairwise_logls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pairwise_kin_logl_ratios.html">pairwise_kin_logl_ratios</a></span><span class="op">(</span>D1 <span class="op">=</span> <span class="va">candidate_offspring</span>,</span>
+<span>                                              D2 <span class="op">=</span> <span class="va">candidate_offspring</span>,</span>
+<span>                                              CK <span class="op">=</span> <span class="va">ex1_ckmr</span>,</span>
+<span>                                              numer <span class="op">=</span> <span class="st">"FS"</span>,</span>
+<span>                                              denom <span class="op">=</span> <span class="st">"U"</span>, </span>
+<span>                                              num_cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; D1 and D2 are identical: dropping self comparisons and keeping only first instance of each pair</span></span>
+<span></span>
+<span><span class="co"># note, num_cores is set to 1 because more than that breaks</span></span>
+<span><span class="co"># it on CRAN checks.  But, leave it blank (i.e., don't use the</span></span>
+<span><span class="co"># num_core option) to, by default, use all</span></span>
+<span><span class="co"># your cores in parallel on a non-windows machine.</span></span></code></pre></div>
 <p>Now, look at all those with logl_ratio &gt; 12 as well, (also close
 to about 14 or 15, which we determined from simulation to be a
 reasonable cutoff value, albeit with a high false negative rate.)</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fs_pairwise_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 41 × 4</span></span>
-<span class="co">#&gt;    D2_indiv D1_indiv logl_ratio num_loc</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R014981  R014982        73.7      76</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R021481  R027461        63.6      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R031276  R031280        58.8      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R014137  R014139        45.0      77</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R013839  R014675        42.9      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R020421  R027348        41.4      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R021571  R025619        41.0      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R014520  R014536        38.8      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R021500  R021511        36.5      78</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R015404  R020276        36.0      78</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 31 more rows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fs_pairwise_logls</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">logl_ratio</span> <span class="op">&gt;</span> <span class="fl">12</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">logl_ratio</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 41 × 4</span></span></span>
+<span><span class="co">#&gt;    D2_indiv D1_indiv logl_ratio num_loc</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> R014981  R014982        73.7      76</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> R021481  R027461        63.6      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> R031276  R031280        58.8      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> R014137  R014139        45.0      77</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> R013839  R014675        42.9      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> R020421  R027348        41.4      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> R021571  R025619        41.0      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> R014520  R014536        38.8      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> R021500  R021511        36.5      78</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> R015404  R020276        36.0      78</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 31 more rows</span></span></span></code></pre></div>
 <p>There are two steps that really should be done before that:</p>
 <ol style="list-style-type: decimal">
 <li>Observe the distribution of internal heterozygosity across all
@@ -1182,7 +1185,7 @@ contamination or genotyping problem.</li>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="literature-cited">Literature Cited<a class="anchor" aria-label="anchor" href="#literature-cited"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-baetscherDispersalNearshoreMarine2019" class="csl-entry">
 Baetscher, Diana S., Eric C. Anderson, Elizabeth A. Gilbert-Horvath,
 Daniel P. Malone, Emily T. Saarman, Mark H. Carr, and John Carlos Garza.
@@ -1218,7 +1221,7 @@ Relationship Inference.”</span> <em>Molecular Ecology Resources</em> 18
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
