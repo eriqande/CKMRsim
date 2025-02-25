@@ -23,10 +23,23 @@
 #'
 #'   reindex_markers(A_few_markers)   # then reindex them
 reindex_markers <- function(M) {
+
+  # first, check to make sure Locus names are unique.  Just in case someone
+  # has the some Locus name on two different chromosomes
+  tmp <- M %>%
+    dplyr::distinct(Chrom, Locus) %>%
+    dplyr::count(Locus) %>%
+    dplyr::filter(n > 1)
+
+  if(nrow(tmp) > 0) {
+    dupies <- tmp$Locus
+    stop("Locus names must be globally unique.  These are not: ", paste(dupies, collapse=", "))
+  }
+
+  # then re-index things
   M %>%
     dplyr::ungroup() %>%
     dplyr::arrange(Chrom, Pos, desc(Freq)) %>%
-    dplyr::group_by(Chrom) %>%
     dplyr::mutate(locidx = as.integer(factor(Locus, levels = unique(Locus)))) %>%
     dplyr::group_by(Chrom, Locus) %>%
     dplyr::mutate(alleidx = as.integer(factor(Allele, levels = unique(Allele))),

@@ -2,8 +2,13 @@
 % Please edit documentation in R/CKMRsim-package.R
 \docType{package}
 \name{CKMRsim}
+\alias{CKMRsim-package}
 \alias{CKMRsim}
 \title{My package documentation}
 \description{
 bla bla, need to write more here
+}
+\author{
+\strong{Maintainer}: Eric C. Anderson \email{eric.anderson@noaa.gov}
+
 }
