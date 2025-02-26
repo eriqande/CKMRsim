@@ -5,4 +5,5 @@
 #' @docType package
 #' @importFrom Rcpp evalCpp
 #' @useDynLib CKMRsim
-NULL
+"_PACKAGE"
+
