@@ -37,30 +37,75 @@ format_mixed_r <- function(R, colchars = ",") {
 # In some cases you might want to specify the Lambda_Star cutoffs
 # instead of the FNRs.  You can do that, too---just specify those
 # lambda_star values as a vector and they will be added to the
-# lambda_star values used by the FNRs.
-imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs) {
+# lambda_star values used by the FNRs.  desired_FPRs are values of FPRs
+# for which you would like to know the lambdas and FNRs
+imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, desired_FPRs = NULL, Q_for_FNRs) {
+
+  # get an internal variable for FNRs that will be modified as we proceed
+  iFNRs <- FNRs
+
   # get the importance weights and the corresponding lambdas when
   # the sample is from pstar
   iw <- tibble(lambda = Q[[pstar]][[nu]] - Q[[pstar]][[de]],
                    impwt = exp(Q[[pstar]][[tr]] - Q[[pstar]][[pstar]])) %>%
     dplyr::arrange(dplyr::desc(lambda)) %>%
-    dplyr::mutate(FPR = cumsum(impwt))
+    dplyr::mutate(FPR = cumsum(impwt) / n())
 
   # and now we gotta get the lambdas for the true correct relationship
   trues <- Q_for_FNRs[[nu]][[nu]] - Q_for_FNRs[[nu]][[de]]
 
   # get the lambda values those correspond to
-  cutoffs <- quantile(trues, probs = FNRs)
+  cutoffs <- quantile(trues, probs = iFNRs)
+
+  # this is for recording why each row of the final return tibble was put in there
+  request_type <- rep("FNR", length.out = length(cutoffs))
+  request <- iFNRs
+
+
+  # it seems like we should be able to add some more lambda_stars that
+  # might be based on a desired FPR.  That way the user could specify
+  # the desired FPR values, and for those, learn what the lambda cutoffs
+  # should be, and then also get the FNR values for those.  So, we just
+  # need to do that, sort of like we are doing with lambda_stars below, already.
+  if(!is.null(desired_FPRs)) {
+    # get each row that is the last one less than the desired FPR
+    FPR_rows <- lapply(desired_FPRs, function(x) {
+      tmp <- iw %>%
+        filter(FPR < x)
+      if(nrow(tmp) == 0) {
+        return(tibble(lambda = NA_real_, impwt = NA_real_, FPR = NA_real_, requested_FPR = x))
+      } else {
+        return(
+          tmp %>%
+            mutate(requested_FPR = x) %>%
+            last()
+        )
+      }
+    }) %>%
+      bind_rows()
+
+    desired_lambdas <- FPR_rows$lambda
+    fnrs3 <- colMeans(outer(trues, desired_lambdas, "<"))
+
+    iFNRs <- c(iFNRs, fnrs3)
+    request_type <- c(request_type, rep("FPR", length.out = length(fnrs3)))
+    request <- c(request, desired_FPRs)
+
+    cutoffs <- c(cutoffs, FPR_rows$lambda)
+  }
 
   if (!is.null(lambda_stars)) {  # here we need to add stuff on there
     fnrs2 <- colMeans(outer(trues, lambda_stars, "<"))  # this gets the false negative rates corresponding to the lambda_stars
     # then add those values into FNRs and cutoffs
-    FNRs <- c(FNRs, fnrs2)
+    iFNRs <- c(iFNRs, fnrs2)
     cutoffs <- c(cutoffs, lambda_stars)
+    request_type <- c(request_type, rep("Lambda", length.out = length(fnrs2)))
+    request <- c(request, lambda_stars)
   }
 
   # then get the FPRs for each of those
   fpr <- lapply(cutoffs, function(x) {
+    if(is.na(x)) { return(NA_real_) }
     tmp <- iw$impwt
     tmp[iw$lambda < x] <- 0.0
     mean(tmp) # mean here is summing them up and then dividing by length
@@ -68,6 +113,7 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs
 
   # also get the estimated standard error of the estimate
   se <- lapply(cutoffs, function(x) {
+    if(is.na(x)) { return(NA_real_) }
     tmp <- iw$impwt
     tmp[iw$lambda < x] <- 0.0  # set the weights less than lambda-star to zero
     sd(tmp) / sqrt(length(tmp))  # this is the standard error of the mean
@@ -75,10 +121,19 @@ imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, Q_for_FNRs
 
   # and also get the number of non-zero importance weights
   nnz <- lapply(cutoffs, function(x) {
+    if(is.na(x)) { return(NA_integer_) }
     sum(iw$lambda >= x)
   }) %>% unlist() %>% unname()
 
-    tibble(FNR = FNRs, FPR = fpr, se = se, num_nonzero_wts = nnz, Lambda_star = cutoffs) %>%
+    tibble(
+      FNR = iFNRs,
+      FPR = fpr,
+      se = se,
+      num_nonzero_wts = nnz,
+      Lambda_star = cutoffs,
+      request_type = request_type,
+      request = request
+    ) %>%
       dplyr::arrange(FNR, Lambda_star)
 }
 
