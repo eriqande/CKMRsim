@@ -4,7 +4,15 @@
 \alias{simulate_missing_data_array}
 \title{Simulate Qijs across multiple relevant levels of missing data}
 \usage{
-simulate_missing_data_array(LG, C, num_points = 11, num_cores = 1, ...)
+simulate_missing_data_array(
+  LG,
+  C,
+  num_points = 11,
+  num_cores = 1,
+  tabulate_and_exit = FALSE,
+  simulation_approach = "simple_miss_freq",
+  ...
+)
 }
 \arguments{
 \item{LG}{the genotypes in long format.  It must have the columns
@@ -23,6 +31,20 @@ simulations will be performed for.}
 from the parallel package.  On Windows, parallelization is not available from forking
 so this must remain equal to 1 on Windows.}
 
+\item{tabulate_and_exit}{if TRUE, then the function exits after tabulating the
+number of pairs with different numbers on shared non-missing genotypes, and returns
+only information about that.  This is useful for getting an overview of what the
+missing data structure in your data look like.}
+
+\item{simulation_approach}{this determines how simulations should be done. The
+options are:
+\itemize{
+\item \code{simple_miss_freq}: do simulations at \code{num_points} different values of the number
+of pairwise shared genotypes, drawing the pattern of missingness from a very simple
+independent random sampling model according to the frequency of missing data in all
+loci.
+}}
+
 \item{...}{
   Arguments passed on to \code{\link[=simulate_Qij]{simulate_Qij}}
   \describe{
@@ -35,13 +57,6 @@ genotype log probabilities of the simulated
 genotypes from.  Genotype log probs are calculated using the Y_l matrices.}
     \item{\code{reps}}{a synonym for \code{calc_relats} for compatibility to an earlier version
 of CKMRsim.}
-    \item{\code{unlinked}}{A logical indicating whether to simulate the markers as unlinked.  By default this is
-TRUE.  If FALSE, then genotypes at linked markers will be simulated using the program MENDEL, genotyping
-errors will be applied to them, and the Q_ij values themselves will still be computed under the assumption
-of no linkage. However, they will be simulated under the no-linkage model for relationships "U", "PO", and
-"MZ", because, in the absence of LD, related pairs under those relationships are not affected by
-physical linkage.}
-    \item{\code{pedigree_list}}{If you specify unlinked == FALSE, then you have to supply a pedigree_list.}
   }}
 }
 \value{
@@ -63,6 +78,12 @@ missingness in pairs, under a simple independence assumption.
 \item Simulate Q_ij values at a series of different numbers of non-missing loci
 to calculate FPRs and FNRs for those.
 }
+}
+\details{
+Note that this function requires a CKMR object \code{C} that is suitable for both
+linked an unlinked simulation.  So, if you don't have that, then you best
+prepare it, even if it means sprinkling your markers into a pseudogenome
+as described \href{https://eriqande.github.io/tws-ckmr-2022/kin-finding-lab.html#power-for-kin-finding-while-accounting-for-physical-linkage}{here}.
 }
 \examples{
 # this is just here for testing at the moment

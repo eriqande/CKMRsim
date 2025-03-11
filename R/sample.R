@@ -39,7 +39,7 @@ format_mixed_r <- function(R, colchars = ",") {
 # lambda_star values as a vector and they will be added to the
 # lambda_star values used by the FNRs.  desired_FPRs are values of FPRs
 # for which you would like to know the lambdas and FNRs
-imp_samp <- function(Q, nu, de, tr, pstar, FNRs, lambda_stars = NULL, desired_FPRs = NULL, Q_for_FNRs) {
+imp_samp <- function(Q, nu, de, tr, pstar, FNRs, Q_for_FNRs, lambda_stars = NULL, desired_FPRs = NULL) {
 
   # get an internal variable for FNRs that will be modified as we proceed
   iFNRs <- FNRs
@@ -219,15 +219,17 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
 #' number of loci.
 #'
 #' @export
-mc_sample_simple <- function(Q,
-                             nu,
-                             de = "U",
-                             tr = "U",
-                             method = c("IS", "vanilla", "both")[1],
-                             pstar = NA,
-                             FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01),
-                             lambda_stars = NULL,
-                             Q_for_fnrs = NULL
+mc_sample_simple <- function(
+    Q,
+    nu,
+    de = "U",
+    tr = "U",
+    method = c("IS", "vanilla", "both")[1],
+    pstar = NA,
+    FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01),
+    Q_for_fnrs = NULL,
+    lambda_stars = NULL,
+    desired_FPRs = NULL
 ) {
 
   #### here test that everything is OK and catch input errors  ####
@@ -273,7 +275,17 @@ mc_sample_simple <- function(Q,
             pstar_tmp <- pstar
           }
           is <- lapply(pstar_tmp, function(pstar_) {
-            tmp <- imp_samp(Q = Q, nu = nu_, de = de_, tr = tr_, pstar_, FNRs, lambda_stars, Q_for_fnrs)
+            tmp <- imp_samp(
+              Q = Q,
+              nu = nu_,
+              de = de_,
+              tr = tr_,
+              pstar = pstar_,
+              FNRs = FNRs,
+              Q_for_FNRs = Q_for_fnrs,
+              lambda_stars = lambda_stars,
+              desired_FPRs = desired_FPRs
+            )
             tmp$pstar <- pstar_
             tmp
           }) %>%

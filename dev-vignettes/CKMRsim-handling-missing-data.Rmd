@@ -1,0 +1,428 @@
+---
+title: "Handling Missing Data"
+output: html_notebook
+#output: rmarkdown::html_vignette
+#vignette: >
+#  %\VignetteIndexEntry{Handling Missing Data}
+#  %\VignetteEngine{knitr::rmarkdown}
+#  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+I am putting this together right now to document how I am approaching missing data,
+and I am using the red snapper GT-seq data as a germane example.
+
+I have created some inputs that I am keeping in the repo, but not committing.  They
+are the "long genos with dupes removed" tibble that Ali provided, and also a CKMR
+object of markers that I made by sprinkling markers into a pseudo-genome (so that
+we have some idea/approximation of the effect of physical linkage).
+
+
+First things first, let's load up those data:
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(CKMRsim)
+
+LG <- read_rds("../development/data/LG.rds")
+C <- read_rds("../development/data/C.rds")
+```
+
+
+
+My philosophy on dealing with missing data at this point is to do a whole series
+of simulations, each one for a different number of loci missing (actually I will
+do it according to the number of loci _shared_) between a pair.  (Note that number
+of shared non-missing loci is simply the total number of loci minus the number
+of loci missing an at least one member of a pair).
+
+
+Currently, the workhorse function for this is `simulate_missing_data_array()`.
+The first thing it does is tabulate the number of shared genotypes amongst
+all pairs of markers.  It does this with a simple matrix multiplication.
+Here, we will use it to just to do that tabulation:
+```{r}
+tabu <- simulate_missing_data_array(LG, C, tabulate_and_exit = TRUE)
+```
+
+One useful output of that is a plot of the number of pairs with
+different numbers of shared, non-missing genotypes:
+```{r}
+tabu$background$plots$pairwise_non_miss_counts_plot
+```
+
+That is a super informative plot. It shows that most of the pairs have only about 120
+informative loci, and very few of them have all loci informative, due to the missing
+genotypes.   We clearly have to account for missing data if our CKMRsim analyses are
+going to be accurate/meaningful.
+
+The other thing that this shows us is that there are no more than about 2.2 million
+pairs for any of those numbers of non-missing loci in the pair.  We can work with
+that, I believe.
+
+Our main problem in all of this is going to be distinguishing half-sib (HS) from
+Unrelated (U) pairs.  Sure, there may be some half-aunt-nieces floating around there,
+but there are not many of them, and we are going to confirm all pairs with RAD seq.
+So, what we want now is simply a way to ensure that we can set a cutoff so that
+not too many of the pairs that are actually U's end up in the set of individuals
+that will be RAD-seqed.  
+
+My current thinking on my approach to doing this is that we can simply simulate
+genotypes for all the pairs in a certain number-of-shared-loci category (NOSLC)
+and do so by matching the actual _pattern of missing data_ in the pairs.  For each
+NOSLC, that should give us a pretty good idea of what threshold we should set so
+that we expect no more than a certain number of unrelateds exceeding that threshold.
+
+Before we dive into that, I want to illustrate a slightly different approach that I
+implemented first, which calculates FPRs and FNRs for different numbers of
+pairwise-shared genotypes.  This is valuable for getting a broad overview
+of the power that a given data set affords.  In this case missing data patterns are
+not drawn directly from those observed amongst the pairs, but rather they are
+simulated according to the overall missing data rate of each locus.  
+
+Let us note that the range of non-missing loci here is 115 to 181, so that is a
+difference of 66.  We will see what happens if we choose to do 22 points in there.
+Also, I think we should put FS and PO in there as well so that we can find them
+first.  But we should do those all in separate runs, because otherwise it gets to
+be combinatorially inconvenient.  
+
+```{r}
+options(CKMRsim.discard_stderr = TRUE, CKMRsim.discard_stdout = TRUE)
+
+relats <- c("HS", "FS", "PO")
+names(relats) <- relats 
+
+multiQ <- lapply(relats, function(x) {
+  simulate_missing_data_array(
+    LG, 
+    C,
+    simulation_approach = "simple_miss_freq",
+    sim_relats = c("U", x),
+    calc_relats = c("U", x), 
+    reps = 5e4,
+    num_cores = 8,
+    num_points = 22
+  )
+})
+
+```
+
+Once we have that we can make a plot that shows FPRs as a function of FNR and
+the number of loci shared non-missing in a pair.  The following is code lifted
+from the function `model_Qij_with_missing_data()` which is still under development...
+
+Before we hop into that, let's just note how many total pairwise comparisons we
+are making:
+```{r}
+n <- n_distinct(LG$Indiv)
+
+num_pairs <- n * (n - 1) / 2
+num_pairs
+```
+
+So, about 108 million.  So, and most of those will be Unrelateds.  Let's imagine
+that we would be OK having to deal with aobut 216 Unrelated pairs getting through
+at this stage (because we are going to retype all those pairs with RAD-seq).  In
+that case we could tolerate a false positive rate at this GT-seq step of
+2e-6.  See:
+```{r}
+num_pairs * c(2e-6, 1e-6, 5e-7, 1e-7)
+```
+
+So, we will use those as our desired_FPRs, but we will go for lower values, too.
+
+Now, we can do the importance sampling from the sample we collected. We make a little
+function to do this.
+```{r}
+Qtib = multiQ$Qij
+nu = "HS"
+de = "U"
+tr = "U"
+FNRs = c(0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.01) # we don't need these, but it was helpful for seeing that the desired_FPRs were working correctly. 
+desired_FPRs = c(2e-6, 1e-6, 5e-7, 1e-7)
+
+mc_sample_array <-  function(
+  Qtib, 
+  nu,
+  de = "U",
+  tr = "U", 
+  FNRs = c(0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.01),
+  desired_FPRs = c(2e-6, 1e-6, 5e-7, 1e-7)
+) {
+  # cycle over all the possible quantities of shared non-missing loci
+  MC <- Qtib %>%
+    mutate(
+      mc = map2(
+        .x = Qijs_unlinked,
+        .y = Qijs_linked,
+        .f = function(x, y) {
+          mc_sample_simple(
+            Q = x,
+            nu = nu,
+            de = de,
+            tr = tr,
+            FNRs = FNRs,
+            Q_for_fnrs = y,
+            desired_FPRs = desired_FPRs
+          )}
+      )
+    )
+  
+  # now, unnest that stuff
+  MCu <- MC %>%
+    select(-Qijs_linked, -Qijs_unlinked) %>%
+    unnest(cols = mc)
+}
+```
+
+So, we can run these on the different arrays, and filter things down to just the desired_FPRs that we want.
+```{r}
+HS_mc <- mc_sample_array(Qtib = multiQ$HS$Qij, nu = "HS") %>%
+  filter(request_type == "FPR")
+PO_mc <- mc_sample_array(Qtib = multiQ$PO$Qij, nu = "PO", desired_FPRs = c(2e-6, 1e-6, 5e-7, 1e-7, 1e-8, 1e-9)) %>%
+  filter(request_type == "FPR")
+FS_mc <- mc_sample_array(Qtib = multiQ$FS$Qij, nu = "FS", desired_FPRs = c(2e-6, 1e-6, 5e-7, 1e-7, 1e-8, 1e-9)) %>%
+  filter(request_type == "FPR")
+
+# and we can put them all together.  The numerator column distinguishes them.
+MC <- bind_rows(
+  HS_mc, PO_mc, FS_mc
+)
+```
+
+
+
+And here is the relationship between num_non_missing_loci and the FNR
+```{r}
+g <- ggplot(MC, aes(x = num_non_missing_loci, y = FNR)) +
+  geom_point() +
+  facet_grid(numerator ~ request)
+g
+```
+
+And what we would really like to get out of this would be way to quickly predict the FNR
+for any number of non-missing loci.  How about a simple polynomial regression?  We nest
+things up to do it on each
+```{r}
+non_miss_series <- 57:181
+
+MC_nest <- MC %>%
+  select(numerator, request, num_non_missing_loci, FNR, Lambda_star) %>%
+  group_by(numerator, request) %>%
+  nest()
+
+pred_FNR <- MC_nest %>%
+  ungroup() %>%
+  mutate(
+    poly_fitFNR = map(
+      .x = data,
+      .f = function(x) lm(FNR ~ poly(num_non_missing_loci, 8), data = x)
+    ),
+    pred_FNR = map(
+      .x = poly_fitFNR,
+      .f = function(x) tibble(
+        num_non_missing_loci = non_miss_series,
+        predicted_FNR = predict(x, tibble(num_non_missing_loci = non_miss_series))
+      )
+    )
+  ) %>%
+  select(numerator, request, pred_FNR) %>%
+  unnest(cols = pred_FNR)
+
+
+```
+
+And now we can plot that if we want:
+```{r}
+g +
+  geom_point(data = pred_FNR, mapping =  aes(x = num_non_missing_loci, y = predicted_FNR), size = 0.4, colour = "violet")
+```
+
+OK.  That looks pretty reasonable. Though the quartic is not so great for the
+PO relationship. So, I went for an 8th degree polynomial fit. And we have some
+decent predictions of the FNR at every possible number of non-missing loci.  That will come in handy. 
+
+The next thing that we would really like to have is the Log-likelihood ratio threshold
+to use for each different level of shared non-missing missing.  We can do that too:
+```{r}
+g2 <- ggplot(MC, aes(x = num_non_missing_loci, y = Lambda_star)) +
+  geom_point() +
+  facet_grid(numerator ~ request)  # this is just here to get a title with the FPR
+
+g2
+```
+That looks like there might be some difficulty in accurately estimating that at
+higher levels of non-missing loci. I would expect it to be smoother. So, let's fit it with
+quartic.
+```{r}
+pred_Lambda <- MC_nest %>%
+  ungroup() %>%
+  mutate(
+    poly_fitLambda = map(
+      .x = data,
+      .f = function(x) lm(Lambda_star ~ poly(num_non_missing_loci, 4), data = x)
+    ),
+    pred_Lambda = map(
+      .x = poly_fitLambda,
+      .f = function(x) tibble(
+        num_non_missing_loci = non_miss_series,
+        predicted_Lambda = predict(x, tibble(num_non_missing_loci = non_miss_series))
+      )
+    )
+  ) %>%
+  select(numerator, request, pred_Lambda) %>%
+  unnest(cols = pred_Lambda)
+```
+
+Then we can plot those:
+```{r}
+g2 +
+  geom_point(
+    data = pred_Lambda,
+    aes(x = num_non_missing_loci, y = predicted_Lambda),
+    colour = "orange", size = 0.4
+  )
+```
+
+Those look pretty reasonable for HS, but not so great for PO and FS.  I have to figure out why there
+is so much variability in those values for different numbers of missing loci.  It might have to do
+with whether or not that one locus with many, many alleles is present and non-missing, or not.
+I should remove that one.  
+
+
+So, that has given us all that we need for doing all the pairwise comparison
+and then filtering them on the basis of the number of shared non-missing loci,
+and we can see how many pairs we end up with (and we have calculated what the
+different FNRs are, too).  
+
+## Doing the pairwise comparisons
+
+Let's do these things and then filter on the Lambda stars and see how many
+pairs we actually end up with.
+
+```{r}
+pklr <- lapply(relats, function(x) {
+  pairwise_kin_logl_ratios(
+    LG,
+    LG,
+    C,
+    numer = x,
+    denom = "U",
+    keep_top = 200,
+    num_cores = 8
+  )
+}) %>% 
+  bind_rows(.id = "Numerator")
+```
+
+We can confirm that by keeping only the top 200, we didn't miss any pairs, since
+the min logl for each individual is much less than 9:
+```{r}
+pklr %>%
+  group_by(Numerator, D2_indiv) %>%
+  summarise(min_logl = min(logl_ratio)) %>%
+  arrange(desc(min_logl)) %>%
+  slice(1:10)
+```
+
+We prep by joining the predicted FNRs and Lambdas
+```{r}
+preds <- pred_FNR %>% 
+  left_join(pred_Lambda, by = join_by(numerator, request, num_non_missing_loci))
+```
+
+Let's first find the likely PO pairs:
+```{r}
+keeper_POs <- pklr %>%
+  filter(Numerator == "PO") %>%
+  left_join(preds, by = join_by(Numerator == numerator, num_loc == num_non_missing_loci)) %>%
+  filter(logl_ratio > predicted_Lambda)
+  
+# and we can count up how many there are for each FPR:
+keeper_POs %>%
+  count(Numerator, request)
+```
+
+So, there is not much difference there in the numbers we are getting for different FPRs, which
+is sort of weird, cuz we would expect lots of Unrelateds at an FPR of 2e-06.
+
+Let's do the same for FS:
+```{r}
+keeper_FSs <- pklr %>%
+  filter(Numerator == "FS") %>%
+  left_join(preds, by = join_by(Numerator == numerator, num_loc == num_non_missing_loci)) %>%
+  filter(logl_ratio > predicted_Lambda)
+  
+# and we can count up how many there are for each FPR:
+keeper_FSs %>%
+  count(Numerator, request)
+
+```
+
+Let's compare the PO and FS ones and see how many are shared
+```{r}
+left_join(keeper_POs, keeper_FSs, by = join_by(D2_indiv, D1_indiv, num_loc, request)) %>%
+  select(Numerator.x:logl_ratio.x, logl_ratio.y, everything())
+```
+
+Lots of them.  OK, we are going to need to calculate the FS/PO likelihood for all of these.
+
+But, for now, let's just find the HS's and toss out the ones that are showing in FS and PO
+so that we can get a decent count of how many we are dealing with.
+```{r}
+keeper_HSs <- pklr %>%
+  filter(Numerator == "HS") %>%
+  left_join(preds, by = join_by(Numerator == numerator, num_loc == num_non_missing_loci)) %>%
+  filter(logl_ratio > predicted_Lambda)
+
+# count those:
+keeper_HSs %>%
+  count(Numerator, request)
+```
+
+And now, let's see how many remain after we toss out the likely FS and PO:
+```{r}
+keeper_HSs %>%
+  anti_join(keeper_FSs, by = join_by(D2_indiv, D1_indiv)) %>%
+  anti_join(keeper_POs, by = join_by(D2_indiv, D1_indiv)) %>%
+  count(Numerator, request)
+```
+
+I suppose we could whittle it down by taking only the cross cohort pairs...
+
+So, what do the FNRs look like for this?  
+```{r}
+keeper_HSs %>%
+  filter(request == 1e-07) %>%
+  count(num_loc, predicted_FNR)
+```
+
+So, those are very high FNR's, and we are going to have to trust these values,
+even if I might not be super confident that we can trust them that much.
+
+At any rate, we are going to have to categorize all pairs according to the cohorts
+of the members and also the number of missing loci between them, and then that
+FNR is going to have to appear in the probability of seeing a HS, so as to be
+accounted for in the CKMR pseudolikelihood.  That is do-able, albeit pretty
+messy.
+
+I could probably wrap this stuff up into some decent functions.
+
+## More thoughts
+
+Hey! Here is a nice thought.  It is always interesting to look at the
+distribution of logl_ratios for putative individuals of a certain category
+(whether it be U, HS, or PO, etc.).  
+
+This is not easily done with differing number of non-missing loci between all
+the pairs, because the logl_ratio distribution is clearly going to be different
+with different numbers of missing data.  However, we could, for each observed value,
+figure out where it lies amongst the the simulated values given the number of missing
+loci.  We can make an ecdf from those values to create a function that returns the CDF of each value.  And then those CDF values should be uniformly distributed.  So, we can do a
+pretty good job of checking the distribution of things, even though the
+number of loci is not the same across all the pairs.  
