@@ -12,8 +12,9 @@ mc_sample_simple(
   method = c("IS", "vanilla", "both")[1],
   pstar = NA,
   FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01),
+  Q_for_fnrs = NULL,
   lambda_stars = NULL,
-  Q_for_fnrs = NULL
+  desired_FPRs = NULL
 )
 }
 \arguments{
@@ -52,12 +53,12 @@ actually set to the be denominator for each lambda.}
 These are reported in column "fnr" in the output. These should all be between
 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).}
 
-\item{lambda_stars}{Additional values of lambda to consider as cutoffs.  The corresponding
-false negative rates will be computed for each of these and will be presented in the output.}
-
 \item{Q_for_fnrs}{The Qij struct to use to compute the Lambda values corresponding to the
 given FNRs. This is used primarily for the situation where you are importance sampling with
 truth = Unrelated and doing physically linked markers.}
+
+\item{lambda_stars}{Additional values of lambda to consider as cutoffs.  The corresponding
+false negative rates will be computed for each of these and will be presented in the output.}
 }
 \value{
 A long format data frame.  It will have a column of \code{tot_loci} that gives the total
