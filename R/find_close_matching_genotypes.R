@@ -14,7 +14,7 @@
 #'   \item{indiv_1}{the id (from the rownames in S) of the firt member of the pair}
 #'   \item{indiv_2}{the id (from the rownames in S) of the second individual of the pair}
 #'   \item{num_mismatch}{the number of loci at which the pair have mismatching genotypes}
-#'   \item{num_loc}{the total number of loci missing in neither individual}
+#'   \item{num_loc}{the total number of loci that are non-missing in both individuals of the pair.}
 #' }
 #' @export
 find_close_matching_genotypes <- function(LG, CK, max_mismatch) {
