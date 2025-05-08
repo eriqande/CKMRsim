@@ -43,6 +43,12 @@ options are:
 of pairwise shared genotypes, drawing the pattern of missingness from a very simple
 independent random sampling model according to the frequency of missing data in all
 loci.
+\item \code{pairwise_patterns}: do a separate simulation for each number of shared non-missing
+loci observed amongst all pairs.  The simulation will do at least one rep for each
+pair within a category of the number of shared non-missing loci, and it will use
+the observed patterns of missing loci for all pairs. If the number Np of pairs in a category
+is less than \code{reps}, then the actual number of reps done will be the smallest integer
+multiple of Np >= \code{reps}, and the patterns of missing data will be recycled.
 }}
 
 \item{...}{

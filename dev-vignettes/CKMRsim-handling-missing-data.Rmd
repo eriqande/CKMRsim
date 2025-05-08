@@ -97,11 +97,13 @@ options(CKMRsim.discard_stderr = TRUE, CKMRsim.discard_stdout = TRUE)
 relats <- c("HS", "FS", "PO")
 names(relats) <- relats 
 
+
+# I am fiddling with this to test simulating based on observed patterns
 multiQ <- lapply(relats, function(x) {
   simulate_missing_data_array(
     LG, 
     C,
-    simulation_approach = "simple_miss_freq",
+    simulation_approach = "pairwise_patterns",
     sim_relats = c("U", x),
     calc_relats = c("U", x), 
     reps = 5e4,
