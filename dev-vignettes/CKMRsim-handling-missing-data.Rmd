@@ -8,6 +8,25 @@ output: html_notebook
 #  %\VignetteEncoding{UTF-8}
 ---
 
+Notes to Self.  I have this working pretty well using multisession.  But I need to set it
+up differently so that:
+
+1. I break simulate_missing_data_array into two functions:
+    - summarize_missing_data()
+    - simulate_missing_data_array().
+  
+- The first one will essentially do the tabulate_and_exit part and will prepare an object
+  that can be saved in a tempdir (using chatGPTs suggested way to make sure it is still
+  accessible in a cluster environment)
+  
+- The second one will read in a list from the first in order to use it all.  So,
+summarize_missing_data should have an option to write the C and LG arguments, too
+so that everything can be written and used as one.
+
+
+
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -29,8 +48,9 @@ First things first, let's load up those data:
 library(tidyverse)
 library(CKMRsim)
 
-LG <- read_rds("../development/data/LG.rds")
+LG_small <- read_rds("../development/data/LG_small.rds")
 C <- read_rds("../development/data/C.rds")
+
 ```
 
 
@@ -41,11 +61,81 @@ do it according to the number of loci _shared_) between a pair.  (Note that numb
 of shared non-missing loci is simply the total number of loci minus the number
 of loci missing an at least one member of a pair).
 
+I have updated a lot on this in the last day.  I have a function to summarize
+missing data patterns, that will also write out some objects for further simulation
+that is parallelized using `future_lapply()`.  If you call the summarize function
+with just the long genos and the CKMR object, you get a nice summary of different
+values.
+
+```{r}
+summ <- summarize_missing_data(LG_small, C)
+```
+
+We can look at plots here:
+```{r}
+summ$background$plots$non_miss_counts_by_indiv_plot
+```
+```{r}
+summ$background$plots$pairwise_non_miss_counts_plot
+```
+
+Now, if we want to make simulations according to the patterns of missing data,
+we need to save the necessary inputs for that.  
+```{r}
+tmp_path <- summarize_missing_data(LG_small, C, downstream_tempdir = "~/Desktop/BOING")
+```
+
+
+Then, we can give a whirl at simulating via missing data patterns.
+```{r}
+relats <- c("HS", "FS", "PO")
+names(relats) <- relats 
+
+
+# I am fiddling with this to test simulating based on observed patterns
+set.seed(5)
+multiQ <- lapply(relats, function(x) {
+  simulate_missing_data_array(
+    input_path = tmp_path,
+    simulation_approach = "pairwise_patterns",
+    sim_relats = c("U", x),
+    calc_relats = c("U", x), 
+    reps = 5000,
+    .parallel_plan = "multisession",
+    .workers = 8,
+    future.seed = TRUE
+  )
+})
+
+```
+
+
+And, for completeness, let us see about simulating via missingness patterns:
+```{r}
+set.seed(10)
+multiQ_simple_miss <- lapply(relats, function(x) {
+  simulate_missing_data_array(
+    input_path = tmp_path,
+    simulation_approach = "simple_miss_freq",
+    sim_relats = c("U", x),
+    calc_relats = c("U", x), 
+    reps = 1e4,
+    num_points = 22,
+    .parallel_plan = "multisession",
+    .workers = 8,
+    future.seed = TRUE
+  )
+})
+```
+
+
+
 
 Currently, the workhorse function for this is `simulate_missing_data_array()`.
 The first thing it does is tabulate the number of shared genotypes amongst
 all pairs of markers.  It does this with a simple matrix multiplication.
-Here, we will use it to just to do that tabulation:
+Here, we will use it to just to do that tabulation.  Note that it also returns
+all the different pairs with a certain number of shared non-missing loci.
 ```{r}
 tabu <- simulate_missing_data_array(LG, C, tabulate_and_exit = TRUE)
 ```
@@ -78,7 +168,70 @@ and do so by matching the actual _pattern of missing data_ in the pairs.  For ea
 NOSLC, that should give us a pretty good idea of what threshold we should set so
 that we expect no more than a certain number of unrelateds exceeding that threshold.
 
-Before we dive into that, I want to illustrate a slightly different approach that I
+
+# Monte Carlo simulations from the actual patterns of missing data
+
+To do this, we set `simulation_approach` to be `"pairwise_patterns"`.  In order
+to make a data set for testing that is somewhat smaller than the full data set,
+I am going to grab just the individuals that are included in the pairs that have
+less than or equal to 65 shared loci.  That is about 538 individuals.
+```{r}
+# we first get the individual indexes of all the fish in those pairs
+keeper_idxs <- lapply(57:65, function(x) {
+  y <- as.character(x)
+  z <- tabu$background$values$lower_triangle_pairs[[y]]
+  unique(c(z$r, z$c))
+}) %>%
+  do.call(c, .) %>%
+  unique() %>%
+  sort()
+
+keeper_Indivs_tib <- tabu$background$values$indiv_names_tibble %>%
+  filter(idx %in% keeper_idxs)
+
+LG_small <- LG %>%
+  semi_join(keeper_Indivs_tib, by = join_by(Indiv))
+```
+So, now I have `C` and `LG_small` to play with.
+
+```{r}
+tabu_small <- simulate_missing_data_array(LG_small, C, tabulate_and_exit = TRUE)
+
+tabu_small$background$plots$pairwise_non_miss_counts_plot
+```
+
+So, that is a cool and nice small data set.  Let's try it:
+```{r}
+options(
+  future.globals.maxSize = 1e9
+)
+
+relats <- c("HS", "FS", "PO")
+names(relats) <- relats 
+
+
+# I am fiddling with this to test simulating based on observed patterns
+set.seed(5)
+multiQ <- lapply(relats, function(x) {
+  simulate_missing_data_array(
+    LG = LG_small, 
+    C = C,
+    simulation_approach = "pairwise_patterns",
+    sim_relats = c("U", x),
+    calc_relats = c("U", x), 
+    reps = 5000,
+    .parallel_plan = "multisession",
+    .workers = 8,
+    future.seed = TRUE
+  )
+})
+
+```
+
+
+# Simulated missingness by fraction missing
+
+I want to illustrate a slightly different approach that I
 implemented first, which calculates FPRs and FNRs for different numbers of
 pairwise-shared genotypes.  This is valuable for getting a broad overview
 of the power that a given data set affords.  In this case missing data patterns are

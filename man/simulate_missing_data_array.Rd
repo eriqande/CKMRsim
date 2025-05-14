@@ -5,36 +5,22 @@
 \title{Simulate Qijs across multiple relevant levels of missing data}
 \usage{
 simulate_missing_data_array(
-  LG,
-  C,
+  input_path,
   num_points = 11,
-  num_cores = 1,
   tabulate_and_exit = FALSE,
   simulation_approach = "simple_miss_freq",
-  ...
+  ...,
+  .parallel_plan = "sequential",
+  .workers = NULL,
+  CKMRsim.discard_stderr = TRUE,
+  CKMRsim.discard_stdout = TRUE
 )
 }
 \arguments{
-\item{LG}{the genotypes in long format.  It must have the columns
-Indiv (unique IDs of the individuals), Locus, gene_copy (must be 1 or 2
-denoting which of the two gene copies in a diploid each allele is), and
-Allele, which must be a character. If there are any missing genotypes
-in the data frame, they must appear as NAs in the Allele column.}
+\item{input_path}{the absolute path to the file of inputs written out by
+\code{summarize_missing_data()}.}
 
-\item{C}{the ckmr object upon which to base the simulations.}
-
-\item{num_points}{the number of different values between the lowest observed
-number of pairwise non-missing genotypes and the highest, inclusive, that
-simulations will be performed for.}
-
-\item{num_cores}{Number of cores to parallelize the simulations over (using mclapply)
-from the parallel package.  On Windows, parallelization is not available from forking
-so this must remain equal to 1 on Windows.}
-
-\item{tabulate_and_exit}{if TRUE, then the function exits after tabulating the
-number of pairs with different numbers on shared non-missing genotypes, and returns
-only information about that.  This is useful for getting an overview of what the
-missing data structure in your data look like.}
+\item{num_points}{Number of points between the observed min and max non-missing loci to simulate.}
 
 \item{simulation_approach}{this determines how simulations should be done. The
 options are:
@@ -64,35 +50,35 @@ genotypes from.  Genotype log probs are calculated using the Y_l matrices.}
     \item{\code{reps}}{a synonym for \code{calc_relats} for compatibility to an earlier version
 of CKMRsim.}
   }}
-}
-\value{
-This function returns a list.  More on that later.
+
+\item{.parallel_plan}{Future strategy (e.g., "sequential", "multisession").}
+
+\item{.workers}{Number of workers for parallel backend.}
+
+\item{CKMRsim.discard_stderr}{logical.  Set to true by default to discard stderr,}
+
+\item{CKMRsim.discard_stdout}{logical. Set to true by default to discard stdout}
 }
 \description{
+This function helps estimate error rates (FPRs/FNRs) under realistic missing data.
 Some data sets have a lot of missing markers.  If this is the case, it is not
 OK to just do the simulations as if there is no missing data.  This function
 wraps up a lot of different steps that can be taken to try to get more accurate
 "first-pass" FPRs and FNRs for situations with a lot of missing data.
-The steps are:
-\itemize{
-\item Tabulate the distribution of the number of informative (i.e., not missing in
-either member of the pair) markers, across all pairs. (Note, this requires
-that you have an actual data set that you are trying to do relationship
-inference in.)
-\item Estimate missingness rates per locus, and from that calculate the rate of
-missingness in pairs, under a simple independence assumption.
-\item Simulate Q_ij values at a series of different numbers of non-missing loci
-to calculate FPRs and FNRs for those.
-}
 }
 \details{
-Note that this function requires a CKMR object \code{C} that is suitable for both
-linked an unlinked simulation.  So, if you don't have that, then you best
-prepare it, even if it means sprinkling your markers into a pseudogenome
-as described \href{https://eriqande.github.io/tws-ckmr-2022/kin-finding-lab.html#power-for-kin-finding-while-accounting-for-physical-linkage}{here}.
+Note that this function requires a path to the output of \code{summarize_missing_data()}.
+Rather than passing things in directly, we write an intermediate, uncompressed
+file to a temp directory of the necessary inputs so that we can easily parallelize
+this on a cluster if needed.
+
+Steps:
+\enumerate{
+\item Summarize missingness across individuals and pairs
+\item Estimate per-locus missing rates, then derive pairwise missing probabilities.
+\item Record background stats and plots
+\item Clean and prepare dot args
+\item Simulate Qij values using either random missingness (when \code{simulation_approach == "simple_miss_freq"})
+or observed pairwise patterns of shared loci (when \code{simulation_approach == "pairwise_patterns"}).
 }
-\examples{
-# this is just here for testing at the moment
-LG <- read_rds("/tmp/LG.rds")
-C <- read_rds("/tmp/C.rds")
 }
