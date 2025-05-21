@@ -28,7 +28,8 @@ of the relationships.}
 the function will just simulate from all the values that have had Y_l_true matrices computed for them
 in the first component of YL.  Genotype values get simulated from the Y_l_true values}
 
-\item{tos}{a vector of names of the relationship IDs to calculate the genotype log probs of the simulated
+\item{tos}{Either NULL or a named list of vectors of names of the relationship IDs to calculate the
+genotype log probs of the simulated
 genotypes from.  Genotype log probs are calculated using the Y_l matrices. If this is NULL then
 the function will just compute probs for all the relationships that have had Y_l matrices computed for them
 in YL.}
