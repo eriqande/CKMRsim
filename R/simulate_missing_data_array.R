@@ -16,7 +16,7 @@
 #' reps that should be done.
 make_miss_mask_mat <- function(MG, L, reps) {
   NP <- length(L$r)
-  Recyc <- 1  # assume only only copy of the patterns
+  Recyc <- 1  # assume only one copy of the patterns
   if(NP < reps) {
     Recyc <- ceiling(reps / NP)
   }
@@ -30,6 +30,19 @@ make_miss_mask_mat <- function(MG, L, reps) {
   ret <- Mat[recy,]
   ret
 }
+
+
+# here is a version with no recycling
+make_miss_mask_mat_no_recyc <- function(MG, L) {
+  NP <- length(L$r)
+  Mat <- lapply(1:NP, function(i) {
+    !as.logical(MG[L$r[i],] *  MG[L$c[i],])
+  }) %>%
+    do.call(what = rbind, args = .)
+  Mat
+}
+
+
 
 
 ######## END OF HELPER FUNCTIONS #################

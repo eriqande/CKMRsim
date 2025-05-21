@@ -44,9 +44,11 @@ multiple of Np >= \code{reps}, and the patterns of missing data will be recycled
 in the \code{kappa_matrix} argument to \code{\link{create_ckmr}} to simulate from.
 For each relationship ID in sim_relats, genotype values will get simulated
 from the \code{Y_l_true} values in \code{C}.}
-    \item{\code{calc_relats}}{a vector of names of the relationship IDs to calculate the
+    \item{\code{calc_relats}}{Either a vector of names of the relationship IDs to calculate the
 genotype log probabilities of the simulated
-genotypes from.  Genotype log probs are calculated using the Y_l matrices.}
+genotypes for,  or a (named) list with one component for each of the names in sim_relats
+that is, itself, a vector of relationships that you want the probability calculated for.
+Genotype log probs are calculated using the Y_l matrices.}
     \item{\code{reps}}{a synonym for \code{calc_relats} for compatibility to an earlier version
 of CKMRsim.}
   }}

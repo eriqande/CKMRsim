@@ -114,13 +114,25 @@ write_large_temp_object <- function(object,
 #' downstream_tempdir to NULL, then the function will try to use the environment variables
 #' CKMRSIM_SHARED_TMPDIR and TMPDIR, in that order, before just using a standard
 #' R temp directory
+#' @param snakemake_dir Name of directory to create in order to write out the
+#' materials for running the simulations via a Snakefile.
+#' @param snake_rep_split If snakemake_dir is non-NA, this is the number of simulation
+#' reps to be done for each snakemake job.  If a partition has fewer pairs that snake_rep_split
+#' of if snake_rep_split is not perfectly divisible by the number of pairs
+#' then the pairs are recycled so that every job has exactly snake_rep_split reps.
 #' @export
 summarize_missing_data <- function(
     LG,
     C,
-    downstream_tempdir = NA
+    downstream_tempdir = NA,
+    snakemake_dir = NA,
+    snake_rep_split = 5e4
 ) {
 
+
+  if(!is.na(downstream_tempdir) && !is.na(snakemake_dir)) {
+    stop("Either both or one of downstream_tempdir and snakemake_dir must be NA.  Both cannot be non-NA")
+  }
   ret <- list()
 
   #### Step 1: summarize missingness across individuals and pairs ####
@@ -173,24 +185,74 @@ summarize_missing_data <- function(
   ret$background$plots$non_miss_counts_by_indiv_plot <- non_miss_counts_by_indiv_plot
   ret$background$plots$pairwise_non_miss_counts_plot <- pairwise_non_miss_counts_plot
 
-  if (is.na(downstream_tempdir)) return(ret)
+  if (is.na(downstream_tempdir) && is.null(snakemake_dir)) return(ret)
 
-  # if downstream_tempdir is not NA, then we compile up the needed inputs
+  # if downstream_tempdir is not NA then we compile
+  # up the needed inputs
   # for simulate_missing_data_array.
-  tosave <- list(
-    C = C,
-    IG = MG,   # these are the integer-represented genotypes in a matrix
-    LTpairs = LTpairs,
-    indiv_names_tibble = ret$background$values$indiv_names_tibble,
-    pairwise_miss_rates_by_locus = pairwise_miss_rates_by_locus,
-    pairwise_non_miss_counts = pairwise_non_miss_counts
-  )
+  if (!is.na(downstream_tempdir)) {
+    tosave <- list(
+      C = C,
+      IG = MG,   # these are the integer-represented genotypes in a matrix
+      LTpairs = LTpairs,
+      indiv_names_tibble = ret$background$values$indiv_names_tibble,
+      pairwise_miss_rates_by_locus = pairwise_miss_rates_by_locus,
+      pairwise_non_miss_counts = pairwise_non_miss_counts
+    )
 
-  path <- write_large_temp_object(
-    tosave,
-    dir = downstream_tempdir
-  )
+    path <- write_large_temp_object(
+      tosave,
+      dir = downstream_tempdir
+    )
+    return(normalizePath(path))
+  }
 
-  normalizePath(path)
+
+  # in this case we create a directory and write some files out to it that will
+  # make it easy to run all the simulations with Snakemake
+  if(!is.na(snakemake_dir)) {
+    dir.create(snakemake_dir, recursive = TRUE, showWarnings = FALSE)
+    dir.create(file.path(snakemake_dir, "resources"), recursive = TRUE, showWarnings = FALSE)
+    dir.create(file.path(snakemake_dir, "resources", "LTpairs"), recursive = TRUE, showWarnings = FALSE)
+    dir.create(file.path(snakemake_dir, "scripts"), recursive = TRUE, showWarnings = FALSE)
+
+    # now, break the LTpairs into reasonably sized chunks
+    chunks <- break_up_LTpairs(LTpairs, R = snake_rep_split)
+
+    # Save each element of chunks to resources/LTpairs and capture the names of
+    # all the chunks for Snakemake as well.
+    chunks_tibble <- lapply(
+      names(chunks),
+      function(n) {
+        # write out the rds files with the pairs in them
+        dump <- write_rds(
+          chunks[[n]],
+          file = file.path(
+            snakemake_dir, "resources", "LTpairs",
+            paste(n, ".rds", collapse = "", sep = "")
+          )
+        )
+
+        # return tibbles with the number of loci and the splits in it
+        # to give to Snakemake later
+        nsplit <- length(chunks[[n]])
+        tibble(
+          num_loci = rep(n, nsplit)
+        ) %>%
+          mutate(splits = 1:nsplit)
+      }) %>%
+      bind_rows()
+
+
+    # then save the other things that we will need
+    write_rds(C, file.path(snakemake_dir, "resources", "ckmr_object.rds"))
+    write_rds(MG, file.path(snakemake_dir, "resources", "integer_genotype_matrix.rds"))
+    write_rds(ret$background$values$indiv_names_tibble, file.path(snakemake_dir, "resources", "indiv_names_tibble.rds"))
+    write_tsv(chunks_tibble, file = file.path(snakemake_dir, "resources", "chunks_tibble.tsv"))
+    # go ahead and return the directory
+    return(normalizePath(snakemake_dir))
+
+  }
+
 
 }

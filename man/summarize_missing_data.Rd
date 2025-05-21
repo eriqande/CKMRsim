@@ -4,7 +4,13 @@
 \alias{summarize_missing_data}
 \title{Summarize the missing data and make some plots.}
 \usage{
-summarize_missing_data(LG, C, downstream_tempdir = NA)
+summarize_missing_data(
+  LG,
+  C,
+  downstream_tempdir = NA,
+  snakemake_dir = NA,
+  snake_rep_split = 50000
+)
 }
 \arguments{
 \item{LG}{the genotypes in long format.  It must have the columns
@@ -22,6 +28,14 @@ accessible from all nodes (for example, a directory in scratch, etc.). If you se
 downstream_tempdir to NULL, then the function will try to use the environment variables
 CKMRSIM_SHARED_TMPDIR and TMPDIR, in that order, before just using a standard
 R temp directory}
+
+\item{snakemake_dir}{Name of directory to create in order to write out the
+materials for running the simulations via a Snakefile.}
+
+\item{snake_rep_split}{If snakemake_dir is non-NA, this is the number of simulation
+reps to be done for each snakemake job.  If a partition has fewer pairs that snake_rep_split
+of if snake_rep_split is not perfectly divisible by the number of pairs
+then the pairs are recycled so that every job has exactly snake_rep_split reps.}
 }
 \value{
 A list containing summary plots, statistics, and simulation results, or

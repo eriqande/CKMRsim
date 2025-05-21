@@ -48,7 +48,7 @@ First things first, let's load up those data:
 library(tidyverse)
 library(CKMRsim)
 
-LG_small <- read_rds("../development/data/LG_small.rds")
+LG <- read_rds("../development/data/LG.rds")
 C <- read_rds("../development/data/C.rds")
 
 ```
@@ -68,7 +68,7 @@ with just the long genos and the CKMR object, you get a nice summary of differen
 values.
 
 ```{r}
-summ <- summarize_missing_data(LG_small, C)
+summ <- summarize_missing_data(LG, C)
 ```
 
 We can look at plots here:
@@ -81,6 +81,17 @@ summ$background$plots$pairwise_non_miss_counts_plot
 
 Now, if we want to make simulations according to the patterns of missing data,
 we need to save the necessary inputs for that.  
+
+I have revamped the way I was doing the parallelization.  I was originally thinking that I would
+try to do that with the future package, but I think it is going to be better for me to figure
+out how to do it via Snakemake.  We are talking thousands of jobs, and I just don't think that
+future is up to the task.  Snakemake is way more failure tolerant because we will be writing results
+out for all of them.  
+
+
+
+
+
 ```{r}
 tmp_path <- summarize_missing_data(LG_small, C, downstream_tempdir = "~/Desktop/BOING")
 ```
