@@ -1,0 +1,73 @@
+# Define environment module
+RMOD = "R/4.4.3"
+
+# define relationships to investigate.  All of these must be included
+# in the CKMR object.  
+RELATS = ["PO", "FS", "HS", "HAN", "U"]
+
+# Read TSV into a DataFrame and index by num_loci
+import pandas as pd
+
+splits_df = pd.read_csv("resources/chunks_tibble.tsv", sep="\t")
+splits_indexed = splits_df.set_index("num_loci").sort_index()
+
+# Input function for aggregating splits for a given num_loci. Deal with
+# situations where only a single split is present, as well. 
+def aggregate_splits(wildcards):
+    try:
+        splits = splits_indexed.loc[int(wildcards.num_loci), "splits"]
+    except KeyError:
+        return []
+    if isinstance(splits, pd.Series):
+        split_list = splits.tolist()
+    else:
+        split_list = [splits]
+    return expand("results/logls/{num_loci}/splits/{split}.rds",
+                  num_loci=wildcards.num_loci,
+                  split=split_list)
+
+# Create list of output paths for the 'all' rule
+all_sim_outputs = [
+    f"results/logls/{num_loci}/sims.rds"
+    for num_loci in splits_indexed.index.unique()
+]
+
+rule all:
+    input:
+        all_sim_outputs
+
+rule simulate_on_splits:
+    input:
+        pairs="resources/LTpairs/{num_loci}.rds",
+        ckmr="resources/ckmr_object.rds",
+        imat="resources/integer_genotype_matrix.rds"
+    output:
+        outf=temp("results/logls/{num_loci}/splits/{split}.rds")
+    params:
+        spl="{split}",
+        relats = RELATS
+    log:
+        "results/logs/simulate_on_splits_{num_loci}_{split}.log"
+    benchmark:
+        "results/benchmarks/simulate_on_splits_{num_loci}_{split}.txt"
+    envmodules:
+        RMOD
+    script:
+        "scripts/simulate_on_splits.R"
+
+
+rule aggregate_simulations:
+    input:
+        infs=aggregate_splits
+    output:
+        outf_linked="results/logls/{num_loci}/Q_linked.rds",
+        outf_unlinked="results/logls/{num_loci}/Q_unlinked.rds"
+    log:
+        "results/logs/aggregate_simulations_{num_loci}.log"
+    benchmark:
+        "results/benchmarks/aggregate_simulations_{num_loci}.txt"
+    envmodules:
+        RMOD
+    script:
+        "scripts/aggregate_simulations.R"
+
