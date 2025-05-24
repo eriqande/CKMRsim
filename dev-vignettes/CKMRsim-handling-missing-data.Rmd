@@ -93,7 +93,7 @@ out for all of them.
 
 
 ```{r}
-tmp_path <- summarize_missing_data(LG_small, C, downstream_tempdir = "~/Desktop/BOING")
+snake_path <- summarize_missing_data(LG, C, snakemake_dir = "snakemake-arena")
 ```
 
 

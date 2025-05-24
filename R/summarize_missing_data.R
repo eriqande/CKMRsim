@@ -185,7 +185,8 @@ summarize_missing_data <- function(
   ret$background$plots$non_miss_counts_by_indiv_plot <- non_miss_counts_by_indiv_plot
   ret$background$plots$pairwise_non_miss_counts_plot <- pairwise_non_miss_counts_plot
 
-  if (is.na(downstream_tempdir) && is.null(snakemake_dir)) return(ret)
+  # return from here if that is all we are doing.
+  if (is.na(downstream_tempdir) && is.na(snakemake_dir)) return(ret)
 
   # if downstream_tempdir is not NA then we compile
   # up the needed inputs
@@ -214,7 +215,6 @@ summarize_missing_data <- function(
     dir.create(snakemake_dir, recursive = TRUE, showWarnings = FALSE)
     dir.create(file.path(snakemake_dir, "resources"), recursive = TRUE, showWarnings = FALSE)
     dir.create(file.path(snakemake_dir, "resources", "LTpairs"), recursive = TRUE, showWarnings = FALSE)
-    dir.create(file.path(snakemake_dir, "scripts"), recursive = TRUE, showWarnings = FALSE)
 
     # now, break the LTpairs into reasonably sized chunks
     chunks <- break_up_LTpairs(LTpairs, R = snake_rep_split)
@@ -249,6 +249,27 @@ summarize_missing_data <- function(
     write_rds(MG, file.path(snakemake_dir, "resources", "integer_genotype_matrix.rds"))
     write_rds(ret$background$values$indiv_names_tibble, file.path(snakemake_dir, "resources", "indiv_names_tibble.rds"))
     write_tsv(chunks_tibble, file = file.path(snakemake_dir, "resources", "chunks_tibble.tsv"))
+
+    #### then write the Snakefile and the scripts that it will use ####
+    relnames <- paste(paste0('"', names(C$loci[[1]]$X_l), '"'), collapse = ", ")  # get the relationships that are in the CKMR object, C
+                                                                # this variable gets glued into the Snakefile
+
+    # 1. Locate and read the Snakefile-skeleton
+    skeleton_path <- system.file("snake-stuff/Snakefile-skeleton", package = "CKMRsim")
+    skeleton_contents <- readLines(skeleton_path) %>%
+      paste(collapse = "\n")
+
+    # 2. Replace the line with glue interpolation
+    rendered_contents <- glue::glue_collapse(glue::glue(skeleton_contents, .open = "<<", .close = ">>"), sep = "\n")
+
+    # 3. Write the result to a Snakefile in snakemake_dir
+    snakefile_path <- file.path(snakemake_dir, "Snakefile")
+    writeLines(rendered_contents, con = snakefile_path)
+
+    # 4. Copy the scripts directory into snakemake_dir
+    scripts_dir <- system.file("snake-stuff/scripts", package = "CKMRsim")
+    fs::dir_copy(scripts_dir, file.path(snakemake_dir, "scripts"), overwrite = TRUE)
+
     # go ahead and return the directory
     return(normalizePath(snakemake_dir))
 

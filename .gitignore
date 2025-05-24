@@ -10,3 +10,4 @@ development/Rmd/*.html
 *.DS_Store
 doc
 Meta
+SnakeMake

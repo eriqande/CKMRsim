@@ -17,7 +17,9 @@ Depends:
     R (>= 3.5)
 Imports:
     dplyr,
+    fs,
     ggplot2,
+    glue,
     magrittr,
     parallel,
     purrr,
