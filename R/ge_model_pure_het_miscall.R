@@ -1,5 +1,9 @@
 #' implements a simple true-genotype-independent genotyping error model
 #'
+#' Note that this is sort of silly in the context of parentage inference
+#' because for non-parentals, it can lead to probability of zero for
+#' Mendelian incompatibilities.  Probably better to use the ge_model_microhap1().
+#'
 #' @param L required locus specific information
 #' @param epsilon the rate at which genotypes are incorrectly observed.
 #' @export
