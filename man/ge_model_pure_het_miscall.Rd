@@ -2,22 +2,31 @@
 % Please edit documentation in R/ge_model_pure_het_miscall.R
 \name{ge_model_pure_het_miscall}
 \alias{ge_model_pure_het_miscall}
-\title{implements a simple true-genotype-independent genotyping error model}
+\title{implements a simple heterozygote miscall model with a modification for Mendelian incompatibilities}
 \usage{
-ge_model_pure_het_miscall(L, m)
+ge_model_pure_het_miscall(L, m, smidge)
 }
 \arguments{
 \item{L}{required locus specific information}
 
-\item{epsilon}{the rate at which genotypes are incorrectly observed.}
+\item{m}{the heterozygote miscall rate}
+
+\item{smidge}{the total amount added to zeroes in a row.}
 }
 \description{
-implements a simple true-genotype-independent genotyping error model
+Note that the pure heterozygote miscall model is a little bit silly because
+alternate homozygotes have no chance of carrying another allele which leads to
+some issues with in the context of parentage inference
+because for non-parentals, it can lead to probability of zero for
+Mendelian incompatibilities.  So, we start off with a pure heterozygote
+miscall model, and then we replace zeroes in each row with smidge divided
+by the number of zeroes.  We basically just don't want to have any zeros
+because that could lead to probabilities of zero.
 }
 \examples{
 L <- list(
  freqs = c(A = 0.6, B = 0.4),
  geno_freqs = c(`A / A` = 0.36, `A / B` = 0.48, `B / B` = 0.16)
 )
-ge_model_TGIE(L, m = 0.185)
+ge_model_pure_het_miscall(L, m = 0.0285, smidge = 0.001)
 }
