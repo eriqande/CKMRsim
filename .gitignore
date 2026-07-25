@@ -11,3 +11,5 @@ development/Rmd/*.html
 doc
 Meta
 SnakeMake
+.paper
+.snapper_gtseq

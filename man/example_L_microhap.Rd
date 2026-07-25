@@ -8,7 +8,7 @@
 An object of class \code{list} of length 2.
 }
 \usage{
-example_L_microhap
+data(example_L_microhap)
 }
 \description{
 A simple example microhaplotype locus with three SNPs and six alleles.

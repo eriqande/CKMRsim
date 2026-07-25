@@ -9,7 +9,7 @@ A matrix.  The rows are relationships (see the CKMRsim paper for abbreviations).
 The columns are the kappas.
 }
 \usage{
-kappas
+data(kappas)
 }
 \description{
 A matrix with named rows (relationships) and named columns (the kappas).

@@ -16,7 +16,7 @@ individuals.  Those should always be 1 and 2. }
 }
 }
 \usage{
-pedigrees
+data(pedigrees)
 }
 \description{
 A list of pedigrees, each specified as a data frame with five columns.

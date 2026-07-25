@@ -8,7 +8,7 @@
 An object of class \code{list} of length 2.
 }
 \usage{
-example_L_biallelic
+data(example_L_biallelic)
 }
 \description{
 A simple example biallelic locus with made up allele frequencies.

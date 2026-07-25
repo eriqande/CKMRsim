@@ -38,7 +38,7 @@ multiple of Np >= \code{reps}, and the patterns of missing data will be recycled
 }}
 
 \item{...}{
-  Arguments passed on to \code{\link[=simulate_Qij]{simulate_Qij}}
+  Arguments passed on to \code{\link{simulate_Qij}}
   \describe{
     \item{\code{sim_relats}}{a vector of names of the relationship IDs (these were the rownames
 in the \code{kappa_matrix} argument to \code{\link{create_ckmr}} to simulate from.

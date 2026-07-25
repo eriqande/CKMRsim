@@ -14,7 +14,7 @@ locations.   The column
 \code{Allele} column gives the sequences of each allele/haplotype observed in the population.
 }
 \usage{
-linked_mhaps
+data(linked_mhaps)
 }
 \description{
 These are data from 165 amplicons sequenced in two different runs of an Illumina

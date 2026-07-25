@@ -8,7 +8,7 @@
 An object of class \code{list} of length 2.
 }
 \usage{
-example_L_microsat
+data(example_L_microsat)
 }
 \description{
 These data are from Locus SFOC113 from Ruzzante et al.  It is included

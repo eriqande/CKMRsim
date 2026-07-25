@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1478 rows and 204 columns.
 }
 \usage{
-labrador_salar_ngs_msats
+data(labrador_salar_ngs_msats)
 }
 \description{
 A data frame of genotypes from multiple collections of Atlantic salmon
