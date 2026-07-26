@@ -1,11 +1,11 @@
 
-#' Model the results of `simulate_missing_data_array()` to interpolate FNR and FPR values
+#' Model missing-data simulation results to interpolate FNR and FPR values
 #'
-#' More later
-#' @param Qtib The tibble output as the `Qij` component of the return list from
-#' `simulate_missing_data_array()`.  This is a tibble with three columns:
-#' `num_non_missing_loci` (int), `num_missing_loci` (int), and `Qijs` (a tibble
-#' of Qij data frames).
+#' More later.
+#' @param Qtib A tibble of missing-data simulation results, typically assembled
+#' from the Snakemake outputs created by `summarize_missing_data()`. It must
+#' include `num_non_missing_loci`, `num_missing_loci`, `Qijs_unlinked`, and
+#' `Qijs_linked`.
 #' @inheritParams mc_sample_simple
 #' @export
 #' @examples

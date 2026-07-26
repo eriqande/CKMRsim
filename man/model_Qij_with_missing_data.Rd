@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_Qij_with_missing_data.R
 \name{model_Qij_with_missing_data}
 \alias{model_Qij_with_missing_data}
-\title{Model the results of \code{simulate_missing_data_array()} to interpolate FNR and FPR values}
+\title{Model missing-data simulation results to interpolate FNR and FPR values}
 \usage{
 model_Qij_with_missing_data(
   Qtib,
@@ -13,10 +13,10 @@ model_Qij_with_missing_data(
 )
 }
 \arguments{
-\item{Qtib}{The tibble output as the \code{Qij} component of the return list from
-\code{simulate_missing_data_array()}.  This is a tibble with three columns:
-\code{num_non_missing_loci} (int), \code{num_missing_loci} (int), and \code{Qijs} (a tibble
-of Qij data frames).}
+\item{Qtib}{A tibble of missing-data simulation results, typically assembled
+from the Snakemake outputs created by \code{summarize_missing_data()}. It must
+include \code{num_non_missing_loci}, \code{num_missing_loci}, \code{Qijs_unlinked}, and
+\code{Qijs_linked}.}
 
 \item{nu}{the name of the relationship that is in the \strong{nu}merator
 of the likelihood ratio (Lambda) whose distribution you wish to learn about.
@@ -40,7 +40,7 @@ These are reported in column "fnr" in the output. These should all be between
 0 and 1.  By default fnr is c(0.3, 0.2, 0.1, 0.05, 0.01, 0.001).}
 }
 \description{
-More later
+More later.
 }
 \examples{
 # here for testing at the moment

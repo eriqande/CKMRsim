@@ -3,7 +3,8 @@
 #' break up (or augment) LTpairs into chunks of size reps
 #'
 #' This is a weird little function that lets us break up the LTpairs
-#' that will be used for the miss_mask_mats in `simulate_missing_data_array()`.
+#' that will be used for the miss_mask_mats in the Snakemake missing-data
+#' simulation workflow.
 #' The idea is that we can get extra parellelization and keep the memory overhead
 #' for each job down low by restricting the number of reps done.  If the names
 #' of the LTPairs list are like c("120", "121",...), the the new names will

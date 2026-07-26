@@ -1,0 +1,81 @@
+---
+title: "develop mendelian incompatibility detector"
+output: html_notebook
+---
+
+
+
+# Getting some example data
+
+We have a half-gig file of pairwise things.  Here is what I did to get just the
+likely PO pairs from that:
+```{r, eval=FALSE}
+library(tidyverse)
+
+pw <- read_rds("~/Downloads/PO_pairwise_logls.rds")
+
+ggplot(pw, aes(x = logl_ratio)) +
+  geom_histogram()
+
+# look at histogram of logls > 0
+ggplot(pw %>% filter(logl_ratio > 0), aes(x = logl_ratio)) +
+  geom_histogram()
+
+# from that, a cutoff of 25 looks good
+candi_PO <- pw %>%
+  filter(logl_ratio >= 25)
+
+# then, for each D2 individual, take only the top two
+# logls
+candi_PO_top2 <- candi_PO %>% 
+  arrange(D2_indiv, desc(logl_ratio)) %>%
+  group_by(D2_indiv) %>%
+  mutate(rank = 1:n()) %>%
+  filter(rank <= 2) %>%
+  ungroup() %>%
+  select(-rank)
+
+# that is 142 singletons and 1044 parent pairs
+
+write_rds(candi_PO_top2, file = "data/po-pairs.rds", compress = "xz")
+
+# and we can get the genotypes for everyone, too:
+par <- read_rds("~/Downloads/candidate_parents.rds") %>%
+  arrange(Indiv, Locus, gene_copy)
+kid <- read_rds("~/Downloads/candidate_offspring.rds") %>%
+  arrange(Indiv, Locus, gene_copy)
+
+genotypes <- bind_rows(kid, par)
+
+write_rds(genotypes, file = "data/genotypes.rds", compress = "xz")
+```
+
+Now, we have those po-pairs and the genotypes.
+
+
+
+# Developing the function
+
+```{r}
+library(tidyverse)
+
+po <- read_rds("data/po-pairs.rds")
+
+geno <- read_rds("data/genotypes.rds")
+
+# we will do something like this:
+j <- left_join(po, geno, by = c("D2_indiv" = "Indiv"), relationship = "many-to-many") %>%
+  rename(D2a = Allele) %>%
+  select(-num_loc) %>%
+  left_join(geno, by = c("D1_indiv" = "Indiv", "Locus", "gene_copy")) %>%
+  rename(D1a = Allele) %>%
+  pivot_wider(names_from = gene_copy, values_from = c(D1a, D2a), names_sep = "_")
+
+# then we can find Mendelian incompatbilities like this:
+mi <- j %>%
+  mutate(
+    mend_incompat = D1a_1 != D2a_1 & D1a_1 != D2a_2 & D1a_2 != D2a_1 & D1a_2 != D2a_2
+  )
+  
+```
+
