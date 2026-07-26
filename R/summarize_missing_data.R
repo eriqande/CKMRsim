@@ -44,7 +44,7 @@ collect_lower_triangle_pairs <- function(M) {
 
 
 
-#' Summarize the missing data and make some plots.
+#' Summarize the missing data and make some plots
 #'
 #' In default mode, this will just summarize the missing data and make and
 #' store some plots in the list output. If you provide `snakemake_dir`, this

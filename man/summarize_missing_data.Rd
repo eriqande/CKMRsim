@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarize_missing_data.R
 \name{summarize_missing_data}
 \alias{summarize_missing_data}
-\title{Summarize the missing data and make some plots.}
+\title{Summarize the missing data and make some plots}
 \usage{
 summarize_missing_data(LG, C, snakemake_dir = NA, snake_rep_split = 50000)
 }

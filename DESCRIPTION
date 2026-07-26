@@ -24,11 +24,11 @@ Imports:
     parallel,
     purrr,
     Rcpp,
+    readr,
     tibble,
     tidyr
 Suggests:
     knitr,
-    readr,
     rmarkdown,
     stringr,
     tidyverse

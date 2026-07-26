@@ -44,6 +44,6 @@ More later.
 }
 \examples{
 # here for testing at the moment
-Qtib <- read_rds("/tmp/Qtib.rds")
+#Qtib <- readr::read_rds("/tmp/Qtib.rds")
 
 }

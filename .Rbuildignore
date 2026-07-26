@@ -14,4 +14,5 @@
 ^\.snapper_gtseq$
 ^\.snakemake$
 ^\.paper$
+^SnakeMake$
 ^SnakeMake/\.snakemake$

@@ -4,10 +4,12 @@
 \alias{format.Qij}
 \title{format method for Qij class (to print)}
 \usage{
-\method{format}{Qij}(Q)
+\method{format}{Qij}(x, ...)
 }
 \arguments{
-\item{Q}{an object of class \code{\link{Qij_class}}.}
+\item{x}{an object of class \code{\link{Qij_class}}.}
+
+\item{...}{additional arguments to format. (But nothing implemented).}
 }
 \description{
 Just prints relevant information for a quick look.

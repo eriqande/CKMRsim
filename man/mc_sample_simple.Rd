@@ -59,6 +59,9 @@ truth = Unrelated and doing physically linked markers.}
 
 \item{lambda_stars}{Additional values of lambda to consider as cutoffs.  The corresponding
 false negative rates will be computed for each of these and will be presented in the output.}
+
+\item{desired_FPRs}{Optional false-positive rates for which to estimate the
+corresponding likelihood-ratio cutoffs and false-negative rates.}
 }
 \value{
 A long format data frame.  It will have a column of \code{tot_loci} that gives the total

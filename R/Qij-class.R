@@ -64,18 +64,20 @@ print_calc_relats <- function(Q) {
 #' format method for Qij class (to print)
 #'
 #' Just prints relevant information for a quick look.
-#' @param Q an object of class \code{\link{Qij_class}}.
-format.Qij <- function(Q) {
+#' @param x an object of class \code{\link{Qij_class}}.
+#' @param ... additional arguments to format. (But nothing implemented).
+#' @export
+format.Qij <- function(x, ...) {
   ret <- character()
-  ret[1] <- paste0("A Qij object with ", length(Q[[1]][[1]]), " reps")
-  if(attributes(Q)$simtype == "unlinked") {
-    ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype)
+  ret[1] <- paste0("A Qij object with ", length(x[[1]][[1]]), " reps")
+  if(attributes(x)$simtype == "unlinked") {
+    ret[2] <- paste0("simulated with markers ", attributes(x)$simtype)
   } else {
-    ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype, " with PO treated as ", attributes(Q)$PO_sim)
+    ret[2] <- paste0("simulated with markers ", attributes(x)$simtype, " with PO treated as ", attributes(x)$PO_sim)
   }
-  ret[3] <- paste0("\"sim_relats\" relationships: ", paste(names(Q), collapse = ", "))
-  ret[4] <- paste0("\"calc_relats\"   relationships: ", print_calc_relats(Q))
-  ret[5] <- paste0("rando_miss_n: ", attributes(Q)$rando_miss_n)
+  ret[3] <- paste0("\"sim_relats\" relationships: ", paste(names(x), collapse = ", "))
+  ret[4] <- paste0("\"calc_relats\"   relationships: ", print_calc_relats(x))
+  ret[5] <- paste0("rando_miss_n: ", attributes(x)$rando_miss_n)
   ret
 }
 

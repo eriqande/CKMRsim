@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' # here for testing at the moment
-#' Qtib <- read_rds("/tmp/Qtib.rds")
+#' #Qtib <- readr::read_rds("/tmp/Qtib.rds")
 #'
 model_Qij_with_missing_data <- function(
   Qtib,
@@ -55,20 +55,16 @@ model_Qij_with_missing_data <- function(
   g
 
   # let's do a simple linear model on each FNR
-  simp <- MCu %>%
-    group_by(FNR) %>%
-    nest() %>%
-    mutate(
-      simplm = map(.x = data, .f = function(x) lm(log10_FPR ~ num_non_missing_loci, data = x)),
-      tidy = map(simplm, broom::tidy)
-    )
-
-  s2 <- simp %>%
-    select(FNR, tidy) %>%
-    unnest(cols = tidy) %>%
-    mutate(term = str_replace_all(term, "[^a-zA-Z]", "")) %>%
-    select(FNR, term, estimate) %>%
-    pivot_wider(names_from = term, values_from = estimate)
+  s2 <- split(MCu, MCu$FNR) %>%
+    lapply(function(x) {
+      cf <- stats::coef(stats::lm(log10_FPR ~ num_non_missing_loci, data = x))
+      tibble(
+        FNR = x$FNR[1],
+        Intercept = cf[["(Intercept)"]],
+        numnonmissingloci = cf[["num_non_missing_loci"]]
+      )
+    }) %>%
+    bind_rows()
 
 
   g +

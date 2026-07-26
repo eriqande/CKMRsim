@@ -215,6 +215,8 @@ vanilla <- function(Q, nu, de, tr, FNRs, lambda_stars = NULL) {
 #' @param Q_for_fnrs The Qij struct to use to compute the Lambda values corresponding to the
 #' given FNRs. This is used primarily for the situation where you are importance sampling with
 #' truth = Unrelated and doing physically linked markers.
+#' @param desired_FPRs Optional false-positive rates for which to estimate the
+#' corresponding likelihood-ratio cutoffs and false-negative rates.
 #' @return A long format data frame.  It will have a column of \code{tot_loci} that gives the total
 #' number of loci.
 #'
@@ -310,4 +312,3 @@ mc_sample_simple <- function(
   }) %>%
     dplyr::bind_rows()
 }
-
