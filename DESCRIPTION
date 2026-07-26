@@ -17,20 +17,22 @@ Depends:
     R (>= 3.5)
 Imports:
     dplyr,
+    fs,
     ggplot2,
+    glue,
     magrittr,
     parallel,
     purrr,
     Rcpp,
+    readr,
     tibble,
     tidyr
 Suggests:
     knitr,
-    readr,
     rmarkdown,
     stringr,
     tidyverse
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 8.0.0
 Encoding: UTF-8

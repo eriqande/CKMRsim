@@ -1,0 +1,77 @@
+
+#' Model missing-data simulation results to interpolate FNR and FPR values
+#'
+#' More later.
+#' @param Qtib A tibble of missing-data simulation results, typically assembled
+#' from the Snakemake outputs created by `summarize_missing_data()`. It must
+#' include `num_non_missing_loci`, `num_missing_loci`, `Qijs_unlinked`, and
+#' `Qijs_linked`.
+#' @inheritParams mc_sample_simple
+#' @export
+#' @examples
+#' # here for testing at the moment
+#' #Qtib <- readr::read_rds("/tmp/Qtib.rds")
+#'
+model_Qij_with_missing_data <- function(
+  Qtib,
+  nu,
+  de = "U",
+  tr = "U",
+  FNRs = c(0.3, 0.2, 0.1, 0.05, 0.01)
+) {
+
+
+  MC <- Qtib %>%
+    mutate(
+      mc = map2(
+        .x = Qijs_unlinked,
+        .y = Qijs_linked,
+        .f = function(x, y) {
+          mc_sample_simple(
+            Q = x,
+            nu = nu,
+            de = de,
+            tr = tr,
+            FNRs = FNRs,
+            Q_for_fnrs = y
+          )}
+      )
+    )
+
+  # now, unnest that stuff
+  MCu <- MC %>%
+    select(-Qijs_linked, -Qijs_unlinked) %>%
+    unnest(cols = mc) %>%
+    mutate(
+      log10_FPR = log10(FPR),
+      log10_FPR_plus_2_se = log10(FPR + 2 * se),
+      log10_FPR_minus_2_se = log10(FPR - 2 * se),
+      .after = FPR
+    )
+
+  g <- ggplot(MCu, aes(x = num_non_missing_loci, y = log10_FPR, colour = factor(FNR))) +
+    geom_point()
+
+  g
+
+  # let's do a simple linear model on each FNR
+  s2 <- split(MCu, MCu$FNR) %>%
+    lapply(function(x) {
+      cf <- stats::coef(stats::lm(log10_FPR ~ num_non_missing_loci, data = x))
+      tibble(
+        FNR = x$FNR[1],
+        Intercept = cf[["(Intercept)"]],
+        numnonmissingloci = cf[["num_non_missing_loci"]]
+      )
+    }) %>%
+    bind_rows()
+
+
+  g +
+    geom_abline(
+      data = s2,
+      mapping = aes(intercept = Intercept, slope = numnonmissingloci, colour = factor(FNR))
+    )
+
+
+}

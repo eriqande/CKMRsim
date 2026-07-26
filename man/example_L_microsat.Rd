@@ -8,18 +8,18 @@
 An object of class \code{list} of length 2.
 }
 \usage{
-example_L_microsat
+data(example_L_microsat)
 }
 \description{
 These data are from Locus SFOC113 from Ruzzante et al.  It is included
 mostly to show how one might make a microsatellite genotyping error model.
 This is a list with two components, each of them vectors:
-\itemize{
-\item{freqs: }{ The frequencies of the different alleles.  The names are the allele
-lengths.}
-\item{geno_freqs: }{ The expected frequencies of the possible genotypes
-given the allele freqs.  The names are the names of the genotypes, which
-are the allele lengths separate by " / ".}
+\describe{
+\item{freqs}{The frequencies of the different alleles. The names are the
+allele lengths.}
+\item{geno_freqs}{The expected frequencies of the possible genotypes given
+the allele freqs. The names are the names of the genotypes, which are the
+allele lengths separate by " / ".}
 }
 }
 \keyword{datasets}

@@ -11,4 +11,9 @@ bla bla, need to write more here
 \author{
 \strong{Maintainer}: Eric C. Anderson \email{eric.anderson@noaa.gov}
 
+Authors:
+\itemize{
+  \item Eric C. Anderson \email{eric.anderson@noaa.gov}
+}
+
 }

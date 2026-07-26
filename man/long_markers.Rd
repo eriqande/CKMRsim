@@ -20,7 +20,7 @@ number of loci on the chromosome.  These should be ordered according to Pos}
 }
 }
 \usage{
-long_markers
+data(long_markers)
 }
 \description{
 This is a tibble that provides an example of how to

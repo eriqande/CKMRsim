@@ -8,18 +8,18 @@
 An object of class \code{list} of length 2.
 }
 \usage{
-example_L_microhap
+data(example_L_microhap)
 }
 \description{
 A simple example microhaplotype locus with three SNPs and six alleles.
 This was taken from a rockfish data that we had in the lab.
 This is a list with two components, each of them vectors:
-\itemize{
-\item{freqs: }{ The frequencies of the different alleles.  The names of
-give the sequence of SNP allele at the microhaplotype.}
-\item{geno_freqs: }{ The expected frequencies of the possible genotypes
-given the allele freqs.  The names are the names of the genotypes, which
-are the allele names separate by " / ".}
+\describe{
+\item{freqs}{The frequencies of the different alleles. The names give the
+sequence of SNP alleles at the microhaplotype.}
+\item{geno_freqs}{The expected frequencies of the possible genotypes given
+the allele freqs. The names are the names of the genotypes, which are the
+allele names separated by " / ".}
 }
 }
 \keyword{datasets}

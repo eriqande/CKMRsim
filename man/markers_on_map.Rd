@@ -17,7 +17,7 @@ the chromosome, and then pos is the cumulative sum of the inter-locus recombinat
 }
 }
 \usage{
-markers_on_map
+data(markers_on_map)
 }
 \description{
 This is a named list.  Each component is named with the number of the chromosome.

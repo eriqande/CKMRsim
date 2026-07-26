@@ -12,10 +12,13 @@ NULL
 
 
 #### Import functions from packages ####
-#' @importFrom dplyr n n_distinct left_join mutate rename select
+#' @importFrom dplyr n n_distinct left_join mutate rename select arrange bind_rows count desc filter last
+#' @importFrom ggplot2 aes geom_abline geom_col geom_point ggplot xlab ylab
+#' @importFrom purrr map2
+#' @importFrom readr write_rds write_tsv
 #' @importFrom stats quantile rmultinom runif sd setNames
 #' @importFrom tibble tibble
-#' @importFrom tidyr pivot_wider separate
+#' @importFrom tidyr pivot_wider separate unnest
 #' @importFrom utils read.table unzip write.table
 
 
@@ -40,7 +43,9 @@ if(getRversion() >= "2.15.1")  {
       "D2a_1",
       "D2a_2",
       "FNR",
+      "FPR",
       "Freq",
+      "Intercept",
       "Kid",
       "Lambda_star",
       "LocIdx",
@@ -52,6 +57,8 @@ if(getRversion() >= "2.15.1")  {
       "Pa",
       "Panew",
       "Pos",
+      "Qijs_linked",
+      "Qijs_unlinked",
       "Rep",
       "Sex",
       "Sexnew",
@@ -61,8 +68,10 @@ if(getRversion() >= "2.15.1")  {
       "alle1",
       "alle2",
       "alleidx",
+      "data",
       "desc",
       "ender",
+      "estimate",
       "g",
       "genostr",
       "gp",
@@ -76,9 +85,18 @@ if(getRversion() >= "2.15.1")  {
       "lambda",
       "list_name",
       "locidx",
+      "log10_FPR",
       "name",
       "newfreq",
+      "numnonmissingloci",
       "pedname",
+      "mc",
+      "num_non_miss",
+      "num_non_missing_loci",
+      "se",
+      "simplm",
+      "term",
+      "tidy",
       "xxx",
       "gnames",
       "1",
@@ -105,4 +123,3 @@ if(getRversion() >= "2.15.1")  {
     )
   )
 }
-

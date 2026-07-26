@@ -10,3 +10,6 @@ development/Rmd/*.html
 *.DS_Store
 doc
 Meta
+SnakeMake
+.paper
+.snapper_gtseq

@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 80 rows and 7 columns.
 }
 \usage{
-markers40
+data(markers40)
 }
 \description{
 This was made by running the example in \code{\link{reindex_markers}}.

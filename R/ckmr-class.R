@@ -50,10 +50,12 @@ ckmr_class <- function(L) {
 #' format method for ckmr class (to print)
 #'
 #' Just prints relevant information for a quick look.
-#' @param C an object of class \code{\link{ckmr_class}}.
-format.ckmr <- function(C) {
+#' @param x an object of class \code{\link{ckmr_class}}.
+#' @param ... additional arguments to format. (But nothing implemented).
+#' @export
+format.ckmr <- function(x, ...) {
 
-  CL <- C$loci
+  CL <- x$loci
 
   # get range of allele nums
   arange <- range(sapply(CL, function(x) length(x$freqs)))

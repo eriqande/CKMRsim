@@ -16,7 +16,7 @@ are useful for sorting things if you run the data through \code{\link{reindex_ma
 \code{Allele} column gives the sequences of each allele/haplotype observed in the population.
 }
 \usage{
-sebastes
+data(sebastes)
 }
 \description{
 These are data from 165 amplicons sequenced in two different runs of an Illumina

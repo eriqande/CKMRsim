@@ -10,3 +10,9 @@
 ^README\.Rmd$
 ^_pkgdown\.yml$
 ^docs$
+^dev-vignettes$
+^\.snapper_gtseq$
+^\.snakemake$
+^\.paper$
+^SnakeMake$
+^SnakeMake/\.snakemake$

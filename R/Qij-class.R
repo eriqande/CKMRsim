@@ -18,12 +18,14 @@
 Qij_class <- function(Q, unlinked, forceLinkagePO, miss_mask_mat, rando_miss_wts, rando_miss_n) {
   # first, make sure that the names of each component are the same
   names1 <- names(Q[[1]])
-  names_correct <- all(sapply(Q, function(x) all(names(x) == names1)))
-  if(!names_correct) stop("Q does not seem to have consistent \"tos\" relationships.")
+
+  # ECA commented out the following two lines when he went to the list-based calc_relats option
+  #names_correct <- all(sapply(Q, function(x) all(names(x) == names1)))
+  #if(!names_correct) stop("Q does not seem to have consistent \"tos\" relationships.")
 
   # then make sure that the number of reps in all cases is correct
   reps <- length(Q[[1]][[1]])
-  reps_correct <- all(reps == sapply(Q, function(x) sapply(x, length)))
+  reps_correct <- all(reps == unlist(sapply(Q, function(x) sapply(x, length))))
   if(!reps_correct) stop("Q does not seem to have consistent reps across all relationships.")
 
   class(Q) <- "Qij"
@@ -48,22 +50,34 @@ Qij_class <- function(Q, unlinked, forceLinkagePO, miss_mask_mat, rando_miss_wts
 }
 
 
+#' A simple function to print out the calc_relats in a list-oriented fashion
+#'
+#' @param Q an object of class \code{\link{Qij_class}}
+print_calc_relats <- function(Q) {
+  ll <- lapply(names(Q), function(q) {
+    paste0("    ", q, ":  ", paste(names(Q[[q]]), collapse = ", "))
+  })
+  paste(c("", ll), collapse = "\n")
+}
+
 
 #' format method for Qij class (to print)
 #'
 #' Just prints relevant information for a quick look.
-#' @param Q an object of class \code{\link{Qij_class}}.
-format.Qij <- function(Q) {
+#' @param x an object of class \code{\link{Qij_class}}.
+#' @param ... additional arguments to format. (But nothing implemented).
+#' @export
+format.Qij <- function(x, ...) {
   ret <- character()
-  ret[1] <- paste0("A Qij object with ", length(Q[[1]][[1]]), " reps")
-  if(attributes(Q)$simtype == "unlinked") {
-    ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype)
+  ret[1] <- paste0("A Qij object with ", length(x[[1]][[1]]), " reps")
+  if(attributes(x)$simtype == "unlinked") {
+    ret[2] <- paste0("simulated with markers ", attributes(x)$simtype)
   } else {
-    ret[2] <- paste0("simulated with markers ", attributes(Q)$simtype, " with PO treated as ", attributes(Q)$PO_sim)
+    ret[2] <- paste0("simulated with markers ", attributes(x)$simtype, " with PO treated as ", attributes(x)$PO_sim)
   }
-  ret[3] <- paste0("\"sim_relats\" relationships: ", paste(names(Q), collapse = ", "))
-  ret[4] <- paste0("\"calc_relats\"   relationships: ", paste(names(Q[[1]]), collapse = ", "))
-  ret[5] <- paste0("rando_miss_n: ", attributes(Q)$rando_miss_n)
+  ret[3] <- paste0("\"sim_relats\" relationships: ", paste(names(x), collapse = ", "))
+  ret[4] <- paste0("\"calc_relats\"   relationships: ", print_calc_relats(x))
+  ret[5] <- paste0("rando_miss_n: ", attributes(x)$rando_miss_n)
   ret
 }
 

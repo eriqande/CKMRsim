@@ -4,10 +4,12 @@
 \alias{format.ckmr}
 \title{format method for ckmr class (to print)}
 \usage{
-\method{format}{ckmr}(C)
+\method{format}{ckmr}(x, ...)
 }
 \arguments{
-\item{C}{an object of class \code{\link{ckmr_class}}.}
+\item{x}{an object of class \code{\link{ckmr_class}}.}
+
+\item{...}{additional arguments to format. (But nothing implemented).}
 }
 \description{
 Just prints relevant information for a quick look.

@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 378 rows and 7 columns.
 }
 \usage{
-microhaps
+data(microhaps)
 }
 \description{
 This was made by running some code in scratch/create-data.R.

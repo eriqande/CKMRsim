@@ -15,7 +15,8 @@
 #' @param froms a vector of names of the relationship IDs to simulate from. If this is NULL then
 #' the function will just simulate from all the values that have had Y_l_true matrices computed for them
 #' in the first component of YL.  Genotype values get simulated from the Y_l_true values
-#' @param tos a vector of names of the relationship IDs to calculate the genotype log probs of the simulated
+#' @param tos Either NULL or a named list of vectors of names of the relationship IDs to calculate the
+#' genotype log probs of the simulated
 #' genotypes from.  Genotype log probs are calculated using the Y_l matrices. If this is NULL then
 #' the function will just compute probs for all the relationships that have had Y_l matrices computed for them
 #' in YL.
@@ -79,8 +80,12 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
   if(is.null(froms)) {
     froms <- names(YL[[1]]$Y_l_true)
   }
-  if(is.null(tos)) {
-    tos <- names(YL[[1]]$Y_l)
+  named_froms <- froms
+  names(named_froms) <- froms
+  if(is.null(tos)) { # if tos is null, then do all pairwise calculations
+    tos <- lapply(named_froms, function(x) names(YL[[1]]$Y_l))
+  } else if(!is.list(tos)) { # if it is not a list, but is just a vector, then turn it into a list
+    tos <- lapply(named_froms, function(x) tos)
   }
   if(!is.null(pedigrees)) {
     misspeds <- base::setdiff(froms, names(pedigrees)) %>%  # note: drop U and MZ because those get done via unlinked always anyway...
@@ -126,7 +131,7 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
 
   # name these so that if we lapply over them, we get the names in the result
   names(froms) <- froms
-  names(tos) <- tos
+  tos <- lapply(tos, function(x) {names(x) <- x; x})
 
 
   # produce text for message that will tell us if the simulation is being done as linked or not.
@@ -151,7 +156,7 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
 
     # now with those in hand we cycle over the tos relationships and compute the log probs
     # for them and then cbind them and rowSum them...
-    lapply(tos, function(t) {
+    lapply(tos[[r]], function(t) {
       tmp_mat <- sapply(names(YL), function(y) {
         log(YL[[y]]$Y_l[[t]])[gp[[y]]]   # right about here is where I think I can add randomly missing loci, etc.
       })

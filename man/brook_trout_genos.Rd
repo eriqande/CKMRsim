@@ -8,7 +8,7 @@
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 20262 rows and 11 columns.
 }
 \usage{
-brook_trout_genos
+data(brook_trout_genos)
 }
 \description{
 These are genotypes of 307 brook trout from a study by Ruzzante et al.
