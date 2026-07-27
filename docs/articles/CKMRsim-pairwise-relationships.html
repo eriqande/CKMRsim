@@ -12,14 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="CKMRsim-pairwise-relationships">
-<meta property="og:description" content="CKMRsim">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -45,7 +44,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -81,7 +80,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -90,9 +89,9 @@
                         <h4 data-toc-skip class="author">Eric C.
 Anderson</h4>
             
-            <h4 data-toc-skip class="date">2024-07-31</h4>
+            <h4 data-toc-skip class="date">2026-07-26</h4>
       
-      
+
       <div class="hidden name"><code>CKMRsim-pairwise-relationships.Rmd</code></div>
 
     </div>
@@ -163,15 +162,16 @@ relationships, (except for monozygous twins and unrelated, which don’t
 yield interesting pedigrees) alongside the IBD coefficient values. In
 these pedigrees, the nodes corresponding to members of the pair are
 shaded (gray) and are labeled 1 and 2.</p>
-<p>Due to the way output files from Mendel are parsed. It is necessary
-that the members of the pair not be founders in the pedigree. This is
-why the pedigrees for GP and PO have founders above the oldest members
-of the pair.</p>
+<p>The members of each pair are labelled 1 and 2 in these pedigree
+definitions. CKMRsim now uses these same pedigrees with its internal
+Rcpp linked-marker simulator by default. The older Mendel-based backend
+is still available for legacy comparisons, and these pedigrees retain
+the non-founder convention that made the Mendel output parsing
+straightforward.</p>
 <div class="section level2">
 <h2 id="parent-offspring">Parent-offspring<a class="anchor" aria-label="anchor" href="#parent-offspring"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0 ~~~~~~~\kappa_1 = 1
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0 ~~~~~~~\kappa_1 = 1 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/PO.png" alt="PO: Parent-offspring"><div class="figcaption">PO: Parent-offspring</div>
 </div>
@@ -179,8 +179,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="full-siblings">Full siblings<a class="anchor" aria-label="anchor" href="#full-siblings"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.25 ~~~~~~~\kappa_1 = 0.5
-~~~~~~~\kappa_2 = 0.25\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.25</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.25 ~~~~~~~\kappa_1 = 0.5 ~~~~~~~\kappa_2 = 0.25</annotation></semantics></math></p>
 <div class="float">
 <img src="images/FS.png" alt="FS: Full siblings"><div class="figcaption">FS: Full siblings</div>
 </div>
@@ -188,8 +187,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="half-siblings">Half siblings<a class="anchor" aria-label="anchor" href="#half-siblings"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/HS.png" alt="HS: Half siblings"><div class="figcaption">HS: Half siblings</div>
 </div>
@@ -197,8 +195,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="grandparent-grandchild">Grandparent-grandchild<a class="anchor" aria-label="anchor" href="#grandparent-grandchild"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/GP.png" alt="GP: Grandparent-grandchild"><div class="figcaption">GP: Grandparent-grandchild</div>
 </div>
@@ -206,8 +203,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="aunt-niece">Aunt-niece<a class="anchor" aria-label="anchor" href="#aunt-niece"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.5</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.5 ~~~~~~~\kappa_1 = 0.5 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/AN.png" alt="AN: Aunt-niece"><div class="figcaption">AN: Aunt-niece</div>
 </div>
@@ -215,8 +211,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="double-first-cousins">Double first cousins<a class="anchor" aria-label="anchor" href="#double-first-cousins"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.5625 ~~~~~~~\kappa_1 = 0.375
-~~~~~~~\kappa_2 = 0.0625\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.5625</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.375</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0.0625</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.5625 ~~~~~~~\kappa_1 = 0.375 ~~~~~~~\kappa_2 = 0.0625</annotation></semantics></math></p>
 <div class="float">
 <img src="images/DFC.png" alt="DFC: Double first cousins"><div class="figcaption">DFC: Double first cousins</div>
 </div>
@@ -224,8 +219,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="half-aunt-niece">Half aunt-niece<a class="anchor" aria-label="anchor" href="#half-aunt-niece"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.75 ~~~~~~~\kappa_1 = 0.25
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.75</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.25</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.75 ~~~~~~~\kappa_1 = 0.25 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/HAN.png" alt="HAN: Half aunt-niece"><div class="figcaption">HAN: Half aunt-niece</div>
 </div>
@@ -233,8 +227,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="first-cousins">First cousins<a class="anchor" aria-label="anchor" href="#first-cousins"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.75 ~~~~~~~\kappa_1 = 0.25
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.75</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.25</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.75 ~~~~~~~\kappa_1 = 0.25 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/FC.png" alt="FC: First cousins"><div class="figcaption">FC: First cousins</div>
 </div>
@@ -242,8 +235,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="half-first-cousins">Half first cousins<a class="anchor" aria-label="anchor" href="#half-first-cousins"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.875 ~~~~~~~\kappa_1 = 0.125
-~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.875</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.125</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.875 ~~~~~~~\kappa_1 = 0.125 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/HFC.png" alt="HFC: Half first cousins"><div class="figcaption">HFC: Half first cousins</div>
 </div>
@@ -251,8 +243,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="double-half-first-cousins">Double half first cousins<a class="anchor" aria-label="anchor" href="#double-half-first-cousins"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.765625 ~~~~~~~\kappa_1 =
-0.21875 ~~~~~~~\kappa_2 = 0.015625\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.765625</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.21875</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0.015625</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.765625 ~~~~~~~\kappa_1 = 0.21875 ~~~~~~~\kappa_2 = 0.015625</annotation></semantics></math></p>
 <div class="float">
 <img src="images/DHFC.png" alt="DHFC: Double half first cousins"><div class="figcaption">DHFC: Double half first cousins</div>
 </div>
@@ -260,8 +251,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="second-cousins">Second cousins<a class="anchor" aria-label="anchor" href="#second-cousins"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.9375 ~~~~~~~\kappa_1 =
-0.0625 ~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.9375</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.0625</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.9375 ~~~~~~~\kappa_1 = 0.0625 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/SC.png" alt="SC: Second cousins"><div class="figcaption">SC: Second cousins</div>
 </div>
@@ -269,8 +259,7 @@ of the pair.</p>
 <div class="section level2">
 <h2 id="half-second-cousins">Half second cousins<a class="anchor" aria-label="anchor" href="#half-second-cousins"></a>
 </h2>
-<p><span class="math inline">\(\kappa_0 = 0.96875 ~~~~~~~\kappa_1 =
-0.03125 ~~~~~~~\kappa_2 = 0\)</span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0.96875</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>1</mn></msub><mo>=</mo><mn>0.03125</mn><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><mspace width="0.222em"></mspace><msub><mi>κ</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0.96875 ~~~~~~~\kappa_1 = 0.03125 ~~~~~~~\kappa_2 = 0</annotation></semantics></math></p>
 <div class="float">
 <img src="images/HSC.png" alt="HSC: Half second cousins"><div class="figcaption">HSC: Half second cousins</div>
 </div>
@@ -279,9 +268,7 @@ of the pair.</p>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -294,16 +281,16 @@ of the pair.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

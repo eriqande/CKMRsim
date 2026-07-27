@@ -12,14 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="CKMRsim-example-1">
-<meta property="og:description" content="CKMRsim">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -45,7 +44,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -81,7 +80,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -90,9 +89,9 @@
                         <h4 data-toc-skip class="author">Eric C.
 Anderson</h4>
             
-            <h4 data-toc-skip class="date">2024-07-31</h4>
+            <h4 data-toc-skip class="date">2026-07-26</h4>
       
-      
+
       <div class="hidden name"><code>CKMRsim-example-1.Rmd</code></div>
 
     </div>
@@ -112,12 +111,13 @@ downloaded from Dryad at: <a href="http://datadryad.org/bitstream/handle/10255/d
 a lot of functions from the tidyverse, so let’s do it.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.4.3</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.4</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 3.4.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.2     </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.5</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 4.0.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.4     </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
@@ -784,7 +784,11 @@ get a little information about it:</p>
 <span><span class="co">#&gt; A Qij object with 10000 reps</span></span>
 <span><span class="co">#&gt; simulated with markers unlinked</span></span>
 <span><span class="co">#&gt; "sim_relats" relationships: PO, FS, HS, U</span></span>
-<span><span class="co">#&gt; "calc_relats"   relationships: PO, FS, U</span></span>
+<span><span class="co">#&gt; "calc_relats"   relationships: </span></span>
+<span><span class="co">#&gt;     PO:  PO, FS, U</span></span>
+<span><span class="co">#&gt;     FS:  PO, FS, U</span></span>
+<span><span class="co">#&gt;     HS:  PO, FS, U</span></span>
+<span><span class="co">#&gt;     U:  PO, FS, U</span></span>
 <span><span class="co">#&gt; rando_miss_n: 0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -918,17 +922,19 @@ default, use importance sampling.</p>
 <span>                 de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ex1_PO_is</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span></span>
-<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 4.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.2 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.8 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  1.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 6.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.2 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
-<p>This shows false positive rates (FPR) of around <span class="math inline">\(10^{-6}\)</span> and smaller when the false
-negative rate (FNR) is 0.01 and greater.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 12</span></span></span>
+<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star request_type request pstar</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 4.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.2 FNR             0.01 PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>500        18.4 FNR             0.05 PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.8 FNR             0.1  PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  1.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 FNR             0.2  PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 6.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.2 FNR             0.3  PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: mc_method &lt;chr&gt;, numerator &lt;chr&gt;, denominator &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   true_relat &lt;chr&gt;</span></span></span></code></pre></div>
+<p>This shows false positive rates (FPR) of around
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>10</mn><mrow><mi>−</mi><mn>6</mn></mrow></msup><annotation encoding="application/x-tex">10^{-6}</annotation></semantics></math>
+and smaller when the false negative rate (FNR) is 0.01 and greater.</p>
 <p>If we wanted to see what the results would look like if we were using
 a logl ratio of 5 as a cutoff, we could do this:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -938,22 +944,24 @@ a logl ratio of 5 as a cutoff, we could do this:</p>
 <span>                 lambda_stars <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ex1_PO_is_5</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 10</span></span></span>
-<span><span class="co">#&gt;      FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.000<span style="text-decoration: underline;">1</span> 7.41<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> 3.60<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>999         5   PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0.01   4.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.2 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0.05   2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>500        18.4 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 0.1    2.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.8 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 0.2    1.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 0.3    2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 6.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.2 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 12</span></span></span>
+<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star request_type request pstar</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> 7.41<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> 3.60<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>999         5   Lambda          5    PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 4.36<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 3.35<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>900        14.2 FNR             0.01 PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  5<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 2.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> 1.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>500        18.4 FNR             0.05 PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  1<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 2.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 1.05<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">9</span>000        20.8 FNR             0.1  PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  2<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.84<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 5.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-14</span>            <span style="text-decoration: underline;">8</span>000        23.9 FNR             0.2  PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>  3<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span> 6.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span>            <span style="text-decoration: underline;">7</span>000        26.2 FNR             0.3  PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: mc_method &lt;chr&gt;, numerator &lt;chr&gt;, denominator &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>We see we would have had a false positive rate around 7.41e-07, if we
 used a logl ratio cutoff of 5. Since there are 1847 adults and 4244
-juvniles in this study, there will be <span class="math inline">\(1847
-\times 4244 = 7,838,668\)</span> pairs being tested for being
-parent-offspring pairs. A per-pair FPR of 7.41e-07 would leave us with
-an expected number of false positive pairs on the order of 6.</p>
+juvniles in this study, there will be
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1847</mn><mo>×</mo><mn>4244</mn><mo>=</mo><mn>7</mn><mo>,</mo><mn>838</mn><mo>,</mo><mn>668</mn></mrow><annotation encoding="application/x-tex">1847 \times 4244 = 7,838,668</annotation></semantics></math>
+pairs being tested for being parent-offspring pairs. A per-pair FPR of
+7.41e-07 would leave us with an expected number of false positive pairs
+on the order of 6.</p>
 <p>My general recommendation for being confident about not erroneously
 identifying unrelated individuals as related pairs is to require that
 the FPR be about 10 to 100 times smaller than the reciprocal of the
@@ -970,21 +978,22 @@ at a number of such cutoffs:</p>
 <span>                 de <span class="op">=</span> <span class="st">"U"</span>, </span>
 <span>                 lambda_stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">15</span>, by <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ex1_PO_is_8_12</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 10</span></span></span>
-<span><span class="co">#&gt;       FNR     FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.004<span style="text-decoration: underline;">6</span> 1.65<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 2.03<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>954        12   PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 0.004<span style="text-decoration: underline;">9</span> 1.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>951        12.1 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 0.005  1.42<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>950        12.2 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.005<span style="text-decoration: underline;">2</span> 1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>948        12.3 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 0.005<span style="text-decoration: underline;">6</span> 1.15<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>944        12.4 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.005<span style="text-decoration: underline;">6</span> 1.15<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>944        12.5 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.005<span style="text-decoration: underline;">8</span> 1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>942        12.6 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.006  1.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>940        12.7 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.006<span style="text-decoration: underline;">2</span> 9.57<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span> 9.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>938        12.8 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.006<span style="text-decoration: underline;">3</span> 9.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span> 9.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>937        12.9 PO    IS        PO       </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 12</span></span></span>
+<span><span class="co">#&gt;       FNR          FPR       se num_nonzero_wts Lambda_star request_type request</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.004<span style="text-decoration: underline;">6</span>      1.65<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 2.03<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>954        12   Lambda          12  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 0.004<span style="text-decoration: underline;">9</span>      1.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.75<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>951        12.1 Lambda          12.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 0.005       1.42<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>950        12.2 Lambda          12.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.005<span style="text-decoration: underline;">2</span>      1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>948        12.3 Lambda          12.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 0.005<span style="text-decoration: underline;">6</span>      1.15<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>944        12.4 Lambda          12.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.005<span style="text-decoration: underline;">6</span>      1.15<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>944        12.5 Lambda          12.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.005<span style="text-decoration: underline;">8</span>      1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>942        12.6 Lambda          12.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.006       1.02<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>940        12.7 Lambda          12.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.006<span style="text-decoration: underline;">2</span>      9.57<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span> 9.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>938        12.8 Lambda          12.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.006<span style="text-decoration: underline;">3</span>      9.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span> 9.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span>            <span style="text-decoration: underline;">9</span>937        12.9 Lambda          12.9</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 26 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: pstar &lt;chr&gt;, mc_method &lt;chr&gt;, numerator &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Let’s find the logl ratio value that gives the largest FPR smaller
 than 1.275727e-08:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
@@ -992,11 +1001,12 @@ than 1.275727e-08:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">FPR</span> <span class="op">&gt;</span> <span class="fl">1.275727e-08</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">FPR</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 10</span></span></span>
-<span><span class="co">#&gt;      FNR       FPR      se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.005<span style="text-decoration: underline;">2</span>   1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>948        12.3 PO    IS        PO       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 12</span></span></span>
+<span><span class="co">#&gt;      FNR      FPR      se num_nonzero_wts Lambda_star request_type request pstar</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.005<span style="text-decoration: underline;">2</span>  1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> 1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-9</span>            <span style="text-decoration: underline;">9</span>948        12.3 Lambda          12.3 PO   </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: mc_method &lt;chr&gt;, numerator &lt;chr&gt;, denominator &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>This suggests that requiring a logl ratio cutoff of about 15 should
 mean almost no false positives, but perhaps a false negative or two (if
 the genotyping error rate is accurate).</p>
@@ -1013,15 +1023,16 @@ negative rate of about 0.2.</p>
 <span>                 nu <span class="op">=</span> <span class="st">"FS"</span>,</span>
 <span>                 de <span class="op">=</span> <span class="st">"U"</span><span class="op">)</span></span>
 <span><span class="va">ex1_FS_is</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 10</span></span></span>
-<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star pstar mc_method numerator</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 1.70<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> 1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>900        7.92 FS    IS        FS       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.19<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> 1.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>500       13.5  FS    IS        FS       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 8.78<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>000       16.4  FS    IS        FS       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  8.17<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">8</span>000       19.9  FS    IS        FS       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  5.98<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 1.99<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span>            <span style="text-decoration: underline;">7</span>000       22.6  FS    IS        FS       </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: denominator &lt;chr&gt;, true_relat &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 12</span></span></span>
+<span><span class="co">#&gt;     FNR      FPR       se num_nonzero_wts Lambda_star request_type request pstar</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  0.01 1.70<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> 1.58<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span>            <span style="text-decoration: underline;">9</span>900        7.92 FNR             0.01 FS   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  0.05 2.19<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> 1.14<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span>            <span style="text-decoration: underline;">9</span>500       13.5  FNR             0.05 FS   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  0.1  2.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> 8.78<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span>            <span style="text-decoration: underline;">9</span>000       16.4  FNR             0.1  FS   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>  0.2  8.17<span style="color: #949494;">e</span><span style="color: #BB0000;">-11</span> 2.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span>            <span style="text-decoration: underline;">8</span>000       19.9  FNR             0.2  FS   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>  0.3  5.98<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span> 1.99<span style="color: #949494;">e</span><span style="color: #BB0000;">-13</span>            <span style="text-decoration: underline;">7</span>000       22.6  FNR             0.3  FS   </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: mc_method &lt;chr&gt;, numerator &lt;chr&gt;, denominator &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   true_relat &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Note! The results here differ from those reported in the data for
 <span class="citation">Baetscher et al. (2019)</span> because we are
 using a different genotyping error model here, with a higher error rate
@@ -1178,6 +1189,7 @@ wrong species are identified as kin in a data set, or when two
 individuals look similar because they each suffered some odd
 contamination or genotyping problem.</li>
 <li>
+</li>
 </ol>
 </div>
 </div>
@@ -1185,11 +1197,10 @@ contamination or genotyping problem.</li>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="literature-cited">Literature Cited<a class="anchor" aria-label="anchor" href="#literature-cited"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-baetscherDispersalNearshoreMarine2019" class="csl-entry">
-Baetscher, Diana S., Eric C. Anderson, Elizabeth A. Gilbert-Horvath,
-Daniel P. Malone, Emily T. Saarman, Mark H. Carr, and John Carlos Garza.
-2019. <span>“Dispersal of a Nearshore Marine Fish Connects Marine
+Baetscher, Diana S., Eric C. Anderson, Elizabeth A. Gilbert-Horvath, et
+al. 2019. <span>“Dispersal of a Nearshore Marine Fish Connects Marine
 Reserves and Adjacent Fished Areas Along an Open Coast.”</span>
 <em>Molecular Ecology</em> 28 (7): 1611–23. <a href="https://doi.org/10.1111/mec.15044" class="external-link">https://doi.org/10.1111/mec.15044</a>.
 </div>
@@ -1206,9 +1217,7 @@ Relationship Inference.”</span> <em>Molecular Ecology Resources</em> 18
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -1221,16 +1230,16 @@ Relationship Inference.”</span> <em>Molecular Ecology Resources</em> 18
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

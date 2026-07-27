@@ -19,7 +19,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -45,7 +45,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -81,7 +81,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -104,8 +104,8 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"CKMRsim-pairwise-relationships"</span><span class="op">)</span></span></code></pre></div>
 <p>An easier way to get to read these vignetttes is to find them in the “articles” tab at CKMRsim’s pkgdown page at: <a href="https://eriqande.github.io/CKMRsim/" class="uri">https://eriqande.github.io/CKMRsim/</a></p>
-<p>Doing simulations in the face of physical linkage requires the Mendel program version 16. This was formerly available at <a href="http://software.genetics.ucla.edu/mendel" class="external-link uri">http://software.genetics.ucla.edu/mendel</a>, but it seems that the site is no longer maintained or connected.</p>
-<p>Instead, you can now install it with the <code><a href="reference/install_mendel.html">install_mendel()</a></code> function.</p>
+<p>Simulations with physically linked markers are now performed internally using CKMRsim’s Rcpp gene-dropper by default, so Mendel is no longer required for routine linked-marker simulations. The legacy Mendel backend remains available with <code>useMendel = TRUE</code> and <code><a href="reference/install_mendel.html">install_mendel()</a></code>, mainly for reproducing older analyses or backend comparisons, but it is no longer the recommended path.</p>
+<p>A tutorial on how to use CKMRsim, prepared for a workshop at TWS 2022, can be found at <a href="https://eriqande.github.io/tws-ckmr-2022/kin-finding-lab.html" class="external-link uri">https://eriqande.github.io/tws-ckmr-2022/kin-finding-lab.html</a></p>
 </div>
   </div>
 
@@ -128,7 +128,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Eric C. Anderson <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Eric C. Anderson <br><small class="roles"> Author, maintainer </small>   </li>
 </ul>
 </div>
 
@@ -145,16 +145,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
