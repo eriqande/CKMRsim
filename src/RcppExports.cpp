@@ -22,6 +22,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// linked_gene_drop_true_genotypes
+List linked_gene_drop_true_genotypes(IntegerVector kid, IntegerVector pa, IntegerVector ma, IntegerVector n_alleles, NumericVector map_pos, IntegerVector chrom_id, IntegerVector chrom_start, IntegerVector chrom_end, List freqs, int reps, int min_crossovers);
+RcppExport SEXP _CKMRsim_linked_gene_drop_true_genotypes(SEXP kidSEXP, SEXP paSEXP, SEXP maSEXP, SEXP n_allelesSEXP, SEXP map_posSEXP, SEXP chrom_idSEXP, SEXP chrom_startSEXP, SEXP chrom_endSEXP, SEXP freqsSEXP, SEXP repsSEXP, SEXP min_crossoversSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type kid(kidSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type pa(paSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type ma(maSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type n_alleles(n_allelesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type map_pos(map_posSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type chrom_id(chrom_idSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type chrom_start(chrom_startSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type chrom_end(chrom_endSEXP);
+    Rcpp::traits::input_parameter< List >::type freqs(freqsSEXP);
+    Rcpp::traits::input_parameter< int >::type reps(repsSEXP);
+    Rcpp::traits::input_parameter< int >::type min_crossovers(min_crossoversSEXP);
+    rcpp_result_gen = Rcpp::wrap(linked_gene_drop_true_genotypes(kid, pa, ma, n_alleles, map_pos, chrom_id, chrom_start, chrom_end, freqs, reps, min_crossovers));
+    return rcpp_result_gen;
+END_RCPP
+}
 // comp_ind_pairwise
 DataFrame comp_ind_pairwise(IntegerMatrix S, IntegerMatrix T, int t, NumericVector values, IntegerVector nGenos, IntegerVector Starts);
 RcppExport SEXP _CKMRsim_comp_ind_pairwise(SEXP SSEXP, SEXP TSEXP, SEXP tSEXP, SEXP valuesSEXP, SEXP nGenosSEXP, SEXP StartsSEXP) {
@@ -106,6 +127,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_CKMRsim_make_matrix_X_l", (DL_FUNC) &_CKMRsim_make_matrix_X_l, 2},
+    {"_CKMRsim_linked_gene_drop_true_genotypes", (DL_FUNC) &_CKMRsim_linked_gene_drop_true_genotypes, 11},
     {"_CKMRsim_comp_ind_pairwise", (DL_FUNC) &_CKMRsim_comp_ind_pairwise, 6},
     {"_CKMRsim_locus_specific_pairwise", (DL_FUNC) &_CKMRsim_locus_specific_pairwise, 7},
     {"_CKMRsim_pairwise_geno_id", (DL_FUNC) &_CKMRsim_pairwise_geno_id, 2},

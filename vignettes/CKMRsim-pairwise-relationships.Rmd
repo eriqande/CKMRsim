@@ -77,9 +77,11 @@ pedigrees) alongside the IBD
 coefficient values. In these pedigrees,
 the nodes corresponding to members of the pair are shaded (gray) and are labeled 1 and 2.
 
-Due to the way output files from Mendel are parsed.  It is necessary that the members of the
-pair not be founders in the pedigree.  This is why the pedigrees for GP and PO have
-founders above the oldest members of the pair.
+The members of each pair are labelled 1 and 2 in these pedigree definitions.
+CKMRsim now uses these same pedigrees with its internal Rcpp linked-marker
+simulator by default. The older Mendel-based backend is still available for
+legacy comparisons, and these pedigrees retain the non-founder convention that
+made the Mendel output parsing straightforward.
 
 
 ```{r, results='asis', echo=FALSE}
@@ -94,4 +96,3 @@ for (i in 2:(nrow(rtable) - 1)) {
   cat(tit, kap, fig)
 }
 ```
-

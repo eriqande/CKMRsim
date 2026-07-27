@@ -13,11 +13,11 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-# here, set up a variable to only run the Mendel-requiring code
-# if on eric's computer with Mendel installed
-DoMendel <- (Sys.info()["user"] == "eriq") && system.file("bin/mendel", package = "CKMRsim") != ""
-DoMendel <- FALSE
-NoDoMendel <- !DoMendel
+# Keep the heavier linked-marker demo out of ordinary vignette builds. Linked
+# marker simulation now runs internally via Rcpp by default; Mendel is only
+# needed if the legacy backend is requested explicitly with useMendel = TRUE.
+DoLinkedDemo <- FALSE
+NoLinkedDemo <- !DoLinkedDemo
 ```
 
 ```{r setup}
@@ -28,11 +28,13 @@ library(tidyverse)
 
 ## Prerequisites
 
-In order to pursue simulations in the face of physical linkage, you must download
-and install the external dependency, Mendel version 16.  For Windows and Mac OS X, 
-CKMRsim will look for the Mendel binary in its default install location. So download
-it from [http://software.genetics.ucla.edu/mendel](http://software.genetics.ucla.edu/mendel) and do a default install.
-Note that you need to register with your email in order to download Mendel.
+CKMRsim now simulates physically linked markers internally using its Rcpp
+gene-dropper. No Mendel installation is required for the recommended/default
+workflow.
+
+The older Mendel-based backend remains available by setting `useMendel = TRUE`,
+but it is retained mainly for reproducing older analyses and backend comparisons.
+For new linked-marker simulations, the internal Rcpp backend is recommended.
 
 ## An Example
 
@@ -79,18 +81,19 @@ Qs_lmh_no_link <- simulate_Qij(ck_lmh,
 
 In order to simulate the markers with physical linkage, you use the same
 `simulate_Qij()` function, but you tell it to simulate with physical linkage
-_and_ you also have to give it a list of pedigrees so that it can pass the
-correct pedigrees to the program MENDEL, which actually does the simulation.
-`CKMRsim` comes with such a list. At the moment, it only has three entries"
-"PO", FS", "HS".  If you want to add more (like cousins) feel free.  Just note
-that the two focal individuals of the pair have to be individuals 1 and 2.  
+_and_ you also give it a list of pedigrees. By default, CKMRsim uses those
+pedigrees with its internal Rcpp gene-dropper. The legacy Mendel backend can
+still be requested with `useMendel = TRUE`, but that route is no longer
+recommended for routine work.
+
+`CKMRsim` comes with such a list. The two focal individuals of each pair are
+individuals 1 and 2. If you want to add more pedigrees, like cousins, feel free.
 If you need help, ping me at [eric.anderson@noaa.gov](mailto:eric.anderson@noaa.gov).
 
 So, simulating with linkage looks like this:
-```{r, eval=DoMendel}
-# we only run this if it is on eric's laptop.  This way
-# we can build the vignette even on CRAN's machines that don't
-# have Mendel installed
+```{r, eval=DoLinkedDemo}
+# This chunk is skipped in ordinary vignette builds because it is stochastic and
+# comparatively heavy, not because it requires Mendel.
 Qs_lmh_with_link <- simulate_Qij(ck_lmh,
                                  calc_relats = c("PO", "FS", "U"),
                                  sim_relats = c("PO", "FS", "U"), 
@@ -113,17 +116,17 @@ is the case. To do that, we extract the log-likelihood ratio values, put them to
 in a single data frame, and then plot them.  Note that the `extract_logls` function
 returns a column that says whether the simulation was done with or without linkage, so
 it is straightforward to do this in two lines:
-```{r, eval=DoMendel}
+```{r, eval=DoLinkedDemo}
 lnl_logls <- list(
   extract_logls(Qs_lmh_no_link, numer = c(FS = 1), denom = c(U = 1)),
   extract_logls(Qs_lmh_with_link, numer = c(FS = 1), denom = c(U = 1))
 ) %>%
   bind_rows()
 ```
-```{r, eval=DoMendel, include=FALSE, echo=FALSE}
+```{r, eval=DoLinkedDemo, include=FALSE, echo=FALSE}
 saveRDS(lnl_logls, file = "data/lnl_logls.rds")
 ```
-```{r, eval=NoDoMendel, include=FALSE, echo=FALSE}
+```{r, eval=NoLinkedDemo, include=FALSE, echo=FALSE}
 lnl_logls <- readRDS("data/lnl_logls.rds")
 ```
 

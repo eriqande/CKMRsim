@@ -35,12 +35,12 @@ An easier way to get to read these vignetttes is to find them in the
 “articles” tab at CKMRsim’s pkgdown page at:
 <https://eriqande.github.io/CKMRsim/>
 
-Doing simulations in the face of physical linkage requires the Mendel
-program version 16. This was formerly available at
-<http://software.genetics.ucla.edu/mendel>, but it seems that the site
-is no longer maintained or connected.
-
-Instead, you can now install it with the `install_mendel()` function.
+Simulations with physically linked markers are now performed internally
+using CKMRsim’s Rcpp gene-dropper by default, so Mendel is no longer
+required for routine linked-marker simulations. The legacy Mendel backend
+remains available with `useMendel = TRUE` and `install_mendel()`, mainly
+for reproducing older analyses or backend comparisons, but it is no
+longer the recommended path.
 
 A tutorial on how to use CKMRsim, prepared for a workshop at TWS 2022, can be found at
 https://eriqande.github.io/tws-ckmr-2022/kin-finding-lab.html

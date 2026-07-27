@@ -12,6 +12,9 @@ simulate_Qij(
   unlinked = TRUE,
   forceLinkagePO = FALSE,
   pedigree_list = NULL,
+  useMendel = FALSE,
+  cM_per_Mb = 1,
+  min_crossovers = 0,
   miss_mask_mat = NULL,
   rando_miss_wts = NULL,
   rando_miss_n = 0,
@@ -37,7 +40,8 @@ Genotype log probs are calculated using the Y_l matrices.}
 of CKMRsim.}
 
 \item{unlinked}{A logical indicating whether to simulate the markers as unlinked.  By default this is
-TRUE.  If FALSE, then genotypes at linked markers will be simulated using the program MENDEL, genotyping
+TRUE.  If FALSE, then genotypes at linked markers will be simulated using CKMRsim's
+internal Rcpp simulator, or using the program MENDEL if \code{useMendel = TRUE}; genotyping
 errors will be applied to them, and the Q_ij values themselves will still be computed under the assumption
 of no linkage. However, they will be simulated under the no-linkage model for relationships "U", "PO", and
 "MZ", because, in the absence of LD, related pairs under those relationships are not affected by
@@ -48,6 +52,15 @@ physical linkage.}
 FALSE.)}
 
 \item{pedigree_list}{If you specify unlinked == FALSE, then you have to supply a pedigree_list.}
+
+\item{useMendel}{If TRUE, use the external Mendel program for linked gene
+dropping. If FALSE, use CKMRsim's internal Rcpp simulator.}
+
+\item{cM_per_Mb}{Recombination-rate conversion used to create a Map column
+from Pos when Map is not present. The value is centiMorgans per megabase.}
+
+\item{min_crossovers}{Minimum number of crossovers in the typed marker span
+of each chromosome for each meiosis.}
 
 \item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 the c-th locus should be considered missing in the r-th simulated sample.  This type of specification

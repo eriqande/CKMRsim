@@ -12,6 +12,9 @@ simulate_and_calc_Q(
   df = NULL,
   pedigrees = NULL,
   forceLinkagePO = FALSE,
+  useMendel = FALSE,
+  cM_per_Mb = 1,
+  min_crossovers = 0,
   miss_mask_mat = NULL,
   rando_miss_wts = NULL,
   rando_miss_n = 0
@@ -38,13 +41,23 @@ in YL.}
 
 \item{pedigrees}{A list in the format of \code{\link{pedigrees}} that includes the pedigrees at least for
 each relationship in \code{froms}.  If this is non-null, then the simulation will be done of the markers
-as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
+as physically linked using CKMRsim's internal Rcpp gene-dropper by default, or using the legacy Mendel
+backend if \code{useMendel = TRUE}.  If it is NULL, then the pedigrees are ignored and the simulation
 is done assuming that the markers are all unlinked.}
 
 \item{forceLinkagePO}{Logical. If TRUE, the genotypes for the parent-offspring
 relationship are simulated with linkage even though it doesn't make a difference
 so long as the markers themselves are not in LD in the population.  This is primarily
 useful for testing.}
+
+\item{useMendel}{If TRUE, use the external Mendel program for linked gene
+dropping. If FALSE, use CKMRsim's internal Rcpp simulator.}
+
+\item{cM_per_Mb}{Recombination-rate conversion used to create a Map column
+from Pos when Map is not present. The value is centiMorgans per megabase.}
+
+\item{min_crossovers}{Minimum number of crossovers in the typed marker span
+of each chromosome for each meiosis.}
 
 \item{miss_mask_mat}{A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 the c-th locus should be considered missing in the r-th simulated sample.  This type of specification

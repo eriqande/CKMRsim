@@ -14,6 +14,25 @@ make_matrix_X_l <- function(p, kappa) {
     .Call('_CKMRsim_make_matrix_X_l', PACKAGE = 'CKMRsim', p, kappa)
 }
 
+#' Gene-drop true linked genotypes for the two focal individuals in a pedigree
+#'
+#' @param kid integer vector of pedigree IDs.
+#' @param pa integer vector of paternal IDs, with 0 for founders.
+#' @param ma integer vector of maternal IDs, with 0 for founders.
+#' @param n_alleles integer vector with the number of alleles at each locus.
+#' @param map_pos numeric vector of map positions in centiMorgans.
+#' @param chrom_id integer chromosome ID per locus.
+#' @param chrom_start one-based start locus index for each chromosome.
+#' @param chrom_end one-based end locus index for each chromosome.
+#' @param freqs list of allele-frequency vectors, one per locus.
+#' @param reps number of replicate gene drops.
+#' @param min_crossovers minimum number of crossovers in the typed marker span
+#' of each chromosome for each meiosis.
+#' @return A list with integer matrices \code{indiv1} and \code{indiv2}.
+linked_gene_drop_true_genotypes <- function(kid, pa, ma, n_alleles, map_pos, chrom_id, chrom_start, chrom_end, freqs, reps, min_crossovers = 0L) {
+    .Call('_CKMRsim_linked_gene_drop_true_genotypes', PACKAGE = 'CKMRsim', kid, pa, ma, n_alleles, map_pos, chrom_id, chrom_start, chrom_end, freqs, reps, min_crossovers)
+}
+
 #' Compute pairwise relationship measures between all individuals in source and one individual in target
 #'
 #' More explanation later.

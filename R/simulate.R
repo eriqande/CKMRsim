@@ -23,7 +23,8 @@
 #' @param df A data frame of the original long markers.
 #' @param pedigrees A list in the format of \code{\link{pedigrees}} that includes the pedigrees at least for
 #' each relationship in \code{froms}.  If this is non-null, then the simulation will be done of the markers
-#' as physically linked using MENDEL.  If it is NULL, then the pedigrees are ignored and the simulation
+#' as physically linked using CKMRsim's internal Rcpp gene-dropper by default, or using the legacy Mendel
+#' backend if \code{useMendel = TRUE}.  If it is NULL, then the pedigrees are ignored and the simulation
 #' is done assuming that the markers are all unlinked.
 #' @param miss_mask_mat  A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 #' the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
@@ -44,6 +45,12 @@
 #' relationship are simulated with linkage even though it doesn't make a difference
 #' so long as the markers themselves are not in LD in the population.  This is primarily
 #' useful for testing.
+#' @param useMendel If TRUE, use the external Mendel program for linked gene
+#' dropping. If FALSE, use CKMRsim's internal Rcpp simulator.
+#' @param cM_per_Mb Recombination-rate conversion used to create a Map column
+#' from Pos when Map is not present. The value is centiMorgans per megabase.
+#' @param min_crossovers Minimum number of crossovers in the typed marker span
+#' of each chromosome for each meiosis.
 #' @export
 #' @return This returns a list with components that are the relationships that were simulated
 #' from.  Inside each of those components is a list with components referring to the relationships
@@ -73,6 +80,9 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
                                 df = NULL,
                                 pedigrees = NULL,
                                 forceLinkagePO = FALSE,
+                                useMendel = FALSE,
+                                cM_per_Mb = 1,
+                                min_crossovers = 0,
                                 miss_mask_mat = NULL,
                                 rando_miss_wts = NULL,
                                 rando_miss_n = 0
@@ -91,7 +101,7 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
     misspeds <- base::setdiff(froms, names(pedigrees)) %>%  # note: drop U and MZ because those get done via unlinked always anyway...
       base::setdiff(c("U", "MZ"))
     if(forceLinkagePO == FALSE) {
-      misspeds <- base::setdiff(misspeds, "PO")   # Don't require PO in the pedigree list of we aren't forcing it to use Mendel for it
+      misspeds <- base::setdiff(misspeds, "PO")   # Don't require PO in the pedigree list unless we force linked simulation for PO
     }
     if(length(misspeds) > 0) stop("Error!  Asking for linked simulation from = ",
                                   paste(froms, collapse = ", "),",
@@ -150,8 +160,16 @@ simulate_and_calc_Q <- function(YL, reps = 10^4,
         sample.int(n = length(y$Y_l_true[[r]]), size = reps[r], replace = TRUE, prob = y$Y_l_true[[r]])
       })
     } else {
-      message("Simulating ", linktext, " markers with MENDEL for relationship: ", r)
-      gp <- sample_linked_genotype_pairs(df = df, ped = pedigrees[[r]], C = YL, num = reps[r])
+      message("Simulating ", linktext, " markers for relationship: ", r)
+      gp <- sample_linked_genotype_pairs(
+        df = df,
+        ped = pedigrees[[r]],
+        C = YL,
+        num = reps[r],
+        useMendel = useMendel,
+        cM_per_Mb = cM_per_Mb,
+        min_crossovers = min_crossovers
+      )
     }
 
     # now with those in hand we cycle over the tos relationships and compute the log probs

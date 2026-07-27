@@ -1,0 +1,483 @@
+---
+title: "Compare Rcpp and Mendel linked-marker simulations"
+output: html_document
+---
+
+```{r setup}
+library(tidyverse)
+library(CKMRsim)
+
+set.seed(20260726)
+```
+
+This notebook compares CKMRsim's internal Rcpp linked-marker simulator to the
+legacy Mendel-based simulator. It uses the public bearded seal SNP data from the
+TWS CKMR workshop repository.
+
+```{r data}
+dir.create("data", showWarnings = FALSE)
+beardo_path <- file.path("data", "beardo-genos.rds")
+
+if(!file.exists(beardo_path)) {
+  download.file(
+    "https://raw.githubusercontent.com/eriqande/tws-ckmr-2022/main/data/beardo-genos.rds",
+    destfile = beardo_path,
+    mode = "wb"
+  )
+}
+
+beardo_genos <- readr::read_rds(beardo_path)
+dim(beardo_genos)
+```
+
+```{r allele-frequencies}
+long_genos <- beardo_genos %>%
+  rename(Indiv = Our_sample) %>%
+  pivot_longer(
+    cols = -Indiv,
+    names_to = c("Locus", "gene_copy"),
+    names_sep = "\\.",
+    values_to = "Allele"
+  )
+
+locus_names <- unique(long_genos$Locus)
+
+afreqs_ready <- long_genos %>%
+  count(Locus, Allele) %>%
+  group_by(Locus) %>%
+  mutate(
+    Freq = n / sum(n),
+    Chrom = "Unk",
+    Pos = as.integer(factor(Locus, levels = locus_names))
+  ) %>%
+  ungroup() %>%
+  select(Chrom, Pos, Locus, Allele, Freq) %>%
+  arrange(Pos, desc(Freq)) %>%
+  mutate(AlleIdx = NA, LocIdx = NA) %>%
+  filter(!is.na(Allele)) %>%
+  reindex_markers()
+
+afreqs_ready
+```
+
+Give the markers pseudo-genomic positions. The published lab notes used 16
+autosomes for bearded seal and a roughly 2.4 Gb genome.
+
+```{r pseudo-genome}
+fake_genome <- geometric_chromo_lengths(
+  n = 16,
+  L = 2.4,
+  sl = 0.25
+)
+
+afreqs_linked <- sprinkle_markers_into_genome(
+  markers = afreqs_ready,
+  genome = fake_genome$chrom_lengths
+)
+
+# Keep the demo reasonably quick. Increase this for a stronger comparison.
+max_loci <- 600
+keep_loci <- afreqs_linked %>%
+  distinct(Chrom, Locus, Pos, LocIdx) %>%
+  arrange(Chrom, Pos, LocIdx) %>%
+  slice_head(n = max_loci) %>%
+  pull(Locus)
+
+afreqs_demo <- afreqs_linked %>%
+  filter(Locus %in% keep_loci) %>%
+  reindex_markers()
+
+n_distinct(afreqs_demo$Locus)
+```
+
+Create a CKMR object and simulate FS pairs three ways:
+
+1. unlinked markers,
+2. linked markers with the internal Rcpp simulator,
+3. linked markers with Mendel, when a Mendel binary is installed.
+
+```{r simulate}
+ck <- create_ckmr(
+  D = afreqs_demo,
+  kappa_matrix = kappas[c("PO", "FS", "HAN", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.005),
+  ge_mod_true_pars_list = list(epsilon = 0.005)
+)
+
+reps <- 1e04
+
+profile_simulation <- function(label, expr) {
+  expr <- substitute(expr)
+
+  gc(reset = TRUE)
+  timing <- system.time(
+    value <- eval(expr, envir = parent.frame())
+  )
+  gc_after <- gc()
+
+  mb_cols <- which(colnames(gc_after) == "(Mb)")
+  max_r_heap_mb <- if(length(mb_cols) >= 3) {
+    sum(gc_after[, mb_cols[3]])
+  } else {
+    NA_real_
+  }
+
+  list(
+    value = value,
+    profile = tibble(
+      backend = label,
+      user_sec = unname(timing[["user.self"]]),
+      system_sec = unname(timing[["sys.self"]]),
+      elapsed_sec = unname(timing[["elapsed"]]),
+      max_r_heap_mb = max_r_heap_mb
+    )
+  )
+}
+
+unlinked_run <- profile_simulation(
+  "unlinked",
+  simulate_Qij(
+    ck,
+    sim_relats = "FS",
+    calc_relats = c("FS", "U"),
+    reps = reps,
+    unlinked = TRUE
+  )
+)
+
+rcpp_run <- profile_simulation(
+  "rcpp",
+  simulate_Qij(
+    ck,
+    sim_relats = "FS",
+    calc_relats = c("FS", "U"),
+    reps = reps,
+    unlinked = FALSE,
+    pedigree_list = pedigrees,
+    useMendel = FALSE
+  )
+)
+
+mendel_run <- profile_simulation(
+  "mendel",
+  simulate_Qij(
+    ck,
+    sim_relats = "FS",
+    calc_relats = c("FS", "U"),
+    reps = reps,
+    unlinked = FALSE,
+    pedigree_list = pedigrees,
+    useMendel = TRUE
+  )
+)
+
+Q_unlinked <- unlinked_run$value
+Q_rcpp <- rcpp_run$value
+Q_mendel <- mendel_run$value
+
+simulation_profiles <- bind_rows(
+  unlinked_run$profile,
+  rcpp_run$profile,
+  mendel_run$profile
+)
+
+simulation_profiles
+```
+
+```{r compare}
+logls <- list(
+  unlinked = extract_logls(Q_unlinked, numer = c(FS = 1), denom = c(U = 1)),
+  rcpp = extract_logls(Q_rcpp, numer = c(FS = 1), denom = c(U = 1)),
+  mendel = extract_logls(Q_mendel, numer = c(FS = 1), denom = c(U = 1))
+)
+
+logls <- bind_rows(logls, .id = "backend")
+
+logls %>%
+  group_by(backend) %>%
+  summarise(
+    n = n(),
+    mean = mean(logl_ratio),
+    sd = sd(logl_ratio),
+    q025 = quantile(logl_ratio, 0.025),
+    q500 = quantile(logl_ratio, 0.500),
+    q975 = quantile(logl_ratio, 0.975),
+    .groups = "drop"
+  )
+```
+
+```{r plot, fig.width=8, fig.height=5}
+ggplot(logls, aes(x = logl_ratio, fill = backend, colour = backend)) +
+  geom_density(alpha = 0.25) +
+  theme_bw()
+```
+
+For FS pairs, the linked simulations should have a noticeably larger variance
+than the unlinked simulation. The Rcpp and Mendel linked distributions should be
+close up to Monte Carlo error.
+
+## HAN/U comparison
+
+Now do the same comparison for half-avuncular (`HAN`) pairs, again using `U` as
+the denominator.  This is the same unlinked/Rcpp/Mendel comparison as above, but
+for a more distant relationship.
+
+```{r simulate-han}
+han_unlinked_run <- profile_simulation(
+  "unlinked",
+  simulate_Qij(
+    ck,
+    sim_relats = "HAN",
+    calc_relats = c("HAN", "U"),
+    reps = reps,
+    unlinked = TRUE
+  )
+)
+
+han_rcpp_run <- profile_simulation(
+  "rcpp",
+  simulate_Qij(
+    ck,
+    sim_relats = "HAN",
+    calc_relats = c("HAN", "U"),
+    reps = reps,
+    unlinked = FALSE,
+    pedigree_list = pedigrees,
+    useMendel = FALSE
+  )
+)
+
+han_mendel_run <- profile_simulation(
+  "mendel",
+  simulate_Qij(
+    ck,
+    sim_relats = "HAN",
+    calc_relats = c("HAN", "U"),
+    reps = reps,
+    unlinked = FALSE,
+    pedigree_list = pedigrees,
+    useMendel = TRUE
+  )
+)
+
+Q_han_unlinked <- han_unlinked_run$value
+Q_han_rcpp <- han_rcpp_run$value
+Q_han_mendel <- han_mendel_run$value
+
+han_simulation_profiles <- bind_rows(
+  han_unlinked_run$profile,
+  han_rcpp_run$profile,
+  han_mendel_run$profile
+)
+
+han_simulation_profiles
+```
+
+```{r compare-han}
+han_logls <- list(
+  unlinked = extract_logls(Q_han_unlinked, numer = c(HAN = 1), denom = c(U = 1)),
+  rcpp = extract_logls(Q_han_rcpp, numer = c(HAN = 1), denom = c(U = 1)),
+  mendel = extract_logls(Q_han_mendel, numer = c(HAN = 1), denom = c(U = 1))
+)
+
+han_logls <- bind_rows(han_logls, .id = "backend")
+
+han_logls %>%
+  group_by(backend) %>%
+  summarise(
+    n = n(),
+    mean = mean(logl_ratio),
+    sd = sd(logl_ratio),
+    q025 = quantile(logl_ratio, 0.025),
+    q500 = quantile(logl_ratio, 0.500),
+    q975 = quantile(logl_ratio, 0.975),
+    .groups = "drop"
+  )
+```
+
+```{r plot-han, fig.width=8, fig.height=5}
+ggplot(han_logls, aes(x = logl_ratio, fill = backend, colour = backend)) +
+  geom_density(alpha = 0.25) +
+  theme_bw()
+```
+
+For HAN pairs the signal is weaker than FS, but the linked Rcpp and Mendel
+distributions should still agree closely up to Monte Carlo error.
+
+## Pair-genotype index check
+
+This check compares the marginal frequency of each simulated genotype-pair
+index at each locus to the value expected from the corresponding `X_l` matrix.
+It does not test linkage among loci, but it is a useful check on genotype-pair
+indexing.
+
+```{r pair-index-check}
+expected_xl_table <- function(C, relat) {
+  imap_dfr(C$loci, function(L, locus) {
+    expected <- as.vector(L$X_l[[relat]])
+    tibble(
+      locus = locus,
+      genotype_pair = seq_along(expected),
+      expected = expected
+    )
+  })
+}
+
+sample_unlinked_true_pair_indices <- function(C, relat, num) {
+  lapply(C$loci, function(L) {
+    probs <- as.vector(L$X_l[[relat]])
+    sample.int(
+      n = length(probs),
+      size = num,
+      replace = TRUE,
+      prob = probs
+    )
+  })
+}
+
+sample_linked_true_pair_indices <- function(D, ped, C, num, backend) {
+  outgenos <- switch(
+    backend,
+    rcpp = CKMRsim:::sample_linked_true_genotype_pairs(
+      df = D,
+      ped = ped,
+      num = num
+    ),
+    mendel = CKMRsim:::sample_linked_true_genotype_pairs_mendel(
+      df = D,
+      ped = ped,
+      num = num
+    ),
+    stop("Unknown linked backend: ", backend)
+  )
+
+  locs <- names(C$loci)
+  names(locs) <- locs
+
+  lapply(locs, function(locus) {
+    nG <- nrow(C$loci[[locus]]$X_l[[1]])
+    nG * (outgenos$indiv2[, locus] - 1) + outgenos$indiv1[, locus]
+  })
+}
+
+observed_pair_index_table <- function(gp, C, relat) {
+  imap_dfr(gp, function(x, locus) {
+    nstates <- length(as.vector(C$loci[[locus]]$X_l[[relat]]))
+    tibble(
+      locus = locus,
+      genotype_pair = seq_len(nstates),
+      simulated = tabulate(x, nbins = nstates) / length(x)
+    )
+  })
+}
+
+run_pair_index_check <- function(dataset, D, C, relat, num) {
+  expected <- expected_xl_table(C, relat)
+
+  map_dfr(c("unlinked", "rcpp", "mendel"), function(backend) {
+    gp <- switch(
+      backend,
+      unlinked = sample_unlinked_true_pair_indices(
+        C = C,
+        relat = relat,
+        num = num
+      ),
+      rcpp = sample_linked_true_pair_indices(
+        D = D,
+        ped = pedigrees[[relat]],
+        C = C,
+        num = num,
+        backend = "rcpp"
+      ),
+      mendel = sample_linked_true_pair_indices(
+        D = D,
+        ped = pedigrees[[relat]],
+        C = C,
+        num = num,
+        backend = "mendel"
+      )
+    )
+
+    observed_pair_index_table(gp, C, relat) %>%
+      left_join(expected, by = c("locus", "genotype_pair")) %>%
+      mutate(
+        dataset = dataset,
+        relat = relat,
+        backend = backend,
+        .before = locus
+      )
+  })
+}
+
+data(linked_mhaps)
+
+linked_mhaps_demo <- linked_mhaps %>%
+  reindex_markers()
+
+# We will check both FS and HAN genotype-pair probabilities with this data set.
+ck_linked_mhaps <- create_ckmr(
+  D = linked_mhaps_demo,
+  kappa_matrix = kappas[c("FS", "HAN", "U"), ],
+  ge_mod_assumed = ge_model_TGIE,
+  ge_mod_true = ge_model_TGIE,
+  ge_mod_assumed_pars_list = list(epsilon = 0.005),
+  ge_mod_true_pars_list = list(epsilon = 0.005)
+)
+
+
+# do this with only 5000 reps
+index_check_reps <- 5000
+
+pair_index_check <- bind_rows(
+  run_pair_index_check(
+    dataset = "trimmed beardo SNPs",
+    D = afreqs_demo,
+    C = ck,
+    relat = "FS",
+    num = index_check_reps
+  ),
+  run_pair_index_check(
+    dataset = "linked_mhaps",
+    D = linked_mhaps_demo,
+    C = ck_linked_mhaps,
+    relat = "FS",
+    num = index_check_reps
+  ),
+  run_pair_index_check(
+    dataset = "trimmed beardo SNPs",
+    D = afreqs_demo,
+    C = ck,
+    relat = "HAN",
+    num = index_check_reps
+  ),
+  run_pair_index_check(
+    dataset = "linked_mhaps",
+    D = linked_mhaps_demo,
+    C = ck_linked_mhaps,
+    relat = "HAN",
+    num = index_check_reps
+  )
+)
+
+pair_index_check %>%
+  group_by(dataset, relat, backend) %>%
+  summarise(
+    n = n(),
+    mean_abs_diff = mean(abs(simulated - expected)),
+    rmse = sqrt(mean((simulated - expected)^2)),
+    max_abs_diff = max(abs(simulated - expected)),
+    .groups = "drop"
+  )
+```
+
+```{r pair-index-check-plot, fig.width=8, fig.height=6}
+ggplot(pair_index_check, aes(x = expected, y = simulated)) +
+  geom_abline(slope = 1, intercept = 0, colour = "grey50") +
+  geom_point(alpha = 0.25, size = 0.7) +
+  facet_grid(dataset + relat ~ backend) +
+  coord_equal() +
+  theme_bw()
+```
+

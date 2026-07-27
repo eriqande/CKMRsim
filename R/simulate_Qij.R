@@ -24,7 +24,8 @@
 #' @param reps a synonym for \code{calc_relats} for compatibility to an earlier version
 #' of CKMRsim.
 #' @param unlinked A logical indicating whether to simulate the markers as unlinked.  By default this is
-#' TRUE.  If FALSE, then genotypes at linked markers will be simulated using the program MENDEL, genotyping
+#' TRUE.  If FALSE, then genotypes at linked markers will be simulated using CKMRsim's
+#' internal Rcpp simulator, or using the program MENDEL if \code{useMendel = TRUE}; genotyping
 #' errors will be applied to them, and the Q_ij values themselves will still be computed under the assumption
 #' of no linkage. However, they will be simulated under the no-linkage model for relationships "U", "PO", and
 #' "MZ", because, in the absence of LD, related pairs under those relationships are not affected by
@@ -33,6 +34,12 @@
 #' @param forceLinkagePO If you really want to force simulation to be done under physical linkage for the PO case
 #' (perhaps to verify that you get the same result as with unlinked.  Pass TRUE to this while \code{unlinked} is
 #' FALSE.)
+#' @param useMendel If TRUE, use the external Mendel program for linked gene
+#' dropping. If FALSE, use CKMRsim's internal Rcpp simulator.
+#' @param cM_per_Mb Recombination-rate conversion used to create a Map column
+#' from Pos when Map is not present. The value is centiMorgans per megabase.
+#' @param min_crossovers Minimum number of crossovers in the typed marker span
+#' of each chromosome for each meiosis.
 #' @param miss_mask_mat  A logical matrix with length(YL) columns and reps rows.  The (r,c)-th is TRUE if
 #' the c-th locus should be considered missing in the r-th simulated sample.  This type of specification
 #' lets the user simulate either a specific pattern of missingness, if desired, or to simulate patterns of
@@ -50,6 +57,7 @@
 #' missing loci.
 #' @export
 simulate_Qij <- function(C, sim_relats, calc_relats, reps = 10^4, unlinked = TRUE, forceLinkagePO = FALSE, pedigree_list = NULL,
+                         useMendel = FALSE, cM_per_Mb = 1, min_crossovers = 0,
                          miss_mask_mat = NULL,
                          rando_miss_wts = NULL,
                          rando_miss_n = 0,
@@ -80,7 +88,9 @@ simulate_Qij <- function(C, sim_relats, calc_relats, reps = 10^4, unlinked = TRU
                                rando_miss_wts = rando_miss_wts, rando_miss_n = rando_miss_n)
   } else {
     ret <- simulate_and_calc_Q(YL = C$loci, reps = reps, froms = sim_relats, tos = calc_relats, df = C$orig_data, pedigrees = pedigree_list,
-                               forceLinkagePO = forceLinkagePO, miss_mask_mat = miss_mask_mat,
+                               forceLinkagePO = forceLinkagePO, useMendel = useMendel,
+                               cM_per_Mb = cM_per_Mb, min_crossovers = min_crossovers,
+                               miss_mask_mat = miss_mask_mat,
                                rando_miss_wts = rando_miss_wts, rando_miss_n = rando_miss_n)
   }
 
