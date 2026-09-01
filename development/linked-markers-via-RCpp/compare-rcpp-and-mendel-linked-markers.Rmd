@@ -209,10 +209,16 @@ logls %>%
 ```
 
 ```{r plot, fig.width=8, fig.height=5}
-ggplot(logls, aes(x = logl_ratio, fill = backend, colour = backend)) +
+FS_comp <- ggplot(logls, aes(x = logl_ratio, fill = backend, colour = backend)) +
   geom_density(alpha = 0.25) +
-  theme_bw()
+  theme_bw() +
+  xlab("Pseudo-Loglikelihood Ratio") +
+  ylab("Density")
+
+FS_comp
 ```
+
+
 
 For FS pairs, the linked simulations should have a noticeably larger variance
 than the unlinked simulation. The Rcpp and Mendel linked distributions should be
@@ -298,13 +304,23 @@ han_logls %>%
 ```
 
 ```{r plot-han, fig.width=8, fig.height=5}
-ggplot(han_logls, aes(x = logl_ratio, fill = backend, colour = backend)) +
+HAN_comp <- ggplot(han_logls, aes(x = logl_ratio, fill = backend, colour = backend)) +
   geom_density(alpha = 0.25) +
-  theme_bw()
+  theme_bw() +
+  xlab("Pseudo-Loglikelihood Ratio") +
+  ylab("Density")
+
+HAN_comp
 ```
 
 For HAN pairs the signal is weaker than FS, but the linked Rcpp and Mendel
 distributions should still agree closely up to Monte Carlo error.
+
+Now, make a final PDF figure for a report.
+```{r}
+combo <- cowplot::plot_grid(FS_comp, HAN_comp, ncol = 1, labels = c("(a)", "(b)"), label_x = -0.015)
+ggsave(combo, filename = "outputs/FS_HAN_comp_to_Mendel.pdf", width = 8, height = 5)
+```
 
 ## Pair-genotype index check
 
@@ -473,11 +489,19 @@ pair_index_check %>%
 ```
 
 ```{r pair-index-check-plot, fig.width=8, fig.height=6}
-ggplot(pair_index_check, aes(x = expected, y = simulated)) +
+geno_freq_comp <- ggplot(pair_index_check, aes(x = expected, y = simulated)) +
   geom_abline(slope = 1, intercept = 0, colour = "grey50") +
   geom_point(alpha = 0.25, size = 0.7) +
   facet_grid(dataset + relat ~ backend) +
   coord_equal() +
-  theme_bw()
+  theme_bw() +
+  ylab("Simulated Genotype Frequency") +
+  xlab("Expected Genotype Freqency")
+
+geno_freq_comp
 ```
 
+Now, make a PNG version (smaller) for a report.
+```{r}
+ggsave(geno_freq_comp, filename = "outputs/geno_freq_comp.png", width = 8, height = 8)
+```
